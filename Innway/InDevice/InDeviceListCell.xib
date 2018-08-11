@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="18" id="KGk-i7-Jjw" customClass="InDeviceListCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="76"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="75.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_launcher.png" translatesAutoresizingMaskIntoConstraints="NO" id="RTH-Gd-YKb">
+                        <rect key="frame" x="8" y="4" width="67.5" height="67.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="RTH-Gd-YKb" secondAttribute="height" id="wy0-Cy-his"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="INNWAY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="csM-Rq-pRP">
+                        <rect key="frame" x="91.5" y="12.5" width="72" height="23"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IsC-Ry-62s" userLabel="line">
+                        <rect key="frame" x="83.5" y="37.5" width="100" height="1"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="9rP-Eb-Wpv"/>
+                            <constraint firstAttribute="width" constant="100" id="oZZ-u3-I1b"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JXG-A2-ht1">
+                        <rect key="frame" x="91" y="40.5" width="39.5" height="19.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="IsC-Ry-62s" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="NCB-OH-ZAz"/>
+                    <constraint firstItem="IsC-Ry-62s" firstAttribute="top" secondItem="csM-Rq-pRP" secondAttribute="bottom" constant="2" id="ZYk-jM-Vh8"/>
+                    <constraint firstItem="IsC-Ry-62s" firstAttribute="leading" secondItem="RTH-Gd-YKb" secondAttribute="trailing" constant="8" id="bf7-0X-hfG"/>
+                    <constraint firstItem="RTH-Gd-YKb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="g7d-Ri-PUc"/>
+                    <constraint firstItem="csM-Rq-pRP" firstAttribute="leading" secondItem="RTH-Gd-YKb" secondAttribute="trailing" constant="16" id="g9e-qF-RkZ"/>
+                    <constraint firstItem="JXG-A2-ht1" firstAttribute="top" secondItem="IsC-Ry-62s" secondAttribute="bottom" constant="2" id="m2d-WG-gQw"/>
+                    <constraint firstItem="JXG-A2-ht1" firstAttribute="leading" secondItem="csM-Rq-pRP" secondAttribute="leading" id="oOL-Vl-r9M"/>
+                    <constraint firstAttribute="bottom" secondItem="RTH-Gd-YKb" secondAttribute="bottom" constant="4" id="qcQ-Q5-yTB"/>
+                    <constraint firstItem="RTH-Gd-YKb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="zGF-GA-hNe"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="deviceIDLabel" destination="JXG-A2-ht1" id="BFq-O8-PVN"/>
+                <outlet property="iconView" destination="RTH-Gd-YKb" id="kYI-Bd-dKM"/>
+                <outlet property="nameLabel" destination="csM-Rq-pRP" id="0Ca-Jd-jPX"/>
+            </connections>
+            <point key="canvasLocation" x="13" y="36"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="ic_launcher.png" width="96" height="96"/>
+    </resources>
+</document>

@@ -1,0 +1,43 @@
+//
+//  InDeviceListCell.m
+//  Innway
+//
+//  Created by danly on 2018/8/4.
+//  Copyright © 2018年 innwaytech. All rights reserved.
+//
+
+#import "InDeviceListCell.h"
+
+@interface InDeviceListCell()
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *deviceIDLabel;
+@end
+
+@implementation InDeviceListCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+}
+
+#pragma mark - Properity
+- (void)setImageName:(NSString *)imageName {
+    _imageName = imageName;
+    self.iconView.image = [UIImage imageNamed:imageName];
+}
+
+- (void)setDeviceName:(NSString *)deviceName {
+    _deviceName = deviceName;
+    self.nameLabel.text = deviceName;
+}
+
+- (void)setDeviceID:(NSString *)deviceID {
+    _deviceID = deviceID;
+    self.deviceIDLabel.text = deviceID;
+}
+
+@end

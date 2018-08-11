@@ -1,0 +1,808 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		33027C1B211EBAC40003C5D9 /* InAlertTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C1A211EBAC40003C5D9 /* InAlertTool.m */; };
+		33287FF9211557BD00C4893B /* icon_password_show.png in Resources */ = {isa = PBXBuildFile; fileRef = 33287FF8211557BD00C4893B /* icon_password_show.png */; };
+		33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33287FFB21155B3200C4893B /* InUserTableViewController.m */; };
+		33287FFF21158E7900C4893B /* InRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33287FFE21158E7900C4893B /* InRegisterViewController.m */; };
+		3328800221158F4900C4893B /* InForgetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3328800121158F4900C4893B /* InForgetPasswordViewController.m */; };
+		3328800821159A4D00C4893B /* InDeviceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3328800721159A4D00C4893B /* InDeviceListViewController.m */; };
+		3328800C21159E9300C4893B /* InDeviceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3328800A21159E9300C4893B /* InDeviceListCell.m */; };
+		3328800D21159E9300C4893B /* InDeviceListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3328800B21159E9300C4893B /* InDeviceListCell.xib */; };
+		3328800F2115A00C00C4893B /* ic_launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 3328800E2115A00C00C4893B /* ic_launcher.png */; };
+		3328801B2115AA4900C4893B /* InControlDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 332880192115AA4900C4893B /* InControlDeviceViewController.m */; };
+		3328801C2115AA4900C4893B /* InControlDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3328801A2115AA4900C4893B /* InControlDeviceViewController.xib */; };
+		3374C74C2112013B00F83101 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C74B2112013B00F83101 /* AppDelegate.m */; };
+		3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C74E2112013B00F83101 /* InLoginViewController.m */; };
+		3374C7522112013B00F83101 /* InUser.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7502112013B00F83101 /* InUser.storyboard */; };
+		3374C7542112013F00F83101 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7532112013F00F83101 /* Assets.xcassets */; };
+		3374C7572112013F00F83101 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7552112013F00F83101 /* LaunchScreen.storyboard */; };
+		3374C75A2112013F00F83101 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C7592112013F00F83101 /* main.m */; };
+		3374C7642112014000F83101 /* InnwayUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C7632112014000F83101 /* InnwayUITests.m */; };
+		3374C7912112077C00F83101 /* icon_map_type.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C76F2112077C00F83101 /* icon_map_type.png */; };
+		3374C7922112077C00F83101 /* icon_child_device_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7702112077C00F83101 /* icon_child_device_gray.png */; };
+		3374C7932112077C00F83101 /* warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7712112077C00F83101 /* warning.png */; };
+		3374C7942112077C00F83101 /* icon_track_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7722112077C00F83101 /* icon_track_up.png */; };
+		3374C7952112077C00F83101 /* icon_more.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7732112077C00F83101 /* icon_more.png */; };
+		3374C7962112077C00F83101 /* icon_default_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7742112077C00F83101 /* icon_default_image.png */; };
+		3374C7972112077C00F83101 /* icon_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7752112077C00F83101 /* icon_close.png */; };
+		3374C7982112077C00F83101 /* icon_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7762112077C00F83101 /* icon_back.png */; };
+		3374C7992112077C00F83101 /* ic_oval.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7772112077C00F83101 /* ic_oval.png */; };
+		3374C79A2112077C00F83101 /* icon_setting.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7782112077C00F83101 /* icon_setting.png */; };
+		3374C79B2112077C00F83101 /* icon_track_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7792112077C00F83101 /* icon_track_down.png */; };
+		3374C79C2112077C00F83101 /* icon_del.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C77A2112077C00F83101 /* icon_del.png */; };
+		3374C79D2112077C00F83101 /* icon_battery.9.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C77B2112077C00F83101 /* icon_battery.9.png */; };
+		3374C79E2112077C00F83101 /* icon_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C77C2112077C00F83101 /* icon_menu.png */; };
+		3374C79F2112077C00F83101 /* icon_child_device.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C77D2112077C00F83101 /* icon_child_device.png */; };
+		3374C7A02112077C00F83101 /* icon_range_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C77E2112077C00F83101 /* icon_range_down.png */; };
+		3374C7A12112077C00F83101 /* icon_add_device.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C77F2112077C00F83101 /* icon_add_device.png */; };
+		3374C7A22112077C00F83101 /* icon_enter.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7802112077C00F83101 /* icon_enter.png */; };
+		3374C7A32112077C00F83101 /* icon_scan_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7812112077C00F83101 /* icon_scan_line.png */; };
+		3374C7A42112077C00F83101 /* icon_back_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7822112077C00F83101 /* icon_back_dark.png */; };
+		3374C7A52112077C00F83101 /* icon_history_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7832112077C00F83101 /* icon_history_down.png */; };
+		3374C7A62112077C00F83101 /* icon_poup.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7842112077C00F83101 /* icon_poup.png */; };
+		3374C7A72112077C00F83101 /* icon_location.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7852112077C00F83101 /* icon_location.png */; };
+		3374C7A82112077C00F83101 /* icon_history_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7862112077C00F83101 /* icon_history_up.png */; };
+		3374C7A92112077C00F83101 /* icon_user.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7872112077C00F83101 /* icon_user.png */; };
+		3374C7AB2112077C00F83101 /* icon_warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7892112077C00F83101 /* icon_warning.png */; };
+		3374C7AC2112077C00F83101 /* icon_warning_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C78A2112077C00F83101 /* icon_warning_gray.png */; };
+		3374C7AD2112077C00F83101 /* icon_charging.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C78B2112077C00F83101 /* icon_charging.png */; };
+		3374C7AE2112077C00F83101 /* icon_dot_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C78C2112077C00F83101 /* icon_dot_up.png */; };
+		3374C7AF2112077C00F83101 /* icon_range_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C78D2112077C00F83101 /* icon_range_up.png */; };
+		3374C7B02112077C00F83101 /* icon_checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C78E2112077C00F83101 /* icon_checked.png */; };
+		3374C7B12112077C00F83101 /* icon_splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C78F2112077C00F83101 /* icon_splash.png */; };
+		3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7902112077C00F83101 /* icon_dot_down.png */; };
+		33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */; };
+		33EE4C932116C27300CDDC98 /* InUserSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4C912116C27300CDDC98 /* InUserSettingViewController.xib */; };
+		33EE4C9A2116DBE000CDDC98 /* InDeviceMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4C982116DBE000CDDC98 /* InDeviceMenuViewController.m */; };
+		33EE4C9B2116DBE000CDDC98 /* InDeviceMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4C992116DBE000CDDC98 /* InDeviceMenuViewController.xib */; };
+		33EE4C9D2116EDD500CDDC98 /* deviceMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4C9C2116EDD500CDDC98 /* deviceMenu.png */; };
+		33EE4CA62116FA9B00CDDC98 /* InDeviceSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4CA42116FA9B00CDDC98 /* InDeviceSettingViewController.m */; };
+		33EE4CA92116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4CA82116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard */; };
+		33EE4CAC21170C1500CDDC98 /* InAlertTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4CAB21170C1500CDDC98 /* InAlertTableViewController.m */; };
+		E909AD2F8F529939073B9C99 /* libPods-Innway.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 548C34A61E92F52550403152 /* libPods-Innway.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3374C7602112014000F83101 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3374C73F2112013A00F83101 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3374C7462112013A00F83101;
+			remoteInfo = Innway;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		19F61050A82BF0B9B29DC8FF /* Pods-Innway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Innway.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Innway/Pods-Innway.debug.xcconfig"; sourceTree = "<group>"; };
+		33027C19211EBAC30003C5D9 /* InAlertTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAlertTool.h; sourceTree = "<group>"; };
+		33027C1A211EBAC40003C5D9 /* InAlertTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAlertTool.m; sourceTree = "<group>"; };
+		33287FF8211557BD00C4893B /* icon_password_show.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_password_show.png; sourceTree = "<group>"; };
+		33287FFA21155B3200C4893B /* InUserTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InUserTableViewController.h; sourceTree = "<group>"; };
+		33287FFB21155B3200C4893B /* InUserTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InUserTableViewController.m; sourceTree = "<group>"; };
+		33287FFD21158E7900C4893B /* InRegisterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InRegisterViewController.h; sourceTree = "<group>"; };
+		33287FFE21158E7900C4893B /* InRegisterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InRegisterViewController.m; sourceTree = "<group>"; };
+		3328800021158F4900C4893B /* InForgetPasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InForgetPasswordViewController.h; sourceTree = "<group>"; };
+		3328800121158F4900C4893B /* InForgetPasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InForgetPasswordViewController.m; sourceTree = "<group>"; };
+		3328800621159A4D00C4893B /* InDeviceListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InDeviceListViewController.h; sourceTree = "<group>"; };
+		3328800721159A4D00C4893B /* InDeviceListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InDeviceListViewController.m; sourceTree = "<group>"; };
+		3328800921159E9300C4893B /* InDeviceListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InDeviceListCell.h; sourceTree = "<group>"; };
+		3328800A21159E9300C4893B /* InDeviceListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InDeviceListCell.m; sourceTree = "<group>"; };
+		3328800B21159E9300C4893B /* InDeviceListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InDeviceListCell.xib; sourceTree = "<group>"; };
+		3328800E2115A00C00C4893B /* ic_launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_launcher.png; sourceTree = "<group>"; };
+		332880182115AA4900C4893B /* InControlDeviceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InControlDeviceViewController.h; sourceTree = "<group>"; };
+		332880192115AA4900C4893B /* InControlDeviceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InControlDeviceViewController.m; sourceTree = "<group>"; };
+		3328801A2115AA4900C4893B /* InControlDeviceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InControlDeviceViewController.xib; sourceTree = "<group>"; };
+		3374C7472112013A00F83101 /* Innway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Innway.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3374C74A2112013B00F83101 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3374C74B2112013B00F83101 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		3374C74D2112013B00F83101 /* InLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InLoginViewController.h; sourceTree = "<group>"; };
+		3374C74E2112013B00F83101 /* InLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InLoginViewController.m; sourceTree = "<group>"; };
+		3374C7512112013B00F83101 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/InUser.storyboard; sourceTree = "<group>"; };
+		3374C7532112013F00F83101 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3374C7562112013F00F83101 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		3374C7582112013F00F83101 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3374C7592112013F00F83101 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3374C75F2112014000F83101 /* InnwayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InnwayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3374C7632112014000F83101 /* InnwayUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InnwayUITests.m; sourceTree = "<group>"; };
+		3374C7652112014000F83101 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3374C76F2112077C00F83101 /* icon_map_type.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_map_type.png; sourceTree = "<group>"; };
+		3374C7702112077C00F83101 /* icon_child_device_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_child_device_gray.png; sourceTree = "<group>"; };
+		3374C7712112077C00F83101 /* warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warning.png; sourceTree = "<group>"; };
+		3374C7722112077C00F83101 /* icon_track_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_track_up.png; sourceTree = "<group>"; };
+		3374C7732112077C00F83101 /* icon_more.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_more.png; sourceTree = "<group>"; };
+		3374C7742112077C00F83101 /* icon_default_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_default_image.png; sourceTree = "<group>"; };
+		3374C7752112077C00F83101 /* icon_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_close.png; sourceTree = "<group>"; };
+		3374C7762112077C00F83101 /* icon_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_back.png; sourceTree = "<group>"; };
+		3374C7772112077C00F83101 /* ic_oval.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_oval.png; sourceTree = "<group>"; };
+		3374C7782112077C00F83101 /* icon_setting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_setting.png; sourceTree = "<group>"; };
+		3374C7792112077C00F83101 /* icon_track_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_track_down.png; sourceTree = "<group>"; };
+		3374C77A2112077C00F83101 /* icon_del.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_del.png; sourceTree = "<group>"; };
+		3374C77B2112077C00F83101 /* icon_battery.9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_battery.9.png; sourceTree = "<group>"; };
+		3374C77C2112077C00F83101 /* icon_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_menu.png; sourceTree = "<group>"; };
+		3374C77D2112077C00F83101 /* icon_child_device.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_child_device.png; sourceTree = "<group>"; };
+		3374C77E2112077C00F83101 /* icon_range_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_range_down.png; sourceTree = "<group>"; };
+		3374C77F2112077C00F83101 /* icon_add_device.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_add_device.png; sourceTree = "<group>"; };
+		3374C7802112077C00F83101 /* icon_enter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_enter.png; sourceTree = "<group>"; };
+		3374C7812112077C00F83101 /* icon_scan_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_scan_line.png; sourceTree = "<group>"; };
+		3374C7822112077C00F83101 /* icon_back_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_back_dark.png; sourceTree = "<group>"; };
+		3374C7832112077C00F83101 /* icon_history_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_history_down.png; sourceTree = "<group>"; };
+		3374C7842112077C00F83101 /* icon_poup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_poup.png; sourceTree = "<group>"; };
+		3374C7852112077C00F83101 /* icon_location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_location.png; sourceTree = "<group>"; };
+		3374C7862112077C00F83101 /* icon_history_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_history_up.png; sourceTree = "<group>"; };
+		3374C7872112077C00F83101 /* icon_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_user.png; sourceTree = "<group>"; };
+		3374C7892112077C00F83101 /* icon_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_warning.png; sourceTree = "<group>"; };
+		3374C78A2112077C00F83101 /* icon_warning_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_warning_gray.png; sourceTree = "<group>"; };
+		3374C78B2112077C00F83101 /* icon_charging.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_charging.png; sourceTree = "<group>"; };
+		3374C78C2112077C00F83101 /* icon_dot_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_dot_up.png; sourceTree = "<group>"; };
+		3374C78D2112077C00F83101 /* icon_range_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_range_up.png; sourceTree = "<group>"; };
+		3374C78E2112077C00F83101 /* icon_checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_checked.png; sourceTree = "<group>"; };
+		3374C78F2112077C00F83101 /* icon_splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_splash.png; sourceTree = "<group>"; };
+		3374C7902112077C00F83101 /* icon_dot_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_dot_down.png; sourceTree = "<group>"; };
+		33EE4C8F2116C27300CDDC98 /* InUserSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InUserSettingViewController.h; sourceTree = "<group>"; };
+		33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InUserSettingViewController.m; sourceTree = "<group>"; };
+		33EE4C912116C27300CDDC98 /* InUserSettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InUserSettingViewController.xib; sourceTree = "<group>"; };
+		33EE4C972116DBE000CDDC98 /* InDeviceMenuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InDeviceMenuViewController.h; sourceTree = "<group>"; };
+		33EE4C982116DBE000CDDC98 /* InDeviceMenuViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InDeviceMenuViewController.m; sourceTree = "<group>"; };
+		33EE4C992116DBE000CDDC98 /* InDeviceMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InDeviceMenuViewController.xib; sourceTree = "<group>"; };
+		33EE4C9C2116EDD500CDDC98 /* deviceMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deviceMenu.png; sourceTree = "<group>"; };
+		33EE4CA32116FA9B00CDDC98 /* InDeviceSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InDeviceSettingViewController.h; sourceTree = "<group>"; };
+		33EE4CA42116FA9B00CDDC98 /* InDeviceSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InDeviceSettingViewController.m; sourceTree = "<group>"; };
+		33EE4CA82116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InDeviceSettingViewController.storyboard; sourceTree = "<group>"; };
+		33EE4CAA21170C1500CDDC98 /* InAlertTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAlertTableViewController.h; sourceTree = "<group>"; };
+		33EE4CAB21170C1500CDDC98 /* InAlertTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAlertTableViewController.m; sourceTree = "<group>"; };
+		548C34A61E92F52550403152 /* libPods-Innway.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Innway.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B71E970440059BC688B692B6 /* Pods-Innway.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Innway.release.xcconfig"; path = "Pods/Target Support Files/Pods-Innway/Pods-Innway.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3374C7442112013A00F83101 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E909AD2F8F529939073B9C99 /* libPods-Innway.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3374C75C2112014000F83101 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		33027C1F211EC5140003C5D9 /* InTool */ = {
+			isa = PBXGroup;
+			children = (
+				33027C19211EBAC30003C5D9 /* InAlertTool.h */,
+				33027C1A211EBAC40003C5D9 /* InAlertTool.m */,
+			);
+			path = InTool;
+			sourceTree = "<group>";
+		};
+		332880032115997400C4893B /* InUser */ = {
+			isa = PBXGroup;
+			children = (
+				3374C7502112013B00F83101 /* InUser.storyboard */,
+				3374C74D2112013B00F83101 /* InLoginViewController.h */,
+				3374C74E2112013B00F83101 /* InLoginViewController.m */,
+				33287FFD21158E7900C4893B /* InRegisterViewController.h */,
+				33287FFE21158E7900C4893B /* InRegisterViewController.m */,
+				3328800021158F4900C4893B /* InForgetPasswordViewController.h */,
+				3328800121158F4900C4893B /* InForgetPasswordViewController.m */,
+				33287FFA21155B3200C4893B /* InUserTableViewController.h */,
+				33287FFB21155B3200C4893B /* InUserTableViewController.m */,
+			);
+			path = InUser;
+			sourceTree = "<group>";
+		};
+		33288005211599F100C4893B /* InDevice */ = {
+			isa = PBXGroup;
+			children = (
+				3328800921159E9300C4893B /* InDeviceListCell.h */,
+				3328800A21159E9300C4893B /* InDeviceListCell.m */,
+				3328800B21159E9300C4893B /* InDeviceListCell.xib */,
+				3328800621159A4D00C4893B /* InDeviceListViewController.h */,
+				3328800721159A4D00C4893B /* InDeviceListViewController.m */,
+				332880182115AA4900C4893B /* InControlDeviceViewController.h */,
+				332880192115AA4900C4893B /* InControlDeviceViewController.m */,
+				3328801A2115AA4900C4893B /* InControlDeviceViewController.xib */,
+				33EE4C972116DBE000CDDC98 /* InDeviceMenuViewController.h */,
+				33EE4C982116DBE000CDDC98 /* InDeviceMenuViewController.m */,
+				33EE4C992116DBE000CDDC98 /* InDeviceMenuViewController.xib */,
+				33EE4C8F2116C27300CDDC98 /* InUserSettingViewController.h */,
+				33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */,
+				33EE4C912116C27300CDDC98 /* InUserSettingViewController.xib */,
+				33EE4CA32116FA9B00CDDC98 /* InDeviceSettingViewController.h */,
+				33EE4CA42116FA9B00CDDC98 /* InDeviceSettingViewController.m */,
+				33EE4CA82116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard */,
+				33EE4CAA21170C1500CDDC98 /* InAlertTableViewController.h */,
+				33EE4CAB21170C1500CDDC98 /* InAlertTableViewController.m */,
+			);
+			path = InDevice;
+			sourceTree = "<group>";
+		};
+		3374C73E2112013A00F83101 = {
+			isa = PBXGroup;
+			children = (
+				3374C7492112013A00F83101 /* Innway */,
+				3374C7622112014000F83101 /* InnwayUITests */,
+				3374C7482112013A00F83101 /* Products */,
+				646857F1B258D174F8BFBE5B /* Pods */,
+				E6EC80CA7CD0FBC2A88AD296 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		3374C7482112013A00F83101 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3374C7472112013A00F83101 /* Innway.app */,
+				3374C75F2112014000F83101 /* InnwayUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3374C7492112013A00F83101 /* Innway */ = {
+			isa = PBXGroup;
+			children = (
+				3374C76E2112077C00F83101 /* image */,
+				33027C1F211EC5140003C5D9 /* InTool */,
+				332880032115997400C4893B /* InUser */,
+				33288005211599F100C4893B /* InDevice */,
+				3374C74A2112013B00F83101 /* AppDelegate.h */,
+				3374C74B2112013B00F83101 /* AppDelegate.m */,
+				3374C7532112013F00F83101 /* Assets.xcassets */,
+				3374C7552112013F00F83101 /* LaunchScreen.storyboard */,
+				3374C7582112013F00F83101 /* Info.plist */,
+				3374C7592112013F00F83101 /* main.m */,
+			);
+			path = Innway;
+			sourceTree = "<group>";
+		};
+		3374C7622112014000F83101 /* InnwayUITests */ = {
+			isa = PBXGroup;
+			children = (
+				3374C7632112014000F83101 /* InnwayUITests.m */,
+				3374C7652112014000F83101 /* Info.plist */,
+			);
+			path = InnwayUITests;
+			sourceTree = "<group>";
+		};
+		3374C76E2112077C00F83101 /* image */ = {
+			isa = PBXGroup;
+			children = (
+				3328800E2115A00C00C4893B /* ic_launcher.png */,
+				33EE4C9C2116EDD500CDDC98 /* deviceMenu.png */,
+				3374C76F2112077C00F83101 /* icon_map_type.png */,
+				3374C7702112077C00F83101 /* icon_child_device_gray.png */,
+				3374C7712112077C00F83101 /* warning.png */,
+				3374C7722112077C00F83101 /* icon_track_up.png */,
+				3374C7732112077C00F83101 /* icon_more.png */,
+				3374C7742112077C00F83101 /* icon_default_image.png */,
+				3374C7752112077C00F83101 /* icon_close.png */,
+				3374C7762112077C00F83101 /* icon_back.png */,
+				3374C7772112077C00F83101 /* ic_oval.png */,
+				3374C7782112077C00F83101 /* icon_setting.png */,
+				3374C7792112077C00F83101 /* icon_track_down.png */,
+				3374C77A2112077C00F83101 /* icon_del.png */,
+				3374C77B2112077C00F83101 /* icon_battery.9.png */,
+				3374C77C2112077C00F83101 /* icon_menu.png */,
+				33287FF8211557BD00C4893B /* icon_password_show.png */,
+				3374C77D2112077C00F83101 /* icon_child_device.png */,
+				3374C77E2112077C00F83101 /* icon_range_down.png */,
+				3374C77F2112077C00F83101 /* icon_add_device.png */,
+				3374C7802112077C00F83101 /* icon_enter.png */,
+				3374C7812112077C00F83101 /* icon_scan_line.png */,
+				3374C7822112077C00F83101 /* icon_back_dark.png */,
+				3374C7832112077C00F83101 /* icon_history_down.png */,
+				3374C7842112077C00F83101 /* icon_poup.png */,
+				3374C7852112077C00F83101 /* icon_location.png */,
+				3374C7862112077C00F83101 /* icon_history_up.png */,
+				3374C7872112077C00F83101 /* icon_user.png */,
+				3374C7892112077C00F83101 /* icon_warning.png */,
+				3374C78A2112077C00F83101 /* icon_warning_gray.png */,
+				3374C78B2112077C00F83101 /* icon_charging.png */,
+				3374C78C2112077C00F83101 /* icon_dot_up.png */,
+				3374C78D2112077C00F83101 /* icon_range_up.png */,
+				3374C78E2112077C00F83101 /* icon_checked.png */,
+				3374C78F2112077C00F83101 /* icon_splash.png */,
+				3374C7902112077C00F83101 /* icon_dot_down.png */,
+			);
+			path = image;
+			sourceTree = "<group>";
+		};
+		646857F1B258D174F8BFBE5B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				19F61050A82BF0B9B29DC8FF /* Pods-Innway.debug.xcconfig */,
+				B71E970440059BC688B692B6 /* Pods-Innway.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		E6EC80CA7CD0FBC2A88AD296 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				548C34A61E92F52550403152 /* libPods-Innway.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3374C7462112013A00F83101 /* Innway */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3374C7682112014000F83101 /* Build configuration list for PBXNativeTarget "Innway" */;
+			buildPhases = (
+				573496603360B9A33966FBED /* [CP] Check Pods Manifest.lock */,
+				3374C7432112013A00F83101 /* Sources */,
+				3374C7442112013A00F83101 /* Frameworks */,
+				3374C7452112013A00F83101 /* Resources */,
+				70C8602B160D1BB5532D9DF8 /* [CP] Embed Pods Frameworks */,
+				8604D6C7127816EC4809D128 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Innway;
+			productName = Innway;
+			productReference = 3374C7472112013A00F83101 /* Innway.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3374C75E2112014000F83101 /* InnwayUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3374C76B2112014000F83101 /* Build configuration list for PBXNativeTarget "InnwayUITests" */;
+			buildPhases = (
+				3374C75B2112014000F83101 /* Sources */,
+				3374C75C2112014000F83101 /* Frameworks */,
+				3374C75D2112014000F83101 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3374C7612112014000F83101 /* PBXTargetDependency */,
+			);
+			name = InnwayUITests;
+			productName = InnwayUITests;
+			productReference = 3374C75F2112014000F83101 /* InnwayUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3374C73F2112013A00F83101 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = In;
+				LastUpgradeCheck = 0940;
+				ORGANIZATIONNAME = innwaytech;
+				TargetAttributes = {
+					3374C7462112013A00F83101 = {
+						CreatedOnToolsVersion = 9.4.1;
+					};
+					3374C75E2112014000F83101 = {
+						CreatedOnToolsVersion = 9.4.1;
+						TestTargetID = 3374C7462112013A00F83101;
+					};
+				};
+			};
+			buildConfigurationList = 3374C7422112013A00F83101 /* Build configuration list for PBXProject "Innway" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3374C73E2112013A00F83101;
+			productRefGroup = 3374C7482112013A00F83101 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3374C7462112013A00F83101 /* Innway */,
+				3374C75E2112014000F83101 /* InnwayUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3374C7452112013A00F83101 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3374C7932112077C00F83101 /* warning.png in Resources */,
+				3374C7A52112077C00F83101 /* icon_history_down.png in Resources */,
+				3374C79C2112077C00F83101 /* icon_del.png in Resources */,
+				3374C7572112013F00F83101 /* LaunchScreen.storyboard in Resources */,
+				3374C79A2112077C00F83101 /* icon_setting.png in Resources */,
+				3374C7AB2112077C00F83101 /* icon_warning.png in Resources */,
+				3374C7A82112077C00F83101 /* icon_history_up.png in Resources */,
+				3374C7542112013F00F83101 /* Assets.xcassets in Resources */,
+				3374C7972112077C00F83101 /* icon_close.png in Resources */,
+				3374C7982112077C00F83101 /* icon_back.png in Resources */,
+				3374C7952112077C00F83101 /* icon_more.png in Resources */,
+				3374C7A02112077C00F83101 /* icon_range_down.png in Resources */,
+				3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */,
+				3374C7522112013B00F83101 /* InUser.storyboard in Resources */,
+				3374C7992112077C00F83101 /* ic_oval.png in Resources */,
+				33EE4CA92116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard in Resources */,
+				3374C7922112077C00F83101 /* icon_child_device_gray.png in Resources */,
+				3374C7AD2112077C00F83101 /* icon_charging.png in Resources */,
+				3374C7A72112077C00F83101 /* icon_location.png in Resources */,
+				3374C7A92112077C00F83101 /* icon_user.png in Resources */,
+				3374C79B2112077C00F83101 /* icon_track_down.png in Resources */,
+				3374C7AF2112077C00F83101 /* icon_range_up.png in Resources */,
+				3374C7B12112077C00F83101 /* icon_splash.png in Resources */,
+				3328800D21159E9300C4893B /* InDeviceListCell.xib in Resources */,
+				3374C7912112077C00F83101 /* icon_map_type.png in Resources */,
+				3374C7AE2112077C00F83101 /* icon_dot_up.png in Resources */,
+				3374C7A12112077C00F83101 /* icon_add_device.png in Resources */,
+				33EE4C9B2116DBE000CDDC98 /* InDeviceMenuViewController.xib in Resources */,
+				3374C7A62112077C00F83101 /* icon_poup.png in Resources */,
+				3328801C2115AA4900C4893B /* InControlDeviceViewController.xib in Resources */,
+				3374C7A42112077C00F83101 /* icon_back_dark.png in Resources */,
+				3328800F2115A00C00C4893B /* ic_launcher.png in Resources */,
+				33287FF9211557BD00C4893B /* icon_password_show.png in Resources */,
+				3374C7942112077C00F83101 /* icon_track_up.png in Resources */,
+				3374C79E2112077C00F83101 /* icon_menu.png in Resources */,
+				3374C7962112077C00F83101 /* icon_default_image.png in Resources */,
+				3374C79D2112077C00F83101 /* icon_battery.9.png in Resources */,
+				3374C7A22112077C00F83101 /* icon_enter.png in Resources */,
+				33EE4C9D2116EDD500CDDC98 /* deviceMenu.png in Resources */,
+				3374C79F2112077C00F83101 /* icon_child_device.png in Resources */,
+				3374C7B02112077C00F83101 /* icon_checked.png in Resources */,
+				3374C7A32112077C00F83101 /* icon_scan_line.png in Resources */,
+				33EE4C932116C27300CDDC98 /* InUserSettingViewController.xib in Resources */,
+				3374C7AC2112077C00F83101 /* icon_warning_gray.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3374C75D2112014000F83101 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		573496603360B9A33966FBED /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Innway-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		70C8602B160D1BB5532D9DF8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Innway/Pods-Innway-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8604D6C7127816EC4809D128 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Innway/Pods-Innway-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3374C7432112013A00F83101 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3328800C21159E9300C4893B /* InDeviceListCell.m in Sources */,
+				3328800221158F4900C4893B /* InForgetPasswordViewController.m in Sources */,
+				33EE4CAC21170C1500CDDC98 /* InAlertTableViewController.m in Sources */,
+				3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */,
+				33287FFF21158E7900C4893B /* InRegisterViewController.m in Sources */,
+				33027C1B211EBAC40003C5D9 /* InAlertTool.m in Sources */,
+				3374C75A2112013F00F83101 /* main.m in Sources */,
+				33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */,
+				33EE4CA62116FA9B00CDDC98 /* InDeviceSettingViewController.m in Sources */,
+				3328801B2115AA4900C4893B /* InControlDeviceViewController.m in Sources */,
+				3328800821159A4D00C4893B /* InDeviceListViewController.m in Sources */,
+				3374C74C2112013B00F83101 /* AppDelegate.m in Sources */,
+				33EE4C9A2116DBE000CDDC98 /* InDeviceMenuViewController.m in Sources */,
+				33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3374C75B2112014000F83101 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3374C7642112014000F83101 /* InnwayUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3374C7612112014000F83101 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3374C7462112013A00F83101 /* Innway */;
+			targetProxy = 3374C7602112014000F83101 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		3374C7502112013B00F83101 /* InUser.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3374C7512112013B00F83101 /* Base */,
+			);
+			name = InUser.storyboard;
+			sourceTree = "<group>";
+		};
+		3374C7552112013F00F83101 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3374C7562112013F00F83101 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3374C7662112014000F83101 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		3374C7672112014000F83101 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3374C7692112014000F83101 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 19F61050A82BF0B9B29DC8FF /* Pods-Innway.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4X78T389EK;
+				INFOPLIST_FILE = Innway/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.innwaytech.innway.Innway;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3374C76A2112014000F83101 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B71E970440059BC688B692B6 /* Pods-Innway.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4X78T389EK;
+				INFOPLIST_FILE = Innway/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.innwaytech.innway.Innway;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3374C76C2112014000F83101 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4X78T389EK;
+				INFOPLIST_FILE = InnwayUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.innwaytech.innway.InnwayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Innway;
+			};
+			name = Debug;
+		};
+		3374C76D2112014000F83101 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4X78T389EK;
+				INFOPLIST_FILE = InnwayUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.innwaytech.innway.InnwayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Innway;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3374C7422112013A00F83101 /* Build configuration list for PBXProject "Innway" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3374C7662112014000F83101 /* Debug */,
+				3374C7672112014000F83101 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3374C7682112014000F83101 /* Build configuration list for PBXNativeTarget "Innway" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3374C7692112014000F83101 /* Debug */,
+				3374C76A2112014000F83101 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3374C76B2112014000F83101 /* Build configuration list for PBXNativeTarget "InnwayUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3374C76C2112014000F83101 /* Debug */,
+				3374C76D2112014000F83101 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3374C73F2112013A00F83101 /* Project object */;
+}
