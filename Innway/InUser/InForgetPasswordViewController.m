@@ -37,6 +37,11 @@
 }
 
 - (IBAction)resetBtnDidClick:(UIButton *)sender {
+    if (self.email.length == 0) {
+        [InAlertTool showAlertWithTip:@"请输入邮箱"];
+        return;
+    }
+    
     NSLog(@"重置密码, 邮箱:%@", self.email);
     NSDictionary *parameters = @{@"username":self.email};
     [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/user/sendResetEmail" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

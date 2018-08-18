@@ -7,6 +7,7 @@
 //
 
 #import "InUserSettingViewController.h"
+#import "InCommon.h"
 #define InSettingViewCellReuseIdentifier @"InSettingViewCell"
 
 @interface InUserSettingViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -51,6 +52,7 @@
 
 // 注销账户
 - (IBAction)logout{
+    [[InCommon sharedInstance] clearUserInfo];
     if (self.logoutUser) {
         self.logoutUser();
     }

@@ -81,7 +81,7 @@
 + (void)showAlertAutoDisappear:(NSString *)message completion:(void (^)(void))completion { //自动隐藏弹框后可选有完成事件
     __block UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
     [alertController show];
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC);
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [alertController dismissViewControllerAnimated:YES completion:completion];
         alertController = nil;

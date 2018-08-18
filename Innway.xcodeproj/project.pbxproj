@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		33027C1B211EBAC40003C5D9 /* InAlertTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C1A211EBAC40003C5D9 /* InAlertTool.m */; };
+		33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C22211EDE1C0003C5D9 /* InCommon.m */; };
 		33287FF9211557BD00C4893B /* icon_password_show.png in Resources */ = {isa = PBXBuildFile; fileRef = 33287FF8211557BD00C4893B /* icon_password_show.png */; };
 		33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33287FFB21155B3200C4893B /* InUserTableViewController.m */; };
 		33287FFF21158E7900C4893B /* InRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33287FFE21158E7900C4893B /* InRegisterViewController.m */; };
@@ -83,6 +84,8 @@
 		19F61050A82BF0B9B29DC8FF /* Pods-Innway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Innway.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Innway/Pods-Innway.debug.xcconfig"; sourceTree = "<group>"; };
 		33027C19211EBAC30003C5D9 /* InAlertTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAlertTool.h; sourceTree = "<group>"; };
 		33027C1A211EBAC40003C5D9 /* InAlertTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAlertTool.m; sourceTree = "<group>"; };
+		33027C21211EDE1C0003C5D9 /* InCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InCommon.h; sourceTree = "<group>"; };
+		33027C22211EDE1C0003C5D9 /* InCommon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InCommon.m; sourceTree = "<group>"; };
 		33287FF8211557BD00C4893B /* icon_password_show.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_password_show.png; sourceTree = "<group>"; };
 		33287FFA21155B3200C4893B /* InUserTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InUserTableViewController.h; sourceTree = "<group>"; };
 		33287FFB21155B3200C4893B /* InUserTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InUserTableViewController.m; sourceTree = "<group>"; };
@@ -185,6 +188,8 @@
 			children = (
 				33027C19211EBAC30003C5D9 /* InAlertTool.h */,
 				33027C1A211EBAC40003C5D9 /* InAlertTool.m */,
+				33027C21211EDE1C0003C5D9 /* InCommon.h */,
+				33027C22211EDE1C0003C5D9 /* InCommon.m */,
 			);
 			path = InTool;
 			sourceTree = "<group>";
@@ -538,6 +543,7 @@
 				33EE4CAC21170C1500CDDC98 /* InAlertTableViewController.m in Sources */,
 				3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */,
 				33287FFF21158E7900C4893B /* InRegisterViewController.m in Sources */,
+				33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */,
 				33027C1B211EBAC40003C5D9 /* InAlertTool.m in Sources */,
 				3374C75A2112013F00F83101 /* main.m in Sources */,
 				33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */,

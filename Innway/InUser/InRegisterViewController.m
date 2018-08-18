@@ -38,6 +38,15 @@
 }
 
 - (IBAction)registerBtnDidClick:(UIButton *)sender {
+    if (self.email.length == 0) {
+        [InAlertTool showAlertWithTip:@"请输入邮箱"];
+        return;
+    }
+    else if (self.pwd.length == 0) {
+        [InAlertTool showAlertWithTip:@"请输入密码"];
+        return;
+    }
+    
     NSDictionary *parameters = @{@"username":self.email, @"password":self.pwd};
     NSLog(@"开始注册，邮箱: %@, 密码: %@", self.email, self.pwd);
     [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/user/register" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
