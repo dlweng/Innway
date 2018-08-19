@@ -59,6 +59,10 @@
 		3374C7B02112077C00F83101 /* icon_checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C78E2112077C00F83101 /* icon_checked.png */; };
 		3374C7B12112077C00F83101 /* icon_splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C78F2112077C00F83101 /* icon_splash.png */; };
 		3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7902112077C00F83101 /* icon_dot_down.png */; };
+		338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7521297F5F00A018EA /* DLUUIDTool.m */; };
+		338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7721297F5F00A018EA /* DLCloudDeviceManager.m */; };
+		338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7921297F5F00A018EA /* DLCentralManager.m */; };
+		338CDF7F21297F6000A018EA /* DLDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7B21297F6000A018EA /* DLDevice.m */; };
 		33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */; };
 		33EE4C932116C27300CDDC98 /* InUserSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4C912116C27300CDDC98 /* InUserSettingViewController.xib */; };
 		33EE4C9A2116DBE000CDDC98 /* InDeviceMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4C982116DBE000CDDC98 /* InDeviceMenuViewController.m */; };
@@ -148,6 +152,14 @@
 		3374C78E2112077C00F83101 /* icon_checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_checked.png; sourceTree = "<group>"; };
 		3374C78F2112077C00F83101 /* icon_splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_splash.png; sourceTree = "<group>"; };
 		3374C7902112077C00F83101 /* icon_dot_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_dot_down.png; sourceTree = "<group>"; };
+		338CDF7421297F5E00A018EA /* DLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLDevice.h; sourceTree = "<group>"; };
+		338CDF7521297F5F00A018EA /* DLUUIDTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLUUIDTool.m; sourceTree = "<group>"; };
+		338CDF7621297F5F00A018EA /* DLCentralManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLCentralManager.h; sourceTree = "<group>"; };
+		338CDF7721297F5F00A018EA /* DLCloudDeviceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLCloudDeviceManager.m; sourceTree = "<group>"; };
+		338CDF7821297F5F00A018EA /* DLCloudDeviceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLCloudDeviceManager.h; sourceTree = "<group>"; };
+		338CDF7921297F5F00A018EA /* DLCentralManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLCentralManager.m; sourceTree = "<group>"; };
+		338CDF7A21297F6000A018EA /* DLUUIDTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLUUIDTool.h; sourceTree = "<group>"; };
+		338CDF7B21297F6000A018EA /* DLDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLDevice.m; sourceTree = "<group>"; };
 		33EE4C8F2116C27300CDDC98 /* InUserSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InUserSettingViewController.h; sourceTree = "<group>"; };
 		33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InUserSettingViewController.m; sourceTree = "<group>"; };
 		33EE4C912116C27300CDDC98 /* InUserSettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InUserSettingViewController.xib; sourceTree = "<group>"; };
@@ -259,6 +271,7 @@
 		3374C7492112013A00F83101 /* Innway */ = {
 			isa = PBXGroup;
 			children = (
+				338CDF8221297F8C00A018EA /* Bluetooth */,
 				3374C76E2112077C00F83101 /* image */,
 				33027C1F211EC5140003C5D9 /* InTool */,
 				332880032115997400C4893B /* InUser */,
@@ -323,6 +336,21 @@
 				3374C7902112077C00F83101 /* icon_dot_down.png */,
 			);
 			path = image;
+			sourceTree = "<group>";
+		};
+		338CDF8221297F8C00A018EA /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				338CDF7621297F5F00A018EA /* DLCentralManager.h */,
+				338CDF7921297F5F00A018EA /* DLCentralManager.m */,
+				338CDF7821297F5F00A018EA /* DLCloudDeviceManager.h */,
+				338CDF7721297F5F00A018EA /* DLCloudDeviceManager.m */,
+				338CDF7421297F5E00A018EA /* DLDevice.h */,
+				338CDF7B21297F6000A018EA /* DLDevice.m */,
+				338CDF7A21297F6000A018EA /* DLUUIDTool.h */,
+				338CDF7521297F5F00A018EA /* DLUUIDTool.m */,
+			);
+			path = Bluetooth;
 			sourceTree = "<group>";
 		};
 		646857F1B258D174F8BFBE5B /* Pods */ = {
@@ -542,6 +570,7 @@
 				3328800221158F4900C4893B /* InForgetPasswordViewController.m in Sources */,
 				33EE4CAC21170C1500CDDC98 /* InAlertTableViewController.m in Sources */,
 				3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */,
+				338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */,
 				33287FFF21158E7900C4893B /* InRegisterViewController.m in Sources */,
 				33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */,
 				33027C1B211EBAC40003C5D9 /* InAlertTool.m in Sources */,
@@ -549,7 +578,10 @@
 				33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */,
 				33EE4CA62116FA9B00CDDC98 /* InDeviceSettingViewController.m in Sources */,
 				3328801B2115AA4900C4893B /* InControlDeviceViewController.m in Sources */,
+				338CDF7F21297F6000A018EA /* DLDevice.m in Sources */,
 				3328800821159A4D00C4893B /* InDeviceListViewController.m in Sources */,
+				338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */,
+				338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */,
 				3374C74C2112013B00F83101 /* AppDelegate.m in Sources */,
 				33EE4C9A2116DBE000CDDC98 /* InDeviceMenuViewController.m in Sources */,
 				33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */,

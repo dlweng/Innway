@@ -67,9 +67,9 @@
                 if (data) {
                     [self.common saveUserInfoWithID:data[@"id"] email:data[@"username"] pwd:data[@"password"]];
                 }
-                [InAlertTool showAlertAutoDisappear:@"登陆成功" completion:^{
+//                [InAlertTool showAlertAutoDisappear:@"登陆成功" completion:^{
                     [self pushToDeviceListController];
-                }];
+//                }];
             }
             else if (code.integerValue == 500) {
                 [InAlertTool showAlertAutoDisappear:[NSString stringWithFormat:@"%@", message]];

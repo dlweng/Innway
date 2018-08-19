@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -39,7 +40,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JXG-A2-ht1">
-                        <rect key="frame" x="91" y="40.5" width="39.5" height="19.5"/>
+                        <rect key="frame" x="91" y="40.5" width="205" height="19.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -54,6 +55,7 @@
                     <constraint firstItem="JXG-A2-ht1" firstAttribute="top" secondItem="IsC-Ry-62s" secondAttribute="bottom" constant="2" id="m2d-WG-gQw"/>
                     <constraint firstItem="JXG-A2-ht1" firstAttribute="leading" secondItem="csM-Rq-pRP" secondAttribute="leading" id="oOL-Vl-r9M"/>
                     <constraint firstAttribute="bottom" secondItem="RTH-Gd-YKb" secondAttribute="bottom" constant="4" id="qcQ-Q5-yTB"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="JXG-A2-ht1" secondAttribute="trailing" constant="8" id="uxT-2s-kLC"/>
                     <constraint firstItem="RTH-Gd-YKb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="zGF-GA-hNe"/>
                 </constraints>
             </tableViewCellContentView>

@@ -20,6 +20,7 @@
 @implementation InUserSettingViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:InSettingViewCellReuseIdentifier];
     self.tableView.scrollEnabled = NO;

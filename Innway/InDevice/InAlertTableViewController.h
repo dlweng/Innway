@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DLDevice.h"
 
 /**
  界面显示类型
@@ -26,6 +27,6 @@ typedef NS_ENUM(NSInteger, InAlertViewType) {
 
 @interface InAlertTableViewController : UITableViewController
 
-- (instancetype)initWithAlertType:(InAlertViewType)alertType withAlert:(NSInteger)alertNum;
+- (instancetype)initWithAlertType:(InAlertViewType)alertType withDevice:(DLDevice *)device;
 
 @end

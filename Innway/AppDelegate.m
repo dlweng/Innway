@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "DLCentralManager.h"
 
 @interface AppDelegate ()
 
@@ -19,6 +20,9 @@
     // Override point for customization after application launch.
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     navigationBar.tintColor = [UIColor whiteColor];
+    [DLCentralManager startSDKCompletion:^(DLCentralManager *manager, CBCentralManagerState state) {
+        
+    }];
     return YES;
 }
 

@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DLDevice.h"
 
 @interface InControlDeviceViewController : UIViewController
+
+@property (nonatomic, strong) DLDevice *device;
 
 @end

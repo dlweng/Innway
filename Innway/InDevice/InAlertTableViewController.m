@@ -11,16 +11,33 @@
 @interface InAlertTableViewController ()
 
 @property (nonatomic, assign) InAlertViewType alertType;
+@property (nonatomic, strong) DLDevice *device;
 @property (nonatomic, assign) NSInteger alertNum;
 
 @end
 
 @implementation InAlertTableViewController
 
-- (instancetype)initWithAlertType:(InAlertViewType)alertType withAlert:(NSInteger)alertNum {
+- (instancetype)initWithAlertType:(InAlertViewType)alertType withDevice:(DLDevice *)device {
     if (self = [super init]) {
         self.alertType = alertType;
-        self.alertNum = alertNum;
+        self.device = device;
+        switch (self.alertType) {
+            case InPhoneAlert:
+            {
+                NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
+                self.alertNum = phoneAlertMusic.integerValue - 1;
+                break;
+            }
+            case InDeviceAlert:
+            {
+                NSNumber *alertMusic = self.device.lastData[AlertMusicKey];
+                self.alertNum = alertMusic.integerValue - 1;
+                break;
+            }
+            default:
+                break;
+        }
     }
     return self;
 }
@@ -42,6 +59,19 @@
 }
 
 - (void)goBack {
+    switch (self.alertType) {
+        case InPhoneAlert:
+        {
+            [[NSUserDefaults standardUserDefaults] setValue:@(self.alertNum+1) forKey:PhoneAlertMusicKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+            break;
+        case InDeviceAlert:
+            [self.device selecteDiconnectAlertMusic:self.alertNum+1];
+            break;
+        default:
+            break;
+    }
     if (self.navigationController.viewControllers.lastObject == self) {
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -106,5 +136,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 70;
 }
+
+
 
 @end

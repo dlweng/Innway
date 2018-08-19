@@ -10,12 +10,14 @@
 #import "InAlertTableViewController.h"
 #define InDeviceSettingCellReuseIdentifier @"InDeviceSettingCell"
 
-@interface InDeviceSettingViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface InDeviceSettingViewController ()<UITableViewDataSource, UITableViewDelegate, DLDeviceDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *deleteDeviceBtn;
 @property (nonatomic, strong) UISwitch *disconnectAlertBtn;
 @property (nonatomic, strong) UISwitch *reconnectTipBtn;
+
+@property (nonatomic, assign) NSNumber *phoneAlertMusic;
 
 @end
 
@@ -46,6 +48,14 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.tableView setContentOffset:CGPointZero animated:NO];
     });
+    self.device.delegate = self;
+    
+    self.phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
+    NSLog(@"手机警报声音: %zd", self.phoneAlertMusic.integerValue);
+    if (!self.phoneAlertMusic) {
+        self.phoneAlertMusic = @(1);
+    }
+    [self.tableView reloadData];
 }
 
 - (IBAction)deleteDeviceBtnDidClick {
@@ -54,10 +64,12 @@
 
 - (void)disconnectAlertBtnDidClick: (UISwitch *)btn {
     NSLog(@"断开警告被点击: %d", btn.isOn);
+    [self.device setDisconnectAlert:btn.isOn reconnectAlert:self.reconnectTipBtn.isOn];
 }
 
 - (void)reconnectTipBtnDidClick:(UISwitch *)btn {
     NSLog(@"重连提示被点击: %d", btn.isOn);
+    [self.device setDisconnectAlert:self.disconnectAlertBtn.isOn reconnectAlert:btn.isOn];
 }
 
 - (void)goBack {
@@ -103,7 +115,7 @@
     switch (indexPath.section) {
         case 0:
         {
-            cell.textLabel.text = @"INNWAY CARD";
+            cell.textLabel.text = self.device.deviceName;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         }
@@ -111,12 +123,21 @@
         {
             switch (indexPath.row) {
                 case 0:
+                {
                     cell.textLabel.text = @"断开警报";
                     cell.accessoryView = self.disconnectAlertBtn;
+                    NSNumber *disconnectAlert = self.device.lastData[DisconnectAlertKey];
+                    self.disconnectAlertBtn.on = disconnectAlert.boolValue;
                     break;
+                }
                 case 1:
+                {
                     cell.textLabel.text = @"重连提示";
                     cell.accessoryView = self.reconnectTipBtn;
+                    NSNumber *reconnectAlert = self.device.lastData[ReconnectAlertKey];
+                    self.reconnectTipBtn.on = reconnectAlert.boolValue;
+                    break;
+                }
                 default:
                     break;
             }
@@ -126,17 +147,43 @@
         {
             switch (indexPath.row) {
                 case 0:
+                {
                     cell.textLabel.text = @"设备警报声音";
-                    cell.detailTextLabel.text = @"设备警报声一";
+                    NSNumber *alertMusic = self.device.lastData[AlertMusicKey];
+                    switch (alertMusic.integerValue) {
+                        case 2:
+                            cell.detailTextLabel.text = @"设备警报声二";
+                            break;
+                        case 3:
+                            cell.detailTextLabel.text = @"设备警报声三";
+                            break;
+                        default:
+                            cell.detailTextLabel.text = @"设备警报声一";
+                            break;
+                    }
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     cell.detailTextLabel.textColor = [UIColor greenColor];
                     break;
+                }
                 case 1:
+                {
                     cell.textLabel.text = @"手机警报声音";
-                    cell.detailTextLabel.text = @"手机警报声一";
+                    switch (self.phoneAlertMusic.integerValue) {
+                        case 2:
+                            cell.detailTextLabel.text = @"手机警报声二";
+                            break;
+                        case 3:
+                            cell.detailTextLabel.text = @"手机警报声三";
+                            break;
+                        default:
+                            cell.detailTextLabel.text = @"手机警报声一";
+                            break;
+                    }
+                    
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     cell.detailTextLabel.textColor = [UIColor greenColor];
                     break;
+                }
                 default:
                     break;
             }
@@ -180,11 +227,15 @@
             default:
                 break;
         }
-        InAlertTableViewController *alertVC = [[InAlertTableViewController alloc] initWithAlertType:alertType withAlert:1];
+        InAlertTableViewController *alertVC = [[InAlertTableViewController alloc] initWithAlertType:alertType withDevice:self.device];
         if (self.navigationController.viewControllers.lastObject == self) {
             [self.navigationController pushViewController:alertVC animated:YES];
         }
     }
+}
+
+- (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data {
+    [self.tableView reloadData];
 }
 
 @end

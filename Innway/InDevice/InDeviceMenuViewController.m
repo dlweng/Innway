@@ -8,11 +8,13 @@
 
 #import "InDeviceMenuViewController.h"
 #define InDeviceMenuCellReuseIdentifier @"InDeviceMenuCell"
+#import "DLCloudDeviceManager.h"
 
 @interface InDeviceMenuViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) NSArray *deviceList;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) NSDictionary *cloudDeviceList;
 
 @end
 
@@ -30,12 +32,17 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:InDeviceMenuCellReuseIdentifier];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.deviceList.count + 1;
+    return self.cloudDeviceList.allKeys.count + 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -47,15 +54,27 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InDeviceMenuCellReuseIdentifier];
-    if (indexPath.row == self.deviceList.count) {
+    if (indexPath.row == self.cloudDeviceList.allKeys.count) {
         cell.imageView.image = [UIImage imageNamed:@"icon_add_device"];
         cell.textLabel.text = @"添加设备";
     }
     else {
+        NSString *identify = self.cloudDeviceList.allKeys[indexPath.row];
+        DLDevice *device = self.cloudDeviceList[identify];
         cell.imageView.image = [UIImage imageNamed:@"deviceMenu"];
-        cell.textLabel.text = @"INNWAY CARD";
+        cell.textLabel.text = device.deviceName;
     }
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if (indexPath.row == self.cloudDeviceList.allKeys.count) {
+        NSLog(@"self.parentViewController = %@", self.parentViewController);
+        if (self.parentViewController.navigationController.viewControllers.lastObject == self.parentViewController) {
+            [self.parentViewController.navigationController popViewControllerAnimated:YES];
+        }
+    }
 }
 
 @end

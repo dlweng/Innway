@@ -10,8 +10,10 @@
 #import "InUserSettingViewController.h"
 #import "InDeviceMenuViewController.h"
 #import "InDeviceSettingViewController.h"
+#import "DLCloudDeviceManager.h"
+#import <MapKit/MapKit.h>
 
-@interface InControlDeviceViewController ()
+@interface InControlDeviceViewController ()<DLDeviceDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewbottomGapConstraint;
@@ -28,6 +30,11 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceMenuViewTrailingConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceMenuTopContaint;
 @property (nonatomic, assign) BOOL deviceMenuIsShow;
+
+@property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
 @end
 
@@ -58,14 +65,20 @@
     self.topBodyView.backgroundColor = [UIColor redColor];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.device.delegate = self;
+    [self.device getDeviceInfo];
+    
+}
+
 - (void)addDeviceMenu {
 #warning 模拟设备列表
-    NSArray *deviceList = @[@"dada", @"dasda"];
-    InDeviceMenuViewController *deviceMenuVC = [InDeviceMenuViewController menuViewControllerWithDeviceList:deviceList];
+    InDeviceMenuViewController *deviceMenuVC = [InDeviceMenuViewController menuViewControllerWithDeviceList:nil];
     [self addChildViewController:deviceMenuVC];
     [self.deviceMenuView addSubview:deviceMenuVC.view];
     
-    self.deviceMenuViewHeightConstraint.constant = deviceList.count * 70 + 50;
+    self.deviceMenuViewHeightConstraint.constant = [DLCloudDeviceManager sharedInstance].cloudDeviceList.allKeys.count * 70 + 50;
     deviceMenuVC.view.frame = CGRectMake(0, 0, self.deviceMenuView.frame.size.width, self.deviceMenuView.frame.size.height);
 }
 
@@ -91,6 +104,7 @@
     NSLog(@"settingView.frame = %@", [NSValue valueWithCGRect:self.settingView.frame]);
     NSLog(@"self.view.frame = %@", [NSValue valueWithCGRect:self.view.frame]);
     NSLog(@"bounds = %@", [NSValue valueWithCGRect:[UIScreen mainScreen].bounds]);
+    self.settingView.hidden = YES;
 }
 
 - (void)showSettingVC: (BOOL)isShow {
@@ -99,6 +113,7 @@
     if (isShow) {
         //显示
         origin.x = 0;
+        self.settingView.hidden = NO;
     }
     else {
         CGFloat width = frame.size.width;
@@ -114,11 +129,15 @@
             self.navigationItem.leftBarButtonItem = self.settingImageBarButton;
         }
         self.settingView.frame = frame;
+    } completion:^(BOOL finished) {
+        if (!isShow) {
+            self.settingView.hidden = YES;
+        }
     }];
 }
 
 - (void)setupNarBar {
-    self.navigationItem.title = @"Innway";
+    self.navigationItem.title = self.device.deviceName;
     self.settingImageBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_setting"] style:UIBarButtonItemStylePlain target:self action:@selector(goToSettingVC)];
     //用户设置
     self.SettingTitleBarButton = [[UIBarButtonItem alloc] initWithTitle:@"用户设置" style:UIBarButtonItemStylePlain target:nil action:nil];
@@ -145,22 +164,44 @@
 //控制设备
 - (IBAction)controlDeviceBtnDidClick:(UIButton *)sender {
     NSLog(@"下发控制指令");
+    [self.device searchDevice];
 }
 
 //进入更多界面
 - (IBAction)more {
     NSLog(@"进入更多界面");
     if (self.navigationController.viewControllers.lastObject == self) {
-        [self.navigationController pushViewController:[InDeviceSettingViewController deviceSettingViewController] animated:YES];
+        InDeviceSettingViewController *vc = [InDeviceSettingViewController deviceSettingViewController];
+        vc.device = self.device;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
 - (IBAction)toSwitchMapMode {
     NSLog(@"切换地图模式");
+//    MKMapTypeStandard = 0,
+//    MKMapTypeSatellite,
+    if (self.mapView.mapType == MKMapTypeStandard) {
+        self.mapView.mapType = MKMapTypeSatellite;
+    }
+    else {
+        self.mapView.mapType = MKMapTypeStandard;
+    }
 }
 
 - (IBAction)toLocation {
     NSLog(@"开始定位");
+}
+
+- (void)updateUI {
+    //根据设备的信息界面
+//    self.device.lastData
+}
+
+- (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data {
+    if (device == self.device) {
+        [self updateUI];
+    }
 }
 
 
