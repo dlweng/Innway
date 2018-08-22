@@ -50,7 +50,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gmk-bd-sj9" userLabel="deviceMenuView">
-                    <rect key="frame" x="187.5" y="0.0" width="187.5" height="128"/>
+                    <rect key="frame" x="150" y="0.0" width="225" height="128"/>
                     <color key="backgroundColor" red="0.66198941249999999" green="0.61484838580000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="128" id="Z8y-ed-Sq0"/>
@@ -161,7 +161,7 @@
                 <constraint firstItem="ZUV-I6-2mO" firstAttribute="top" secondItem="n2y-1z-g8O" secondAttribute="bottom" constant="30" id="Qic-3M-A0Y"/>
                 <constraint firstItem="ZUV-I6-2mO" firstAttribute="top" secondItem="sFK-RS-0Zf" secondAttribute="bottom" id="QuM-3f-K25"/>
                 <constraint firstItem="n2y-1z-g8O" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="30" id="SGf-wG-MXd"/>
-                <constraint firstItem="gmk-bd-sj9" firstAttribute="width" secondItem="sFK-RS-0Zf" secondAttribute="width" multiplier="0.5" id="VUy-jB-KQ9"/>
+                <constraint firstItem="gmk-bd-sj9" firstAttribute="width" secondItem="sFK-RS-0Zf" secondAttribute="width" multiplier="0.6" id="VUy-jB-KQ9"/>
                 <constraint firstAttribute="trailing" secondItem="ZUV-I6-2mO" secondAttribute="trailing" id="ai9-Pg-PUB"/>
                 <constraint firstAttribute="trailing" secondItem="gmk-bd-sj9" secondAttribute="trailing" id="c2t-db-zVA"/>
                 <constraint firstItem="ZUV-I6-2mO" firstAttribute="top" secondItem="f3P-xo-K4a" secondAttribute="bottom" constant="30" id="c5O-Yq-9T5"/>

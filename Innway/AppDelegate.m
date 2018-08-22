@@ -21,7 +21,6 @@
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     navigationBar.tintColor = [UIColor whiteColor];
     [DLCentralManager startSDKCompletion:^(DLCentralManager *manager, CBCentralManagerState state) {
-        
     }];
     return YES;
 }

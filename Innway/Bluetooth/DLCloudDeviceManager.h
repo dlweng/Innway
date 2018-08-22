@@ -20,8 +20,8 @@ typedef void (^DidDeleteDeviceEvent)(DLCloudDeviceManager *manager, NSError *err
 + (instancetype)sharedInstance;
 
 // 添加设备
-- (void)addDevice:(NSString *)identifier completion:(DidAddDeviceEvent)completion;
-- (void)deleteDevice:(NSString *)identifier completion:(DidDeleteDeviceEvent)completion;
+- (void)addDevice:(NSString *)mac completion:(DidAddDeviceEvent)completion;
+- (void)deleteDevice:(NSString *)mac completion:(DidDeleteDeviceEvent)completion;
 
 
 @end

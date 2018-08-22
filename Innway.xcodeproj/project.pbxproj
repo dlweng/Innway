@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		33027C1B211EBAC40003C5D9 /* InAlertTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C1A211EBAC40003C5D9 /* InAlertTool.m */; };
 		33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C22211EDE1C0003C5D9 /* InCommon.m */; };
+		3321B8BF212C22DE00633382 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3321B8BE212C22DE00633382 /* MapKit.framework */; };
 		33287FF9211557BD00C4893B /* icon_password_show.png in Resources */ = {isa = PBXBuildFile; fileRef = 33287FF8211557BD00C4893B /* icon_password_show.png */; };
 		33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33287FFB21155B3200C4893B /* InUserTableViewController.m */; };
 		33287FFF21158E7900C4893B /* InRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33287FFE21158E7900C4893B /* InRegisterViewController.m */; };
@@ -90,6 +91,7 @@
 		33027C1A211EBAC40003C5D9 /* InAlertTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAlertTool.m; sourceTree = "<group>"; };
 		33027C21211EDE1C0003C5D9 /* InCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InCommon.h; sourceTree = "<group>"; };
 		33027C22211EDE1C0003C5D9 /* InCommon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InCommon.m; sourceTree = "<group>"; };
+		3321B8BE212C22DE00633382 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		33287FF8211557BD00C4893B /* icon_password_show.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_password_show.png; sourceTree = "<group>"; };
 		33287FFA21155B3200C4893B /* InUserTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InUserTableViewController.h; sourceTree = "<group>"; };
 		33287FFB21155B3200C4893B /* InUserTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InUserTableViewController.m; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3321B8BF212C22DE00633382 /* MapKit.framework in Frameworks */,
 				E909AD2F8F529939073B9C99 /* libPods-Innway.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,6 +368,7 @@
 		E6EC80CA7CD0FBC2A88AD296 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3321B8BE212C22DE00633382 /* MapKit.framework */,
 				548C34A61E92F52550403152 /* libPods-Innway.a */,
 			);
 			name = Frameworks;

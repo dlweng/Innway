@@ -78,7 +78,12 @@
     [self addChildViewController:deviceMenuVC];
     [self.deviceMenuView addSubview:deviceMenuVC.view];
     
-    self.deviceMenuViewHeightConstraint.constant = [DLCloudDeviceManager sharedInstance].cloudDeviceList.allKeys.count * 70 + 50;
+    CGFloat height = [DLCloudDeviceManager sharedInstance].cloudDeviceList.allKeys.count * 70 + 50;
+    CGFloat maxHeight = [UIScreen mainScreen].bounds.size.height - 138 - 66;
+    if (height > maxHeight) {
+        height = maxHeight;
+    }
+    self.deviceMenuViewHeightConstraint.constant = height;
     deviceMenuVC.view.frame = CGRectMake(0, 0, self.deviceMenuView.frame.size.width, self.deviceMenuView.frame.size.height);
 }
 

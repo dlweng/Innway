@@ -194,7 +194,7 @@
             switch (indexPath.row) {
                 case 0:
                     cell.textLabel.text = @"设备地址";
-                    cell.detailTextLabel.text = @"04:00:00:00:00:00";
+                    cell.detailTextLabel.text = self.device.mac;
                     cell.detailTextLabel.textColor = [UIColor darkGrayColor];
                     break;
                 case 1:

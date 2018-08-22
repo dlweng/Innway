@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <MBProgressHUD.h>
 
 @interface UIAlertController (InAlertTool)
 @property (strong, nonatomic) UIWindow *alertWindow;
@@ -21,5 +22,9 @@
 + (UIAlertController *)showAlert:(NSString *)title message:(NSString *)message;
 + (void)showAlertAutoDisappear:(NSString *)message;
 + (void)showAlertAutoDisappear:(NSString *)message completion:(void (^)(void))completion;
+
++ (void)showHUDAddedTo:(UIView *)view animated:(BOOL)animated;
++ (void)showHUDAddedTo:(UIView *)view tips:(NSString *)tips tag:(NSInteger)tag animated:(BOOL)animated;
++ (void)hideHUDForView:(UIView *)view tag:(NSInteger)tag;
 
 @end

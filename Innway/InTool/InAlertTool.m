@@ -88,4 +88,44 @@
     });
 }
 
++ (void)showHUDAddedTo:(UIView *)view animated:(BOOL)animated {
+    if (view) {
+        MBProgressHUD *hud = [MBProgressHUD HUDForView:view];
+        if (!animated || hud.alpha == 0) {
+            [MBProgressHUD showHUDAddedTo:view animated:animated];
+        }
+    }
+}
+
++ (void)showHUDAddedTo:(UIView *)view tips:(NSString *)tips tag:(NSInteger)tag animated:(BOOL)animated {
+    if (![self findHUDForView:view tag:tag]) {
+        MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:view];
+        hud.tag = tag;
+        hud.label.text = tips;
+        hud.label.adjustsFontSizeToFitWidth = YES;
+        hud.label.minimumScaleFactor = 0.3;
+        hud.removeFromSuperViewOnHide = YES;
+        [view addSubview:hud];
+        [hud showAnimated:YES];
+    }
+}
+
++ (void)hideHUDForView:(UIView *)view tag:(NSInteger)tag {
+    MBProgressHUD *hud = [self findHUDForView:view tag:tag];
+    if (hud != nil) {
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hideAnimated:YES];
+    }
+}
+
++ (MBProgressHUD *)findHUDForView:(UIView *)view tag:(NSInteger)tag {
+    NSEnumerator *subviewsEnum = [view.subviews reverseObjectEnumerator];
+    for (UIView *subview in subviewsEnum) {
+        if ([subview isKindOfClass:[MBProgressHUD class]] && subview.tag == tag) {
+            return (MBProgressHUD *)subview;
+        }
+    }
+    return nil;
+}
+
 @end

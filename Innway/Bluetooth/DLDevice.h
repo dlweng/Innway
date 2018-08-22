@@ -31,6 +31,7 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 
 @property (nonatomic, strong) CBPeripheral *peripheral;
 @property (nonatomic, copy) NSString *deviceName;
+@property (nonatomic, copy) NSString *mac;
 @property (nonatomic, strong, readonly) NSDictionary *lastData;
 @property (nonatomic, weak) id<DLDeviceDelegate> delegate;
 
@@ -47,6 +48,7 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 - (void)getDeviceInfo;
 - (void)searchDevice;
 - (void)setDisconnectAlert:(BOOL)disconnectAlert reconnectAlert:(BOOL)reconnectAlert;
+- (void)activeDevice; //激活设备
 //警报音编码，可选 01，02，03
 - (void)selecteDiconnectAlertMusic:(NSInteger)alertMusic;
 @end

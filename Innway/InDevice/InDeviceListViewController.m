@@ -13,12 +13,16 @@
 #import "DLCentralManager.h"
 #import "DLDevice.h"
 #import "InAlertTool.h"
+#import <SSPullToRefresh/SSPullToRefresh.h>
 
 
 #define InDeviceListCellReuseIdentifier @"InDeviceListCell"
 
-@interface InDeviceListViewController ()
+@interface InDeviceListViewController ()<SSPullToRefreshViewDelegate>
 @property (nonatomic, strong) NSDictionary *knownPeripherals;
+
+@property (strong, nonatomic) SSPullToRefreshView *pullToRefreshView;
+@property (nonatomic, strong) DLCentralManager *centralManager;
 
 @end
 
@@ -28,24 +32,61 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:239/255.0 green:239/255.0 blue:244/255.0 alpha:1];
     [self setUpNarBar];
+    self.centralManager = [DLCentralManager sharedInstance];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.tableView reloadData];
-    [[DLCentralManager sharedInstance] startScanCompletion:^(DLCentralManager *manager, NSMutableDictionary<NSString *,CBPeripheral *> *knownPeripherals) {
-        self.knownPeripherals = knownPeripherals;
-        [self.tableView reloadData];
-    }];
+    [self pullToRefreshViewDidStartLoading:self.pullToRefreshView];
     //每次进来先初始化界面
     self.knownPeripherals = [DLCentralManager sharedInstance].knownPeripherals;
     [self.tableView reloadData];
 }
 
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    if (self.pullToRefreshView == nil) {
+        self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.tableView delegate:self];//下拉刷新
+    }
+    if ([[UIDevice currentDevice].systemVersion integerValue] < 11) { //ios11以下才需要
+        self.pullToRefreshView.defaultContentInset = UIEdgeInsetsMake(64, 0, 64, 0);
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.pullToRefreshView finishLoading];
+}
+
+- (void)pullToRefreshViewDidStartLoading:(SSPullToRefreshView *)view {
+    [self getPeripherals];
+}
+
+- (void)refreshTableView {
+    if (self.pullToRefreshView.state == SSPullToRefreshViewStateLoading) {
+        [self.pullToRefreshView finishLoadingAnimated:YES completion:^{
+            self.knownPeripherals = self.centralManager.knownPeripherals;
+            [self.tableView reloadData];
+        }];
+    } else {
+        self.knownPeripherals = self.centralManager.knownPeripherals;
+        [self.tableView reloadData];
+    }
+}
+
 - (void)setUpNarBar {
     self.navigationItem.title = @"设备列表";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+}
+
+- (void)getPeripherals {
+    [[DLCentralManager sharedInstance] startScanDidDiscoverDeviceEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *mac) {
+        [self refreshTableView];
+    } didEndDiscoverDeviceEvent:^(DLCentralManager *manager, NSMutableDictionary<NSString *,CBPeripheral *> *knownPeripherals) {
+        self.knownPeripherals = knownPeripherals;
+        [self refreshTableView];
+    }];
 }
 
 #pragma mark - Table view data source
@@ -72,16 +113,18 @@
     CBPeripheral *peripheral = self.knownPeripherals[key];
     cell.imageName = @"ic_launcher";
     cell.deviceName = peripheral.name;
-    cell.deviceID = peripheral.identifier.UUIDString;
+    cell.deviceID = key;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSString *identify = self.knownPeripherals.allKeys[indexPath.row];
-    [[DLCloudDeviceManager sharedInstance] addDevice:identify completion:^(DLCloudDeviceManager *manager, DLDevice *device, NSError *error) {
+    NSString *mac = self.knownPeripherals.allKeys[indexPath.row];
+    [InAlertTool showHUDAddedTo:self.view animated:YES];
+    [[DLCloudDeviceManager sharedInstance] addDevice:mac completion:^(DLCloudDeviceManager *manager, DLDevice *device, NSError *error) {
         if (!error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
             [InAlertTool showAlertAutoDisappear:@"添加设备成功" completion:^{
                 InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
                 controlDeviceVC.device = device;
@@ -91,6 +134,7 @@
             }];
         }
         else {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
             [InAlertTool showAlertAutoDisappear:@"添加设备失败"];
         }
     }];

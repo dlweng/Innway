@@ -14,18 +14,19 @@
 
 @class DLCentralManager;
 typedef void (^CentralManagerEvent)(DLCentralManager *manager, CBCentralManagerState state);
-typedef void (^DidDiscoverDeviceEvent)(DLCentralManager *manager, NSMutableDictionary<NSString *, CBPeripheral*>* knownPeripherals);
+typedef void (^DidDiscoverDeviceEvent)(DLCentralManager *manager, CBPeripheral *peripheral, NSString *mac);
+typedef void (^DidEndDiscoverDeviceEvent)(DLCentralManager *manager, NSMutableDictionary<NSString *, CBPeripheral*>* knownPeripherals);
 typedef void (^DidConnectToDeviceEvent)(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error);
 typedef void (^DidDisConnectToDeviceEvent)(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error);
 
 @interface DLCentralManager : NSObject
 
-@property (nonatomic, strong) NSMutableDictionary<NSString *, CBPeripheral*>* knownPeripherals;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, CBPeripheral*>* connectedPeripherals;
+@property (nonatomic, strong, readonly) NSMutableDictionary<NSString *, CBPeripheral*>* knownPeripherals;
+//@property (nonatomic, strong) NSMutableDictionary<NSString *, CBPeripheral*>* connectedPeripherals;
 
 + (instancetype)sharedInstance;
 + (void)startSDKCompletion:(CentralManagerEvent)completion;
-- (void)startScanCompletion:(DidDiscoverDeviceEvent)completion;
+- (void)startScanDidDiscoverDeviceEvent:(DidDiscoverDeviceEvent)discoverEvent didEndDiscoverDeviceEvent:(DidEndDiscoverDeviceEvent)endDiscoverEvent;
 - (void)connectToDevice: (CBPeripheral *)peripheral completion:(DidConnectToDeviceEvent)completion;
 - (void)disConnectToDevice: (CBPeripheral *)peripheral completion:(DidDisConnectToDeviceEvent)completion;
 

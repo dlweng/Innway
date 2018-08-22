@@ -73,10 +73,16 @@
     for (CBCharacteristic *characteristic in characteristics) {
         NSLog(@" -- Characteristic %@ (%@)", [characteristic UUID], characteristic);
         [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral on:YES];
+        [self activeDevice];  //激活设备
     }
 }
 
 #pragma mark - 写数据快捷接口
+- (void)activeDevice {
+    char active[1] = {0x01};
+    [self write:[NSData dataWithBytes:active length:strlen(active)]];
+}
+
 - (void)getDeviceInfo {
     char getDeviceInfo[4] = {0xEE, 0x01, 0x00, 0x00};
     [self write:[NSData dataWithBytes:getDeviceInfo length:strlen(getDeviceInfo)]];
