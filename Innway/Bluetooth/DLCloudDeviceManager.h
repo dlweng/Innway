@@ -23,5 +23,9 @@ typedef void (^DidDeleteDeviceEvent)(DLCloudDeviceManager *manager, NSError *err
 - (void)addDevice:(NSString *)mac completion:(DidAddDeviceEvent)completion;
 - (void)deleteDevice:(NSString *)mac completion:(DidDeleteDeviceEvent)completion;
 
+// 获取云端的设备列表
+- (void)getHTTPCloudDeviceList;
+//根据新发现的设备更新云端列表
+- (void)updateCloudList;
 
 @end

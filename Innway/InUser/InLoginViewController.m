@@ -12,6 +12,7 @@
 #import <AFNetworking.h>
 #import "InAlertTool.h"
 #import "InCommon.h"
+#import "InAlertTool.h"
 
 @interface InLoginViewController ()
 
@@ -20,6 +21,7 @@
 @property (nonatomic, copy) NSString *pwd;
 @property (nonatomic, strong) InCommon *common;
 @property (nonatomic, weak) InUserTableViewController *userTableViewVC;
+@property (nonatomic, assign) BOOL firstAppear;
 
 @end
 
@@ -30,19 +32,19 @@
     //设置按钮的圆弧
     self.loginBtn.layer.masksToBounds = YES;
     self.loginBtn.layer.cornerRadius = 25;
+    self.firstAppear = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.common.ID != -1) {
+    if (self.firstAppear && self.common.ID != -1) {
+        self.firstAppear = NO;
         self.userTableViewVC.email = self.common.email;
         self.userTableViewVC.pwd = self.common.pwd;
         self.email = self.common.email;
         self.pwd = self.common.pwd;
+        [self userLogin:nil]; // 自动登陆
     }
-//    if (self.common.ID != -1) {
-//        [self userLogin:nil]; // 自动登陆
-//    }
 }
 
 - (IBAction)userLogin:(UIButton *)sender {
@@ -57,6 +59,7 @@
     
     NSLog(@"开始登陆, self.email = %@, self.pwd = %@", self.email, self.pwd);
     NSDictionary *parameters = @{@"username":self.email, @"password":self.pwd};
+    [InAlertTool showHUDAddedTo:self.view animated:YES];
     [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/user/login" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"登陆结果：task = %@, responseObject = %@", task, responseObject);
         if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
@@ -67,8 +70,9 @@
                 if (data) {
                     [self.common saveUserInfoWithID:data[@"id"] email:data[@"username"] pwd:data[@"password"]];
                 }
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
 //                [InAlertTool showAlertAutoDisappear:@"登陆成功" completion:^{
-                    [self pushToDeviceListController];
+                [self pushToDeviceListController];
 //                }];
             }
             else if (code.integerValue == 500) {

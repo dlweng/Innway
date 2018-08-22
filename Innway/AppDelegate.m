@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "DLCentralManager.h"
+#import "DLCloudDeviceManager.h"
 
 @interface AppDelegate ()
 
@@ -22,6 +23,7 @@
     navigationBar.tintColor = [UIColor whiteColor];
     [DLCentralManager startSDKCompletion:^(DLCentralManager *manager, CBCentralManagerState state) {
     }];
+    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceList];
     return YES;
 }
 

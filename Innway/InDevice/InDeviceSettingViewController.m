@@ -8,6 +8,9 @@
 
 #import "InDeviceSettingViewController.h"
 #import "InAlertTableViewController.h"
+#import "InAlertTool.h"
+#import "DLCloudDeviceManager.h"
+#import "InDeviceListViewController.h"
 #define InDeviceSettingCellReuseIdentifier @"InDeviceSettingCell"
 
 @interface InDeviceSettingViewController ()<UITableViewDataSource, UITableViewDelegate, DLDeviceDelegate>
@@ -59,7 +62,21 @@
 }
 
 - (IBAction)deleteDeviceBtnDidClick {
-    NSLog(@"删除设备被点击");
+    [InAlertTool showHUDAddedTo:self.view tips:@"正在删除设备，请稍候！" tag:1 animated:YES];
+    [[DLCloudDeviceManager sharedInstance] deleteDevice:self.device.mac completion:^(DLCloudDeviceManager *manager, NSError *error) {
+        [InAlertTool hideHUDForView:self.view tag:1];
+        if (error) {
+            [InAlertTool showAlertWithTip:@"设备删除失败"];
+        }
+        else {
+            if(self.navigationController.viewControllers.count >= 2) {
+                UIViewController *vc = self.navigationController.viewControllers[1];
+                if ([vc isKindOfClass:[InDeviceListViewController class]]) {
+                    [self.navigationController popToViewController:vc animated:YES];
+                }
+            }
+        }
+    }];
 }
 
 - (void)disconnectAlertBtnDidClick: (UISwitch *)btn {

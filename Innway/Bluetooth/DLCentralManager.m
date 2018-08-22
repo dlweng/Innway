@@ -10,6 +10,7 @@
 #import "DLDevice.h"
 #import "DLUUIDTool.h"
 #import <UIKit/UIKit.h>
+#import "DLCloudDeviceManager.h"
 
 static DLCentralManager *instance = nil;
 
@@ -18,8 +19,6 @@ static DLCentralManager *instance = nil;
     NSTimer *_scanTimer;
     int _time;
 }
-
-//- (void)startScanDidDiscoverDeviceEvent:(DidDiscoverDeviceEvent)discoverEvent didEndDiscoverDeviceEvent:(DidEndDiscoverDeviceEvent)endDiscoverEvent
 
 @property (nonatomic, strong) CBCentralManager *manager;
 @property (nonatomic, strong) CentralManagerEvent startCompletion;
@@ -91,6 +90,7 @@ static DLCentralManager *instance = nil;
 - (void)stopScanning {
     NSLog(@"关闭设备发现功能");
     [self.manager stopScan];
+    // 更新一下云端列表
     if (self.endDiscoverEvent) {
         self.endDiscoverEvent(self, self.knownPeripherals);
     }
@@ -106,14 +106,27 @@ static DLCentralManager *instance = nil;
     }
 }
 - (void)connectToDevice: (CBPeripheral *)peripheral completion:(DidConnectToDeviceEvent)completion {
+    if (!peripheral) {
+        NSLog(@"不存在设备，无法建立连接");
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([DLCentralManager class]) code:1 userInfo:nil];
+        completion(self, peripheral, error);
+        return;
+    }
     [self connectToPeripheral:peripheral];
     self.connectDeviceCompletion = completion;
 }
 
 - (void)disConnectToDevice: (CBPeripheral *)peripheral completion:(DidDisConnectToDeviceEvent)completion {
     NSLog(@"开始断开设备的连接: %@", peripheral);
-    [self.manager cancelPeripheralConnection:peripheral];
-    self.disConnectDeviceCompletion = completion;
+    if (peripheral) {
+        [self.manager cancelPeripheralConnection:peripheral];
+        self.disConnectDeviceCompletion = completion;
+    }
+    else {
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([DLCentralManager class]) code:1 userInfo:nil];
+        completion(self, peripheral, error);
+    }
+    
 }
 
 #pragma mark - 内部工具方法
@@ -122,6 +135,7 @@ static DLCentralManager *instance = nil;
 }
 
 - (void)connectToPeripheral:(CBPeripheral *)peripheral {
+   
     if (peripheral.state == CBPeripheralStateDisconnected || peripheral.state == CBPeripheralStateDisconnecting) {
         NSLog(@"开始连接到设备, 设备的状态: %zd", peripheral.state);
         NSDictionary *options = @{CBConnectPeripheralOptionNotifyOnNotificationKey: @TRUE};
@@ -164,6 +178,7 @@ static DLCentralManager *instance = nil;
 }
 
 - (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
+    NSLog(@"发现新设备: %@", peripheral);
 #warning 测试代码
     NSString *mac = [self getDeviceMac:advertisementData];
     if (mac.length == 0) {
@@ -171,6 +186,7 @@ static DLCentralManager *instance = nil;
     }
     if (![_knownPeripherals objectForKey:mac]) {
         [_knownPeripherals setValue:peripheral forKey:mac];
+        [[DLCloudDeviceManager sharedInstance] updateCloudList];
         if (self.discoverEvent) {
             self.discoverEvent(self, peripheral, mac);
         }

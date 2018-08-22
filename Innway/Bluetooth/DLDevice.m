@@ -24,6 +24,7 @@
 + (instancetype)device:(CBPeripheral *)peripheral {
     DLDevice *device = [[DLDevice alloc] init];
     device.peripheral = peripheral;
+    NSLog(@"设置peripheral--创建设备mac, peripheral = %@", peripheral);
     [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(reconnectDevice:) name:DeviceDisconnectNotification object:nil];
     return device;
 }
@@ -33,11 +34,13 @@
 }
 
 - (void)reconnectDevice:(NSNotification *)notification {
+    return;
     CBPeripheral *peripheral = notification.object;
     if ([peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
         [[DLCentralManager sharedInstance] connectToDevice:peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
             if (error) {
                 NSLog(@"重连失败");
+                self.online = false;
             }
             else {
                 NSLog(@"重连成功");
@@ -49,6 +52,7 @@
 
 - (BOOL)discoverServices {
     if (_peripheral) {
+        self.online = YES;  //设置在线
         [_peripheral setDelegate:self];
         CBUUID *serviceUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
         [_peripheral discoverServices:@[serviceUUID]];
@@ -359,11 +363,29 @@
 
 #pragma mark - Properity
 - (void)setPeripheral:(CBPeripheral *)peripheral {
-    if (_peripheral) {
-        [_peripheral setDelegate:nil];
+    NSLog(@"设置外设: %@", peripheral);
+    if ([_peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
+        return;
     }
-    _peripheral = peripheral;
-    [_peripheral setDelegate:self];
+    self.online = false;
+    if (_peripheral) {
+        // 外设地址发生变化
+        NSLog(@"执行方法:%s, 外设地址放生变化: 旧的外设:%@, 新的外设:%@", __func__, peripheral, _peripheral);
+        [_peripheral setDelegate:nil];
+        _peripheral = peripheral;
+        [peripheral setDelegate:self];
+        [[DLCentralManager sharedInstance] connectToDevice:peripheral completion:^(DLCentralManager *manager, CBPeripheral *connectPeripheral, NSError *error) {
+            if (peripheral == connectPeripheral && !error){
+                //连接成功
+                [self discoverServices];
+            }
+        }];
+    }
+    else {
+        // 第一次赋值外设
+        _peripheral = peripheral;
+        [peripheral setDelegate:self];
+    }  
 }
 
 - (NSMutableDictionary *)data {
@@ -388,6 +410,17 @@
         _deviceName = self.peripheral.name;
     }
     return _deviceName;
+}
+
+- (void)setOnline:(BOOL)online {
+    _online = online;
+}
+
+- (BOOL)connected {
+    if (_peripheral && (_peripheral.state == CBPeripheralStateConnected || _peripheral.state == CBPeripheralStateConnecting)) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

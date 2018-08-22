@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NSDictionary+GetValue.h"
 
 @interface InCommon : NSObject
 

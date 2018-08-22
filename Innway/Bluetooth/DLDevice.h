@@ -34,12 +34,11 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 @property (nonatomic, copy) NSString *mac;
 @property (nonatomic, strong, readonly) NSDictionary *lastData;
 @property (nonatomic, weak) id<DLDeviceDelegate> delegate;
+@property (nonatomic, copy) NSString *cloudID;
+@property (nonatomic, copy) NSString *gps;
+@property (nonatomic, assign) BOOL online;
+@property (nonatomic, assign, readonly) BOOL connected;
 
-//@property (nonatomic, assign) NSInteger cloudID;
-//@property (nonatomic, copy) NSString *mac;
-//// 标识设备是否在线
-//@property (nonatomic, assign) BOOL online;
-// 返回true，成功发现服务； 返回false，发现失败
 - (BOOL)discoverServices;
 
 + (instancetype)device:(CBPeripheral *)peripheral;

@@ -20,6 +20,7 @@
 		3328800F2115A00C00C4893B /* ic_launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 3328800E2115A00C00C4893B /* ic_launcher.png */; };
 		3328801B2115AA4900C4893B /* InControlDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 332880192115AA4900C4893B /* InControlDeviceViewController.m */; };
 		3328801C2115AA4900C4893B /* InControlDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3328801A2115AA4900C4893B /* InControlDeviceViewController.xib */; };
+		3358965C212DB1E8002E5BD4 /* NSDictionary+GetValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358965A212DB1E8002E5BD4 /* NSDictionary+GetValue.m */; };
 		3374C74C2112013B00F83101 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C74B2112013B00F83101 /* AppDelegate.m */; };
 		3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C74E2112013B00F83101 /* InLoginViewController.m */; };
 		3374C7522112013B00F83101 /* InUser.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7502112013B00F83101 /* InUser.storyboard */; };
@@ -108,6 +109,8 @@
 		332880182115AA4900C4893B /* InControlDeviceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InControlDeviceViewController.h; sourceTree = "<group>"; };
 		332880192115AA4900C4893B /* InControlDeviceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InControlDeviceViewController.m; sourceTree = "<group>"; };
 		3328801A2115AA4900C4893B /* InControlDeviceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InControlDeviceViewController.xib; sourceTree = "<group>"; };
+		3358965A212DB1E8002E5BD4 /* NSDictionary+GetValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+GetValue.m"; sourceTree = "<group>"; };
+		3358965B212DB1E8002E5BD4 /* NSDictionary+GetValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+GetValue.h"; sourceTree = "<group>"; };
 		3374C7472112013A00F83101 /* Innway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Innway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3374C74A2112013B00F83101 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3374C74B2112013B00F83101 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -201,6 +204,8 @@
 		33027C1F211EC5140003C5D9 /* InTool */ = {
 			isa = PBXGroup;
 			children = (
+				3358965B212DB1E8002E5BD4 /* NSDictionary+GetValue.h */,
+				3358965A212DB1E8002E5BD4 /* NSDictionary+GetValue.m */,
 				33027C19211EBAC30003C5D9 /* InAlertTool.h */,
 				33027C1A211EBAC40003C5D9 /* InAlertTool.m */,
 				33027C21211EDE1C0003C5D9 /* InCommon.h */,
@@ -427,6 +432,11 @@
 				TargetAttributes = {
 					3374C7462112013A00F83101 = {
 						CreatedOnToolsVersion = 9.4.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 					3374C75E2112014000F83101 = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -575,6 +585,7 @@
 				33EE4CAC21170C1500CDDC98 /* InAlertTableViewController.m in Sources */,
 				3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */,
 				338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */,
+				3358965C212DB1E8002E5BD4 /* NSDictionary+GetValue.m in Sources */,
 				33287FFF21158E7900C4893B /* InRegisterViewController.m in Sources */,
 				33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */,
 				33027C1B211EBAC40003C5D9 /* InAlertTool.m in Sources */,
