@@ -9,10 +9,10 @@
 #import "InDeviceMenuViewController.h"
 #define InDeviceMenuCellReuseIdentifier @"InDeviceMenuCell"
 #import "DLCloudDeviceManager.h"
+#import "InDeviceListViewController.h"
 
 @interface InDeviceMenuViewController ()<UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) NSArray *deviceList;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSDictionary *cloudDeviceList;
 
@@ -20,9 +20,8 @@
 
 @implementation InDeviceMenuViewController
 
-+ (instancetype)menuViewControllerWithDeviceList:(NSArray *)deviceList {
++ (instancetype)menuViewController {
     InDeviceMenuViewController *menuVC = [[InDeviceMenuViewController alloc] init];
-    menuVC.deviceList = deviceList;
     menuVC.tableView.backgroundColor = [UIColor redColor];
     return menuVC;
 }
@@ -46,7 +45,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == self.deviceList.count) {
+    if (indexPath.row == self.cloudDeviceList.count) {
         return 50;
     }
     return 70;
@@ -72,7 +71,20 @@
     if (indexPath.row == self.cloudDeviceList.allKeys.count) {
         NSLog(@"self.parentViewController = %@", self.parentViewController);
         if (self.parentViewController.navigationController.viewControllers.lastObject == self.parentViewController) {
-            [self.parentViewController.navigationController popViewControllerAnimated:YES];
+             if(self.parentViewController.navigationController.viewControllers.count >= 2) {
+                UIViewController *vc = self.parentViewController.navigationController.viewControllers[1];
+                if ([vc isKindOfClass:[InDeviceListViewController class]]) {
+                    [self.parentViewController.navigationController popToViewController:vc animated:YES];
+                }
+            }
+        }
+        
+    }
+    else {
+        NSString *mac = self.cloudDeviceList.allKeys[indexPath.row];
+        DLDevice *device = self.cloudDeviceList[mac];
+        if (self.delegate) {
+            [self.delegate menuViewController:self didSelectedDevice:device];
         }
     }
 }

@@ -13,7 +13,7 @@
 #import "DLCloudDeviceManager.h"
 #import <MapKit/MapKit.h>
 
-@interface InControlDeviceViewController ()<DLDeviceDelegate>
+@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewbottomGapConstraint;
@@ -74,7 +74,8 @@
 
 - (void)addDeviceMenu {
 #warning 模拟设备列表
-    InDeviceMenuViewController *deviceMenuVC = [InDeviceMenuViewController menuViewControllerWithDeviceList:nil];
+    InDeviceMenuViewController *deviceMenuVC = [InDeviceMenuViewController menuViewController];
+    deviceMenuVC.delegate = self;
     [self addChildViewController:deviceMenuVC];
     [self.deviceMenuView addSubview:deviceMenuVC.view];
     
@@ -209,5 +210,21 @@
     }
 }
 
+- (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device {
+    if (!device.connected) {
+        return;
+    }
+    if (device == self.device) {
+        [self goToMenu];
+    }
+    else {
+        if (self.navigationController.viewControllers.lastObject == self) {
+//            [self.navigationController popViewControllerAnimated:NO];
+            InControlDeviceViewController *deviceControlVC = [[InControlDeviceViewController alloc] init];
+            deviceControlVC.device = device;
+            [self.navigationController pushViewController:deviceControlVC animated:NO];
+        }
+    }
+}
 
 @end

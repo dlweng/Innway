@@ -23,7 +23,6 @@
     navigationBar.tintColor = [UIColor whiteColor];
     [DLCentralManager startSDKCompletion:^(DLCentralManager *manager, CBCentralManagerState state) {
     }];
-    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceList];
     return YES;
 }
 

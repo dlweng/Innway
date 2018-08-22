@@ -8,8 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@class InDeviceMenuViewController;
+@class DLDevice;
+@protocol InDeviceMenuViewControllerDelegate<NSObject>
+- (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device;
+@end
+
 @interface InDeviceMenuViewController : UIViewController
 
-+ (instancetype)menuViewControllerWithDeviceList:(NSArray *)deviceList;
++ (instancetype)menuViewController;
+@property (nonatomic, weak) id<InDeviceMenuViewControllerDelegate> delegate;
 
 @end

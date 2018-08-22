@@ -33,6 +33,8 @@
     self.view.backgroundColor = [UIColor colorWithRed:239/255.0 green:239/255.0 blue:244/255.0 alpha:1];
     [self setUpNarBar];
     self.centralManager = [DLCentralManager sharedInstance];
+    // 获取云端列表
+    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceList];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
