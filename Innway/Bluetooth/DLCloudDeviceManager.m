@@ -11,7 +11,7 @@
 #import "InCommon.h"
 
 static DLCloudDeviceManager *instance = nil;
-
+static BOOL deleteing = NO;
 @interface DLCloudDeviceManager()
 
 @property (nonatomic, weak) DLCentralManager *centralManager;
@@ -30,6 +30,11 @@ static DLCloudDeviceManager *instance = nil;
 }
 
 - (void)addDevice:(NSString *)mac completion:(DidAddDeviceEvent)completion {
+    if (self.cloudDeviceList.count >= 6) {
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:6 userInfo:nil];
+        completion(self, nil, error);
+        return;
+    }
     DLDevice *device = [self.cloudDeviceList objectForKey:mac];
     if (device) {
         // 已经添加到云端
@@ -52,7 +57,11 @@ static DLCloudDeviceManager *instance = nil;
         NSLog(@"未添加到云端，需做请求添加");
         // 未添加到云端, 添加到云端
         CBPeripheral *peripheral = [[DLCentralManager sharedInstance].knownPeripherals objectForKey:mac];
-        NSDictionary *parameters = @{@"userid":@([InCommon sharedInstance].ID), @"name":peripheral.name, @"mac":mac};
+        NSString *peripheralName = peripheral.name;
+        if (peripheralName.length == 0) {
+            peripheralName = @"Lily";
+        }
+        NSDictionary *parameters = @{@"userid":@([InCommon sharedInstance].ID), @"name":peripheralName, @"mac":mac};
         [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/device/addDevice" parameters:parameters  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             if (responseObject) {
                 NSLog(@"做添加http请求成功");
@@ -84,7 +93,15 @@ static DLCloudDeviceManager *instance = nil;
         }
         if ([newMac isEqualToString:mac]) {
             find = YES;
+            NSLog(@"查找到设备, peripheral = %@",  peripheral);
             //2.再连接设备
+            if (peripheral.state == CBPeripheralStateConnecting || peripheral.state == CBPeripheralStateConnected) {
+                // 不清楚新查找的设备，为何有存在连接状态的，导致去连接没有回调，这里处理这种情况的
+                NSLog(@"查找到的新设备处于连接状态");
+                [device discoverServices];
+                completion(self, device, nil);
+                return;
+            }
             [self.centralManager connectToDevice:peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
                 if (error) {
                     // 连接失败
@@ -92,6 +109,7 @@ static DLCloudDeviceManager *instance = nil;
                     return ;
                 }
                 //连接成功,发现服务
+                NSLog(@"添加设备-扫描发现了设备:%@", mac);
                 [device discoverServices];
                 completion(self, device, nil);
             }];
@@ -102,6 +120,7 @@ static DLCloudDeviceManager *instance = nil;
         }
         // 扫描不到设备
         NSError *error = [NSError errorWithDomain:NSStringFromClass([manager class]) code:2 userInfo:nil];
+        NSLog(@"添加设备-扫描不到设备:%@", mac);
         if (completion) {
             completion(self, nil, error);
         }
@@ -111,6 +130,7 @@ static DLCloudDeviceManager *instance = nil;
 
 - (void)deleteDevice:(NSString *)mac completion:(DidDeleteDeviceEvent)completion {
     NSLog(@"删除设备mac：%@", mac);
+    deleteing = YES;
     // 1.从云端删除设备
     // 2.断开连接
     DLDevice *device = [self.cloudDeviceList objectForKey:mac];
@@ -124,12 +144,15 @@ static DLCloudDeviceManager *instance = nil;
                 if (code.integerValue == 200) {
                     [self.cloudDeviceList removeObjectForKey:mac];
                     [self.centralManager disConnectToDevice:device.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
-                        if (error) {
-                            NSLog(@"断开连接失败，不做删除");
-                            completion(self, error);
-                            return ;
+                        if (deleteing && [device.peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
+                            deleteing = NO;
+                            if (error) {
+                                NSLog(@"断开连接失败，不做删除, %@", error);
+                                completion(self, error);
+                                return ;
+                            }
+                            completion(self, nil);
                         }
-                        completion(self, nil);
                     }];
                 }
                 else {
@@ -207,6 +230,18 @@ static DLCloudDeviceManager *instance = nil;
             }];
         }
     }
+}
+
+- (void)deleteCloudList {
+    for (NSString *mac in self.cloudDeviceList) {
+        DLDevice *device = [self.cloudDeviceList objectForKey:mac];
+        if (device.connected) {
+            //断开所有已经连接的设备
+            NSLog(@"断开设备的连接: %@", device.peripheral);
+            [self.centralManager disConnectToDevice:device.peripheral completion:nil];
+        }
+    }
+    [self.cloudDeviceList removeAllObjects];
 }
 
 - (NSMutableDictionary<NSString *,DLDevice *> *)cloudDeviceList {

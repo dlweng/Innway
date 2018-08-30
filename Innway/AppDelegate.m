@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "DLCentralManager.h"
 #import "DLCloudDeviceManager.h"
+#import "InAlertTool.h"
 
 @interface AppDelegate ()
 
@@ -22,6 +23,9 @@
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     navigationBar.tintColor = [UIColor whiteColor];
     [DLCentralManager startSDKCompletion:^(DLCentralManager *manager, CBCentralManagerState state) {
+        if (state == CBCentralManagerStatePoweredOff) {
+            [InAlertTool showAlertWithTip:@"请打开蓝牙"];
+        }
     }];
     return YES;
 }

@@ -28,4 +28,7 @@ typedef void (^DidDeleteDeviceEvent)(DLCloudDeviceManager *manager, NSError *err
 //根据新发现的设备更新云端列表
 - (void)updateCloudList;
 
+// 注销账户时，需要断开所有连接的设备，以及删除本地保存的云端列表
+- (void)deleteCloudList;
+
 @end

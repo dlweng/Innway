@@ -8,6 +8,7 @@
 
 #import "InUserSettingViewController.h"
 #import "InCommon.h"
+#import "DLCloudDeviceManager.h"
 #define InSettingViewCellReuseIdentifier @"InSettingViewCell"
 
 @interface InUserSettingViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -55,6 +56,8 @@
 - (IBAction)logout{
     [[InCommon sharedInstance] clearUserInfo];
     if (self.logoutUser) {
+        // 清除云端列表
+        [[DLCloudDeviceManager sharedInstance] deleteCloudList];
         self.logoutUser();
     }
 }

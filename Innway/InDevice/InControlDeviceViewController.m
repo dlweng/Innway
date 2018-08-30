@@ -12,6 +12,7 @@
 #import "InDeviceSettingViewController.h"
 #import "DLCloudDeviceManager.h"
 #import <MapKit/MapKit.h>
+#import "InAlertTool.h"
 
 @interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate>
 
@@ -212,6 +213,23 @@
 
 - (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device {
     if (!device.connected) {
+        [[DLCloudDeviceManager sharedInstance] addDevice:device.mac completion:^(DLCloudDeviceManager *manager, DLDevice *newDevice, NSError *error) {
+            if (error) {
+                [InAlertTool showAlertWithTip:@"设备离线，不能进入控制界面"];
+            }
+            else {
+                if (newDevice == self.device) {
+                    [self goToMenu];
+                }
+                else {
+                    if (self.navigationController.viewControllers.lastObject == self) {
+                        InControlDeviceViewController *deviceControlVC = [[InControlDeviceViewController alloc] init];
+                        deviceControlVC.device = device;
+                        [self.navigationController pushViewController:deviceControlVC animated:NO];
+                    }
+                }
+            }
+        }];
         return;
     }
     if (device == self.device) {
@@ -219,7 +237,6 @@
     }
     else {
         if (self.navigationController.viewControllers.lastObject == self) {
-//            [self.navigationController popViewControllerAnimated:NO];
             InControlDeviceViewController *deviceControlVC = [[InControlDeviceViewController alloc] init];
             deviceControlVC.device = device;
             [self.navigationController pushViewController:deviceControlVC animated:NO];

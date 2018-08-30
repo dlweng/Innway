@@ -137,7 +137,12 @@
         }
         else {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [InAlertTool showAlertAutoDisappear:@"添加设备失败"];
+            if (error.code == 6) {
+                [InAlertTool showAlertAutoDisappear:@"不能添加超过6台设备"];
+            }
+            else {
+                [InAlertTool showAlertAutoDisappear:@"添加设备失败"];
+            }
         }
     }];
     

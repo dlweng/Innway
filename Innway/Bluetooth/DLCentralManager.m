@@ -88,7 +88,7 @@ static DLCentralManager *instance = nil;
 }
 
 - (void)stopScanning {
-    NSLog(@"关闭设备发现功能");
+    NSLog(@"关闭设备发现功能, endDiscoverEvent = %@", self.endDiscoverEvent);
     [self.manager stopScan];
     // 更新一下云端列表
     if (self.endDiscoverEvent) {
@@ -138,7 +138,7 @@ static DLCentralManager *instance = nil;
    
     if (peripheral.state == CBPeripheralStateDisconnected || peripheral.state == CBPeripheralStateDisconnecting) {
         NSLog(@"开始连接到设备, 设备的状态: %zd", peripheral.state);
-        NSDictionary *options = @{CBConnectPeripheralOptionNotifyOnNotificationKey: @TRUE};
+        NSDictionary *options = @{CBConnectPeripheralOptionNotifyOnDisconnectionKey: @NO, CBConnectPeripheralOptionNotifyOnConnectionKey: @NO,CBConnectPeripheralOptionNotifyOnNotificationKey: @NO};
         [self.manager connectPeripheral:peripheral options:options];
     }
 }
@@ -178,7 +178,7 @@ static DLCentralManager *instance = nil;
 }
 
 - (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
-    NSLog(@"发现新设备: %@", peripheral);
+//    NSLog(@"发现新设备: %@", peripheral);
 #warning 测试代码
     NSString *mac = [self getDeviceMac:advertisementData];
     if (mac.length == 0) {
