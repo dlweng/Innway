@@ -9,6 +9,9 @@
 #import "DLDevice.h"
 #import "DLUUIDTool.h"
 #import "DLCentralManager.h"
+#import "InCommon.h"
+
+// 设备默认位置:22.55694872036483,114.11126873029583
 
 @interface DLDevice()
 @property (nonatomic, strong) NSMutableDictionary *data;
@@ -29,18 +32,26 @@
     return device;
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        // 设置默认位置 22.55694872036483,114.11126873029583
+        _coordinate = CLLocationCoordinate2DMake(22.55694872036483, 114.11126873029583);
+    }
+    return self;
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceDisconnectNotification object:nil];
 }
 
 - (void)reconnectDevice:(NSNotification *)notification {
-    return;
     CBPeripheral *peripheral = notification.object;
+    NSLog(@"设备连接被断开，去重连设备");
     if ([peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
         [[DLCentralManager sharedInstance] connectToDevice:peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
             if (error) {
                 NSLog(@"重连失败");
-                self.online = false;
+                self.online = NO;
             }
             else {
                 NSLog(@"重连成功");
@@ -162,9 +173,12 @@
         NSString *alertStatus = [payload substringWithRange:NSMakeRange(0, 2)];
         NSLog(@"alertStatus = %@", alertStatus);
         [self.data setValue:@(alertStatus.boolValue) forKey:AlertStatusKey];
+
     }
     else if ([cmd isEqualToString:@"06"]) {
         NSLog(@"设备寻找手机，手机要发出警报");
+        [[InCommon sharedInstance] playSound];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchPhoneNotification object:self];
     }
     else if ([cmd isEqualToString:@"08"]) {
         [self.data setValue:@(self.disconnectAlert) forKey:DisconnectAlertKey];
@@ -361,13 +375,15 @@
     return [[UUID.data description] cStringUsingEncoding:NSStringEncodingConversionAllowLossy];
 }
 
+
+
 #pragma mark - Properity
 - (void)setPeripheral:(CBPeripheral *)peripheral {
     NSLog(@"设置外设: %@", peripheral);
     if ([_peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
         return;
     }
-    self.online = false;
+    self.online = NO;
     if (_peripheral) {
         // 外设地址发生变化
         NSLog(@"执行方法:%s, 外设地址放生变化: 旧的外设:%@, 新的外设:%@", __func__, peripheral, _peripheral);
@@ -409,10 +425,17 @@
     if (_deviceName.length == 0) {
         _deviceName = self.peripheral.name;
     }
+    if (_deviceName.length == 0) {
+        _deviceName = @"Lily";
+    }
     return _deviceName;
 }
 
 - (void)setOnline:(BOOL)online {
+    if (_online != online) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(online)];
+        [[InCommon sharedInstance] uploadDeviceLocation:self];
+    }
     _online = online;
 }
 
@@ -421,6 +444,27 @@
         return YES;
     }
     return NO;
+}
+
+- (void)setCoordinate:(NSString *)gps {
+    if ([gps isKindOfClass:[NSString class]]) {
+        NSArray *strs = [gps componentsSeparatedByString:@","];
+        if (strs.count == 2) {
+            NSString *latitude = strs[0];
+            NSString *longitude = strs[1];
+            _coordinate.latitude = latitude.doubleValue;
+            _coordinate.longitude = longitude.doubleValue;
+        }
+    }
+}
+
+- (NSString *)getGps{
+    if (self.online) {
+        _coordinate = [InCommon sharedInstance].currentLocation;
+    }
+    CLLocationCoordinate2D deviceLocation = _coordinate;
+    NSString *gps = [NSString stringWithFormat:@"%f,%f", deviceLocation.latitude, deviceLocation.longitude];
+    return gps;
 }
 
 @end

@@ -20,6 +20,7 @@
 
 + (UIAlertController *)showAlertWithTip:(NSString *)message;
 + (UIAlertController *)showAlert:(NSString *)title message:(NSString *)message;
++ (UIAlertController *)showAlert:(NSString *)title message:(NSString *)message confirmHanler:(void (^)(void))confirmHanler;
 + (void)showAlertAutoDisappear:(NSString *)message;
 + (void)showAlertAutoDisappear:(NSString *)message completion:(void (^)(void))completion;
 

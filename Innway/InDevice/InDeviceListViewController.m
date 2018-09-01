@@ -14,6 +14,7 @@
 #import "DLDevice.h"
 #import "InAlertTool.h"
 #import <SSPullToRefresh/SSPullToRefresh.h>
+#import "InCommon.h"
 
 
 #define InDeviceListCellReuseIdentifier @"InDeviceListCell"
@@ -35,6 +36,8 @@
     self.centralManager = [DLCentralManager sharedInstance];
     // 获取云端列表
     [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceList];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceSearchPhone:) name:DeviceSearchPhoneNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -59,6 +62,18 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.pullToRefreshView finishLoading];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceSearchPhoneNotification object:nil];
+}
+
+- (void)deviceSearchPhone:(NSNotification *)noti {
+    DLDevice *device = noti.object;
+    [[InCommon sharedInstance] playSound];
+    [InAlertTool showAlert:@"提示" message:[NSString stringWithFormat:@"设备%@在查找手机", device.deviceName] confirmHanler:^{
+        [[InCommon sharedInstance] stopSound];
+    }];
 }
 
 - (void)pullToRefreshViewDidStartLoading:(SSPullToRefreshView *)view {

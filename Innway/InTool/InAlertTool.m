@@ -74,6 +74,18 @@
     return alertController;
 }
 
++ (UIAlertController *)showAlert:(NSString *)title message:(NSString *)message confirmHanler:(void (^)(void))confirmHanler{
+    NSString *confirm = @"确定";
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        if (confirmHanler) {
+            confirmHanler();
+        }
+    }]];
+    [alertController show];
+    return alertController;
+}
+
 + (void)showAlertAutoDisappear:(NSString *)message { //默认2.0s后自动隐藏弹框
     [self showAlertAutoDisappear:message completion:nil];
 }

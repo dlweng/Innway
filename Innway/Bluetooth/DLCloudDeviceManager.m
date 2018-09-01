@@ -194,7 +194,7 @@ static BOOL deleteing = NO;
                     device.mac = mac;
                     device.cloudID = [cloudDevice stringValueForKey:@"id" defaultValue:@""];
                     device.deviceName = [cloudDevice stringValueForKey:@"name" defaultValue:@""];
-                    device.gps = [cloudDevice stringValueForKey:@"gps" defaultValue:@""];
+                    device.coordinate = [cloudDevice stringValueForKey:@"gps" defaultValue:@""];
                     [newList setValue:device forKey:mac];
                 }
                 self.cloudDeviceList = newList;

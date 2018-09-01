@@ -29,11 +29,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:InDeviceMenuCellReuseIdentifier];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOnlineChange:) name:DeviceOnlineChangeNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceOnlineChangeNotification object:nil];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -62,6 +67,12 @@
         DLDevice *device = self.cloudDeviceList[identify];
         cell.imageView.image = [UIImage imageNamed:@"deviceMenu"];
         cell.textLabel.text = device.deviceName;
+        if (device.online) {
+            cell.textLabel.textColor = [UIColor blackColor];
+        }
+        else {
+            cell.textLabel.textColor = [UIColor grayColor];
+        }
     }
     return cell;
 }
@@ -87,6 +98,10 @@
             [self.delegate menuViewController:self didSelectedDevice:device];
         }
     }
+}
+
+- (void)deviceOnlineChange:(NSNotification *)noti {
+    [self.tableView reloadData];
 }
 
 @end

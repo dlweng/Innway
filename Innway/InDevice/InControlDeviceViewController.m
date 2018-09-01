@@ -11,10 +11,12 @@
 #import "InDeviceMenuViewController.h"
 #import "InDeviceSettingViewController.h"
 #import "DLCloudDeviceManager.h"
+#import "InAnnotationView.h"
 #import <MapKit/MapKit.h>
 #import "InAlertTool.h"
+#import "InCommon.h"
 
-@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate>
+@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate, MKMapViewDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewbottomGapConstraint;
@@ -34,8 +36,9 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+// 存储掉线设备大头针的位置
+@property (nonatomic, strong) NSMutableDictionary *deviceAnnotation;
 
 @end
 
@@ -64,14 +67,19 @@
     [self addSettingView];
     [self addDeviceMenu];
     self.topBodyView.backgroundColor = [UIColor redColor];
+    
+    self.mapView.delegate = self;
+    self.mapView.showsUserLocation = NO;
+    self.mapView.userTrackingMode = MKUserTrackingModeFollow;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.device.delegate = self;
     [self.device getDeviceInfo];
-    
+    [self updateAnnotation];
 }
+
 
 - (void)addDeviceMenu {
 #warning 模拟设备列表
@@ -198,6 +206,7 @@
 
 - (IBAction)toLocation {
     NSLog(@"开始定位");
+    [self.mapView setCenterCoordinate:self.mapView.userLocation.coordinate];
 }
 
 - (void)updateUI {
@@ -205,31 +214,35 @@
 //    self.device.lastData
 }
 
-- (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data {
+- (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data{
     if (device == self.device) {
         [self updateUI];
     }
 }
 
 - (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device {
-    if (!device.connected) {
-        [[DLCloudDeviceManager sharedInstance] addDevice:device.mac completion:^(DLCloudDeviceManager *manager, DLDevice *newDevice, NSError *error) {
-            if (error) {
-                [InAlertTool showAlertWithTip:@"设备离线，不能进入控制界面"];
-            }
-            else {
-                if (newDevice == self.device) {
-                    [self goToMenu];
-                }
-                else {
-                    if (self.navigationController.viewControllers.lastObject == self) {
-                        InControlDeviceViewController *deviceControlVC = [[InControlDeviceViewController alloc] init];
-                        deviceControlVC.device = device;
-                        [self.navigationController pushViewController:deviceControlVC animated:NO];
-                    }
-                }
-            }
-        }];
+    if (!device.online) {
+        [InAlertTool showAlertAutoDisappear:@"离线设备，不能进入控制界面"];
+        [self goToMenu];
+//        [InAlertTool showHUDAddedTo:self.view tips:@"正在尝试连接设备" tag:1 animated:YES];
+//        [[DLCloudDeviceManager sharedInstance] addDevice:device.mac completion:^(DLCloudDeviceManager *manager, DLDevice *newDevice, NSError *error) {
+//            [InAlertTool hideHUDForView:self.view tag:1];
+//            if (error) {
+//                [InAlertTool showAlertWithTip:@"设备离线，不能进入控制界面"];
+//            }
+//            else {
+//                if (newDevice == self.device) {
+//                    [self goToMenu];
+//                }
+//                else {
+//                    if (self.navigationController.viewControllers.lastObject == self) {
+//                        InControlDeviceViewController *deviceControlVC = [[InControlDeviceViewController alloc] init];
+//                        deviceControlVC.device = device;
+//                        [self.navigationController pushViewController:deviceControlVC animated:NO];
+//                    }
+//                }
+//            }
+//        }];
         return;
     }
     if (device == self.device) {
@@ -240,6 +253,49 @@
             InControlDeviceViewController *deviceControlVC = [[InControlDeviceViewController alloc] init];
             deviceControlVC.device = device;
             [self.navigationController pushViewController:deviceControlVC animated:NO];
+        }
+    }
+}
+
+#pragma mark - Map
+-(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    NSLog(@"地图用户位置更新, %f, %f", userLocation.coordinate.latitude, userLocation.coordinate.longitude);
+    [InCommon sharedInstance].currentLocation = userLocation.coordinate;
+}
+
+// 画自定义大头针的方法
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
+{
+    if ([annotation isKindOfClass:[InAnnotation class]]) {
+        NSString *reuseID = @"InAnnotationView";
+        InAnnotationView *annotationView = (InAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseID];
+        if (annotationView == nil) {
+            annotationView = [[InAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseID];
+            
+        }
+        return annotationView;
+    }
+    return nil;
+}
+
+- (void)updateAnnotation{
+    NSMutableDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+    for (NSString *mac in cloudDeviceList.allKeys) {
+        DLDevice *device = cloudDeviceList[mac];
+        InAnnotation *annotation = [self.deviceAnnotation objectForKey:mac];
+        if (device.online && annotation) {
+            // 设备在线，但是存在大头针，删除大头针
+            [self.deviceAnnotation removeObjectForKey:mac];
+            [self.mapView removeAnnotation:annotation];
+        }
+        else if (!device.online && !annotation) {
+            // 设备不在线，且不存在大头针，需要增加
+            annotation = [[InAnnotation alloc] init];
+            annotation.coordinate = device.coordinate;
+            annotation.title = device.deviceName;
+            [self.deviceAnnotation setObject:annotation forKey:mac];
+            [self.mapView addAnnotation:annotation];
         }
     }
 }

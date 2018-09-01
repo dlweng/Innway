@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import <MapKit/MapKit.h>
 
 #define ElectricKey @"Electric"
 #define ChargingStateKey @"ChargingState"
@@ -18,6 +19,8 @@
 
 #define PhoneAlertMusicKey @"PhoneAlertMusic"
 
+#define DeviceOnlineChangeNotification @"DeviceOnlineChangeNotification"
+#define DeviceSearchPhoneNotification @"DeviceSearchPhoneNotification"
 
 @class DLDevice;
 typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *error);
@@ -35,11 +38,15 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 @property (nonatomic, strong, readonly) NSDictionary *lastData;
 @property (nonatomic, weak) id<DLDeviceDelegate> delegate;
 @property (nonatomic, copy) NSString *cloudID;
-@property (nonatomic, copy) NSString *gps;
+@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic, assign) BOOL online;
 @property (nonatomic, assign, readonly) BOOL connected;
 
 - (BOOL)discoverServices;
+
+- (void)setCoordinate:(NSString *)gps;
+// 在线设备获取的是当前手机的经纬度； 离线设备获取的是保存的经纬度
+- (NSString *)getGps;
 
 + (instancetype)device:(CBPeripheral *)peripheral;
 - (void)write:(NSData *)data;

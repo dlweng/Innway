@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		33027C1B211EBAC40003C5D9 /* InAlertTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C1A211EBAC40003C5D9 /* InAlertTool.m */; };
 		33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C22211EDE1C0003C5D9 /* InCommon.m */; };
+		331797E1213A6958000B8DD6 /* voice1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 331797DE213A6957000B8DD6 /* voice1.mp3 */; };
+		331797E2213A6958000B8DD6 /* voice3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 331797DF213A6957000B8DD6 /* voice3.mp3 */; };
+		331797E3213A6958000B8DD6 /* voice2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 331797E0213A6958000B8DD6 /* voice2.mp3 */; };
+		331797F0213AF282000B8DD6 /* InAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 331797EF213AF282000B8DD6 /* InAnnotationView.m */; };
+		331797F2213AF364000B8DD6 /* bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 331797F1213AF364000B8DD6 /* bubble.png */; };
+		331797F4213AF372000B8DD6 /* annotation.png in Resources */ = {isa = PBXBuildFile; fileRef = 331797F3213AF372000B8DD6 /* annotation.png */; };
 		3321B8BF212C22DE00633382 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3321B8BE212C22DE00633382 /* MapKit.framework */; };
 		33287FF9211557BD00C4893B /* icon_password_show.png in Resources */ = {isa = PBXBuildFile; fileRef = 33287FF8211557BD00C4893B /* icon_password_show.png */; };
 		33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33287FFB21155B3200C4893B /* InUserTableViewController.m */; };
@@ -92,6 +98,13 @@
 		33027C1A211EBAC40003C5D9 /* InAlertTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAlertTool.m; sourceTree = "<group>"; };
 		33027C21211EDE1C0003C5D9 /* InCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InCommon.h; sourceTree = "<group>"; };
 		33027C22211EDE1C0003C5D9 /* InCommon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InCommon.m; sourceTree = "<group>"; };
+		331797DE213A6957000B8DD6 /* voice1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice1.mp3; sourceTree = "<group>"; };
+		331797DF213A6957000B8DD6 /* voice3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice3.mp3; sourceTree = "<group>"; };
+		331797E0213A6958000B8DD6 /* voice2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice2.mp3; sourceTree = "<group>"; };
+		331797EE213AF282000B8DD6 /* InAnnotationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAnnotationView.h; sourceTree = "<group>"; };
+		331797EF213AF282000B8DD6 /* InAnnotationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAnnotationView.m; sourceTree = "<group>"; };
+		331797F1213AF364000B8DD6 /* bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubble.png; sourceTree = "<group>"; };
+		331797F3213AF372000B8DD6 /* annotation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = annotation.png; sourceTree = "<group>"; };
 		3321B8BE212C22DE00633382 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		33287FF8211557BD00C4893B /* icon_password_show.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_password_show.png; sourceTree = "<group>"; };
 		33287FFA21155B3200C4893B /* InUserTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InUserTableViewController.h; sourceTree = "<group>"; };
@@ -204,6 +217,8 @@
 		33027C1F211EC5140003C5D9 /* InTool */ = {
 			isa = PBXGroup;
 			children = (
+				331797EE213AF282000B8DD6 /* InAnnotationView.h */,
+				331797EF213AF282000B8DD6 /* InAnnotationView.m */,
 				3358965B212DB1E8002E5BD4 /* NSDictionary+GetValue.h */,
 				3358965A212DB1E8002E5BD4 /* NSDictionary+GetValue.m */,
 				33027C19211EBAC30003C5D9 /* InAlertTool.h */,
@@ -259,6 +274,9 @@
 		3374C73E2112013A00F83101 = {
 			isa = PBXGroup;
 			children = (
+				331797DE213A6957000B8DD6 /* voice1.mp3 */,
+				331797E0213A6958000B8DD6 /* voice2.mp3 */,
+				331797DF213A6957000B8DD6 /* voice3.mp3 */,
 				3374C7492112013A00F83101 /* Innway */,
 				3374C7622112014000F83101 /* InnwayUITests */,
 				3374C7482112013A00F83101 /* Products */,
@@ -306,6 +324,8 @@
 		3374C76E2112077C00F83101 /* image */ = {
 			isa = PBXGroup;
 			children = (
+				331797F3213AF372000B8DD6 /* annotation.png */,
+				331797F1213AF364000B8DD6 /* bubble.png */,
 				3328800E2115A00C00C4893B /* ic_launcher.png */,
 				33EE4C9C2116EDD500CDDC98 /* deviceMenu.png */,
 				3374C76F2112077C00F83101 /* icon_map_type.png */,
@@ -478,6 +498,7 @@
 				3374C7542112013F00F83101 /* Assets.xcassets in Resources */,
 				3374C7972112077C00F83101 /* icon_close.png in Resources */,
 				3374C7982112077C00F83101 /* icon_back.png in Resources */,
+				331797E1213A6958000B8DD6 /* voice1.mp3 in Resources */,
 				3374C7952112077C00F83101 /* icon_more.png in Resources */,
 				3374C7A02112077C00F83101 /* icon_range_down.png in Resources */,
 				3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */,
@@ -491,6 +512,7 @@
 				3374C79B2112077C00F83101 /* icon_track_down.png in Resources */,
 				3374C7AF2112077C00F83101 /* icon_range_up.png in Resources */,
 				3374C7B12112077C00F83101 /* icon_splash.png in Resources */,
+				331797E3213A6958000B8DD6 /* voice2.mp3 in Resources */,
 				3328800D21159E9300C4893B /* InDeviceListCell.xib in Resources */,
 				3374C7912112077C00F83101 /* icon_map_type.png in Resources */,
 				3374C7AE2112077C00F83101 /* icon_dot_up.png in Resources */,
@@ -498,6 +520,7 @@
 				33EE4C9B2116DBE000CDDC98 /* InDeviceMenuViewController.xib in Resources */,
 				3374C7A62112077C00F83101 /* icon_poup.png in Resources */,
 				3328801C2115AA4900C4893B /* InControlDeviceViewController.xib in Resources */,
+				331797E2213A6958000B8DD6 /* voice3.mp3 in Resources */,
 				3374C7A42112077C00F83101 /* icon_back_dark.png in Resources */,
 				3328800F2115A00C00C4893B /* ic_launcher.png in Resources */,
 				33287FF9211557BD00C4893B /* icon_password_show.png in Resources */,
@@ -506,7 +529,9 @@
 				3374C7962112077C00F83101 /* icon_default_image.png in Resources */,
 				3374C79D2112077C00F83101 /* icon_battery.9.png in Resources */,
 				3374C7A22112077C00F83101 /* icon_enter.png in Resources */,
+				331797F2213AF364000B8DD6 /* bubble.png in Resources */,
 				33EE4C9D2116EDD500CDDC98 /* deviceMenu.png in Resources */,
+				331797F4213AF372000B8DD6 /* annotation.png in Resources */,
 				3374C79F2112077C00F83101 /* icon_child_device.png in Resources */,
 				3374C7B02112077C00F83101 /* icon_checked.png in Resources */,
 				3374C7A32112077C00F83101 /* icon_scan_line.png in Resources */,
@@ -597,6 +622,7 @@
 				3328800821159A4D00C4893B /* InDeviceListViewController.m in Sources */,
 				338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */,
 				338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */,
+				331797F0213AF282000B8DD6 /* InAnnotationView.m in Sources */,
 				3374C74C2112013B00F83101 /* AppDelegate.m in Sources */,
 				33EE4C9A2116DBE000CDDC98 /* InDeviceMenuViewController.m in Sources */,
 				33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */,

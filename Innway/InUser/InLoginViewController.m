@@ -65,12 +65,12 @@
         if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
             NSNumber *code = responseObject[@"code"];
             NSString *message = responseObject[@"message"];
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
             if (code.integerValue == 200) {
                 NSDictionary *data = responseObject[@"data"];
                 if (data) {
                     [self.common saveUserInfoWithID:data[@"id"] email:data[@"username"] pwd:data[@"password"]];
                 }
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
 //                [InAlertTool showAlertAutoDisappear:@"登陆成功" completion:^{
                 [self pushToDeviceListController];
 //                }];
