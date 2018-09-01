@@ -55,6 +55,8 @@
     }
     self.deviceMenuTopContaint.constant = self.topBodyViewTopConstraint.constant;
     
+    self.deviceNameLabel.text = self.device.deviceName;
+    
     // 隐藏设备菜单界面
     self.deviceMenuIsShow = YES;
     [self goToMenu];
@@ -152,7 +154,7 @@
 }
 
 - (void)setupNarBar {
-    self.navigationItem.title = self.device.deviceName;
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"innwayLOGO"]];
     self.settingImageBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_setting"] style:UIBarButtonItemStylePlain target:self action:@selector(goToSettingVC)];
     //用户设置
     self.SettingTitleBarButton = [[UIBarButtonItem alloc] initWithTitle:@"用户设置" style:UIBarButtonItemStylePlain target:nil action:nil];

@@ -15,6 +15,7 @@
 		331797F0213AF282000B8DD6 /* InAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 331797EF213AF282000B8DD6 /* InAnnotationView.m */; };
 		331797F2213AF364000B8DD6 /* bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 331797F1213AF364000B8DD6 /* bubble.png */; };
 		331797F4213AF372000B8DD6 /* annotation.png in Resources */ = {isa = PBXBuildFile; fileRef = 331797F3213AF372000B8DD6 /* annotation.png */; };
+		331797F6213B07AD000B8DD6 /* innwayLOGO.png in Resources */ = {isa = PBXBuildFile; fileRef = 331797F5213B07AC000B8DD6 /* innwayLOGO.png */; };
 		3321B8BF212C22DE00633382 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3321B8BE212C22DE00633382 /* MapKit.framework */; };
 		33287FF9211557BD00C4893B /* icon_password_show.png in Resources */ = {isa = PBXBuildFile; fileRef = 33287FF8211557BD00C4893B /* icon_password_show.png */; };
 		33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33287FFB21155B3200C4893B /* InUserTableViewController.m */; };
@@ -105,6 +106,7 @@
 		331797EF213AF282000B8DD6 /* InAnnotationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAnnotationView.m; sourceTree = "<group>"; };
 		331797F1213AF364000B8DD6 /* bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubble.png; sourceTree = "<group>"; };
 		331797F3213AF372000B8DD6 /* annotation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = annotation.png; sourceTree = "<group>"; };
+		331797F5213B07AC000B8DD6 /* innwayLOGO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = innwayLOGO.png; sourceTree = "<group>"; };
 		3321B8BE212C22DE00633382 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		33287FF8211557BD00C4893B /* icon_password_show.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_password_show.png; sourceTree = "<group>"; };
 		33287FFA21155B3200C4893B /* InUserTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InUserTableViewController.h; sourceTree = "<group>"; };
@@ -324,6 +326,7 @@
 		3374C76E2112077C00F83101 /* image */ = {
 			isa = PBXGroup;
 			children = (
+				331797F5213B07AC000B8DD6 /* innwayLOGO.png */,
 				331797F3213AF372000B8DD6 /* annotation.png */,
 				331797F1213AF364000B8DD6 /* bubble.png */,
 				3328800E2115A00C00C4893B /* ic_launcher.png */,
@@ -510,6 +513,7 @@
 				3374C7A72112077C00F83101 /* icon_location.png in Resources */,
 				3374C7A92112077C00F83101 /* icon_user.png in Resources */,
 				3374C79B2112077C00F83101 /* icon_track_down.png in Resources */,
+				331797F6213B07AD000B8DD6 /* innwayLOGO.png in Resources */,
 				3374C7AF2112077C00F83101 /* icon_range_up.png in Resources */,
 				3374C7B12112077C00F83101 /* icon_splash.png in Resources */,
 				331797E3213A6958000B8DD6 /* voice2.mp3 in Resources */,
