@@ -7,6 +7,7 @@
 //
 
 #import "InDeviceListCell.h"
+#import "InCommon.h"
 
 @interface InDeviceListCell()
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
@@ -25,11 +26,6 @@
 }
 
 #pragma mark - Properity
-- (void)setImageName:(NSString *)imageName {
-    _imageName = imageName;
-    self.iconView.image = [UIImage imageNamed:imageName];
-}
-
 - (void)setDeviceName:(NSString *)deviceName {
     _deviceName = deviceName;
     self.nameLabel.text = deviceName;
@@ -38,6 +34,11 @@
 - (void)setDeviceID:(NSString *)deviceID {
     _deviceID = deviceID;
     self.deviceIDLabel.text = deviceID;
+}
+
+- (void)setRssi:(NSNumber *)rssi {
+    NSString *imageName = [[InCommon sharedInstance] getImageName:rssi];
+    self.iconView.image = [UIImage imageNamed:imageName];
 }
 
 @end

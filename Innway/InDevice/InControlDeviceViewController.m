@@ -15,11 +15,10 @@
 #import <MapKit/MapKit.h>
 #import "InAlertTool.h"
 #import "InCommon.h"
+#import "NSDictionary+GetValue.h"
 
 @interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate, MKMapViewDelegate>
-
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewbottomGapConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *controlBtnBottomGapContraint;
 @property (weak, nonatomic) IBOutlet UIButton *controlDeviceBtn;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBodyViewTopConstraint;
 @property (weak, nonatomic) IBOutlet UIView *topBodyView;
@@ -29,16 +28,21 @@
 @property (nonatomic, strong) UIBarButtonItem *SettingTitleBarButton;
 
 @property (weak, nonatomic) IBOutlet UIView *deviceMenuView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceMenuViewHeightConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceMenuViewTrailingConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceMenuTopContaint;
-@property (nonatomic, assign) BOOL deviceMenuIsShow;
+@property (weak, nonatomic) IBOutlet UIView *deviceMenuBackgroupView;
 
 @property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 // 存储掉线设备大头针的位置
 @property (nonatomic, strong) NSMutableDictionary *deviceAnnotation;
+
+@property (weak, nonatomic) IBOutlet UIButton *battery;
+
+@property (weak, nonatomic) IBOutlet UIButton *deviceSettingBtn;
+@property (weak, nonatomic) IBOutlet UIImageView *deviceImageView;
+@property (weak, nonatomic) IBOutlet UIView *bottomBodyView;
+@property (weak, nonatomic) IBOutlet UIView *backgroupView;
+
 
 @end
 
@@ -49,21 +53,17 @@
     self.topBodyViewTopConstraint.constant += 64;
     if ([UIScreen mainScreen].bounds.size.height == 812) { //iphonex
         //iphoneX底部和顶部需要多留20px空白
-        self.bottomViewHeightConstraint.constant += 20;
-        self.bottomViewbottomGapConstraint.constant += 20;
+        self.controlBtnBottomGapContraint.constant += 20;
         self.topBodyViewTopConstraint.constant += 20;
     }
-    self.deviceMenuTopContaint.constant = self.topBodyViewTopConstraint.constant;
-    
-    self.deviceNameLabel.text = self.device.deviceName;
-    
-    // 隐藏设备菜单界面
-    self.deviceMenuIsShow = YES;
-    [self goToMenu];
     
     // 设置按钮圆弧
     self.controlDeviceBtn.layer.masksToBounds = YES;
     self.controlDeviceBtn.layer.cornerRadius = 5;
+    self.bottomBodyView.layer.masksToBounds = YES;
+    self.bottomBodyView.layer.cornerRadius = 5;
+    self.deviceMenuBackgroupView.layer.masksToBounds = YES;
+    self.deviceMenuBackgroupView.layer.cornerRadius = 5;
     
     [self setupNarBar];
     [self addSettingView];
@@ -73,6 +73,7 @@
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = NO;
     self.mapView.userTrackingMode = MKUserTrackingModeFollow;
+    self.deviceSettingBtn.transform = CGAffineTransformRotate(self.deviceSettingBtn.transform, M_PI * 0.5);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -80,23 +81,17 @@
     self.device.delegate = self;
     [self.device getDeviceInfo];
     [self updateAnnotation];
+    [self updateUI:nil];
 }
 
 
 - (void)addDeviceMenu {
-#warning 模拟设备列表
     InDeviceMenuViewController *deviceMenuVC = [InDeviceMenuViewController menuViewController];
     deviceMenuVC.delegate = self;
     [self addChildViewController:deviceMenuVC];
-    [self.deviceMenuView addSubview:deviceMenuVC.view];
-    
-    CGFloat height = [DLCloudDeviceManager sharedInstance].cloudDeviceList.allKeys.count * 70 + 50;
-    CGFloat maxHeight = [UIScreen mainScreen].bounds.size.height - 138 - 66;
-    if (height > maxHeight) {
-        height = maxHeight;
-    }
-    self.deviceMenuViewHeightConstraint.constant = height;
-    deviceMenuVC.view.frame = CGRectMake(0, 0, self.deviceMenuView.frame.size.width, self.deviceMenuView.frame.size.height);
+    [self.deviceMenuBackgroupView addSubview:deviceMenuVC.view];
+    deviceMenuVC.view.frame = self.deviceMenuBackgroupView.bounds;
+    self.deviceMenuView.hidden = YES;
 }
 
 - (void)addSettingView {
@@ -168,13 +163,16 @@
 }
 
 - (void)goToMenu {
-    self.deviceMenuIsShow = !self.deviceMenuIsShow;
-    if (self.deviceMenuIsShow) {
-        self.deviceMenuViewTrailingConstraint.constant = 0;
-    }
-    else {
-        self.deviceMenuViewTrailingConstraint.constant = [UIScreen mainScreen].bounds.size.width * -0.7;
-    }
+    BOOL isshow = self.deviceMenuView.hidden;
+    [UIView animateWithDuration:0.25 animations:^{
+        self.deviceMenuView.hidden = !isshow;
+        if (isshow) {
+            self.bottomBodyView.hidden = YES;
+        }
+        else {
+            self.bottomBodyView.hidden = NO;
+        }
+    }];
 }
 
 #pragma mark - Action
@@ -211,52 +209,81 @@
     [self.mapView setCenterCoordinate:self.mapView.userLocation.coordinate];
 }
 
-- (void)updateUI {
+- (void)updateUI:(NSDictionary *)data {
     //根据设备的信息界面
 //    self.device.lastData
+    self.deviceNameLabel.text = self.device.deviceName;
+    self.deviceImageView.image = [UIImage imageNamed:[[InCommon sharedInstance] getImageName:self.device.rssi]];
+    if (data.count > 0) {
+        NSString *batteryImageName = @"10";
+        NSInteger battery = [data integerValueForKey:ElectricKey defaultValue:0];
+        if (battery > 90) {
+            batteryImageName = @"100";
+        }
+        else if (battery > 80) {
+            batteryImageName = @"90";
+        }
+        else if (battery > 70) {
+            batteryImageName = @"80";
+        }
+        else if (battery > 60) {
+            batteryImageName = @"70";
+        }
+        else if (battery > 50) {
+            batteryImageName = @"60";
+        }
+        else if (battery > 40) {
+            batteryImageName = @"50";
+        }
+        else if (battery > 30) {
+            batteryImageName = @"40";
+        }
+        else if (battery > 20) {
+            batteryImageName = @"30";
+        }
+        else if (battery > 10) {
+            batteryImageName = @"20";
+        } else {
+            batteryImageName = @"10";
+        }
+        [self.battery setBackgroundImage:[UIImage imageNamed:batteryImageName] forState:UIControlStateNormal];
+        [self.battery setTitle:[NSString stringWithFormat:@"%@%%", batteryImageName] forState:UIControlStateNormal];
+        if (battery > 20) {
+            [self.battery setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        }
+        else {
+            [self.battery setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }
+    }
 }
 
 - (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data{
     if (device == self.device) {
-        [self updateUI];
+        [self updateUI:data];
     }
 }
 
 - (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device {
     if (!device.online) {
-        [InAlertTool showAlertAutoDisappear:@"离线设备，不能进入控制界面"];
-        [self goToMenu];
-//        [InAlertTool showHUDAddedTo:self.view tips:@"正在尝试连接设备" tag:1 animated:YES];
-//        [[DLCloudDeviceManager sharedInstance] addDevice:device.mac completion:^(DLCloudDeviceManager *manager, DLDevice *newDevice, NSError *error) {
-//            [InAlertTool hideHUDForView:self.view tag:1];
-//            if (error) {
-//                [InAlertTool showAlertWithTip:@"设备离线，不能进入控制界面"];
-//            }
-//            else {
-//                if (newDevice == self.device) {
-//                    [self goToMenu];
-//                }
-//                else {
-//                    if (self.navigationController.viewControllers.lastObject == self) {
-//                        InControlDeviceViewController *deviceControlVC = [[InControlDeviceViewController alloc] init];
-//                        deviceControlVC.device = device;
-//                        [self.navigationController pushViewController:deviceControlVC animated:NO];
-//                    }
-//                }
-//            }
-//        }];
         return;
     }
-    if (device == self.device) {
-        [self goToMenu];
+    [self goToMenu];
+    if (device != self.device) {
+        self.device.delegate = nil;
+        self.device = device;
+        self.device.delegate = self;
+        [self.device getDeviceInfo];
+        [self updateAnnotation];
+        [self updateUI:nil];
     }
-    else {
-        if (self.navigationController.viewControllers.lastObject == self) {
-            InControlDeviceViewController *deviceControlVC = [[InControlDeviceViewController alloc] init];
-            deviceControlVC.device = device;
-            [self.navigationController pushViewController:deviceControlVC animated:NO];
-        }
+}
+
+- (void)deviceSettingBtnDidClick:(DLDevice *)device {
+    if (!device.online) {
+        return;
     }
+    [self menuViewController:nil didSelectedDevice:device];
+    [self more];
 }
 
 #pragma mark - Map

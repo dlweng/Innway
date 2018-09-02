@@ -20,7 +20,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="75.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_launcher.png" translatesAutoresizingMaskIntoConstraints="NO" id="RTH-Gd-YKb">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RSSI_0.png" translatesAutoresizingMaskIntoConstraints="NO" id="RTH-Gd-YKb">
                         <rect key="frame" x="8" y="4" width="67.5" height="67.5"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="RTH-Gd-YKb" secondAttribute="height" id="wy0-Cy-his"/>
@@ -69,6 +69,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_launcher.png" width="96" height="96"/>
+        <image name="RSSI_0.png" width="191" height="191"/>
     </resources>
 </document>

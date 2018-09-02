@@ -12,6 +12,7 @@
 @class DLDevice;
 @protocol InDeviceMenuViewControllerDelegate<NSObject>
 - (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device;
+- (void)deviceSettingBtnDidClick:(DLDevice *)device;
 @end
 
 @interface InDeviceMenuViewController : UIViewController

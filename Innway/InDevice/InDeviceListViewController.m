@@ -98,7 +98,7 @@
 }
 
 - (void)getPeripherals {
-    [[DLCentralManager sharedInstance] startScanDidDiscoverDeviceEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *mac) {
+    [[DLCentralManager sharedInstance] startScanDeviceWithTimeout:10 discoverEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *mac) {
         [self refreshTableView];
     } didEndDiscoverDeviceEvent:^(DLCentralManager *manager, NSMutableDictionary<NSString *,CBPeripheral *> *knownPeripherals) {
         self.knownPeripherals = knownPeripherals;
@@ -127,10 +127,11 @@
         cell = [tableView dequeueReusableCellWithIdentifier:InDeviceListCellReuseIdentifier];
     }
     NSString *key = self.knownPeripherals.allKeys[indexPath.row];
-    CBPeripheral *peripheral = self.knownPeripherals[key];
-    cell.imageName = @"ic_launcher";
+    DLKnowDevice *knowDevice = self.knownPeripherals[key];;
+    CBPeripheral *peripheral = knowDevice.peripheral;
     cell.deviceName = peripheral.name;
     cell.deviceID = key;
+    cell.rssi = knowDevice.rssi;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }

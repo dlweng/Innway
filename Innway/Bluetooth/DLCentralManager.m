@@ -14,10 +14,14 @@
 
 static DLCentralManager *instance = nil;
 
+@implementation DLKnowDevice
+@end
+
 @interface DLCentralManager()<CBCentralManagerDelegate> {
     NSMutableDictionary *_knownPeripherals;
     NSTimer *_scanTimer;
     int _time;
+    int _timeout;
 }
 
 @property (nonatomic, strong) CBCentralManager *manager;
@@ -65,19 +69,20 @@ static DLCentralManager *instance = nil;
     }
 }
 
-- (void)startScanDidDiscoverDeviceEvent:(DidDiscoverDeviceEvent)discoverEvent didEndDiscoverDeviceEvent:(DidEndDiscoverDeviceEvent)endDiscoverEvent {
+- (void)startScanDeviceWithTimeout:(int)timeout discoverEvent:(DidDiscoverDeviceEvent)discoverEvent didEndDiscoverDeviceEvent:(DidEndDiscoverDeviceEvent)endDiscoverEvent {
+    _timeout = timeout;
     [_scanTimer setFireDate:[NSDate distantFuture]];
     NSLog(@"开启设备发现功能");
     // 只删除断开连接的设备
     NSMutableArray *disconnectKeys = [NSMutableArray array];
-    for (NSString *identify in _knownPeripherals.allKeys) {
-        CBPeripheral *peripheral = _knownPeripherals[identify];
-        if (peripheral.state == CBPeripheralStateDisconnected) {
-            [disconnectKeys addObject:identify];
+    for (NSString *mac in _knownPeripherals.allKeys) {
+        DLKnowDevice *knowDevice = _knownPeripherals[mac];
+        if (knowDevice.peripheral.state == CBPeripheralStateDisconnected) {
+            [disconnectKeys addObject:mac];
         }
     }
-    for (NSString *identify in disconnectKeys) {
-        [_knownPeripherals removeObjectForKey:identify];
+    for (NSString *mac in disconnectKeys) {
+        [_knownPeripherals removeObjectForKey:mac];
     }
     // 开始扫描
     [self startScaning];
@@ -100,7 +105,7 @@ static DLCentralManager *instance = nil;
 - (void)run {
     NSLog(@"定时器计时:_time = %d", _time);
     _time++;
-    if (_time >= 10) {
+    if (_time >= _timeout) {
         [_scanTimer setFireDate:[NSDate distantFuture]];
         [self stopScanning];
     }
@@ -178,18 +183,27 @@ static DLCentralManager *instance = nil;
 }
 
 - (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
-//    NSLog(@"发现新设备: %@", peripheral);
+    NSLog(@"发现新设备: %@, %@", peripheral, RSSI);
 #warning 测试代码
     NSString *mac = [self getDeviceMac:advertisementData];
     if (mac.length == 0) {
         mac = peripheral.identifier.UUIDString;
     }
-    if (![_knownPeripherals objectForKey:mac]) {
-        [_knownPeripherals setValue:peripheral forKey:mac];
+    DLKnowDevice *knowDevice = [_knownPeripherals objectForKey:mac];
+    if (!knowDevice) {
+        // 不存在该设备，添加
+        knowDevice = [[DLKnowDevice alloc] init];
+        knowDevice.peripheral = peripheral;
+        knowDevice.rssi = RSSI;
+        [_knownPeripherals setValue:knowDevice forKey:mac];
         [[DLCloudDeviceManager sharedInstance] updateCloudList];
         if (self.discoverEvent) {
             self.discoverEvent(self, peripheral, mac);
         }
+    }
+    else {
+        //存在，更新rssi
+        knowDevice.rssi = RSSI;
     }
     
 // 有效代码
@@ -265,7 +279,7 @@ static DLCentralManager *instance = nil;
 //}
 
 #pragma mark - Properity
-- (NSMutableDictionary<NSString *,CBPeripheral *> *)knownPeripherals {
+- (NSMutableDictionary<NSString *, DLKnowDevice*> *)knownPeripherals {
     return [_knownPeripherals copy];
 }
 

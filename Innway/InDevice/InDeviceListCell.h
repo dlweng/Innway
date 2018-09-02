@@ -10,8 +10,8 @@
 
 @interface InDeviceListCell : UITableViewCell
 
-@property (nonatomic, copy) NSString *imageName;
 @property (nonatomic, copy) NSString *deviceName;
 @property (nonatomic, copy) NSString *deviceID;
+@property (nonatomic, strong) NSNumber *rssi;
 
 @end

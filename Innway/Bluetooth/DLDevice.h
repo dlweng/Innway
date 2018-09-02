@@ -29,7 +29,7 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 - (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data;
 @end
 
-// 本地设备类
+// 云端设备类
 @interface DLDevice : NSObject<CBPeripheralDelegate>
 
 @property (nonatomic, strong) CBPeripheral *peripheral;
@@ -41,6 +41,7 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic, assign) BOOL online;
 @property (nonatomic, assign, readonly) BOOL connected;
+@property (nonatomic, strong) NSNumber *rssi;
 
 - (BOOL)discoverServices;
 

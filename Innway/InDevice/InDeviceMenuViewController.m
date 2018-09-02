@@ -5,17 +5,20 @@
 //  Created by danly on 2018/8/5.
 //  Copyright © 2018年 innwaytech. All rights reserved.
 //
+#define InDeviceMenuCell1ReuseIdentifier @"InDeviceMenuCell1"
+#define InDeviceMenuCell2ReuseIdentifier @"InDeviceMenuCell2"
 
 #import "InDeviceMenuViewController.h"
-#define InDeviceMenuCellReuseIdentifier @"InDeviceMenuCell"
 #import "DLCloudDeviceManager.h"
 #import "InDeviceListViewController.h"
+#import "InDeviceMenuCell1.h"
+#import "InDeviceMenuCell2.h"
+#import "InCommon.h"
 
-@interface InDeviceMenuViewController ()<UITableViewDelegate, UITableViewDataSource>
+@interface InDeviceMenuViewController ()<UITableViewDelegate, UITableViewDataSource, InDeviceMenuCell1Delegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSDictionary *cloudDeviceList;
-
 @end
 
 @implementation InDeviceMenuViewController
@@ -28,8 +31,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:InDeviceMenuCellReuseIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"InDeviceMenuCell1" bundle:nil] forCellReuseIdentifier:InDeviceMenuCell1ReuseIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"InDeviceMenuCell2" bundle:nil] forCellReuseIdentifier:InDeviceMenuCell2ReuseIdentifier];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOnlineChange:) name:DeviceOnlineChangeNotification object:nil];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.tableView.backgroundColor = [UIColor clearColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -57,24 +63,22 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InDeviceMenuCellReuseIdentifier];
     if (indexPath.row == self.cloudDeviceList.allKeys.count) {
-        cell.imageView.image = [UIImage imageNamed:@"icon_add_device"];
-        cell.textLabel.text = @"添加设备";
+        InDeviceMenuCell2 *cell = [tableView dequeueReusableCellWithIdentifier:InDeviceMenuCell2ReuseIdentifier];
+        cell.backgroundColor = [UIColor clearColor];
+        return cell;
     }
     else {
+        InDeviceMenuCell1 *cell = [tableView dequeueReusableCellWithIdentifier:InDeviceMenuCell1ReuseIdentifier];
+        cell.backgroundColor = [UIColor clearColor];
         NSString *identify = self.cloudDeviceList.allKeys[indexPath.row];
         DLDevice *device = self.cloudDeviceList[identify];
-        cell.imageView.image = [UIImage imageNamed:@"deviceMenu"];
-        cell.textLabel.text = device.deviceName;
-        if (device.online) {
-            cell.textLabel.textColor = [UIColor blackColor];
-        }
-        else {
-            cell.textLabel.textColor = [UIColor grayColor];
-        }
+        cell.iconView.image = [UIImage imageNamed:[[InCommon sharedInstance] getImageName:device.rssi]];
+        cell.titleLabel.text = device.deviceName;
+        cell.device = device;
+        cell.delegate = self;
+        return cell;
     }
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -103,5 +107,12 @@
 - (void)deviceOnlineChange:(NSNotification *)noti {
     [self.tableView reloadData];
 }
+
+- (void)deviceMenuCellSettingBtnDidClick:(InDeviceMenuCell1 *)cell {
+    if ([self.delegate respondsToSelector:@selector(deviceSettingBtnDidClick:)]) {
+        [self.delegate deviceSettingBtnDidClick:cell.device];
+    }
+}
+
 
 @end

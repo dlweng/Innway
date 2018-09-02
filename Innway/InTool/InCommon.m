@@ -187,5 +187,53 @@ static SystemSoundID soundID;
     return _locationManager;
 }
 
+- (NSString *)getImageName:(NSNumber *)rssi {
+    NSInteger rSSI = rssi.integerValue;
+    NSString *imageName = @"RSSI_11";
+    if(rSSI>=-50)
+    {
+        imageName = @"RSSI_0";
+    }
+    else if(rSSI>-60)//>90%
+    {
+        imageName = @"RSSI_1";
+    }
+    else if(rSSI>-65)//>80%
+    {
+        imageName = @"RSSI_2";
+    }
+    else if(rSSI>-70)//>70%
+    {
+        imageName = @"RSSI_3";
+    }
+    else if(rSSI>-75)//>60%
+    {
+        imageName = @"RSSI_4";
+    }
+    else if(rSSI>-80)//>50%
+    {
+        imageName = @"RSSI_5";
+    }
+    else if(rSSI>-85)//>40%
+    {
+        imageName = @"RSSI_6";
+    }
+    else if(rSSI>-90)//>30%
+    {
+        imageName = @"RSSI_7";
+    }
+    else if(rSSI>-95)//>20%
+    {
+        imageName = @"RSSI_8";
+    }
+    else if(rSSI>-100)//>10%
+    {
+        imageName = @"RSSI_9";
+    }
+    else{
+        imageName = @"RSSI_11";
+    }
+    return imageName;
+}
 
 @end

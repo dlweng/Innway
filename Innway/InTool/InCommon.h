@@ -31,4 +31,6 @@
 - (BOOL)startUpdatingLocation;
 - (void)uploadDeviceLocation:(DLDevice *)device;
 
+- (NSString *)getImageName:(NSNumber *)rssi;
+
 @end

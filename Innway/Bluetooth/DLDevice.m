@@ -47,11 +47,11 @@
 - (void)reconnectDevice:(NSNotification *)notification {
     CBPeripheral *peripheral = notification.object;
     NSLog(@"设备连接被断开，去重连设备");
+    self.online = NO;
     if ([peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
         [[DLCentralManager sharedInstance] connectToDevice:peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
             if (error) {
                 NSLog(@"重连失败");
-                self.online = NO;
             }
             else {
                 NSLog(@"重连成功");
@@ -85,10 +85,11 @@
 - (void) peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     NSLog(@"Characteristics for service %@ (%@)", [service UUID], service);
     NSArray *characteristics = [service characteristics];
+    [self activeDevice];  //激活设备
+    [self getDeviceInfo];
     for (CBCharacteristic *characteristic in characteristics) {
         NSLog(@" -- Characteristic %@ (%@)", [characteristic UUID], characteristic);
         [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral on:YES];
-        [self activeDevice];  //激活设备
     }
 }
 
@@ -465,6 +466,13 @@
     CLLocationCoordinate2D deviceLocation = _coordinate;
     NSString *gps = [NSString stringWithFormat:@"%f,%f", deviceLocation.latitude, deviceLocation.longitude];
     return gps;
+}
+
+- (NSNumber *)rssi {
+    if (!_rssi) {
+        _rssi = @(-120);
+    }
+    return _rssi;
 }
 
 @end

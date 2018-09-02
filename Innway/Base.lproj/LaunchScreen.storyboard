@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="1ip-ul-RMH">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_splash.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="1ip-ul-RMH">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
                         </subviews>
@@ -40,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icon_splash.png" width="750" height="1334"/>
+        <image name="icon_splash.jpg" width="750" height="1334"/>
     </resources>
 </document>

@@ -56,7 +56,8 @@ static BOOL deleteing = NO;
     else {
         NSLog(@"未添加到云端，需做请求添加");
         // 未添加到云端, 添加到云端
-        CBPeripheral *peripheral = [[DLCentralManager sharedInstance].knownPeripherals objectForKey:mac];
+        DLKnowDevice *knowDevice = [[DLCentralManager sharedInstance].knownPeripherals objectForKey:mac];
+        CBPeripheral *peripheral = knowDevice.peripheral;
         NSString *peripheralName = peripheral.name;
         if (peripheralName.length == 0) {
             peripheralName = @"Lily";
@@ -87,7 +88,7 @@ static BOOL deleteing = NO;
 
 - (void)connectDevice:(DLDevice *)device mac:(NSString *)mac  completion:(DidAddDeviceEvent)completion {
     __block BOOL find = NO;
-    [self.centralManager startScanDidDiscoverDeviceEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *newMac) {
+    [self.centralManager startScanDeviceWithTimeout:10 discoverEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *newMac) {
         if (find) {
             return ;
         }
@@ -114,7 +115,7 @@ static BOOL deleteing = NO;
                 completion(self, device, nil);
             }];
         }
-    } didEndDiscoverDeviceEvent:^(DLCentralManager *manager, NSMutableDictionary<NSString *,CBPeripheral *> *knownPeripherals) {
+    } didEndDiscoverDeviceEvent:^(DLCentralManager *manager, NSMutableDictionary<NSString *,DLKnowDevice *> *knownPeripherals) {
         if (find) {
             return ;
         }
@@ -188,8 +189,10 @@ static BOOL deleteing = NO;
                     DLDevice *device = [self.cloudDeviceList objectForKey:mac];
                     if (!device) {
                         // 不存在，则需要创建
-                        CBPeripheral *peripheral = [self.centralManager.knownPeripherals objectForKey:mac];
+                        DLKnowDevice *knowDevice = [self.centralManager.knownPeripherals objectForKey:mac];
+                        CBPeripheral *peripheral = knowDevice.peripheral;
                         device = [DLDevice device:peripheral];
+                        device.rssi = knowDevice.rssi;
                     }
                     device.mac = mac;
                     device.cloudID = [cloudDevice stringValueForKey:@"id" defaultValue:@""];
@@ -210,9 +213,11 @@ static BOOL deleteing = NO;
 - (void)updateCloudList {
     for (NSString *mac in self.cloudDeviceList.allKeys) {
         DLDevice *device = self.cloudDeviceList[mac];
-        CBPeripheral *peripheral = [self.centralManager.knownPeripherals objectForKey:mac];
+        DLKnowDevice *knowDevice = [self.centralManager.knownPeripherals objectForKey:mac];
+        CBPeripheral *peripheral = knowDevice.peripheral;
         NSLog(@"设置peripheral--更新设备mac, peripheral = %@", peripheral);
         device.peripheral = peripheral;
+        device.rssi = knowDevice.rssi;
     }
     [self autoConnectCloudDevice];
 }

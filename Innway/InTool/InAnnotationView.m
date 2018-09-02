@@ -26,8 +26,10 @@
 
 @end
 
+@interface UIBubbleBtn:UIButton
+@end
 
-@implementation UIButton (Bubble)
+@implementation UIBubbleBtn
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect {
     // 上：10 下：10 左：10 右：22
@@ -43,7 +45,7 @@
 
 
 @interface InAnnotationView()
-@property (nonatomic, weak) UIButton *bubble;
+@property (nonatomic, weak) UIBubbleBtn *bubble;
 @end
 
 @implementation InAnnotationView
@@ -78,7 +80,7 @@
 
 - (UIButton *)bubble {
     if (!_bubble) {
-        UIButton *btn = [[UIButton alloc] init];
+        UIBubbleBtn *btn = [[UIBubbleBtn alloc] init];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont systemFontOfSize:TitleFont];
         UIImage *image = [UIImage imageNamed:@"bubble"];
