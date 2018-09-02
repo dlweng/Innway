@@ -59,7 +59,7 @@
         NSLog(@"重置结果：task = %@, responseObject = %@", task, responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"重置结果：task = %@, error = %@", task, error);
-        [InAlertTool showAlertAutoDisappear:@"重置失败"];
+        [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
     }];
 }
 

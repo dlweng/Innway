@@ -34,6 +34,7 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"InDeviceMenuCell1" bundle:nil] forCellReuseIdentifier:InDeviceMenuCell1ReuseIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"InDeviceMenuCell2" bundle:nil] forCellReuseIdentifier:InDeviceMenuCell2ReuseIdentifier];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOnlineChange:) name:DeviceOnlineChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];
     self.view.backgroundColor = [UIColor clearColor];
     self.tableView.backgroundColor = [UIColor clearColor];
 }
@@ -45,6 +46,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceOnlineChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -114,5 +116,8 @@
     }
 }
 
+- (void)deviceRSSIChange:(NSNotification *)noti {
+    [self.tableView reloadData];
+}
 
 @end

@@ -16,11 +16,11 @@
 #define ReconnectAlertKey @"ReconnectAlert"
 #define AlertMusicKey @"AlertMusic"
 #define AlertStatusKey @"AlertStatusKey"
-
 #define PhoneAlertMusicKey @"PhoneAlertMusic"
 
 #define DeviceOnlineChangeNotification @"DeviceOnlineChangeNotification"
 #define DeviceSearchPhoneNotification @"DeviceSearchPhoneNotification"
+#define DeviceRSSIChangeNotification  @"DeviceRSSIChangeNotification"
 
 @class DLDevice;
 typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *error);
@@ -31,7 +31,7 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 
 // 云端设备类
 @interface DLDevice : NSObject<CBPeripheralDelegate>
-
+@property (nonatomic, strong) NSMutableDictionary *data;
 @property (nonatomic, strong) CBPeripheral *peripheral;
 @property (nonatomic, copy) NSString *deviceName;
 @property (nonatomic, copy) NSString *mac;

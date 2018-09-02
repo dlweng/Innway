@@ -66,6 +66,10 @@
     [[DLCloudDeviceManager sharedInstance] deleteDevice:self.device.mac completion:^(DLCloudDeviceManager *manager, NSError *error) {
         [InAlertTool hideHUDForView:self.view tag:1];
         if (error) {
+            if (error.code < -1000) {
+                [InAlertTool showAlertWithTip:@"网络连接异常"];
+                return ;
+            }
             [InAlertTool showAlertWithTip:@"设备删除失败"];
         }
         else {

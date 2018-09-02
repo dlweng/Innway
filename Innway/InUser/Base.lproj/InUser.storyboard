@@ -129,7 +129,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="InUserTableViewController" id="jrT-FU-Acs" customClass="InUserTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="FU4-lF-T4h">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <sections>
@@ -354,6 +354,6 @@
         <image name="icon_user.png" width="34" height="43"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="9hq-Tp-LBE"/>
+        <segue reference="aaN-kV-54u"/>
     </inferredMetricsTieBreakers>
 </document>

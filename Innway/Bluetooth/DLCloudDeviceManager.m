@@ -38,7 +38,7 @@ static BOOL deleteing = NO;
     DLDevice *device = [self.cloudDeviceList objectForKey:mac];
     if (device) {
         // 已经添加到云端
-        if (device.connected) {
+        if (device.connected && device.online) {
             // 已经连接，直接跳转
             NSLog(@"设备已经存在云端，也已连接，直接跳转");
             [device discoverServices];
@@ -88,7 +88,7 @@ static BOOL deleteing = NO;
 
 - (void)connectDevice:(DLDevice *)device mac:(NSString *)mac  completion:(DidAddDeviceEvent)completion {
     __block BOOL find = NO;
-    [self.centralManager startScanDeviceWithTimeout:10 discoverEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *newMac) {
+    [self.centralManager startScanDeviceWithTimeout:5 discoverEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *newMac) {
         if (find) {
             return ;
         }
@@ -118,6 +118,32 @@ static BOOL deleteing = NO;
     } didEndDiscoverDeviceEvent:^(DLCentralManager *manager, NSMutableDictionary<NSString *,DLKnowDevice *> *knownPeripherals) {
         if (find) {
             return ;
+        }
+        DLKnowDevice *knowDevice = [knownPeripherals objectForKey:mac];
+        if (knowDevice) {
+            find = YES;
+            CBPeripheral *peripheral = knowDevice.peripheral;
+            NSLog(@"查找到设备, peripheral = %@",  peripheral);
+            //2.再连接设备
+            if (peripheral.state == CBPeripheralStateConnecting || peripheral.state == CBPeripheralStateConnected) {
+                // 不清楚新查找的设备，为何有存在连接状态的，导致去连接没有回调，这里处理这种情况的
+                NSLog(@"查找到的新设备处于连接状态");
+                [device discoverServices];
+                completion(self, device, nil);
+                return;
+            }
+            [self.centralManager connectToDevice:peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
+                if (error) {
+                    // 连接失败
+                    completion(self, nil, error);
+                    return ;
+                }
+                //连接成功,发现服务
+                NSLog(@"添加设备-扫描发现了设备:%@", mac);
+                [device discoverServices];
+                completion(self, device, nil);
+            }];
+            return;
         }
         // 扫描不到设备
         NSError *error = [NSError errorWithDomain:NSStringFromClass([manager class]) code:2 userInfo:nil];

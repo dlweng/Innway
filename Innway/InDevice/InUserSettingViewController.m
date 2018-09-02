@@ -117,7 +117,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
         UILabel *label = [[UILabel alloc] init];
-        NSString *email = @"999999@qq.com";
+        NSString *email = [InCommon sharedInstance].email;
         label.text = [NSString stringWithFormat:@"   用户: %@", email];
         label.font = [UIFont systemFontOfSize:16.0];
         label.textColor = [UIColor darkGrayColor];

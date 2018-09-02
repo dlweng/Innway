@@ -38,6 +38,7 @@
     [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceList];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceSearchPhone:) name:DeviceSearchPhoneNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -66,6 +67,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceSearchPhoneNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
 }
 
 - (void)deviceSearchPhone:(NSNotification *)noti {
@@ -74,6 +76,13 @@
     [InAlertTool showAlert:@"提示" message:[NSString stringWithFormat:@"设备%@在查找手机", device.deviceName] confirmHanler:^{
         [[InCommon sharedInstance] stopSound];
     }];
+}
+
+- (void)deviceRSSIChange:(NSNotification *)noti {
+    DLDevice *device = noti.object;
+    DLKnowDevice *knowDevice = [self.knownPeripherals objectForKey:device];
+    knowDevice.rssi = device.rssi;
+    [self.tableView reloadData];
 }
 
 - (void)pullToRefreshViewDidStartLoading:(SSPullToRefreshView *)view {
@@ -98,7 +107,7 @@
 }
 
 - (void)getPeripherals {
-    [[DLCentralManager sharedInstance] startScanDeviceWithTimeout:10 discoverEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *mac) {
+    [[DLCentralManager sharedInstance] startScanDeviceWithTimeout:12 discoverEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *mac) {
         [self refreshTableView];
     } didEndDiscoverDeviceEvent:^(DLCentralManager *manager, NSMutableDictionary<NSString *,CBPeripheral *> *knownPeripherals) {
         self.knownPeripherals = knownPeripherals;
@@ -155,6 +164,9 @@
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             if (error.code == 6) {
                 [InAlertTool showAlertAutoDisappear:@"不能添加超过6台设备"];
+            }
+            else if (error.code < -1000) {
+                [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
             }
             else {
                 [InAlertTool showAlertAutoDisappear:@"添加设备失败"];

@@ -11,10 +11,14 @@
 #import "DLCentralManager.h"
 #import "InCommon.h"
 
+#define offlineRSSI @(-120)
 // 设备默认位置:22.55694872036483,114.11126873029583
 
-@interface DLDevice()
-@property (nonatomic, strong) NSMutableDictionary *data;
+@interface DLDevice() {
+    NSNumber *_rssi;
+    NSTimer *_readRSSITimer;
+    int _time;
+}
 
 // 保存设置的值，等ack回来之后更新本地数据
 @property (nonatomic, assign) BOOL disconnectAlert;
@@ -36,12 +40,17 @@
     if (self = [super init]) {
         // 设置默认位置 22.55694872036483,114.11126873029583
         _coordinate = CLLocationCoordinate2DMake(22.55694872036483, 114.11126873029583);
+        _readRSSITimer = [NSTimer timerWithTimeInterval:30 target:self selector:@selector(readRSSI) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_readRSSITimer forMode:NSRunLoopCommonModes];
     }
     return self;
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceDisconnectNotification object:nil];
+    //移除
+    [_readRSSITimer invalidate];
+    _readRSSITimer = nil;
 }
 
 - (void)reconnectDevice:(NSNotification *)notification {
@@ -74,22 +83,38 @@
 
 - (void)peripheral:(CBPeripheral *)_peripheral didDiscoverServices:(NSError *)error {
     NSArray *services = [_peripheral services];
+    CBUUID *serverUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
     for (CBService *service in services) {
-        NSLog(@"UUID = %@", [service UUID]);
-        CBUUID *uuid1 = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
-        CBUUID *uuid2 = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
-        [self.peripheral discoverCharacteristics:@[uuid1, uuid2] forService:service];
+        if ([service.UUID.UUIDString isEqualToString:serverUUID.UUIDString]) {
+            NSLog(@"发现服务0xE001");
+            CBUUID *ntfUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
+            CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
+            [self.peripheral discoverCharacteristics:@[ntfUUID, writeUUID] forService:service];
+        }
     }
 }
 
 - (void) peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
-    NSLog(@"Characteristics for service %@ (%@)", [service UUID], service);
+//    NSLog(@"Characteristics for service %@ (%@)", [service UUID], service);
+    CBUUID *ntfUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
+    CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
     NSArray *characteristics = [service characteristics];
-    [self activeDevice];  //激活设备
-    [self getDeviceInfo];
     for (CBCharacteristic *characteristic in characteristics) {
-        NSLog(@" -- Characteristic %@ (%@)", [characteristic UUID], characteristic);
-        [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral on:YES];
+        if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
+            NSLog(@"发现E002写角色，开始激活设备，并获取设备信息");
+            [self activeDevice];
+            [self getDeviceInfo];
+        }
+        if ([characteristic.UUID.UUIDString isEqualToString:ntfUUID.UUIDString]) {
+            NSLog(@"发现E003, 打开监听来自设备通知的功能");
+            [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral on:YES];
+        }
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
+    if (peripheral == self.peripheral && !error) {
+        self.rssi = RSSI;
     }
 }
 
@@ -436,6 +461,13 @@
     if (_online != online) {
         [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(online)];
         [[InCommon sharedInstance] uploadDeviceLocation:self];
+        if (!online) {
+            //掉线，将RSSI设置为-120
+            self.rssi = offlineRSSI;
+        }
+        else {
+            [self.peripheral readRSSI];
+        }
     }
     _online = online;
 }
@@ -470,9 +502,28 @@
 
 - (NSNumber *)rssi {
     if (!_rssi) {
-        _rssi = @(-120);
+        _rssi = offlineRSSI;
     }
     return _rssi;
+}
+
+- (void)setRssi:(NSNumber *)rssi {
+    _rssi = rssi;
+    if (rssi.integerValue > -100 && !self.connected && !self.online && self.peripheral) {
+        [[DLCentralManager sharedInstance] connectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
+            if (!error) {
+                [self discoverServices];
+            }
+        }];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceRSSIChangeNotification object:self];
+}
+
+- (void)readRSSI {
+    if (self.online) {
+        NSLog(@"定时读取设备的RSSI值: %@", self.mac);
+        [self.peripheral readRSSI];
+    }
 }
 
 @end

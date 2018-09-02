@@ -74,6 +74,12 @@
     self.mapView.showsUserLocation = NO;
     self.mapView.userTrackingMode = MKUserTrackingModeFollow;
     self.deviceSettingBtn.transform = CGAffineTransformRotate(self.deviceSettingBtn.transform, M_PI * 0.5);
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -81,7 +87,7 @@
     self.device.delegate = self;
     [self.device getDeviceInfo];
     [self updateAnnotation];
-    [self updateUI:nil];
+    [self updateUI];
 }
 
 
@@ -209,14 +215,14 @@
     [self.mapView setCenterCoordinate:self.mapView.userLocation.coordinate];
 }
 
-- (void)updateUI:(NSDictionary *)data {
+- (void)updateUI {
     //根据设备的信息界面
 //    self.device.lastData
     self.deviceNameLabel.text = self.device.deviceName;
     self.deviceImageView.image = [UIImage imageNamed:[[InCommon sharedInstance] getImageName:self.device.rssi]];
-    if (data.count > 0) {
+    if (self.device.data.count > 0) {
         NSString *batteryImageName = @"10";
-        NSInteger battery = [data integerValueForKey:ElectricKey defaultValue:0];
+        NSInteger battery = [self.device.data integerValueForKey:ElectricKey defaultValue:0];
         if (battery > 90) {
             batteryImageName = @"100";
         }
@@ -259,23 +265,46 @@
 
 - (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data{
     if (device == self.device) {
-        [self updateUI:data];
+        [self updateUI];
     }
 }
 
 - (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device {
     if (!device.online) {
+        if (device.rssi.integerValue > -100) {
+            [InAlertTool showHUDAddedTo:self.view animated:YES];
+            [[DLCloudDeviceManager sharedInstance] addDevice:device.mac completion:^(DLCloudDeviceManager *manager, DLDevice *newdevice, NSError *error) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                if ([newdevice.mac isEqualToString:device.mac]) {
+                    if (error) {
+                        if (error.code < -1000) {
+                            [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
+                            return ;
+                        }
+                        [InAlertTool showAlertAutoDisappear:@"建立连接失败"];
+                        return ;
+                    }
+                    [self goToMenu];
+                    [self updateDevice:newdevice];
+                }
+            }];
+        }
         return;
     }
     [self goToMenu];
     if (device != self.device) {
-        self.device.delegate = nil;
-        self.device = device;
-        self.device.delegate = self;
-        [self.device getDeviceInfo];
-        [self updateAnnotation];
-        [self updateUI:nil];
+        [self updateDevice:device];
     }
+}
+
+- (void)updateDevice:(DLDevice *)device {
+    self.device.delegate = nil;
+    self.device = device;
+    self.device.delegate = self;
+    [self.device getDeviceInfo];
+    [self updateAnnotation];
+    [self updateUI];
+    [self toLocation];
 }
 
 - (void)deviceSettingBtnDidClick:(DLDevice *)device {
@@ -326,6 +355,13 @@
             [self.deviceAnnotation setObject:annotation forKey:mac];
             [self.mapView addAnnotation:annotation];
         }
+    }
+}
+
+- (void)deviceRSSIChange:(NSNotification *)noti {
+    DLDevice *device = noti.object;
+    if (device.mac == self.device.mac) {
+        [self updateUI];
     }
 }
 

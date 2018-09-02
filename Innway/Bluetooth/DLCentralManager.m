@@ -84,6 +84,7 @@ static DLCentralManager *instance = nil;
     for (NSString *mac in disconnectKeys) {
         [_knownPeripherals removeObjectForKey:mac];
     }
+    
     // 开始扫描
     [self startScaning];
     _time = 0;
@@ -183,43 +184,52 @@ static DLCentralManager *instance = nil;
 }
 
 - (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
-    NSLog(@"发现新设备: %@, %@", peripheral, RSSI);
-#warning 测试代码
-    NSString *mac = [self getDeviceMac:advertisementData];
-    if (mac.length == 0) {
-        mac = peripheral.identifier.UUIDString;
-    }
-    DLKnowDevice *knowDevice = [_knownPeripherals objectForKey:mac];
-    if (!knowDevice) {
-        // 不存在该设备，添加
-        knowDevice = [[DLKnowDevice alloc] init];
-        knowDevice.peripheral = peripheral;
-        knowDevice.rssi = RSSI;
-        [_knownPeripherals setValue:knowDevice forKey:mac];
-        [[DLCloudDeviceManager sharedInstance] updateCloudList];
-        if (self.discoverEvent) {
-            self.discoverEvent(self, peripheral, mac);
-        }
-    }
-    else {
-        //存在，更新rssi
-        knowDevice.rssi = RSSI;
-    }
-    
-// 有效代码
-//    if ([self effectivePeripheral:advertisementData]) {
-//        NSString *mac = [self getDeviceMac:advertisementData];
-//        NSLog(@"发现新设备: %@, mac = %@", peripheral, mac);
-//        if (![_knownPeripherals objectForKey:mac]) {
-//            [_knownPeripherals setValue:peripheral forKey:mac];
-//            if (self.discoverEvent) {
-//                self.discoverEvent(self, peripheral, mac);
-//            }
+//#warning 测试代码
+//    NSString *mac = [self getDeviceMac:advertisementData];
+//    if (mac.length == 0) {
+//        mac = peripheral.identifier.UUIDString;
+//    }
+//    DLKnowDevice *knowDevice = [_knownPeripherals objectForKey:mac];
+//    if (!knowDevice) {
+//        // 不存在该设备，添加
+//        knowDevice = [[DLKnowDevice alloc] init];
+//        knowDevice.peripheral = peripheral;
+//        knowDevice.rssi = RSSI;
+//        [_knownPeripherals setValue:knowDevice forKey:mac];
+//        [[DLCloudDeviceManager sharedInstance] updateCloudList];
+//        if (self.discoverEvent) {
+//            self.discoverEvent(self, peripheral, mac);
 //        }
 //    }
 //    else {
-////            NSLog(@"发现旧设备: %@", peripheral);
+//        //存在，更新rssi
+//        knowDevice.rssi = RSSI;
 //    }
+    
+// 有效代码
+    if ([self effectivePeripheral:advertisementData]) {
+        NSString *mac = [self getDeviceMac:advertisementData];
+        if (mac.length > 0) {
+            DLKnowDevice *knowDevice = [_knownPeripherals objectForKey:mac];
+            if (!knowDevice) {
+                // 不存在该设备，添加
+                NSLog(@"发现新设备: %@, %@", peripheral, RSSI);
+                knowDevice = [[DLKnowDevice alloc] init];
+                knowDevice.peripheral = peripheral;
+                knowDevice.rssi = RSSI;
+                [_knownPeripherals setValue:knowDevice forKey:mac];
+                [[DLCloudDeviceManager sharedInstance] updateCloudList];
+                if (self.discoverEvent) {
+                    self.discoverEvent(self, peripheral, mac);
+                }
+            }
+            else {
+                NSLog(@"发现旧设备, 更新RSSI: %@, %@", peripheral, RSSI);
+                //存在，更新rssi
+                knowDevice.rssi = RSSI;
+            }
+        }
+    }
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {

@@ -81,7 +81,8 @@
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"登陆结果：task = %@, error = %@", task, error);
-        [InAlertTool showAlertAutoDisappear:@"登陆失败"];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
     }];
 }
 
