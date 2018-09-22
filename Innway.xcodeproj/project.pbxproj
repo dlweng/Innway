@@ -94,6 +94,13 @@
 		3374C7AF2112077C00F83101 /* icon_range_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C78D2112077C00F83101 /* icon_range_up.png */; };
 		3374C7B02112077C00F83101 /* icon_checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C78E2112077C00F83101 /* icon_checked.png */; };
 		3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7902112077C00F83101 /* icon_dot_down.png */; };
+		3379A2D321561E73008D1AA2 /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2CD21561E72008D1AA2 /* background@2x.png */; };
+		3379A2D421561E73008D1AA2 /* background@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2CE21561E72008D1AA2 /* background@3x.png */; };
+		3379A2D521561E73008D1AA2 /* whiteBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2CF21561E72008D1AA2 /* whiteBtn@3x.png */; };
+		3379A2D621561E73008D1AA2 /* greenBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2D021561E72008D1AA2 /* greenBtn@3x.png */; };
+		3379A2D721561E73008D1AA2 /* greenBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2D121561E72008D1AA2 /* greenBtn@2x.png */; };
+		3379A2D821561E73008D1AA2 /* whiteBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2D221561E73008D1AA2 /* whiteBtn@2x.png */; };
+		3379A2DE21562500008D1AA2 /* InButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3379A2DD21562500008D1AA2 /* InButton.m */; };
 		338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7521297F5F00A018EA /* DLUUIDTool.m */; };
 		338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7721297F5F00A018EA /* DLCloudDeviceManager.m */; };
 		338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7921297F5F00A018EA /* DLCentralManager.m */; };
@@ -226,6 +233,14 @@
 		3374C78D2112077C00F83101 /* icon_range_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_range_up.png; sourceTree = "<group>"; };
 		3374C78E2112077C00F83101 /* icon_checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_checked.png; sourceTree = "<group>"; };
 		3374C7902112077C00F83101 /* icon_dot_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_dot_down.png; sourceTree = "<group>"; };
+		3379A2CD21561E72008D1AA2 /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
+		3379A2CE21561E72008D1AA2 /* background@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@3x.png"; sourceTree = "<group>"; };
+		3379A2CF21561E72008D1AA2 /* whiteBtn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteBtn@3x.png"; sourceTree = "<group>"; };
+		3379A2D021561E72008D1AA2 /* greenBtn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenBtn@3x.png"; sourceTree = "<group>"; };
+		3379A2D121561E72008D1AA2 /* greenBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenBtn@2x.png"; sourceTree = "<group>"; };
+		3379A2D221561E73008D1AA2 /* whiteBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteBtn@2x.png"; sourceTree = "<group>"; };
+		3379A2DC21562500008D1AA2 /* InButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InButton.h; sourceTree = "<group>"; };
+		3379A2DD21562500008D1AA2 /* InButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InButton.m; sourceTree = "<group>"; };
 		338CDF7421297F5E00A018EA /* DLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLDevice.h; sourceTree = "<group>"; };
 		338CDF7521297F5F00A018EA /* DLUUIDTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLUUIDTool.m; sourceTree = "<group>"; };
 		338CDF7621297F5F00A018EA /* DLCentralManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLCentralManager.h; sourceTree = "<group>"; };
@@ -281,6 +296,8 @@
 				33027C1A211EBAC40003C5D9 /* InAlertTool.m */,
 				33027C21211EDE1C0003C5D9 /* InCommon.h */,
 				33027C22211EDE1C0003C5D9 /* InCommon.m */,
+				3379A2DC21562500008D1AA2 /* InButton.h */,
+				3379A2DD21562500008D1AA2 /* InButton.m */,
 			);
 			path = InTool;
 			sourceTree = "<group>";
@@ -386,6 +403,13 @@
 		3374C76E2112077C00F83101 /* image */ = {
 			isa = PBXGroup;
 			children = (
+				3379A2D121561E72008D1AA2 /* greenBtn@2x.png */,
+				3379A2D021561E72008D1AA2 /* greenBtn@3x.png */,
+				3379A2CD21561E72008D1AA2 /* background@2x.png */,
+				3379A2CE21561E72008D1AA2 /* background@3x.png */,
+				3379A2D221561E73008D1AA2 /* whiteBtn@2x.png */,
+				3379A2CF21561E72008D1AA2 /* whiteBtn@3x.png */,
+				3379A2CC21561CDB008D1AA2 /* New */,
 				33179814213BD684000B8DD6 /* 10.png */,
 				3317981B213BD687000B8DD6 /* 20.png */,
 				33179815213BD684000B8DD6 /* 30.png */,
@@ -449,6 +473,13 @@
 				331797F7213BBB5B000B8DD6 /* icon_splash.jpg */,
 			);
 			path = image;
+			sourceTree = "<group>";
+		};
+		3379A2CC21561CDB008D1AA2 /* New */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = New;
 			sourceTree = "<group>";
 		};
 		338CDF8221297F8C00A018EA /* Bluetooth */ = {
@@ -586,6 +617,7 @@
 				33179838213BEDEB000B8DD6 /* InDeviceMenuCell2.xib in Resources */,
 				3374C7A82112077C00F83101 /* icon_history_up.png in Resources */,
 				33179820213BD688000B8DD6 /* 70.png in Resources */,
+				3379A2D721561E73008D1AA2 /* greenBtn@2x.png in Resources */,
 				3374C7542112013F00F83101 /* Assets.xcassets in Resources */,
 				3317980B213BCE9F000B8DD6 /* RSSI_3.png in Resources */,
 				3374C7972112077C00F83101 /* icon_close.png in Resources */,
@@ -605,11 +637,14 @@
 				3374C7A92112077C00F83101 /* icon_user.png in Resources */,
 				3374C79B2112077C00F83101 /* icon_track_down.png in Resources */,
 				331797F6213B07AD000B8DD6 /* innwayLOGO.png in Resources */,
+				3379A2D821561E73008D1AA2 /* whiteBtn@2x.png in Resources */,
 				3317981E213BD688000B8DD6 /* 10.png in Resources */,
 				3317981D213BD688000B8DD6 /* 40.png in Resources */,
 				331797F8213BBB5B000B8DD6 /* icon_splash.jpg in Resources */,
 				3374C7AF2112077C00F83101 /* icon_range_up.png in Resources */,
 				331797E3213A6958000B8DD6 /* voice2.mp3 in Resources */,
+				3379A2D421561E73008D1AA2 /* background@3x.png in Resources */,
+				3379A2D521561E73008D1AA2 /* whiteBtn@3x.png in Resources */,
 				3328800D21159E9300C4893B /* InDeviceListCell.xib in Resources */,
 				33179821213BD688000B8DD6 /* 100.png in Resources */,
 				3374C7912112077C00F83101 /* icon_map_type.png in Resources */,
@@ -619,9 +654,11 @@
 				3374C7A12112077C00F83101 /* icon_add_device.png in Resources */,
 				33EE4C9B2116DBE000CDDC98 /* InDeviceMenuViewController.xib in Resources */,
 				3374C7A62112077C00F83101 /* icon_poup.png in Resources */,
+				3379A2D621561E73008D1AA2 /* greenBtn@3x.png in Resources */,
 				3328801C2115AA4900C4893B /* InControlDeviceViewController.xib in Resources */,
 				3317982B213BEB3D000B8DD6 /* InDeviceMenuCell1.xib in Resources */,
 				331797E2213A6958000B8DD6 /* voice3.mp3 in Resources */,
+				3379A2D321561E73008D1AA2 /* background@2x.png in Resources */,
 				3317980F213BCE9F000B8DD6 /* RSSI_6.png in Resources */,
 				33179806213BCE9F000B8DD6 /* RSSI_5.png in Resources */,
 				3374C7A42112077C00F83101 /* icon_back_dark.png in Resources */,
@@ -715,6 +752,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3379A2DE21562500008D1AA2 /* InButton.m in Sources */,
 				3328800C21159E9300C4893B /* InDeviceListCell.m in Sources */,
 				3328800221158F4900C4893B /* InForgetPasswordViewController.m in Sources */,
 				33EE4CAC21170C1500CDDC98 /* InAlertTableViewController.m in Sources */,

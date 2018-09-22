@@ -27,6 +27,8 @@
             [InAlertTool showAlertWithTip:@"请打开蓝牙"];
         }
     }];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     return YES;
 }
 
