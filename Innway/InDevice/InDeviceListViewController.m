@@ -80,7 +80,7 @@
 
 - (void)deviceRSSIChange:(NSNotification *)noti {
     DLDevice *device = noti.object;
-    DLKnowDevice *knowDevice = [self.knownPeripherals objectForKey:device];
+    DLKnowDevice *knowDevice = [self.knownPeripherals objectForKey:device.mac];
     knowDevice.rssi = device.rssi;
     [self.tableView reloadData];
 }

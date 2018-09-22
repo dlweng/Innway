@@ -40,7 +40,7 @@
     if (self = [super init]) {
         // 设置默认位置 22.55694872036483,114.11126873029583
         _coordinate = CLLocationCoordinate2DMake(22.55694872036483, 114.11126873029583);
-        _readRSSITimer = [NSTimer timerWithTimeInterval:30 target:self selector:@selector(readRSSI) userInfo:nil repeats:YES];
+        _readRSSITimer = [NSTimer timerWithTimeInterval:15 target:self selector:@selector(readRSSI) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_readRSSITimer forMode:NSRunLoopCommonModes];
     }
     return self;
@@ -201,7 +201,7 @@
         [self.data setValue:@(alertStatus.boolValue) forKey:AlertStatusKey];
 
     }
-    else if ([cmd isEqualToString:@"06"]) {
+    else if ([cmd isEqualToString:@"05"]) {
         NSLog(@"设备寻找手机，手机要发出警报");
         [[InCommon sharedInstance] playSound];
         [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchPhoneNotification object:self];
