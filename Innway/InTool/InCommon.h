@@ -11,6 +11,8 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <CoreLocation/CoreLocation.h>
 
+#define common [InCommon sharedInstance]
+
 @class DLDevice;
 @interface InCommon : NSObject
 @property (nonatomic, assign) NSInteger ID;

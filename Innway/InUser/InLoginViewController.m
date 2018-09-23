@@ -7,20 +7,19 @@
 //
 
 #import "InLoginViewController.h"
-#import "InUserTableViewController.h"
 #import "InDeviceListViewController.h"
 #import <AFNetworking.h>
 #import "InAlertTool.h"
 #import "InCommon.h"
 #import "InAlertTool.h"
+#import "InTextField.h"
 
 @interface InLoginViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
-@property (nonatomic, copy) NSString *email;
-@property (nonatomic, copy) NSString *pwd;
-@property (nonatomic, strong) InCommon *common;
-@property (nonatomic, weak) InUserTableViewController *userTableViewVC;
+
+@property (weak, nonatomic) IBOutlet InTextField *emailTextField;
+@property (weak, nonatomic) IBOutlet InTextField *passwordTextField;
 @property (nonatomic, assign) BOOL firstAppear;
 
 @end
@@ -29,45 +28,35 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.navigationItem.title = @"Log in";
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
-    //设置按钮的圆弧
-    self.loginBtn.layer.masksToBounds = YES;
-    self.loginBtn.layer.cornerRadius = 25;
     self.firstAppear = YES;
+    //    //设置按钮的圆弧
+    //    self.loginBtn.layer.masksToBounds = YES;
+    //    self.loginBtn.layer.cornerRadius = 25;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.firstAppear && self.common.ID != -1) {
+    if (self.firstAppear && common.ID != -1) {
         self.firstAppear = NO;
-        self.userTableViewVC.email = self.common.email;
-        self.userTableViewVC.pwd = self.common.pwd;
-        self.email = self.common.email;
-        self.pwd = self.common.pwd;
-        [self userLogin:nil]; // 自动登陆
-    }
-}
-
-- (void)goBack {
-    if (self.navigationController.viewControllers.lastObject == self) {
-        [self.navigationController popViewControllerAnimated:YES];
+        self.emailTextField.text = common.email;
+        self.passwordTextField.text = common.pwd;
+//        [self userLogin:nil]; // 自动登陆
     }
 }
 
 - (IBAction)userLogin:(UIButton *)sender {
-    if (self.email.length == 0) {
+    if (self.emailTextField.text.length == 0) {
         [InAlertTool showAlertWithTip:@"请输入邮箱"];
         return;
     }
-    else if (self.pwd.length == 0) {
+    else if (self.passwordTextField.text.length == 0) {
         [InAlertTool showAlertWithTip:@"请输入密码"];
         return;
     }
     
-    NSLog(@"开始登陆, self.email = %@, self.pwd = %@", self.email, self.pwd);
-    NSDictionary *parameters = @{@"username":self.email, @"password":self.pwd};
+    NSLog(@"开始登陆, self.email = %@, self.pwd = %@", self.emailTextField.text, self.passwordTextField.text);
+    NSDictionary *parameters = @{@"username":self.emailTextField.text, @"password":self.passwordTextField.text};
     [InAlertTool showHUDAddedTo:self.view animated:YES];
     [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/user/login" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"登陆结果：task = %@, responseObject = %@", task, responseObject);
@@ -78,7 +67,7 @@
             if (code.integerValue == 200) {
                 NSDictionary *data = responseObject[@"data"];
                 if (data) {
-                    [self.common saveUserInfoWithID:data[@"id"] email:data[@"username"] pwd:data[@"password"]];
+                    [common saveUserInfoWithID:data[@"id"] email:data[@"username"] pwd:data[@"password"]];
                 }
 //                [InAlertTool showAlertAutoDisappear:@"登陆成功" completion:^{
                 [self pushToDeviceListController];
@@ -99,27 +88,5 @@
     InDeviceListViewController *deviceListController = [[InDeviceListViewController alloc] initWithStyle:UITableViewStylePlain];
     [self.navigationController pushViewController:deviceListController animated:YES];
 }
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.destinationViewController isKindOfClass:[InUserTableViewController class]]) {
-        InUserTableViewController *userTableViewVC = segue.destinationViewController;
-        self.userTableViewVC = userTableViewVC;
-        userTableViewVC.userViewType = InUserWithPassword;
-        userTableViewVC.emailValueChanging = ^(NSString *email) {
-            self.email = email;
-//            NSLog(@"邮箱: %@", self.email);
-        };
-        userTableViewVC.pwdValueChanging = ^(NSString *pwd) {
-            self.pwd = pwd;
-//            NSLog(@"密码: %@", self.pwd);
-        };
-    }
-}
-
-- (InCommon *)common {
-    return [InCommon sharedInstance];
-}
-
-
 
 @end

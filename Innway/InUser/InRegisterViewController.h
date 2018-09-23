@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "InBaseViewController.h"
 
-@interface InRegisterViewController : UIViewController
+@interface InRegisterViewController : InBaseViewController
 
 @end

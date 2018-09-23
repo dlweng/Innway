@@ -112,6 +112,7 @@
 		3385C6D621574BCC005FAB04 /* greenLongButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6D221574BCB005FAB04 /* greenLongButton@2x.png */; };
 		3385C6D721574BCC005FAB04 /* whiteLongButton@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6D321574BCB005FAB04 /* whiteLongButton@3x.png */; };
 		3385C6DA21575E5E005FAB04 /* InTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 3385C6D921575E5E005FAB04 /* InTextField.m */; };
+		3385C6DD21578D2B005FAB04 /* InBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3385C6DC21578D2B005FAB04 /* InBaseViewController.m */; };
 		338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7521297F5F00A018EA /* DLUUIDTool.m */; };
 		338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7721297F5F00A018EA /* DLCloudDeviceManager.m */; };
 		338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7921297F5F00A018EA /* DLCentralManager.m */; };
@@ -266,6 +267,8 @@
 		3385C6D321574BCB005FAB04 /* whiteLongButton@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteLongButton@3x.png"; sourceTree = "<group>"; };
 		3385C6D821575E5E005FAB04 /* InTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InTextField.h; sourceTree = "<group>"; };
 		3385C6D921575E5E005FAB04 /* InTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InTextField.m; sourceTree = "<group>"; };
+		3385C6DB21578D2B005FAB04 /* InBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InBaseViewController.h; sourceTree = "<group>"; };
+		3385C6DC21578D2B005FAB04 /* InBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InBaseViewController.m; sourceTree = "<group>"; };
 		338CDF7421297F5E00A018EA /* DLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLDevice.h; sourceTree = "<group>"; };
 		338CDF7521297F5F00A018EA /* DLUUIDTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLUUIDTool.m; sourceTree = "<group>"; };
 		338CDF7621297F5F00A018EA /* DLCentralManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLCentralManager.h; sourceTree = "<group>"; };
@@ -407,6 +410,8 @@
 		3374C7492112013A00F83101 /* Innway */ = {
 			isa = PBXGroup;
 			children = (
+				3385C6DB21578D2B005FAB04 /* InBaseViewController.h */,
+				3385C6DC21578D2B005FAB04 /* InBaseViewController.m */,
 				338CDF8221297F8C00A018EA /* Bluetooth */,
 				3374C76E2112077C00F83101 /* image */,
 				33027C1F211EC5140003C5D9 /* InTool */,
@@ -825,6 +830,7 @@
 				3374C74C2112013B00F83101 /* AppDelegate.m in Sources */,
 				33EE4C9A2116DBE000CDDC98 /* InDeviceMenuViewController.m in Sources */,
 				33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */,
+				3385C6DD21578D2B005FAB04 /* InBaseViewController.m in Sources */,
 				3317982A213BEB3D000B8DD6 /* InDeviceMenuCell1.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

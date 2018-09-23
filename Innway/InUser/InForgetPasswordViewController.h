@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "InBaseViewController.h"
 
-@interface InForgetPasswordViewController : UIViewController
+@interface InForgetPasswordViewController : InBaseViewController
 
 @end

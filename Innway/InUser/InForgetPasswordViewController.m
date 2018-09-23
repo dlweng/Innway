@@ -10,11 +10,12 @@
 #import "InUserTableViewController.h"
 #import <AFNetworking.h>
 #import "InAlertTool.h"
+#import "InTextField.h"
 
 @interface InForgetPasswordViewController ()
 
-@property (weak, nonatomic) IBOutlet UIButton *resetBtn;
-@property (nonatomic, copy) NSString *email;
+//@property (weak, nonatomic) IBOutlet UIButton *resetBtn;
+@property (weak, nonatomic) IBOutlet InTextField *emailTextField;
 
 @end
 
@@ -23,27 +24,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"Retrieve password";
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
     
-    //设置按钮的圆弧
-    self.resetBtn.layer.masksToBounds = YES;
-    self.resetBtn.layer.cornerRadius = 25;
-}
-
-- (void)goBack {
-    if (self.navigationController.viewControllers.lastObject == self) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+//    //设置按钮的圆弧
+//    self.resetBtn.layer.masksToBounds = YES;
+//    self.resetBtn.layer.cornerRadius = 25;
 }
 
 - (IBAction)resetBtnDidClick:(UIButton *)sender {
-    if (self.email.length == 0) {
+    if (self.emailTextField.text.length == 0) {
         [InAlertTool showAlertWithTip:@"请输入邮箱"];
         return;
     }
     
-    NSLog(@"重置密码, 邮箱:%@", self.email);
-    NSDictionary *parameters = @{@"username":self.email};
+    NSLog(@"重置密码, 邮箱:%@", self.emailTextField.text);
+    NSDictionary *parameters = @{@"username":self.emailTextField.text};
     [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/user/sendResetEmail" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
             NSNumber *code = responseObject[@"code"];
@@ -63,15 +57,15 @@
     }];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.destinationViewController isKindOfClass:[InUserTableViewController class]]) {
-        InUserTableViewController *userTableViewVC = segue.destinationViewController;
-        userTableViewVC.userViewType = InUserNotPassword;
-        userTableViewVC.emailValueChanging = ^(NSString *email) {
-            self.email = email;
-            NSLog(@"邮箱: %@", self.email);
-        };
-    }
-}
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    if ([segue.destinationViewController isKindOfClass:[InUserTableViewController class]]) {
+//        InUserTableViewController *userTableViewVC = segue.destinationViewController;
+//        userTableViewVC.userViewType = InUserNotPassword;
+//        userTableViewVC.emailValueChanging = ^(NSString *email) {
+//            self.email = email;
+//            NSLog(@"邮箱: %@", self.email);
+//        };
+//    }
+//}
 
 @end
