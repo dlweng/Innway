@@ -12,7 +12,7 @@
 #import "InAlertTool.h"
 #import "InTextField.h"
 
-@interface InForgetPasswordViewController ()
+@interface InForgetPasswordViewController ()<UITextFieldDelegate>
 
 //@property (weak, nonatomic) IBOutlet UIButton *resetBtn;
 @property (weak, nonatomic) IBOutlet InTextField *emailTextField;
@@ -24,13 +24,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"Retrieve password";
-    
+    self.emailTextField.delegate = self;
 //    //设置按钮的圆弧
 //    self.resetBtn.layer.masksToBounds = YES;
 //    self.resetBtn.layer.cornerRadius = 25;
 }
 
 - (IBAction)resetBtnDidClick:(UIButton *)sender {
+    [self.view endEditing:YES];
     if (self.emailTextField.text.length == 0) {
         [InAlertTool showAlertWithTip:@"请输入邮箱"];
         return;
@@ -67,5 +68,10 @@
 //        };
 //    }
 //}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.view endEditing:YES];
+    return YES;
+}
 
 @end

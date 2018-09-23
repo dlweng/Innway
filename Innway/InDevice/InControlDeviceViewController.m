@@ -16,6 +16,7 @@
 #import "InAlertTool.h"
 #import "InCommon.h"
 #import "NSDictionary+GetValue.h"
+#import "InLoginViewController.h"
 
 @interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate, MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *controlBtnBottomGapContraint;
@@ -114,9 +115,14 @@
             [self showSettingVC:NO];
     };
     settingVC.logoutUser = ^{
-        if (self.navigationController.viewControllers.lastObject == self) {
-            NSLog(@"退出账户");
-            [self.navigationController popToRootViewControllerAnimated:YES];
+        if (self.navigationController.viewControllers.lastObject == self &&
+            self.navigationController.viewControllers.count > 2) {
+            UIViewController *loginVC = self.navigationController.viewControllers[1];
+            if ([loginVC isKindOfClass:[InLoginViewController class]]) {
+                NSLog(@"退出账户");
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }
+            
         }
     };
     NSLog(@"settingView.frame = %@", [NSValue valueWithCGRect:self.settingView.frame]);

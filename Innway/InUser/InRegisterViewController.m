@@ -12,7 +12,7 @@
 #import "InAlertTool.h"
 #import "InTextField.h"
 
-@interface InRegisterViewController ()
+@interface InRegisterViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet InTextField *emailTextField;
 @property (weak, nonatomic) IBOutlet InTextField *passwordTextField;
@@ -26,6 +26,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"Sign up";
+    self.emailTextField.delegate = self;
+    self.passwordTextField.delegate = self;
     
 //    //设置按钮的圆弧
 //    self.registerBtn.layer.masksToBounds = YES;
@@ -130,6 +132,7 @@
 
 
 - (IBAction)registerBtnDidClick:(UIButton *)sender {
+    [self.view endEditing:YES];
     if (self.emailTextField.text.length == 0) {
         [InAlertTool showAlertWithTip:@"请输入邮箱"];
         return;
@@ -160,6 +163,14 @@
     }];
 }
 
-
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.emailTextField) {
+        [self.passwordTextField becomeFirstResponder];
+    }
+    else {
+        [self.view endEditing:YES];
+    }
+    return YES;
+}
 
 @end

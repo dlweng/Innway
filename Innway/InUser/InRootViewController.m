@@ -7,6 +7,7 @@
 //
 
 #import "InRootViewController.h"
+#import "InCommon.h"
 
 @interface InRootViewController ()
 
@@ -22,6 +23,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.hidden = YES;
+    if (common.email.length > 0 && common.pwd.length > 0) {
+        
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

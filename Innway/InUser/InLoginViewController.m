@@ -14,7 +14,7 @@
 #import "InAlertTool.h"
 #import "InTextField.h"
 
-@interface InLoginViewController ()
+@interface InLoginViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 
@@ -30,6 +30,8 @@
     [super viewDidLoad];
     self.navigationItem.title = @"Log in";
     self.firstAppear = YES;
+    self.emailTextField.delegate = self;
+    self.passwordTextField.delegate = self;
     //    //设置按钮的圆弧
     //    self.loginBtn.layer.masksToBounds = YES;
     //    self.loginBtn.layer.cornerRadius = 25;
@@ -46,6 +48,7 @@
 }
 
 - (IBAction)userLogin:(UIButton *)sender {
+    [self.view endEditing:YES];
     if (self.emailTextField.text.length == 0) {
         [InAlertTool showAlertWithTip:@"请输入邮箱"];
         return;
@@ -87,6 +90,17 @@
 - (void)pushToDeviceListController {
     InDeviceListViewController *deviceListController = [[InDeviceListViewController alloc] initWithStyle:UITableViewStylePlain];
     [self.navigationController pushViewController:deviceListController animated:YES];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"] forBarMetrics:UIBarMetricsDefault];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.emailTextField) {
+        [self.passwordTextField becomeFirstResponder];
+    }
+    else {
+        [self.view endEditing:YES];
+    }
+    return YES;
 }
 
 @end

@@ -113,6 +113,8 @@
 		3385C6D721574BCC005FAB04 /* whiteLongButton@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6D321574BCB005FAB04 /* whiteLongButton@3x.png */; };
 		3385C6DA21575E5E005FAB04 /* InTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 3385C6D921575E5E005FAB04 /* InTextField.m */; };
 		3385C6DD21578D2B005FAB04 /* InBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3385C6DC21578D2B005FAB04 /* InBaseViewController.m */; };
+		3385C6E021579759005FAB04 /* narBarBackgroudImage@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6DE21579758005FAB04 /* narBarBackgroudImage@3x.png */; };
+		3385C6E121579759005FAB04 /* narBarBackgroudImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6DF21579758005FAB04 /* narBarBackgroudImage@2x.png */; };
 		338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7521297F5F00A018EA /* DLUUIDTool.m */; };
 		338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7721297F5F00A018EA /* DLCloudDeviceManager.m */; };
 		338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7921297F5F00A018EA /* DLCentralManager.m */; };
@@ -269,6 +271,8 @@
 		3385C6D921575E5E005FAB04 /* InTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InTextField.m; sourceTree = "<group>"; };
 		3385C6DB21578D2B005FAB04 /* InBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InBaseViewController.h; sourceTree = "<group>"; };
 		3385C6DC21578D2B005FAB04 /* InBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InBaseViewController.m; sourceTree = "<group>"; };
+		3385C6DE21579758005FAB04 /* narBarBackgroudImage@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "narBarBackgroudImage@3x.png"; sourceTree = "<group>"; };
+		3385C6DF21579758005FAB04 /* narBarBackgroudImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "narBarBackgroudImage@2x.png"; sourceTree = "<group>"; };
 		338CDF7421297F5E00A018EA /* DLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLDevice.h; sourceTree = "<group>"; };
 		338CDF7521297F5F00A018EA /* DLUUIDTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLUUIDTool.m; sourceTree = "<group>"; };
 		338CDF7621297F5F00A018EA /* DLCentralManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLCentralManager.h; sourceTree = "<group>"; };
@@ -445,6 +449,8 @@
 				3379A2CE21561E72008D1AA2 /* background@3x.png */,
 				3379A2D221561E73008D1AA2 /* whiteBtn@2x.png */,
 				3379A2CF21561E72008D1AA2 /* whiteBtn@3x.png */,
+				3385C6DF21579758005FAB04 /* narBarBackgroudImage@2x.png */,
+				3385C6DE21579758005FAB04 /* narBarBackgroudImage@3x.png */,
 				3379A2CC21561CDB008D1AA2 /* New */,
 				33179814213BD684000B8DD6 /* 10.png */,
 				3317981B213BD687000B8DD6 /* 20.png */,
@@ -677,6 +683,7 @@
 				3374C7522112013B00F83101 /* InUser.storyboard in Resources */,
 				3374C7992112077C00F83101 /* ic_oval.png in Resources */,
 				3385C6D521574BCC005FAB04 /* greenLongButton@3x.png in Resources */,
+				3385C6E021579759005FAB04 /* narBarBackgroudImage@3x.png in Resources */,
 				33EE4CA92116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard in Resources */,
 				3374C7922112077C00F83101 /* icon_child_device_gray.png in Resources */,
 				3374C7AD2112077C00F83101 /* icon_charging.png in Resources */,
@@ -714,6 +721,7 @@
 				3317980F213BCE9F000B8DD6 /* RSSI_6.png in Resources */,
 				33179806213BCE9F000B8DD6 /* RSSI_5.png in Resources */,
 				3374C7A42112077C00F83101 /* icon_back_dark.png in Resources */,
+				3385C6E121579759005FAB04 /* narBarBackgroudImage@2x.png in Resources */,
 				3328800F2115A00C00C4893B /* ic_launcher.png in Resources */,
 				33287FF9211557BD00C4893B /* icon_password_show.png in Resources */,
 				33179825213BD688000B8DD6 /* 20.png in Resources */,
