@@ -7,9 +7,12 @@
 //
 
 #import "InRootViewController.h"
+#import "InLoginViewController.h"
 #import "InCommon.h"
 
 @interface InRootViewController ()
+
+@property (nonatomic, assign) BOOL firstAppear;
 
 @end
 
@@ -23,8 +26,15 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.hidden = YES;
-    if (common.email.length > 0 && common.pwd.length > 0) {
-        
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (self.firstAppear && [InCommon sharedInstance].ID > -1) {
+        self.firstAppear = NO;
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"InUser" bundle:nil];
+        InLoginViewController *loginVC = [sb instantiateViewControllerWithIdentifier:@"InLoginViewController"];
+        [self.navigationController pushViewController:loginVC animated:YES];
     }
 }
 

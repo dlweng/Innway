@@ -120,7 +120,8 @@
             UIViewController *loginVC = self.navigationController.viewControllers[1];
             if ([loginVC isKindOfClass:[InLoginViewController class]]) {
                 NSLog(@"退出账户");
-                [self.navigationController popToRootViewControllerAnimated:YES];
+                [self.navigationController popToViewController:loginVC animated:YES];
+//                [self.navigationController popToRootViewControllerAnimated:YES];
             }
             
         }
