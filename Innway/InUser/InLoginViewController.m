@@ -29,6 +29,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.title = @"Log in";
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
     //设置按钮的圆弧
     self.loginBtn.layer.masksToBounds = YES;
     self.loginBtn.layer.cornerRadius = 25;
@@ -44,6 +47,12 @@
         self.email = self.common.email;
         self.pwd = self.common.pwd;
         [self userLogin:nil]; // 自动登陆
+    }
+}
+
+- (void)goBack {
+    if (self.navigationController.viewControllers.lastObject == self) {
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

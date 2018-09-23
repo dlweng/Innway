@@ -101,6 +101,17 @@
 		3379A2D721561E73008D1AA2 /* greenBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2D121561E72008D1AA2 /* greenBtn@2x.png */; };
 		3379A2D821561E73008D1AA2 /* whiteBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2D221561E73008D1AA2 /* whiteBtn@2x.png */; };
 		3379A2DE21562500008D1AA2 /* InButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3379A2DD21562500008D1AA2 /* InButton.m */; };
+		3385C6C221574254005FAB04 /* InRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3385C6C121574254005FAB04 /* InRootViewController.m */; };
+		3385C6C6215743E5005FAB04 /* InInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3385C6C4215743E5005FAB04 /* InInputView.m */; };
+		3385C6CC2157467D005FAB04 /* Rectangle2copy@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6C82157467B005FAB04 /* Rectangle2copy@3x.png */; };
+		3385C6CD2157467D005FAB04 /* lockicon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6C92157467C005FAB04 /* lockicon@3x.png */; };
+		3385C6CE2157467D005FAB04 /* Rectangle2copy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6CA2157467C005FAB04 /* Rectangle2copy@2x.png */; };
+		3385C6CF2157467D005FAB04 /* lockicon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6CB2157467D005FAB04 /* lockicon@2x.png */; };
+		3385C6D421574BCC005FAB04 /* whiteLongButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6D021574BC8005FAB04 /* whiteLongButton@2x.png */; };
+		3385C6D521574BCC005FAB04 /* greenLongButton@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6D121574BCA005FAB04 /* greenLongButton@3x.png */; };
+		3385C6D621574BCC005FAB04 /* greenLongButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6D221574BCB005FAB04 /* greenLongButton@2x.png */; };
+		3385C6D721574BCC005FAB04 /* whiteLongButton@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6D321574BCB005FAB04 /* whiteLongButton@3x.png */; };
+		3385C6DA21575E5E005FAB04 /* InTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 3385C6D921575E5E005FAB04 /* InTextField.m */; };
 		338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7521297F5F00A018EA /* DLUUIDTool.m */; };
 		338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7721297F5F00A018EA /* DLCloudDeviceManager.m */; };
 		338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7921297F5F00A018EA /* DLCentralManager.m */; };
@@ -241,6 +252,20 @@
 		3379A2D221561E73008D1AA2 /* whiteBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteBtn@2x.png"; sourceTree = "<group>"; };
 		3379A2DC21562500008D1AA2 /* InButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InButton.h; sourceTree = "<group>"; };
 		3379A2DD21562500008D1AA2 /* InButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InButton.m; sourceTree = "<group>"; };
+		3385C6C021574254005FAB04 /* InRootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InRootViewController.h; sourceTree = "<group>"; };
+		3385C6C121574254005FAB04 /* InRootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InRootViewController.m; sourceTree = "<group>"; };
+		3385C6C3215743E5005FAB04 /* InInputView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InInputView.h; sourceTree = "<group>"; };
+		3385C6C4215743E5005FAB04 /* InInputView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InInputView.m; sourceTree = "<group>"; };
+		3385C6C82157467B005FAB04 /* Rectangle2copy@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Rectangle2copy@3x.png"; sourceTree = "<group>"; };
+		3385C6C92157467C005FAB04 /* lockicon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lockicon@3x.png"; sourceTree = "<group>"; };
+		3385C6CA2157467C005FAB04 /* Rectangle2copy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Rectangle2copy@2x.png"; sourceTree = "<group>"; };
+		3385C6CB2157467D005FAB04 /* lockicon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lockicon@2x.png"; sourceTree = "<group>"; };
+		3385C6D021574BC8005FAB04 /* whiteLongButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteLongButton@2x.png"; sourceTree = "<group>"; };
+		3385C6D121574BCA005FAB04 /* greenLongButton@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenLongButton@3x.png"; sourceTree = "<group>"; };
+		3385C6D221574BCB005FAB04 /* greenLongButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenLongButton@2x.png"; sourceTree = "<group>"; };
+		3385C6D321574BCB005FAB04 /* whiteLongButton@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteLongButton@3x.png"; sourceTree = "<group>"; };
+		3385C6D821575E5E005FAB04 /* InTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InTextField.h; sourceTree = "<group>"; };
+		3385C6D921575E5E005FAB04 /* InTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InTextField.m; sourceTree = "<group>"; };
 		338CDF7421297F5E00A018EA /* DLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLDevice.h; sourceTree = "<group>"; };
 		338CDF7521297F5F00A018EA /* DLUUIDTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLUUIDTool.m; sourceTree = "<group>"; };
 		338CDF7621297F5F00A018EA /* DLCentralManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLCentralManager.h; sourceTree = "<group>"; };
@@ -306,6 +331,8 @@
 			isa = PBXGroup;
 			children = (
 				3374C7502112013B00F83101 /* InUser.storyboard */,
+				3385C6C021574254005FAB04 /* InRootViewController.h */,
+				3385C6C121574254005FAB04 /* InRootViewController.m */,
 				3374C74D2112013B00F83101 /* InLoginViewController.h */,
 				3374C74E2112013B00F83101 /* InLoginViewController.m */,
 				33287FFD21158E7900C4893B /* InRegisterViewController.h */,
@@ -314,6 +341,10 @@
 				3328800121158F4900C4893B /* InForgetPasswordViewController.m */,
 				33287FFA21155B3200C4893B /* InUserTableViewController.h */,
 				33287FFB21155B3200C4893B /* InUserTableViewController.m */,
+				3385C6C3215743E5005FAB04 /* InInputView.h */,
+				3385C6C4215743E5005FAB04 /* InInputView.m */,
+				3385C6D821575E5E005FAB04 /* InTextField.h */,
+				3385C6D921575E5E005FAB04 /* InTextField.m */,
 			);
 			path = InUser;
 			sourceTree = "<group>";
@@ -478,6 +509,14 @@
 		3379A2CC21561CDB008D1AA2 /* New */ = {
 			isa = PBXGroup;
 			children = (
+				3385C6D221574BCB005FAB04 /* greenLongButton@2x.png */,
+				3385C6D121574BCA005FAB04 /* greenLongButton@3x.png */,
+				3385C6D021574BC8005FAB04 /* whiteLongButton@2x.png */,
+				3385C6D321574BCB005FAB04 /* whiteLongButton@3x.png */,
+				3385C6CB2157467D005FAB04 /* lockicon@2x.png */,
+				3385C6C92157467C005FAB04 /* lockicon@3x.png */,
+				3385C6CA2157467C005FAB04 /* Rectangle2copy@2x.png */,
+				3385C6C82157467B005FAB04 /* Rectangle2copy@3x.png */,
 			);
 			path = New;
 			sourceTree = "<group>";
@@ -604,6 +643,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3385C6D621574BCC005FAB04 /* greenLongButton@2x.png in Resources */,
 				33179824213BD688000B8DD6 /* 90.png in Resources */,
 				3317981F213BD688000B8DD6 /* 30.png in Resources */,
 				3374C7932112077C00F83101 /* warning.png in Resources */,
@@ -625,11 +665,13 @@
 				3374C7982112077C00F83101 /* icon_back.png in Resources */,
 				331797E1213A6958000B8DD6 /* voice1.mp3 in Resources */,
 				3374C7952112077C00F83101 /* icon_more.png in Resources */,
+				3385C6D421574BCC005FAB04 /* whiteLongButton@2x.png in Resources */,
 				33179808213BCE9F000B8DD6 /* RSSI_1.png in Resources */,
 				3374C7A02112077C00F83101 /* icon_range_down.png in Resources */,
 				3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */,
 				3374C7522112013B00F83101 /* InUser.storyboard in Resources */,
 				3374C7992112077C00F83101 /* ic_oval.png in Resources */,
+				3385C6D521574BCC005FAB04 /* greenLongButton@3x.png in Resources */,
 				33EE4CA92116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard in Resources */,
 				3374C7922112077C00F83101 /* icon_child_device_gray.png in Resources */,
 				3374C7AD2112077C00F83101 /* icon_charging.png in Resources */,
@@ -641,6 +683,7 @@
 				3317981E213BD688000B8DD6 /* 10.png in Resources */,
 				3317981D213BD688000B8DD6 /* 40.png in Resources */,
 				331797F8213BBB5B000B8DD6 /* icon_splash.jpg in Resources */,
+				3385C6CD2157467D005FAB04 /* lockicon@3x.png in Resources */,
 				3374C7AF2112077C00F83101 /* icon_range_up.png in Resources */,
 				331797E3213A6958000B8DD6 /* voice2.mp3 in Resources */,
 				3379A2D421561E73008D1AA2 /* background@3x.png in Resources */,
@@ -650,11 +693,15 @@
 				3374C7912112077C00F83101 /* icon_map_type.png in Resources */,
 				3317980A213BCE9F000B8DD6 /* RSSI_2.png in Resources */,
 				33179807213BCE9F000B8DD6 /* RSSI_7.png in Resources */,
+				3385C6CE2157467D005FAB04 /* Rectangle2copy@2x.png in Resources */,
 				3374C7AE2112077C00F83101 /* icon_dot_up.png in Resources */,
+				3385C6CC2157467D005FAB04 /* Rectangle2copy@3x.png in Resources */,
 				3374C7A12112077C00F83101 /* icon_add_device.png in Resources */,
 				33EE4C9B2116DBE000CDDC98 /* InDeviceMenuViewController.xib in Resources */,
 				3374C7A62112077C00F83101 /* icon_poup.png in Resources */,
 				3379A2D621561E73008D1AA2 /* greenBtn@3x.png in Resources */,
+				3385C6D721574BCC005FAB04 /* whiteLongButton@3x.png in Resources */,
+				3385C6CF2157467D005FAB04 /* lockicon@2x.png in Resources */,
 				3328801C2115AA4900C4893B /* InControlDeviceViewController.xib in Resources */,
 				3317982B213BEB3D000B8DD6 /* InDeviceMenuCell1.xib in Resources */,
 				331797E2213A6958000B8DD6 /* voice3.mp3 in Resources */,
@@ -766,11 +813,14 @@
 				33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */,
 				33EE4CA62116FA9B00CDDC98 /* InDeviceSettingViewController.m in Sources */,
 				3328801B2115AA4900C4893B /* InControlDeviceViewController.m in Sources */,
+				3385C6C6215743E5005FAB04 /* InInputView.m in Sources */,
 				33179837213BEDEB000B8DD6 /* InDeviceMenuCell2.m in Sources */,
 				338CDF7F21297F6000A018EA /* DLDevice.m in Sources */,
 				3328800821159A4D00C4893B /* InDeviceListViewController.m in Sources */,
 				338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */,
+				3385C6DA21575E5E005FAB04 /* InTextField.m in Sources */,
 				338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */,
+				3385C6C221574254005FAB04 /* InRootViewController.m in Sources */,
 				331797F0213AF282000B8DD6 /* InAnnotationView.m in Sources */,
 				3374C74C2112013B00F83101 /* AppDelegate.m in Sources */,
 				33EE4C9A2116DBE000CDDC98 /* InDeviceMenuViewController.m in Sources */,
