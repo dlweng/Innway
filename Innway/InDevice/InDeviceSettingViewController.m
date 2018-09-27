@@ -66,15 +66,15 @@
     [[DLCloudDeviceManager sharedInstance] deleteDevice:self.device.mac completion:^(DLCloudDeviceManager *manager, NSError *error) {
         [InAlertTool hideHUDForView:self.view tag:1];
         if (error) {
-            if (error.code < -1000) {
+            if (error.code == -1) {
                 [InAlertTool showAlertWithTip:@"网络连接异常"];
                 return ;
             }
             [InAlertTool showAlertWithTip:@"设备删除失败"];
         }
         else {
-            if(self.navigationController.viewControllers.count >= 2) {
-                UIViewController *vc = self.navigationController.viewControllers[1];
+            if(self.navigationController.viewControllers.count >= 3) {
+                UIViewController *vc = self.navigationController.viewControllers[2];
                 if ([vc isKindOfClass:[InDeviceListViewController class]]) {
                     [self.navigationController popToViewController:vc animated:YES];
                 }

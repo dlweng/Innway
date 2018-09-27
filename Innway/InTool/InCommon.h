@@ -31,6 +31,7 @@
 - (void)stopSound;
 
 // 返回false，说明当前APP没有开启定位功能
+- (NSString *)getCurrentGps;
 - (BOOL)startUpdatingLocation;
 - (void)uploadDeviceLocation:(DLDevice *)device;
 

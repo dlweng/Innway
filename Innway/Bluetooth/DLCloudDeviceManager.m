@@ -7,7 +7,6 @@
 //
 
 #import "DLCloudDeviceManager.h"
-#import <AFNetworking.h>
 #import "InCommon.h"
 
 static DLCloudDeviceManager *instance = nil;
@@ -30,8 +29,8 @@ static BOOL deleteing = NO;
 }
 
 - (void)addDevice:(NSString *)mac completion:(DidAddDeviceEvent)completion {
-    if (self.cloudDeviceList.count >= 6) {
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:6 userInfo:nil];
+    if (self.cloudDeviceList.count >= 8) {
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:300 userInfo:@{NSLocalizedDescriptionKey:@"添加的设备不能大于8个"}];
         completion(self, nil, error);
         return;
     }
@@ -62,26 +61,34 @@ static BOOL deleteing = NO;
         if (peripheralName.length == 0) {
             peripheralName = @"Lily";
         }
-        NSDictionary *parameters = @{@"userid":@([InCommon sharedInstance].ID), @"name":peripheralName, @"mac":mac};
-        [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/device/addDevice" parameters:parameters  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            if (responseObject) {
-                NSLog(@"做添加http请求成功");
-                NSString *deviceid = [responseObject stringValueForKey:@"deviceid" defaultValue:@""];
-                // 创建对象
-                DLDevice *newDevice = [DLDevice device:peripheral];
-                newDevice.cloudID = deviceid;
-                newDevice.mac = mac;
-                
-                // 添加到云端列表
-                [self.cloudDeviceList setValue:newDevice forKey:mac];
-                //去连接设备
-                [self connectDevice:newDevice mac:mac completion:completion];
-                
+        NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"name":peripheralName, @"mac":mac, @"action":@"addDevice", @"gps":[common getCurrentGps]};
+        [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"添加设备http网络异常, %@",error);
+                completion(self, nil, error);
+                return ;
             }
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            NSLog(@"做添加http请求失败, %@",error);
-            //创建失败
-            completion(self, nil, error);
+            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+            if (code == 200) {
+                NSInteger data = [responseObject integerValueForKey:@"data" defaultValue:-1];
+                if (data > -1) {
+                    NSLog(@"添加设备http请求成功");
+                    // 创建对象
+                    DLDevice *newDevice = [DLDevice device:peripheral];
+                    newDevice.cloudID = data;
+                    newDevice.mac = mac;
+                    // 添加到云端列表
+                    [self.cloudDeviceList setValue:newDevice forKey:mac];
+                    //去连接设备
+                    [self connectDevice:newDevice mac:mac completion:completion];
+                    return ;
+                }
+            }
+            
+            NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"添加设备http网络异常"];
+            NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:@{NSLocalizedDescriptionKey: message}];
+            NSLog(@"添加设备http请求失败, %@",message);
+            completion(self, nil, myError);
         }];
     }
 }
@@ -146,7 +153,7 @@ static BOOL deleteing = NO;
             return;
         }
         // 扫描不到设备
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([manager class]) code:2 userInfo:nil];
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([manager class]) code:-3 userInfo:@{NSLocalizedDescriptionKey:@"查找不到设备"}];
         NSLog(@"添加设备-扫描不到设备:%@", mac);
         if (completion) {
             completion(self, nil, error);
@@ -162,20 +169,24 @@ static BOOL deleteing = NO;
     // 2.断开连接
     DLDevice *device = [self.cloudDeviceList objectForKey:mac];
     if (device) {
-        NSDictionary *parameters = @{@"deviceid":device.cloudID};
-        [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/device/deleteDevice" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            NSLog(@"做http请求删除成功, %@", responseObject);
-            if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
-                NSNumber *code = responseObject[@"code"];
-                NSString *message = responseObject[@"message"];
-                if (code.integerValue == 200) {
+        NSDictionary *body = @{@"deviceid":@(device.cloudID), @"action":@"deleteDevice"};
+        [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"做http请求删除失败, %@", error);
+                completion(self, error);
+            }
+            else {
+                NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+                if (code == 200) {
+                    NSLog(@"http请求删除设备成功");
                     [self.cloudDeviceList removeObjectForKey:mac];
                     [self.centralManager disConnectToDevice:device.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
                         if (deleteing && [device.peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
                             deleteing = NO;
                             if (error) {
                                 NSLog(@"断开连接失败，不做删除, %@", error);
-                                completion(self, error);
+                                NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:-4 userInfo:@{NSLocalizedDescriptionKey: @"断开设备连接失败"}];
+                                completion(self, myError);
                                 return ;
                             }
                             completion(self, nil);
@@ -183,14 +194,12 @@ static BOOL deleteing = NO;
                     }];
                 }
                 else {
-                    NSLog(@"删除失败, %@", message);
-                    NSError *error = [NSError errorWithDomain:NSStringFromClass([DLCloudDeviceManager class]) code:1 userInfo:nil];
-                    completion(self, error);
+                    NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"删除设备失败"];
+                    NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:@{NSLocalizedDescriptionKey: message}];
+                    NSLog(@"http请求删除设备失败， %@", message);
+                    completion(self, myError);
                 }
             }
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            NSLog(@"做http请求删除失败, %@", error);
-            completion(self, error);
         }];
     }
     else {
@@ -203,36 +212,45 @@ static BOOL deleteing = NO;
 // 获取云端的设备列表
 - (void)getHTTPCloudDeviceList {
     NSLog(@"做请求去获取云端的设备列表");
-    NSDictionary *parameters = @{@"userid":@([InCommon sharedInstance].ID)};
-    [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/device/getDeviceList" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"获取云端设备列表成功: %@", responseObject);
-        if (responseObject) {
-            NSArray *cloudDevices = [responseObject arrayValueForKey:@"data" defaultValue:nil];
-            if (cloudDevices.count > 0) {
-                NSMutableDictionary *newList = [NSMutableDictionary dictionary];
-                for (NSDictionary *cloudDevice in cloudDevices) {
-                    NSString *mac = [cloudDevice stringValueForKey:@"mac" defaultValue:@""];
-                    DLDevice *device = [self.cloudDeviceList objectForKey:mac];
-                    if (!device) {
-                        // 不存在，则需要创建
-                        DLKnowDevice *knowDevice = [self.centralManager.knownPeripherals objectForKey:mac];
-                        CBPeripheral *peripheral = knowDevice.peripheral;
-                        device = [DLDevice device:peripheral];
-                        device.rssi = knowDevice.rssi;
+    NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"action":@"getDeviceList"};
+    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"获取云端设备列表失败: %@", error);
+        }
+        else {
+            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+            if (code == 200) {
+                NSArray *cloudDevices = [responseObject arrayValueForKey:@"data" defaultValue:nil];
+                NSLog(@"获取云端列表成功: %@", cloudDevices.description);
+                if (cloudDevices.count > 0) {
+                    NSMutableDictionary *newList = [NSMutableDictionary dictionary];
+                    for (NSDictionary *cloudDevice in cloudDevices) {
+                        NSString *mac = [cloudDevice stringValueForKey:@"mac" defaultValue:@""];
+                        DLDevice *device = [self.cloudDeviceList objectForKey:mac];
+                        if (!device) {
+                            // 不存在，则需要创建
+                            DLKnowDevice *knowDevice = [self.centralManager.knownPeripherals objectForKey:mac];
+                            CBPeripheral *peripheral = knowDevice.peripheral;
+                            device = [DLDevice device:peripheral];
+                            device.rssi = knowDevice.rssi;
+                        }
+                        device.mac = mac;
+                        device.cloudID = [cloudDevice integerValueForKey:@"id" defaultValue:-1];
+                        device.deviceName = [cloudDevice stringValueForKey:@"name" defaultValue:@""];
+                        device.coordinate = [cloudDevice stringValueForKey:@"gps" defaultValue:@""];
+                        [newList setValue:device forKey:mac];
                     }
-                    device.mac = mac;
-                    device.cloudID = [cloudDevice stringValueForKey:@"id" defaultValue:@""];
-                    device.deviceName = [cloudDevice stringValueForKey:@"name" defaultValue:@""];
-                    device.coordinate = [cloudDevice stringValueForKey:@"gps" defaultValue:@""];
-                    [newList setValue:device forKey:mac];
+                    self.cloudDeviceList = newList;
+                    [self autoConnectCloudDevice];
                 }
-                self.cloudDeviceList = newList;
-                [self autoConnectCloudDevice];
+                return ;
+            }
+            else {
+                NSLog(@"获取云端设备列表失败: %@", [responseObject stringValueForKey:@"message" defaultValue:@""]);
             }
         }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"获取云端设备列表失败: %@", error);
     }];
+    
 }
 
 //根据新发现的设备更新云端列表

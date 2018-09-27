@@ -37,7 +37,7 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 @property (nonatomic, copy) NSString *mac;
 @property (nonatomic, strong, readonly) NSDictionary *lastData;
 @property (nonatomic, weak) id<DLDeviceDelegate> delegate;
-@property (nonatomic, copy) NSString *cloudID;
+@property (nonatomic, assign) NSInteger cloudID;
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic, assign) BOOL online;
 @property (nonatomic, assign, readonly) BOOL connected;

@@ -114,7 +114,7 @@ static DLCentralManager *instance = nil;
 - (void)connectToDevice: (CBPeripheral *)peripheral completion:(DidConnectToDeviceEvent)completion {
     if (!peripheral) {
         NSLog(@"不存在设备，无法建立连接");
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([DLCentralManager class]) code:1 userInfo:nil];
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([DLCentralManager class]) code:-2 userInfo:@{NSLocalizedDescriptionKey: @"与设备建立连接失败"}];
         completion(self, peripheral, error);
         return;
     }

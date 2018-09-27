@@ -49,7 +49,7 @@
         NSLog(@"注册结果:responseObject = %@, error = %@", responseObject, error);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (error) {
-            [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
+            [InAlertTool showAlertAutoDisappear:error.localizedDescription];
         }
         else {
 //            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];

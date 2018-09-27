@@ -75,28 +75,6 @@ static SystemSoundID soundID;
     self.pwd = nil;
 }
 
-- (void)uploadDeviceLocation:(DLDevice *)device {
-    NSString *gps = [device getGps];
-    if (gps.length == 0) {
-        return;
-    }
-    NSLog(@"开始上传设备%@的位置", device.mac);
-    NSDictionary *parameters = @{@"deviceid":device.cloudID, @"gps":gps};
-    [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/device/updateDeviceGPS" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
-            NSLog(@"上传设备位置结果: %@", responseObject);
-            NSNumber *code = responseObject[@"code"];
-            NSString *message = responseObject[@"message"];
-            if (code.integerValue == 200) {
-            }
-            else if (code.integerValue == 500) {
-            }
-        }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"上传位置失败, %@", error);
-    }];
-}
-
 #pragma mark - 手机报警
 - (void)playSound {
     AudioServicesDisposeSystemSoundID(soundID);
@@ -124,6 +102,31 @@ static SystemSoundID soundID;
 }
 
 #pragma mark - 定位
+- (void)uploadDeviceLocation:(DLDevice *)device {
+    NSString *gps = [device getGps];
+    if (gps.length == 0) {
+        return;
+    }
+    NSLog(@"开始上传设备%@的位置, gps = %@", device.mac, gps);
+    NSDictionary *body = @{@"deviceid":@(device.cloudID), @"gps":gps, @"action":@"updateDeviceGPS"};
+    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"上传设备位置失败: %@", error);
+        }
+        else {
+            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+            NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"gps更新失败"];
+            NSLog(@"上传设备位置code = %zd, message = %@", code, message);
+        }
+    }];
+}
+
+- (NSString *)getCurrentGps{
+    CLLocationCoordinate2D deviceLocation = self.currentLocation;
+    NSString *gps = [NSString stringWithFormat:@"%f,%f", deviceLocation.latitude, deviceLocation.longitude];
+    return gps;
+}
+
 /**
  *  当授权状态发生改变了就会调用该代理方法
  *
@@ -191,48 +194,56 @@ static SystemSoundID soundID;
 - (NSString *)getImageName:(NSNumber *)rssi {
     NSInteger rSSI = rssi.integerValue;
     NSString *imageName = @"RSSI_11";
-    if(rSSI>=-50)
+    if(rSSI>=-45)
     {
-        imageName = @"RSSI_0";
+        imageName = @"RSSI_12";
     }
-    else if(rSSI>-60)//>90%
+    else if(rSSI>-50)//>90%
     {
-        imageName = @"RSSI_1";
+        imageName = @"RSSI_11";
     }
-    else if(rSSI>-65)//>80%
+    else if(rSSI>-55)//>80%
     {
-        imageName = @"RSSI_2";
+        imageName = @"RSSI_10";
     }
-    else if(rSSI>-70)//>70%
-    {
-        imageName = @"RSSI_3";
-    }
-    else if(rSSI>-75)//>60%
-    {
-        imageName = @"RSSI_4";
-    }
-    else if(rSSI>-80)//>50%
-    {
-        imageName = @"RSSI_5";
-    }
-    else if(rSSI>-85)//>40%
-    {
-        imageName = @"RSSI_6";
-    }
-    else if(rSSI>-90)//>30%
-    {
-        imageName = @"RSSI_7";
-    }
-    else if(rSSI>-95)//>20%
-    {
-        imageName = @"RSSI_8";
-    }
-    else if(rSSI>-100)//>10%
+    else if(rSSI>-60)//>70%
     {
         imageName = @"RSSI_9";
     }
+    else if(rSSI>-65)//>60%
+    {
+        imageName = @"RSSI_8";
+    }
+    else if(rSSI>-70)//>50%
+    {
+        imageName = @"RSSI_7";
+    }
+    else if(rSSI>-75)//>40%
+    {
+        imageName = @"RSSI_6";
+    }
+    else if(rSSI>-80)//>30%
+    {
+        imageName = @"RSSI_5";
+    }
+    else if(rSSI>-85)//>20%
+    {
+        imageName = @"RSSI_4";
+    }
+    else if(rSSI>-90)//>10%
+    {
+        imageName = @"RSSI_3";
+    }
+    else if(rSSI>-95)//>10%
+    {
+        imageName = @"RSSI_2";
+    }
+    else if(rSSI>-100)//>10%
+    {
+        imageName = @"RSSI_1";
+    }
     else{
-        imageName = @"RSSI_11";
+        imageName = @"RSSI_0";
     }
     return imageName;
 }
@@ -249,6 +260,9 @@ static SystemSoundID soundID;
     [responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json",@"text/json",@"text/javascript",@"text/html",@"text/plain",nil]];
     manager.responseSerializer= responseSerializer;
     NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:formRequest uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse *_Nonnull response,id _Nullable responseObject,NSError *_Nullable error) {
+        if (error) {
+            error = [NSError errorWithDomain:NSStringFromClass([self class]) code:-1 userInfo:@{NSLocalizedDescriptionKey:@"网络连接异常"}];
+        }
         completionHandler(response, responseObject, error);
     }];
     [dataTask resume];

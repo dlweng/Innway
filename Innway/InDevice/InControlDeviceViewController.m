@@ -254,8 +254,12 @@
         }
         else if (battery > 10) {
             batteryImageName = @"20";
-        } else {
+        } else if(battery >= 5){
             batteryImageName = @"10";
+        } else if(battery > 0){
+            batteryImageName = @"5";
+        } else if(battery == 0){
+            batteryImageName = @"0";
         }
         [self.battery setBackgroundImage:[UIImage imageNamed:batteryImageName] forState:UIControlStateNormal];
         [self.battery setTitle:[NSString stringWithFormat:@"%@%%", batteryImageName] forState:UIControlStateNormal];
@@ -282,8 +286,8 @@
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if ([newdevice.mac isEqualToString:device.mac]) {
                     if (error) {
-                        if (error.code < -1000) {
-                            [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
+                        if (error.code == -1) {
+                            [InAlertTool showAlertAutoDisappear:error.localizedDescription];
                             return ;
                         }
                         [InAlertTool showAlertAutoDisappear:@"建立连接失败"];

@@ -152,7 +152,7 @@
     [[DLCloudDeviceManager sharedInstance] addDevice:mac completion:^(DLCloudDeviceManager *manager, DLDevice *device, NSError *error) {
         if (!error) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [InAlertTool showAlertAutoDisappear:@"添加设备成功" completion:^{
+            [InAlertTool showAlertAutoDisappear:@"添加成功" completion:^{
                 InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
                 controlDeviceVC.device = device;
                 if (self.navigationController.viewControllers.lastObject == self) {
@@ -162,15 +162,7 @@
         }
         else {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if (error.code == 6) {
-                [InAlertTool showAlertAutoDisappear:@"不能添加超过6台设备"];
-            }
-            else if (error.code < -1000) {
-                [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
-            }
-            else {
-                [InAlertTool showAlertAutoDisappear:@"添加设备失败"];
-            }
+            [InAlertTool showAlertAutoDisappear:error.localizedDescription];
         }
     }];
     
