@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "DLCentralManager.h"
 #import "DLCloudDeviceManager.h"
-#import "InAlertTool.h"
+#import "InCommon.h"
 
 @interface AppDelegate ()
 

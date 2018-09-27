@@ -13,9 +13,7 @@
 #import "DLCloudDeviceManager.h"
 #import "InAnnotationView.h"
 #import <MapKit/MapKit.h>
-#import "InAlertTool.h"
 #import "InCommon.h"
-#import "NSDictionary+GetValue.h"
 #import "InLoginViewController.h"
 
 @interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate, MKMapViewDelegate>

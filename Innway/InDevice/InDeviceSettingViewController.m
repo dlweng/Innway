@@ -6,9 +6,9 @@
 //  Copyright © 2018年 innwaytech. All rights reserved.
 //
 
+#import "InCommon.h"
 #import "InDeviceSettingViewController.h"
 #import "InAlertTableViewController.h"
-#import "InAlertTool.h"
 #import "DLCloudDeviceManager.h"
 #import "InDeviceListViewController.h"
 #define InDeviceSettingCellReuseIdentifier @"InDeviceSettingCell"

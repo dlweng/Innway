@@ -6,13 +6,10 @@
 //  Copyright © 2018年 innwaytech. All rights reserved.
 //
 
+#import "InCommon.h"
+#import "InTextField.h"
 #import "InLoginViewController.h"
 #import "InDeviceListViewController.h"
-#import <AFNetworking.h>
-#import "InAlertTool.h"
-#import "InCommon.h"
-#import "InAlertTool.h"
-#import "InTextField.h"
 
 @interface InLoginViewController ()<UITextFieldDelegate>
 
@@ -43,12 +40,14 @@
         self.firstAppear = NO;
         self.emailTextField.text = common.email;
         self.passwordTextField.text = common.pwd;
-//        [self userLogin:nil]; // 自动登陆
+        [self userLogin:nil]; // 自动登陆
     }
+    
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor blackColor]];
 }
 
 - (IBAction)userLogin:(UIButton *)sender {
-    [self.view endEditing:YES];
     if (self.emailTextField.text.length == 0) {
         [InAlertTool showAlertWithTip:@"请输入邮箱"];
         return;
@@ -58,32 +57,33 @@
         return;
     }
     
-    NSLog(@"开始登陆, self.email = %@, self.pwd = %@", self.emailTextField.text, self.passwordTextField.text);
-    NSDictionary *parameters = @{@"username":self.emailTextField.text, @"password":self.passwordTextField.text};
+    [self.view endEditing:YES];
     [InAlertTool showHUDAddedTo:self.view animated:YES];
-    [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/user/login" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"登陆结果：task = %@, responseObject = %@", task, responseObject);
-        if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
-            NSNumber *code = responseObject[@"code"];
-            NSString *message = responseObject[@"message"];
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if (code.integerValue == 200) {
-                NSDictionary *data = responseObject[@"data"];
-                if (data) {
-                    [common saveUserInfoWithID:data[@"id"] email:data[@"username"] pwd:data[@"password"]];
-                }
-//                [InAlertTool showAlertAutoDisappear:@"登陆成功" completion:^{
-                [self pushToDeviceListController];
-//                }];
-            }
-            else if (code.integerValue == 500) {
-                [InAlertTool showAlertAutoDisappear:[NSString stringWithFormat:@"%@", message]];
-            }
-        }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"登陆结果：task = %@, error = %@", task, error);
+    NSDictionary* body = @{@"username":self.emailTextField.text, @"password":self.passwordTextField.text, @"action":@"login"};
+    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        NSLog(@"登陆结果:responseObject = %@, error = %@", responseObject, error);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
+        if (error) {
+            [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
+        }
+        else {
+            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+            if (code == 200) {
+                NSDictionary *data = [responseObject dictValueForKey:@"data" defaultValue:nil];
+                if (data) {
+                    NSInteger ID = [data integerValueForKey:@"ID" defaultValue:-1];
+                    NSString *userName = [data stringValueForKey:@"LoginName" defaultValue:@""];
+                    NSString *password = [data stringValueForKey:@"PassWord" defaultValue:@""];
+                    [common saveUserInfoWithID:ID email:userName pwd:password];
+                }
+                [self pushToDeviceListController];
+            }
+            else {
+                NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"登陆失败"];
+                [InAlertTool showAlertAutoDisappear:message];
+            }
+            
+        }
     }];
 }
 

@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "NSDictionary+GetValue.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
+#import <MBProgressHUD.h>
 
 #define common [InCommon sharedInstance]
 
@@ -23,7 +24,7 @@
 @property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
 + (instancetype)sharedInstance;
 
-- (void)saveUserInfoWithID:(NSNumber *)ID email:(NSString *)email pwd:(NSString *)pwd;
+- (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd;
 - (void)clearUserInfo;
 
 - (void)playSound;
@@ -34,5 +35,38 @@
 - (void)uploadDeviceLocation:(DLDevice *)device;
 
 - (NSString *)getImageName:(NSNumber *)rssi;
+
++ (void)sendHttpMethod:(NSString *)method URLString:(NSString *)URLString body:(NSDictionary *)body completionHandler:(nullable void (^)(NSURLResponse *response, NSDictionary *responseObject,  NSError * _Nullable error))completionHandler;
+
+@end
+
+@interface NSDictionary (GetValue)
+
+- (NSString *)stringValueForKey:(NSString *)key defaultValue:(NSString *)defaultValue;
+- (NSNumber *)numberValueForKey:(NSString *)key defaultValue:(NSNumber *)defaultValue;
+- (NSInteger)integerValueForKey:(NSString *)key defaultValue:(NSInteger)defaultValue;
+- (BOOL)boolValueForKey:(NSString *)key defaultValue:(BOOL)defaultValue;
+- (double)doubleValueForKey:(NSString *)key defaultValue:(double)defaultValue;
+- (NSArray *)arrayValueForKey:(NSString *)key defaultValue:(NSArray *)defaultValue;
+- (NSDictionary *)dictValueForKey:(NSString *)key defaultValue:(NSDictionary *)defaultValue;
+
+@end
+
+@interface UIAlertController (InAlertTool)
+@property (strong, nonatomic) UIWindow *alertWindow;
+@property (strong, nonatomic, readonly) UILabel *detailTextLabel;
+- (void)show;
+@end
+
+@interface InAlertTool : NSObject
+
++ (UIAlertController *)showAlertWithTip:(NSString *)message;
++ (UIAlertController *)showAlert:(NSString *)title message:(NSString *)message;
++ (UIAlertController *)showAlert:(NSString *)title message:(NSString *)message confirmHanler:(void (^)(void))confirmHanler;
++ (void)showAlertAutoDisappear:(NSString *)message;
++ (void)showAlertAutoDisappear:(NSString *)message completion:(void (^)(void))completion;
++ (void)showHUDAddedTo:(UIView *)view animated:(BOOL)animated;
++ (void)showHUDAddedTo:(UIView *)view tips:(NSString *)tips tag:(NSInteger)tag animated:(BOOL)animated;
++ (void)hideHUDForView:(UIView *)view tag:(NSInteger)tag;
 
 @end

@@ -7,10 +7,8 @@
 //
 
 #import "InRegisterViewController.h"
-#import "InUserTableViewController.h"
-#import <AFNetworking.h>
-#import "InAlertTool.h"
 #import "InTextField.h"
+#import "InCommon.h"
 
 @interface InRegisterViewController ()<UITextFieldDelegate>
 
@@ -34,9 +32,6 @@
 }
 
 - (IBAction)registerBtnDidClick:(UIButton *)sender {
-#warning danly-Test
-    self.emailTextField.text = @"307262195@qq.com";
-    self.passwordTextField.text = @"666888";
     if (self.emailTextField.text.length == 0) {
         [InAlertTool showAlertWithTip:@"请输入邮箱"];
         return;
@@ -45,39 +40,33 @@
         [InAlertTool showAlertWithTip:@"请输入密码"];
         return;
     }
-
+    
+    [self.view endEditing:YES];
+    [InAlertTool showHUDAddedTo:self.view animated:YES];
     NSLog(@"开始注册，邮箱: %@, 密码: %@", self.emailTextField.text, self.passwordTextField.text);
-
-
-    NSDictionary* form = @{@"username":self.emailTextField.text, @"password":self.passwordTextField.text, @"action":@"register"};
-
-    NSMutableURLRequest* formRequest = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" parameters:form error:nil];
-
-    [formRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8"forHTTPHeaderField:@"Content-Type"];
-
-    AFHTTPSessionManager*manager = [AFHTTPSessionManager manager];
-
-    AFJSONResponseSerializer* responseSerializer = [AFJSONResponseSerializer serializer];
-
-    [responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json",@"text/json",@"text/javascript",@"text/html",@"text/plain",nil]];
-
-    manager.responseSerializer= responseSerializer;
-
-    NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:formRequest uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse *_Nonnull response,id _Nullable responseObject,NSError *_Nullable error) {
-
-        if(error) {
-
-            NSLog(@"Error: %@", error);
-
-            return;
-
+    NSDictionary* body = @{@"username":self.emailTextField.text, @"password":self.passwordTextField.text, @"action":@"register"};
+    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        NSLog(@"注册结果:responseObject = %@, error = %@", responseObject, error);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (error) {
+            [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
         }
-
-        NSLog(@"%@ %@", responseObject, responseObject[@"message"]);
-
+        else {
+//            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+            NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"注册失败"];
+            [InAlertTool showAlertAutoDisappear:message];
+        }
     }];
+}
 
-    [dataTask resume];
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.emailTextField) {
+        [self.passwordTextField becomeFirstResponder];
+    }
+    else {
+        [self.view endEditing:YES];
+    }
+    return YES;
 }
 
 //- (IBAction)registerBtnDidClick:(UIButton *)sender {
@@ -110,15 +99,5 @@
 //        [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
 //    }];
 //}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if (textField == self.emailTextField) {
-        [self.passwordTextField becomeFirstResponder];
-    }
-    else {
-        [self.view endEditing:YES];
-    }
-    return YES;
-}
 
 @end

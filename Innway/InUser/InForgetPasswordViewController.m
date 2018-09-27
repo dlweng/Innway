@@ -7,10 +7,8 @@
 //
 
 #import "InForgetPasswordViewController.h"
-#import "InUserTableViewController.h"
-#import <AFNetworking.h>
-#import "InAlertTool.h"
 #import "InTextField.h"
+#import "InCommon.h"
 
 @interface InForgetPasswordViewController ()<UITextFieldDelegate>
 
@@ -31,31 +29,17 @@
 }
 
 - (IBAction)resetBtnDidClick:(UIButton *)sender {
-    [self.view endEditing:YES];
     if (self.emailTextField.text.length == 0) {
         [InAlertTool showAlertWithTip:@"请输入邮箱"];
         return;
     }
-    
+    [self.view endEditing:YES];
     NSLog(@"重置密码, 邮箱:%@", self.emailTextField.text);
-    NSDictionary *parameters = @{@"username":self.emailTextField.text};
-    [[AFHTTPSessionManager manager] POST:@"http://111.230.192.125/user/sendResetEmail" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
-            NSNumber *code = responseObject[@"code"];
-            NSString *message = responseObject[@"message"];
-            if (code.integerValue == 200) {
-                [InAlertTool showAlertAutoDisappear:@"重置成功"];
-            }
-            else if (code.integerValue == 500) {
-                [InAlertTool showAlertAutoDisappear:[NSString stringWithFormat:@"%@", message]];
-            }
-//            NSLog(@"重置结果：code = %@, message = %@", code, message);
-        }
-        NSLog(@"重置结果：task = %@, responseObject = %@", task, responseObject);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"重置结果：task = %@, error = %@", task, error);
-        [InAlertTool showAlertAutoDisappear:@"网络连接异常"];
-    }];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.view endEditing:YES];
+    return YES;
 }
 
 //- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -68,10 +52,5 @@
 //        };
 //    }
 //}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self.view endEditing:YES];
-    return YES;
-}
 
 @end

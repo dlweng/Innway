@@ -12,7 +12,7 @@
 #import "DLCloudDeviceManager.h"
 #import "DLCentralManager.h"
 #import "DLDevice.h"
-#import "InAlertTool.h"
+#import "InCommon.h"
 #import <SSPullToRefresh/SSPullToRefresh.h>
 #import "InCommon.h"
 

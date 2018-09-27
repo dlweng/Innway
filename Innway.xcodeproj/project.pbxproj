@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		33027C1B211EBAC40003C5D9 /* InAlertTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C1A211EBAC40003C5D9 /* InAlertTool.m */; };
 		33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C22211EDE1C0003C5D9 /* InCommon.m */; };
 		331797E1213A6958000B8DD6 /* voice1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 331797DE213A6957000B8DD6 /* voice1.mp3 */; };
 		331797E2213A6958000B8DD6 /* voice3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 331797DF213A6957000B8DD6 /* voice3.mp3 */; };
@@ -15,7 +14,6 @@
 		331797F0213AF282000B8DD6 /* InAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 331797EF213AF282000B8DD6 /* InAnnotationView.m */; };
 		331797F2213AF364000B8DD6 /* bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 331797F1213AF364000B8DD6 /* bubble.png */; };
 		331797F4213AF372000B8DD6 /* annotation.png in Resources */ = {isa = PBXBuildFile; fileRef = 331797F3213AF372000B8DD6 /* annotation.png */; };
-		331797F6213B07AD000B8DD6 /* innwayLOGO.png in Resources */ = {isa = PBXBuildFile; fileRef = 331797F5213B07AC000B8DD6 /* innwayLOGO.png */; };
 		331797F8213BBB5B000B8DD6 /* icon_splash.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 331797F7213BBB5B000B8DD6 /* icon_splash.jpg */; };
 		33179806213BCE9F000B8DD6 /* RSSI_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 331797F9213BCE9C000B8DD6 /* RSSI_5.png */; };
 		33179807213BCE9F000B8DD6 /* RSSI_7.png in Resources */ = {isa = PBXBuildFile; fileRef = 331797FA213BCE9C000B8DD6 /* RSSI_7.png */; };
@@ -54,7 +52,6 @@
 		3328800F2115A00C00C4893B /* ic_launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 3328800E2115A00C00C4893B /* ic_launcher.png */; };
 		3328801B2115AA4900C4893B /* InControlDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 332880192115AA4900C4893B /* InControlDeviceViewController.m */; };
 		3328801C2115AA4900C4893B /* InControlDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3328801A2115AA4900C4893B /* InControlDeviceViewController.xib */; };
-		3358965C212DB1E8002E5BD4 /* NSDictionary+GetValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358965A212DB1E8002E5BD4 /* NSDictionary+GetValue.m */; };
 		3374C74C2112013B00F83101 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C74B2112013B00F83101 /* AppDelegate.m */; };
 		3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C74E2112013B00F83101 /* InLoginViewController.m */; };
 		3374C7522112013B00F83101 /* InUser.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7502112013B00F83101 /* InUser.storyboard */; };
@@ -119,6 +116,8 @@
 		338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7721297F5F00A018EA /* DLCloudDeviceManager.m */; };
 		338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7921297F5F00A018EA /* DLCentralManager.m */; };
 		338CDF7F21297F6000A018EA /* DLDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7B21297F6000A018EA /* DLDevice.m */; };
+		33E9B81B215BC83300BA3EBE /* innwayLOGO@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E9B819215BC83300BA3EBE /* innwayLOGO@3x.png */; };
+		33E9B81C215BC83300BA3EBE /* innwayLOGO@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E9B81A215BC83300BA3EBE /* innwayLOGO@2x.png */; };
 		33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */; };
 		33EE4C932116C27300CDDC98 /* InUserSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4C912116C27300CDDC98 /* InUserSettingViewController.xib */; };
 		33EE4C9A2116DBE000CDDC98 /* InDeviceMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4C982116DBE000CDDC98 /* InDeviceMenuViewController.m */; };
@@ -142,8 +141,6 @@
 
 /* Begin PBXFileReference section */
 		19F61050A82BF0B9B29DC8FF /* Pods-Innway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Innway.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Innway/Pods-Innway.debug.xcconfig"; sourceTree = "<group>"; };
-		33027C19211EBAC30003C5D9 /* InAlertTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAlertTool.h; sourceTree = "<group>"; };
-		33027C1A211EBAC40003C5D9 /* InAlertTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAlertTool.m; sourceTree = "<group>"; };
 		33027C21211EDE1C0003C5D9 /* InCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InCommon.h; sourceTree = "<group>"; };
 		33027C22211EDE1C0003C5D9 /* InCommon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InCommon.m; sourceTree = "<group>"; };
 		331797DE213A6957000B8DD6 /* voice1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice1.mp3; sourceTree = "<group>"; };
@@ -153,7 +150,6 @@
 		331797EF213AF282000B8DD6 /* InAnnotationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAnnotationView.m; sourceTree = "<group>"; };
 		331797F1213AF364000B8DD6 /* bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubble.png; sourceTree = "<group>"; };
 		331797F3213AF372000B8DD6 /* annotation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = annotation.png; sourceTree = "<group>"; };
-		331797F5213B07AC000B8DD6 /* innwayLOGO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = innwayLOGO.png; sourceTree = "<group>"; };
 		331797F7213BBB5B000B8DD6 /* icon_splash.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = icon_splash.jpg; sourceTree = "<group>"; };
 		331797F9213BCE9C000B8DD6 /* RSSI_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RSSI_5.png; sourceTree = "<group>"; };
 		331797FA213BCE9C000B8DD6 /* RSSI_7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RSSI_7.png; sourceTree = "<group>"; };
@@ -200,8 +196,6 @@
 		332880182115AA4900C4893B /* InControlDeviceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InControlDeviceViewController.h; sourceTree = "<group>"; };
 		332880192115AA4900C4893B /* InControlDeviceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InControlDeviceViewController.m; sourceTree = "<group>"; };
 		3328801A2115AA4900C4893B /* InControlDeviceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InControlDeviceViewController.xib; sourceTree = "<group>"; };
-		3358965A212DB1E8002E5BD4 /* NSDictionary+GetValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+GetValue.m"; sourceTree = "<group>"; };
-		3358965B212DB1E8002E5BD4 /* NSDictionary+GetValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+GetValue.h"; sourceTree = "<group>"; };
 		3374C7472112013A00F83101 /* Innway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Innway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3374C74A2112013B00F83101 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3374C74B2112013B00F83101 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -281,6 +275,8 @@
 		338CDF7921297F5F00A018EA /* DLCentralManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLCentralManager.m; sourceTree = "<group>"; };
 		338CDF7A21297F6000A018EA /* DLUUIDTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLUUIDTool.h; sourceTree = "<group>"; };
 		338CDF7B21297F6000A018EA /* DLDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLDevice.m; sourceTree = "<group>"; };
+		33E9B819215BC83300BA3EBE /* innwayLOGO@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "innwayLOGO@3x.png"; sourceTree = "<group>"; };
+		33E9B81A215BC83300BA3EBE /* innwayLOGO@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "innwayLOGO@2x.png"; sourceTree = "<group>"; };
 		33EE4C8F2116C27300CDDC98 /* InUserSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InUserSettingViewController.h; sourceTree = "<group>"; };
 		33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InUserSettingViewController.m; sourceTree = "<group>"; };
 		33EE4C912116C27300CDDC98 /* InUserSettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InUserSettingViewController.xib; sourceTree = "<group>"; };
@@ -320,16 +316,12 @@
 		33027C1F211EC5140003C5D9 /* InTool */ = {
 			isa = PBXGroup;
 			children = (
-				331797EE213AF282000B8DD6 /* InAnnotationView.h */,
-				331797EF213AF282000B8DD6 /* InAnnotationView.m */,
-				3358965B212DB1E8002E5BD4 /* NSDictionary+GetValue.h */,
-				3358965A212DB1E8002E5BD4 /* NSDictionary+GetValue.m */,
-				33027C19211EBAC30003C5D9 /* InAlertTool.h */,
-				33027C1A211EBAC40003C5D9 /* InAlertTool.m */,
 				33027C21211EDE1C0003C5D9 /* InCommon.h */,
 				33027C22211EDE1C0003C5D9 /* InCommon.m */,
 				3379A2DC21562500008D1AA2 /* InButton.h */,
 				3379A2DD21562500008D1AA2 /* InButton.m */,
+				331797EE213AF282000B8DD6 /* InAnnotationView.h */,
+				331797EF213AF282000B8DD6 /* InAnnotationView.m */,
 			);
 			path = InTool;
 			sourceTree = "<group>";
@@ -474,10 +466,11 @@
 				331797FC213BCE9D000B8DD6 /* RSSI_9.png */,
 				33179801213BCE9E000B8DD6 /* RSSI_10.png */,
 				33179804213BCE9F000B8DD6 /* RSSI_11.png */,
-				331797F5213B07AC000B8DD6 /* innwayLOGO.png */,
 				331797F3213AF372000B8DD6 /* annotation.png */,
 				331797F1213AF364000B8DD6 /* bubble.png */,
 				3328800E2115A00C00C4893B /* ic_launcher.png */,
+				33E9B81A215BC83300BA3EBE /* innwayLOGO@2x.png */,
+				33E9B819215BC83300BA3EBE /* innwayLOGO@3x.png */,
 				33EE4C9C2116EDD500CDDC98 /* deviceMenu.png */,
 				3374C76F2112077C00F83101 /* icon_map_type.png */,
 				3374C7702112077C00F83101 /* icon_child_device_gray.png */,
@@ -672,9 +665,11 @@
 				3374C7542112013F00F83101 /* Assets.xcassets in Resources */,
 				3317980B213BCE9F000B8DD6 /* RSSI_3.png in Resources */,
 				3374C7972112077C00F83101 /* icon_close.png in Resources */,
+				33E9B81B215BC83300BA3EBE /* innwayLOGO@3x.png in Resources */,
 				33179812213BCE9F000B8DD6 /* RSSI_8.png in Resources */,
 				3374C7982112077C00F83101 /* icon_back.png in Resources */,
 				331797E1213A6958000B8DD6 /* voice1.mp3 in Resources */,
+				33E9B81C215BC83300BA3EBE /* innwayLOGO@2x.png in Resources */,
 				3374C7952112077C00F83101 /* icon_more.png in Resources */,
 				3385C6D421574BCC005FAB04 /* whiteLongButton@2x.png in Resources */,
 				33179808213BCE9F000B8DD6 /* RSSI_1.png in Resources */,
@@ -690,7 +685,6 @@
 				3374C7A72112077C00F83101 /* icon_location.png in Resources */,
 				3374C7A92112077C00F83101 /* icon_user.png in Resources */,
 				3374C79B2112077C00F83101 /* icon_track_down.png in Resources */,
-				331797F6213B07AD000B8DD6 /* innwayLOGO.png in Resources */,
 				3379A2D821561E73008D1AA2 /* whiteBtn@2x.png in Resources */,
 				3317981E213BD688000B8DD6 /* 10.png in Resources */,
 				3317981D213BD688000B8DD6 /* 40.png in Resources */,
@@ -818,10 +812,8 @@
 				33EE4CAC21170C1500CDDC98 /* InAlertTableViewController.m in Sources */,
 				3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */,
 				338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */,
-				3358965C212DB1E8002E5BD4 /* NSDictionary+GetValue.m in Sources */,
 				33287FFF21158E7900C4893B /* InRegisterViewController.m in Sources */,
 				33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */,
-				33027C1B211EBAC40003C5D9 /* InAlertTool.m in Sources */,
 				3374C75A2112013F00F83101 /* main.m in Sources */,
 				33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */,
 				33EE4CA62116FA9B00CDDC98 /* InDeviceSettingViewController.m in Sources */,
