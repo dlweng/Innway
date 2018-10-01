@@ -9,7 +9,7 @@
 #import "InCommon.h"
 #import "InTextField.h"
 #import "InLoginViewController.h"
-#import "InDeviceListViewController.h"
+#import "InAddDeviceStartViewController.h"
 
 @interface InLoginViewController ()<UITextFieldDelegate>
 
@@ -76,7 +76,7 @@
                     NSString *password = [data stringValueForKey:@"PassWord" defaultValue:@""];
                     [common saveUserInfoWithID:ID email:userName pwd:password];
                 }
-                [self pushToDeviceListController];
+                [self pushToAddDeviceController];
             }
             else {
                 NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"登陆失败"];
@@ -87,11 +87,11 @@
     }];
 }
 
-- (void)pushToDeviceListController {
-    InDeviceListViewController *deviceListController = [[InDeviceListViewController alloc] initWithStyle:UITableViewStylePlain];
-    [self.navigationController pushViewController:deviceListController animated:YES];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"] forBarMetrics:UIBarMetricsDefault];
+- (void)pushToAddDeviceController {
+    InAddDeviceStartViewController *addDeviceStartVC = [InAddDeviceStartViewController addDeviceStartViewController];
+    [self.navigationController pushViewController:addDeviceStartVC animated:YES];
 }
+
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.emailTextField) {

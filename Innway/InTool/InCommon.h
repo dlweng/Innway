@@ -14,6 +14,15 @@
 
 #define common [InCommon sharedInstance]
 
+/**
+ 界面显示类型
+ */
+typedef NS_ENUM(NSInteger, InSearchDeviceType) {
+    InDeviceTag = 0,
+    InDeviceChip = 1,
+    InDeviceCard = 2
+};
+
 @class DLDevice;
 @interface InCommon : NSObject
 @property (nonatomic, assign) NSInteger ID;
@@ -22,6 +31,7 @@
 //标识是否支持定位功能
 @property (nonatomic, assign) BOOL isLocation;
 @property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
+@property (nonatomic, assign) InSearchDeviceType searchDeviceType;
 + (instancetype)sharedInstance;
 
 - (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd;
