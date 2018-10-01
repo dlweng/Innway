@@ -37,6 +37,9 @@ typedef NS_ENUM(NSInteger, InSearchDeviceType) {
 - (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd;
 - (void)clearUserInfo;
 
+- (void)saveCloudList:(NSDictionary <NSString*, DLDevice*>*)cloudList;
+- (NSDictionary <NSString*, DLDevice*>*)getCloudList;
+
 - (void)playSound;
 - (void)stopSound;
 

@@ -13,6 +13,7 @@
 @class DLCloudDeviceManager;
 typedef void (^DidAddDeviceEvent)(DLCloudDeviceManager *manager, DLDevice *device, NSError *error);
 typedef void (^DidDeleteDeviceEvent)(DLCloudDeviceManager *manager, NSError *error);
+typedef void (^DidGetCloudListEvent)(DLCloudDeviceManager *manager, NSDictionary *cloudList);
 
 @interface DLCloudDeviceManager : NSObject
 @property (nonatomic, strong) NSMutableDictionary<NSString*, DLDevice*> *cloudDeviceList;
@@ -24,7 +25,7 @@ typedef void (^DidDeleteDeviceEvent)(DLCloudDeviceManager *manager, NSError *err
 - (void)deleteDevice:(NSString *)mac completion:(DidDeleteDeviceEvent)completion;
 
 // 获取云端的设备列表
-- (void)getHTTPCloudDeviceList;
+- (void)getHTTPCloudDeviceListCompletion:(DidGetCloudListEvent)completion;
 //根据新发现的设备更新云端列表
 - (void)updateCloudList;
 

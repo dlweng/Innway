@@ -34,64 +34,108 @@ static BOOL deleteing = NO;
         completion(self, nil, error);
         return;
     }
-    DLDevice *device = [self.cloudDeviceList objectForKey:mac];
-    if (device) {
-        // 已经添加到云端
-        if (device.connected && device.online) {
-            // 已经连接，直接跳转
-            NSLog(@"设备已经存在云端，也已连接，直接跳转");
-            [device discoverServices];
-            if (completion) {
-                completion(self, device, nil);
-            }
-            return;
-        }
-        else {
-            //未连接，去连接
-            NSLog(@"设备已添加到云端，但是未连接，下一步做连接");
-            [self connectDevice:device mac:mac completion:completion];
-        }
+    NSLog(@"未添加到云端，需做请求添加");
+    // 未添加到云端, 添加到云端
+    DLKnowDevice *knowDevice = [[DLCentralManager sharedInstance].knownPeripherals objectForKey:mac];
+    CBPeripheral *peripheral = knowDevice.peripheral;
+    NSString *peripheralName = peripheral.name;
+    if (peripheralName.length == 0) {
+        peripheralName = @"Lily";
     }
-    else {
-        NSLog(@"未添加到云端，需做请求添加");
-        // 未添加到云端, 添加到云端
-        DLKnowDevice *knowDevice = [[DLCentralManager sharedInstance].knownPeripherals objectForKey:mac];
-        CBPeripheral *peripheral = knowDevice.peripheral;
-        NSString *peripheralName = peripheral.name;
-        if (peripheralName.length == 0) {
-            peripheralName = @"Lily";
+    NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"name":peripheralName, @"mac":mac, @"action":@"addDevice", @"gps":[common getCurrentGps]};
+    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"添加设备http网络异常, %@",error);
+            completion(self, nil, error);
+            return ;
         }
-        NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"name":peripheralName, @"mac":mac, @"action":@"addDevice", @"gps":[common getCurrentGps]};
-        [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
-            if (error) {
-                NSLog(@"添加设备http网络异常, %@",error);
-                completion(self, nil, error);
+        NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+        if (code == 200) {
+            NSInteger data = [responseObject integerValueForKey:@"data" defaultValue:-1];
+            if (data > -1) {
+                NSLog(@"添加设备http请求成功");
+                // 创建对象
+                DLDevice *newDevice = [DLDevice device:peripheral];
+                newDevice.cloudID = data;
+                newDevice.mac = mac;
+                // 添加到云端列表
+                [self.cloudDeviceList setValue:newDevice forKey:mac];
+                completion(self, newDevice, nil);
                 return ;
             }
-            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
-            if (code == 200) {
-                NSInteger data = [responseObject integerValueForKey:@"data" defaultValue:-1];
-                if (data > -1) {
-                    NSLog(@"添加设备http请求成功");
-                    // 创建对象
-                    DLDevice *newDevice = [DLDevice device:peripheral];
-                    newDevice.cloudID = data;
-                    newDevice.mac = mac;
-                    // 添加到云端列表
-                    [self.cloudDeviceList setValue:newDevice forKey:mac];
-                    //去连接设备
-                    [self connectDevice:newDevice mac:mac completion:completion];
-                    return ;
-                }
-            }
-            
-            NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"添加设备http网络异常"];
-            NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:@{NSLocalizedDescriptionKey: message}];
-            NSLog(@"添加设备http请求失败, %@",message);
-            completion(self, nil, myError);
-        }];
-    }
+        }
+        
+        NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"添加设备http网络异常"];
+        NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:@{NSLocalizedDescriptionKey: message}];
+        NSLog(@"添加设备http请求失败, %@",message);
+        completion(self, nil, myError);
+    }];
 }
+
+//- (void)addDevice:(NSString *)mac completion:(DidAddDeviceEvent)completion {
+//    if (self.cloudDeviceList.count >= 8) {
+//        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:300 userInfo:@{NSLocalizedDescriptionKey:@"添加的设备不能大于8个"}];
+//        completion(self, nil, error);
+//        return;
+//    }
+//    DLDevice *device = [self.cloudDeviceList objectForKey:mac];
+//    if (device) {
+//        // 已经添加到云端
+//        if (device.connected && device.online) {
+//            // 已经连接，直接跳转
+//            NSLog(@"设备已经存在云端，也已连接，直接跳转");
+//            [device discoverServices];
+//            if (completion) {
+//                completion(self, device, nil);
+//            }
+//            return;
+//        }
+//        else {
+//            //未连接，去连接
+//            NSLog(@"设备已添加到云端，但是未连接，下一步做连接");
+//            [self connectDevice:device mac:mac completion:completion];
+//        }
+//    }
+//    else {
+//        NSLog(@"未添加到云端，需做请求添加");
+//        // 未添加到云端, 添加到云端
+//        DLKnowDevice *knowDevice = [[DLCentralManager sharedInstance].knownPeripherals objectForKey:mac];
+//        CBPeripheral *peripheral = knowDevice.peripheral;
+//        NSString *peripheralName = peripheral.name;
+//        if (peripheralName.length == 0) {
+//            peripheralName = @"Lily";
+//        }
+//        NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"name":peripheralName, @"mac":mac, @"action":@"addDevice", @"gps":[common getCurrentGps]};
+//        [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+//            if (error) {
+//                NSLog(@"添加设备http网络异常, %@",error);
+//                completion(self, nil, error);
+//                return ;
+//            }
+//            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+//            if (code == 200) {
+//                NSInteger data = [responseObject integerValueForKey:@"data" defaultValue:-1];
+//                if (data > -1) {
+//                    NSLog(@"添加设备http请求成功");
+//                    // 创建对象
+//                    DLDevice *newDevice = [DLDevice device:peripheral];
+//                    newDevice.cloudID = data;
+//                    newDevice.mac = mac;
+//                    // 添加到云端列表
+//                    [self.cloudDeviceList setValue:newDevice forKey:mac];
+//                    //去连接设备
+//                    [self connectDevice:newDevice mac:mac completion:completion];
+//                    return ;
+//                }
+//            }
+//
+//            NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"添加设备http网络异常"];
+//            NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:@{NSLocalizedDescriptionKey: message}];
+//            NSLog(@"添加设备http请求失败, %@",message);
+//            completion(self, nil, myError);
+//        }];
+//    }
+//}
 
 - (void)connectDevice:(DLDevice *)device mac:(NSString *)mac  completion:(DidAddDeviceEvent)completion {
     __block BOOL find = NO;
@@ -210,11 +254,12 @@ static BOOL deleteing = NO;
 }
 
 // 获取云端的设备列表
-- (void)getHTTPCloudDeviceList {
+- (void)getHTTPCloudDeviceListCompletion:(DidGetCloudListEvent)completion {
     NSLog(@"做请求去获取云端的设备列表");
     NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"action":@"getDeviceList"};
     [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         if (error) {
+            self.cloudDeviceList = [NSMutableDictionary dictionaryWithDictionary:[common getCloudList]];
             NSLog(@"获取云端设备列表失败: %@", error);
         }
         else {
@@ -241,14 +286,15 @@ static BOOL deleteing = NO;
                         [newList setValue:device forKey:mac];
                     }
                     self.cloudDeviceList = newList;
-                    [self autoConnectCloudDevice];
                 }
-                return ;
             }
             else {
                 NSLog(@"获取云端设备列表失败: %@", [responseObject stringValueForKey:@"message" defaultValue:@""]);
+                self.cloudDeviceList = [NSMutableDictionary dictionaryWithDictionary:[common getCloudList]];
             }
         }
+        completion(self, [self.cloudDeviceList copy]);
+        [self autoConnectCloudDevice];
     }];
     
 }

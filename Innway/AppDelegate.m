@@ -26,6 +26,13 @@
         if (state == CBCentralManagerStatePoweredOff) {
             [InAlertTool showAlertWithTip:@"请打开蓝牙"];
         }
+        else if (state == CBCentralManagerStatePoweredOn) {
+            [manager startScanDeviceWithTimeout:10 discoverEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *mac) {
+                
+            } didEndDiscoverDeviceEvent:^(DLCentralManager *manager, NSMutableDictionary<NSString *,DLKnowDevice *> *knownPeripherals) {
+                
+            }];
+        }
     }];
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;

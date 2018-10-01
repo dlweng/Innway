@@ -35,7 +35,7 @@
     [self setUpNarBar];
     self.centralManager = [DLCentralManager sharedInstance];
     // 获取云端列表
-    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceList];
+//    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceList];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceSearchPhone:) name:DeviceSearchPhoneNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];

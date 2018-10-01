@@ -9,7 +9,9 @@
 #import "InCommon.h"
 #import "InTextField.h"
 #import "InLoginViewController.h"
+#import "InControlDeviceViewController.h"
 #import "InAddDeviceStartViewController.h"
+#import "DLCloudDeviceManager.h"
 
 @interface InLoginViewController ()<UITextFieldDelegate>
 
@@ -76,7 +78,7 @@
                     NSString *password = [data stringValueForKey:@"PassWord" defaultValue:@""];
                     [common saveUserInfoWithID:ID email:userName pwd:password];
                 }
-                [self pushToAddDeviceController];
+                [self pushToNewCotroller];
             }
             else {
                 NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"登陆失败"];
@@ -87,11 +89,25 @@
     }];
 }
 
+- (void)pushToNewCotroller {
+    // 获取云端设备列表
+    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
+        if (cloudList.count == 0) {
+            [self pushToAddDeviceController];
+        }
+        else {
+            DLDevice *device = cloudList[cloudList.allKeys.firstObject];
+            InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
+            controlDeviceVC.device = device;
+            [self.navigationController pushViewController:controlDeviceVC animated:YES];
+        }
+    }];
+}
+
 - (void)pushToAddDeviceController {
     InAddDeviceStartViewController *addDeviceStartVC = [InAddDeviceStartViewController addDeviceStartViewController];
     [self.navigationController pushViewController:addDeviceStartVC animated:YES];
 }
-
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.emailTextField) {

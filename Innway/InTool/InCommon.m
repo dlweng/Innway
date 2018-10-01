@@ -75,6 +75,33 @@ static SystemSoundID soundID;
     self.pwd = nil;
 }
 
+- (void)saveCloudList:(NSDictionary <NSString*, DLDevice*>*)cloudList {
+    if (cloudList == nil || self.ID <= 0) {
+        return;
+    }
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    // 云端列表在本地的存储格式
+    // @{@"usersCloudListDic": @{@"用户ID": @{用户所属云端设备列表}}}
+    NSDictionary *usersCloudListDic = [defaults objectForKey:@"usersCloudListDic"];
+    if (!usersCloudListDic) {
+        usersCloudListDic = [NSMutableDictionary dictionary];
+    }
+    NSMutableDictionary *newUsersCloudListDic = [NSMutableDictionary dictionaryWithDictionary:usersCloudListDic];
+    [newUsersCloudListDic setValue:cloudList forKey:[NSString stringWithFormat:@"%zd", self.ID]];
+    [defaults setObject:newUsersCloudListDic forKey:@"usersCloudListDic"];
+    [defaults synchronize];
+}
+
+- (NSDictionary <NSString*, DLDevice*>*)getCloudList {
+    if (self.ID <= 0) {
+        return @{};
+    }
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *usersCloudListDic = [defaults objectForKey:@"usersCloudListDic"];
+    NSDictionary *cloudList = [usersCloudListDic dictValueForKey:[NSString stringWithFormat:@"%zd", self.ID] defaultValue:@{}];
+    return cloudList;
+}
+
 #pragma mark - 手机报警
 - (void)playSound {
     AudioServicesDisposeSystemSoundID(soundID);

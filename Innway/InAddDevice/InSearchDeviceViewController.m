@@ -7,6 +7,11 @@
 //
 
 #import "InSearchDeviceViewController.h"
+#import "InControlDeviceViewController.h"
+#import "DLCloudDeviceManager.h"
+#import "DLCentralManager.h"
+#import "InCommon.h"
+
 
 /**
  界面显示类型
@@ -37,6 +42,7 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *phoneOptionViewHeightConstraint;
 
 @property (nonatomic, strong) NSTimer *searchAnimationTimer;
+@property (nonatomic, copy) NSString *findDeviceMac;
 
 /**
  动画的显示标识
@@ -76,6 +82,7 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
     self.type = InSearch;
     [self updateView];
     [self stopAnimation];
+    self.findDeviceMac = nil;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -141,11 +148,13 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
         {
             NSLog(@"开始搜索新设备");
             [self startAnimation];
+            [self searchNewDevice];
             break;
         }
         case InSuccess:
         {
             NSLog(@"跳转到控制界面");
+            [self addNewDevice];
             break;
         }
         case InFailed: {
@@ -157,6 +166,38 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
         default:
             break;
     }
+}
+
+- (void)searchNewDevice {
+    __block BOOL find = NO;
+    [[DLCentralManager sharedInstance] startScanDeviceWithTimeout:10 discoverEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *mac) {
+        if (!find) {
+            DLDevice *device = [[DLCloudDeviceManager sharedInstance].cloudDeviceList objectForKey:mac];
+            if (!device) {
+                // 找到新设备
+                find = YES;
+                self.type = InSuccess;
+                [self stopAnimation];
+                [self updateView];
+                self.findDeviceMac = mac;
+            }
+        }
+    } didEndDiscoverDeviceEvent:nil];
+}
+
+- (void)addNewDevice {
+    [[DLCloudDeviceManager sharedInstance] addDevice:self.findDeviceMac completion:^(DLCloudDeviceManager *manager, DLDevice *device, NSError *error) {
+        if (error) {
+            [InAlertTool showAlert:@"Tip" message:@"添加设备失败" confirmHanler:^{
+               
+            }];
+        }
+        else {
+            InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
+            controlDeviceVC.device = device;
+            [self.navigationController pushViewController:controlDeviceVC animated:YES];
+        }
+    }];
 }
 
 - (void)goBack {
