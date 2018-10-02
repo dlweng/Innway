@@ -96,14 +96,20 @@
             [self pushToAddDeviceController];
         }
         else {
-            DLDevice *device = cloudList[cloudList.allKeys.firstObject];
-            InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
-            controlDeviceVC.device = device;
-            [self.navigationController pushViewController:controlDeviceVC animated:YES];
+            [self pushToControlDeviceController];
         }
     }];
 }
 
+- (void)pushToControlDeviceController {
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"] forBarMetrics:UIBarMetricsDefault];
+    DLDevice *device = [DLCloudDeviceManager sharedInstance].cloudDeviceList[[DLCloudDeviceManager sharedInstance].cloudDeviceList.allKeys.firstObject];
+    InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
+    controlDeviceVC.device = device;
+    [self.navigationController pushViewController:controlDeviceVC animated:YES];
+    [self.navigationController.navigationBar setHidden:NO];
+}
+    
 - (void)pushToAddDeviceController {
     InAddDeviceStartViewController *addDeviceStartVC = [InAddDeviceStartViewController addDeviceStartViewController];
     [self.navigationController pushViewController:addDeviceStartVC animated:YES];

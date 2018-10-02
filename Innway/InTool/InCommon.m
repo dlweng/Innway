@@ -75,7 +75,7 @@ static SystemSoundID soundID;
     self.pwd = nil;
 }
 
-- (void)saveCloudList:(NSDictionary <NSString*, DLDevice*>*)cloudList {
+- (void)saveCloudList:(NSArray *)cloudList {
     if (cloudList == nil || self.ID <= 0) {
         return;
     }
@@ -87,18 +87,63 @@ static SystemSoundID soundID;
         usersCloudListDic = [NSMutableDictionary dictionary];
     }
     NSMutableDictionary *newUsersCloudListDic = [NSMutableDictionary dictionaryWithDictionary:usersCloudListDic];
-    [newUsersCloudListDic setValue:cloudList forKey:[NSString stringWithFormat:@"%zd", self.ID]];
+    
+    NSMutableArray *newCloudList = [NSMutableArray array];
+    for (NSDictionary *dic in cloudList) {
+        NSMutableDictionary *newDic = [NSMutableDictionary dictionary];
+        NSInteger ID = [dic integerValueForKey:@"id" defaultValue:-1];
+        if (ID > 0) {
+            [newDic setValue:[dic stringValueForKey:@"name" defaultValue:@""] forKey:@"name"];
+            [newDic setValue:[dic stringValueForKey:@"mac" defaultValue:@""] forKey:@"mac"];
+            [newDic setValue:@(ID) forKey:@"id"];
+            [newDic setValue:[dic stringValueForKey:@"gps" defaultValue:@""] forKey:@"gps"];
+            [newCloudList addObject:newDic];
+        }
+        
+    }
+    [newUsersCloudListDic setValue:newCloudList forKey:[NSString stringWithFormat:@"%zd", self.ID]];
     [defaults setObject:newUsersCloudListDic forKey:@"usersCloudListDic"];
     [defaults synchronize];
 }
 
-- (NSDictionary <NSString*, DLDevice*>*)getCloudList {
+- (void)saveCloudListWithDevice:(DLDevice *)device {
+    if (device) {
+        NSMutableArray *cloudList = [NSMutableArray arrayWithArray:[self getCloudList]];
+        NSMutableDictionary *newDeviceDic = [NSMutableDictionary dictionary];
+        [newDeviceDic setValue:@(device.cloudID) forKey:@"id"];
+        [newDeviceDic setValue:device.deviceName forKey:@"name"];
+        [newDeviceDic setValue:device.getGps forKey:@"gps"];
+        [newDeviceDic setValue:device.mac forKey:@"mac"];
+        [cloudList addObject:[newDeviceDic copy]];
+        [self saveCloudList:[cloudList copy]];
+    }
+}
+
+- (void)removeDeviceByCloudList:(DLDevice *)device {
+    if (device) {
+        NSMutableArray *cloudList = [NSMutableArray arrayWithArray:[self getCloudList]];
+        NSDictionary *removeDevice = nil;
+        for (NSDictionary *deviceDic in cloudList) {
+            NSString *mac = [deviceDic objectForKey:@"mac"];
+            if ([mac isEqualToString:device.mac]) {
+                removeDevice = deviceDic;
+                break;
+            }
+        }
+        if (removeDevice) {
+            [cloudList removeObject:removeDevice];
+            [self saveCloudList:[cloudList copy]];
+        }
+    }
+}
+
+- (NSArray *)getCloudList {
     if (self.ID <= 0) {
-        return @{};
+        return @[];
     }
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *usersCloudListDic = [defaults objectForKey:@"usersCloudListDic"];
-    NSDictionary *cloudList = [usersCloudListDic dictValueForKey:[NSString stringWithFormat:@"%zd", self.ID] defaultValue:@{}];
+    NSArray *cloudList = [usersCloudListDic arrayValueForKey:[NSString stringWithFormat:@"%zd", self.ID] defaultValue:@[]];
     return cloudList;
 }
 

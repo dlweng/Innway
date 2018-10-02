@@ -60,6 +60,7 @@ static BOOL deleteing = NO;
                 newDevice.mac = mac;
                 // 添加到云端列表
                 [self.cloudDeviceList setValue:newDevice forKey:mac];
+                [common saveCloudListWithDevice:newDevice];
                 completion(self, newDevice, nil);
                 return ;
             }
@@ -222,6 +223,7 @@ static BOOL deleteing = NO;
             else {
                 NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
                 if (code == 200) {
+                    [common removeDeviceByCloudList:device];
                     NSLog(@"http请求删除设备成功");
                     [self.cloudDeviceList removeObjectForKey:mac];
                     [self.centralManager disConnectToDevice:device.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
@@ -258,40 +260,44 @@ static BOOL deleteing = NO;
     NSLog(@"做请求去获取云端的设备列表");
     NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"action":@"getDeviceList"};
     [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        NSArray *cloudDevices;
         if (error) {
-            self.cloudDeviceList = [NSMutableDictionary dictionaryWithDictionary:[common getCloudList]];
+            cloudDevices = [common getCloudList];
             NSLog(@"获取云端设备列表失败: %@", error);
         }
         else {
             NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
             if (code == 200) {
-                NSArray *cloudDevices = [responseObject arrayValueForKey:@"data" defaultValue:nil];
+                cloudDevices = [responseObject arrayValueForKey:@"data" defaultValue:nil];
                 NSLog(@"获取云端列表成功: %@", cloudDevices.description);
                 if (cloudDevices.count > 0) {
-                    NSMutableDictionary *newList = [NSMutableDictionary dictionary];
-                    for (NSDictionary *cloudDevice in cloudDevices) {
-                        NSString *mac = [cloudDevice stringValueForKey:@"mac" defaultValue:@""];
-                        DLDevice *device = [self.cloudDeviceList objectForKey:mac];
-                        if (!device) {
-                            // 不存在，则需要创建
-                            DLKnowDevice *knowDevice = [self.centralManager.knownPeripherals objectForKey:mac];
-                            CBPeripheral *peripheral = knowDevice.peripheral;
-                            device = [DLDevice device:peripheral];
-                            device.rssi = knowDevice.rssi;
-                        }
-                        device.mac = mac;
-                        device.cloudID = [cloudDevice integerValueForKey:@"id" defaultValue:-1];
-                        device.deviceName = [cloudDevice stringValueForKey:@"name" defaultValue:@""];
-                        device.coordinate = [cloudDevice stringValueForKey:@"gps" defaultValue:@""];
-                        [newList setValue:device forKey:mac];
-                    }
-                    self.cloudDeviceList = newList;
+                    [common saveCloudList:cloudDevices];
                 }
             }
             else {
                 NSLog(@"获取云端设备列表失败: %@", [responseObject stringValueForKey:@"message" defaultValue:@""]);
-                self.cloudDeviceList = [NSMutableDictionary dictionaryWithDictionary:[common getCloudList]];
+                cloudDevices = [common getCloudList];
             }
+        }
+        if (cloudDevices.count > 0) {
+            NSMutableDictionary *newList = [NSMutableDictionary dictionary];
+            for (NSDictionary *cloudDevice in cloudDevices) {
+                NSString *mac = [cloudDevice stringValueForKey:@"mac" defaultValue:@""];
+                DLDevice *device = [self.cloudDeviceList objectForKey:mac];
+                if (!device) {
+                    // 不存在，则需要创建
+                    DLKnowDevice *knowDevice = [self.centralManager.knownPeripherals objectForKey:mac];
+                    CBPeripheral *peripheral = knowDevice.peripheral;
+                    device = [DLDevice device:peripheral];
+                    device.rssi = knowDevice.rssi;
+                }
+                device.mac = mac;
+                device.cloudID = [cloudDevice integerValueForKey:@"id" defaultValue:-1];
+                device.deviceName = [cloudDevice stringValueForKey:@"name" defaultValue:@""];
+                device.coordinate = [cloudDevice stringValueForKey:@"gps" defaultValue:@""];
+                [newList setValue:device forKey:mac];
+            }
+            self.cloudDeviceList = newList;
         }
         completion(self, [self.cloudDeviceList copy]);
         [self autoConnectCloudDevice];
