@@ -459,6 +459,8 @@
 
 - (void)setOnline:(BOOL)online {
     if (_online != online) {
+        NSLog(@"设置在线状态: %d", online);
+        _online = online;
         [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(online)];
         [[InCommon sharedInstance] uploadDeviceLocation:self];
         if (!online) {

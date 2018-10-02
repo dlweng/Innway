@@ -12,12 +12,17 @@
 @class DLDevice;
 @protocol InDeviceMenuViewControllerDelegate<NSObject>
 - (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device;
+- (void)menuViewController:(InDeviceMenuViewController *)menuVC moveDown:(CGFloat)down;
 - (void)deviceSettingBtnDidClick:(DLDevice *)device;
 @end
 
 @interface InDeviceMenuViewController : UIViewController
 
-+ (instancetype)menuViewController;
++ (instancetype)menuViewControllerWithCloudList:(NSArray *)cloudList;
+- (void)reloadView:(NSArray *)cloudList;
+
 @property (nonatomic, weak) id<InDeviceMenuViewControllerDelegate> delegate;
+// YES: 标识能向下移动， NO:表示能向上移动
+@property (nonatomic, assign) BOOL down;
 
 @end

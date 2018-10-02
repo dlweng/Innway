@@ -82,6 +82,7 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
     self.type = InSearch;
     [self updateView];
     [self stopAnimation];
+    [self hideAllWating];
     self.findDeviceMac = nil;
 }
 
@@ -182,7 +183,14 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
                 self.findDeviceMac = mac;
             }
         }
-    } didEndDiscoverDeviceEvent:nil];
+    } didEndDiscoverDeviceEvent:^(DLCentralManager *manager, NSMutableDictionary<NSString *,DLKnowDevice *> *knownPeripherals) {
+        if (!find) {
+            [self stopAnimation];
+            [self hideAllWating];
+            self.type = InFailed;
+            [self updateView];
+        }
+    }];
 }
 
 - (void)addNewDevice {
@@ -212,6 +220,12 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 
 - (void)stopAnimation {
     [self.searchAnimationTimer setFireDate:[NSDate distantFuture]];
+}
+
+- (void)hideAllWating {
+    self.waiting1.hidden = YES;
+    self.waiting2.hidden = YES;
+    self.waiting3.hidden = YES;
 }
 
 - (void)animation {

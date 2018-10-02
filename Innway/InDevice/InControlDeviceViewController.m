@@ -41,6 +41,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *deviceImageView;
 @property (weak, nonatomic) IBOutlet UIView *bottomBodyView;
 @property (weak, nonatomic) IBOutlet UIView *backgroupView;
+@property (nonatomic, strong)InDeviceMenuViewController *deviceMenuVC;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceMenuHeightConstraint;
 
 
 @end
@@ -49,6 +51,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // 自动连接云端设备
+    [[DLCloudDeviceManager sharedInstance] autoConnectCloudDevice];
+    if (!self.device) {
+        [self sortDeviceList];
+    }
+    
+    // 界面调整
     self.topBodyViewTopConstraint.constant += 64;
     if ([UIScreen mainScreen].bounds.size.height == 812) { //iphonex
         //iphoneX底部和顶部需要多留20px空白
@@ -61,8 +70,6 @@
     self.controlDeviceBtn.layer.cornerRadius = 5;
     self.bottomBodyView.layer.masksToBounds = YES;
     self.bottomBodyView.layer.cornerRadius = 5;
-    self.deviceMenuBackgroupView.layer.masksToBounds = YES;
-    self.deviceMenuBackgroupView.layer.cornerRadius = 5;
     
     [self setupNarBar];
     [self addSettingView];
@@ -87,16 +94,22 @@
     [self.device getDeviceInfo];
     [self updateAnnotation];
     [self updateUI];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceChangeOnline:) name:DeviceOnlineChangeNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceOnlineChangeNotification object:nil];
 }
 
 
 - (void)addDeviceMenu {
-    InDeviceMenuViewController *deviceMenuVC = [InDeviceMenuViewController menuViewController];
-    deviceMenuVC.delegate = self;
-    [self addChildViewController:deviceMenuVC];
-    [self.deviceMenuBackgroupView addSubview:deviceMenuVC.view];
-    deviceMenuVC.view.frame = self.deviceMenuBackgroupView.bounds;
-    self.deviceMenuView.hidden = YES;
+    self.deviceMenuVC = [InDeviceMenuViewController menuViewControllerWithCloudList:[self sortDeviceList]];
+    self.deviceMenuVC.delegate = self;
+    [self addChildViewController:self.deviceMenuVC];
+    [self.deviceMenuView addSubview:self.deviceMenuVC.view];
+    self.deviceMenuVC.view.frame = self.deviceMenuView.bounds;
+    [self menuViewController:self.deviceMenuVC moveDown:MAXFLOAT];
 }
 
 - (void)addSettingView {
@@ -174,16 +187,17 @@
 }
 
 - (void)goToMenu {
-    BOOL isshow = self.deviceMenuView.hidden;
-    [UIView animateWithDuration:0.25 animations:^{
-        self.deviceMenuView.hidden = !isshow;
-        if (isshow) {
-            self.bottomBodyView.hidden = YES;
-        }
-        else {
-            self.bottomBodyView.hidden = NO;
-        }
-    }];
+//    BOOL isshow = self.deviceMenuView.hidden;
+//    [UIView animateWithDuration:0.25 animations:^{
+//        self.deviceMenuView.hidden = !isshow;
+//        if (isshow) {
+//            self.bottomBodyView.hidden = YES;
+//        }
+//        else {
+//            self.bottomBodyView.hidden = NO;
+//            [self.deviceMenuVC reloadView:[self sortDeviceList]];
+//        }
+//    }];
 }
 
 #pragma mark - Action
@@ -221,55 +235,11 @@
 }
 
 - (void)updateUI {
-    //根据设备的信息界面
-//    self.device.lastData
-    self.deviceNameLabel.text = self.device.deviceName;
-    self.deviceImageView.image = [UIImage imageNamed:[[InCommon sharedInstance] getImageName:self.device.rssi]];
-    if (self.device.data.count > 0) {
-        NSString *batteryImageName = @"10";
-        NSInteger battery = [self.device.data integerValueForKey:ElectricKey defaultValue:0];
-        if (battery > 90) {
-            batteryImageName = @"100";
-        }
-        else if (battery > 80) {
-            batteryImageName = @"90";
-        }
-        else if (battery > 70) {
-            batteryImageName = @"80";
-        }
-        else if (battery > 60) {
-            batteryImageName = @"70";
-        }
-        else if (battery > 50) {
-            batteryImageName = @"60";
-        }
-        else if (battery > 40) {
-            batteryImageName = @"50";
-        }
-        else if (battery > 30) {
-            batteryImageName = @"40";
-        }
-        else if (battery > 20) {
-            batteryImageName = @"30";
-        }
-        else if (battery > 10) {
-            batteryImageName = @"20";
-        } else if(battery >= 5){
-            batteryImageName = @"10";
-        } else if(battery > 0){
-            batteryImageName = @"5";
-        } else if(battery == 0){
-            batteryImageName = @"0";
-        }
-        [self.battery setBackgroundImage:[UIImage imageNamed:batteryImageName] forState:UIControlStateNormal];
-        [self.battery setTitle:[NSString stringWithFormat:@"%@%%", batteryImageName] forState:UIControlStateNormal];
-        if (battery > 20) {
-            [self.battery setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        }
-        else {
-            [self.battery setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        }
-    }
+    NSString *deviceName = self.device.deviceName;
+    deviceName = @"Lily";
+    [self.controlDeviceBtn setTitle:[NSString stringWithFormat:@"Ring Innway %@", deviceName] forState:UIControlStateNormal];
+    [self.deviceMenuVC reloadView:nil];
+    [self updateAnnotation];
 }
 
 - (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data{
@@ -279,39 +249,41 @@
 }
 
 - (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device {
-    if (!device.online) {
-        if (device.rssi.integerValue > -100) {
-            [InAlertTool showHUDAddedTo:self.view animated:YES];
-            [[DLCloudDeviceManager sharedInstance] addDevice:device.mac completion:^(DLCloudDeviceManager *manager, DLDevice *newdevice, NSError *error) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                if ([newdevice.mac isEqualToString:device.mac]) {
-                    if (error) {
-                        if (error.code == -1) {
-                            [InAlertTool showAlertAutoDisappear:error.localizedDescription];
-                            return ;
-                        }
-                        [InAlertTool showAlertAutoDisappear:@"建立连接失败"];
-                        return ;
-                    }
-                    [self goToMenu];
-                    [self updateDevice:newdevice];
-                }
-            }];
-        }
-        return;
-    }
-    [self goToMenu];
+    [self menuViewController:self.deviceMenuVC moveDown:MAXFLOAT];
     if (device != self.device) {
         [self updateDevice:device];
     }
+}
+
+- (void)menuViewController:(InDeviceMenuViewController *)menuVC moveDown:(CGFloat)down {
+    if (down > 0) {
+        //往下
+        CGFloat minHeight = 190;
+        if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 1) {
+            minHeight = 142;
+        }
+        CGFloat maxMenuHeight = [UIScreen mainScreen].bounds.size.height * 0.5;
+        if (maxMenuHeight + self.deviceMenuHeightConstraint.constant - down < minHeight) {
+            down = maxMenuHeight + self.deviceMenuHeightConstraint.constant - minHeight;
+            menuVC.down = NO;
+        }
+    }
+    else {
+        // 往上
+        if (self.deviceMenuHeightConstraint.constant - down > 0) {
+            down = self.deviceMenuHeightConstraint.constant;
+            menuVC.down = YES;
+        }
+    }
+    self.deviceMenuHeightConstraint.constant -= down;
 }
 
 - (void)updateDevice:(DLDevice *)device {
     self.device.delegate = nil;
     self.device = device;
     self.device.delegate = self;
+    [self.deviceMenuVC reloadView:[self sortDeviceList]];
     [self.device getDeviceInfo];
-    [self updateAnnotation];
     [self updateUI];
     [self toLocation];
 }
@@ -346,6 +318,11 @@
     return nil;
 }
 
+- (void)deviceChangeOnline:(NSNotification *)notification {
+    NSLog(@"接收到设备状态改变的通知: %@", notification.object);
+    [self updateAnnotation];
+}
+
 - (void)updateAnnotation{
     NSMutableDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
     for (NSString *mac in cloudDeviceList.allKeys) {
@@ -372,6 +349,52 @@
     if (device.mac == self.device.mac) {
         [self updateUI];
     }
+}
+
+- (NSArray *)sortDeviceList {
+    NSDictionary *cloudList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+    if (cloudList.count == 0) {
+        return @[];
+    }
+    if (!self.device) {
+        for (NSString *mac in cloudList.allKeys) {
+            //第一个连接的设备是赋值为self.device
+            DLDevice *device = cloudList[mac];
+            if (device.connected) {
+                self.device = device;
+                break;
+            }
+        }
+        
+    }
+    if (!self.device) {
+        //全部设备都没有连接，将第一个设备设置为self.device
+        self.device = cloudList[cloudList.allKeys[0]];
+    }
+    NSMutableArray *connectList = [NSMutableArray array];
+    [connectList addObject:self.device];
+    NSMutableArray *disConnectList = [NSMutableArray array];
+    // 先将已经连接的筛选出来
+    for (NSString *mac in cloudList.allKeys) {
+        DLDevice *device = cloudList[mac];
+        if (device != self.device) {
+            if (device.connected) {
+                [connectList addObject:device];
+            }
+            else {
+                [disConnectList addObject:device];
+            }
+        }
+    }
+    [connectList addObjectsFromArray:disConnectList];
+    return [connectList copy];
+}
+
+- (NSMutableDictionary *)deviceAnnotation {
+    if (!_deviceAnnotation) {
+        _deviceAnnotation = [NSMutableDictionary dictionary];
+    }
+    return _deviceAnnotation;
 }
 
 @end

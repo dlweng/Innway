@@ -7,15 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-@class DLDevice;
+#import "DLDevice.h"
+
 @class InDeviceMenuCell1;
 @protocol InDeviceMenuCell1Delegate<NSObject>
 - (void)deviceMenuCellSettingBtnDidClick:(InDeviceMenuCell1 *)cell;
 @end
 @interface InDeviceMenuCell1 : UITableViewCell
-@property (weak, nonatomic) IBOutlet UIImageView *iconView;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UIButton *deviceSettingBtn;
 @property (nonatomic, strong) DLDevice *device;
 @property (nonatomic, weak) id<InDeviceMenuCell1Delegate> delegate;

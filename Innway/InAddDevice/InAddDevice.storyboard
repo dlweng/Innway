@@ -500,7 +500,7 @@
                         <outlet property="titleTipLabel" destination="kXk-nB-kjf" id="S7Q-Zn-sFj"/>
                         <outlet property="topOptionViewHeightConstraint" destination="oQ8-6m-oAR" id="dKv-CG-11D"/>
                         <outlet property="tryAagainLabel" destination="pNL-DA-a8n" id="asO-Tg-nTO"/>
-                        <outlet property="waiting1" destination="rh7-bj-yke" id="i5B-1n-Tak"/>
+                        <outlet property="waiting1" destination="cDd-Rb-ueA" id="VUH-15-5eg"/>
                         <outlet property="waiting2" destination="rh7-bj-yke" id="MFT-rf-4hU"/>
                         <outlet property="waiting3" destination="s5N-v3-JNK" id="jI0-k9-RKm"/>
                     </connections>

@@ -9,12 +9,12 @@
 #import "InAddDeviceStartViewController.h"
 
 @interface InAddDeviceStartViewController ()
-
+@property (nonatomic, assign) BOOL canBack;
 @end
 
 @implementation InAddDeviceStartViewController
 
-+ (instancetype)addDeviceStartViewController {
++ (instancetype)addDeviceStartViewController:(BOOL)canBack {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"InAddDevice" bundle:nil];
     InAddDeviceStartViewController *addDeviceStartVC = [sb instantiateViewControllerWithIdentifier:@"InAddDeviceStartViewController"];
     return addDeviceStartVC;
@@ -24,6 +24,7 @@
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"Add device";
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {

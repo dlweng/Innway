@@ -14,18 +14,24 @@
 #import "InDeviceMenuCell1.h"
 #import "InDeviceMenuCell2.h"
 #import "InCommon.h"
+#import "InAddDeviceStartViewController.h"
 
 @interface InDeviceMenuViewController ()<UITableViewDelegate, UITableViewDataSource, InDeviceMenuCell1Delegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) NSDictionary *cloudDeviceList;
+@property (nonatomic, strong) NSArray *cloudList;
+@property (weak, nonatomic) IBOutlet UIView *upDownView;
+@property (nonatomic, assign) CGPoint oldPoint;
+@property (weak, nonatomic) IBOutlet UIImageView *upDownImage;
+
 @end
 
 @implementation InDeviceMenuViewController
 
-+ (instancetype)menuViewController {
++ (instancetype)menuViewControllerWithCloudList:(NSArray *)cloudList {
     InDeviceMenuViewController *menuVC = [[InDeviceMenuViewController alloc] init];
     menuVC.tableView.backgroundColor = [UIColor redColor];
+    menuVC.cloudList = cloudList;
     return menuVC;
 }
 
@@ -37,11 +43,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];
     self.view.backgroundColor = [UIColor clearColor];
     self.tableView.backgroundColor = [UIColor clearColor];
+    
+    self.upDownView.userInteractionEnabled = YES;
+    [self.upDownView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(upDown:)]];
+    self.down = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
 }
 
 - (void)dealloc {
@@ -54,18 +63,18 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.cloudDeviceList.allKeys.count + 1;
+    return self.cloudList.count + 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == self.cloudDeviceList.count) {
+    if (indexPath.row == self.cloudList.count) {
         return 50;
     }
     return 70;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == self.cloudDeviceList.allKeys.count) {
+    if (indexPath.row == self.cloudList.count) {
         InDeviceMenuCell2 *cell = [tableView dequeueReusableCellWithIdentifier:InDeviceMenuCell2ReuseIdentifier];
         cell.backgroundColor = [UIColor clearColor];
         return cell;
@@ -73,10 +82,7 @@
     else {
         InDeviceMenuCell1 *cell = [tableView dequeueReusableCellWithIdentifier:InDeviceMenuCell1ReuseIdentifier];
         cell.backgroundColor = [UIColor clearColor];
-        NSString *identify = self.cloudDeviceList.allKeys[indexPath.row];
-        DLDevice *device = self.cloudDeviceList[identify];
-        cell.iconView.image = [UIImage imageNamed:[[InCommon sharedInstance] getImageName:device.rssi]];
-        cell.titleLabel.text = device.deviceName;
+        DLDevice *device = self.cloudList[indexPath.row];
         cell.device = device;
         cell.delegate = self;
         return cell;
@@ -85,25 +91,21 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    if (indexPath.row == self.cloudDeviceList.allKeys.count) {
+    if (indexPath.row == self.cloudList.count) {
         NSLog(@"self.parentViewController = %@", self.parentViewController);
-        if (self.parentViewController.navigationController.viewControllers.lastObject == self.parentViewController) {
-             if(self.parentViewController.navigationController.viewControllers.count >= 2) {
-                UIViewController *vc = self.parentViewController.navigationController.viewControllers[1];
-                if ([vc isKindOfClass:[InDeviceListViewController class]]) {
-                    [self.parentViewController.navigationController popToViewController:vc animated:YES];
-                }
-            }
-        }
-        
+        [self pushToAddDeviceController];
     }
     else {
-        NSString *mac = self.cloudDeviceList.allKeys[indexPath.row];
-        DLDevice *device = self.cloudDeviceList[mac];
+        DLDevice *device = self.cloudList[indexPath.row];
         if (self.delegate) {
             [self.delegate menuViewController:self didSelectedDevice:device];
         }
     }
+}
+
+- (void)pushToAddDeviceController {
+    InAddDeviceStartViewController *addDeviceStartVC = [InAddDeviceStartViewController addDeviceStartViewController:YES];
+    [self.navigationController pushViewController:addDeviceStartVC animated:YES];
 }
 
 - (void)deviceOnlineChange:(NSNotification *)noti {
@@ -119,5 +121,38 @@
 - (void)deviceRSSIChange:(NSNotification *)noti {
     [self.tableView reloadData];
 }
+
+- (void)reloadView:(NSArray *)cloudList {
+    if (cloudList) {
+        self.cloudList = cloudList;
+    }
+    [self.tableView reloadData];
+}
+
+- (void)upDown:(UIPanGestureRecognizer *)pan {
+    NSLog(@"pan = %@", [NSValue valueWithCGPoint:[pan locationInView:self.view]]);
+    CGPoint point = [pan locationInView:self.view];
+    if (self.down) {
+        if (point.y > 0) {
+            [self.delegate menuViewController:self moveDown:point.y];
+        }
+    }
+    else {
+        if (point.y < 0) {
+            [self.delegate menuViewController:self moveDown:point.y];
+        }
+    }
+}
+
+- (void)setDown:(BOOL)down {
+    _down = down;
+    if (down) {
+        self.upDownImage.image = [UIImage imageNamed:@"down"];
+    }
+    else {
+        self.upDownImage.image = [UIImage imageNamed:@"up"];
+    }
+}
+
 
 @end

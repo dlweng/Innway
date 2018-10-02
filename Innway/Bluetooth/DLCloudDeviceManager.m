@@ -9,6 +9,7 @@
 #import "DLCloudDeviceManager.h"
 #import "InCommon.h"
 
+
 static DLCloudDeviceManager *instance = nil;
 static BOOL deleteing = NO;
 @interface DLCloudDeviceManager()

@@ -11,6 +11,7 @@
 #import "InAlertTableViewController.h"
 #import "DLCloudDeviceManager.h"
 #import "InDeviceListViewController.h"
+#import "InAddDeviceStartViewController.h"
 #define InDeviceSettingCellReuseIdentifier @"InDeviceSettingCell"
 
 @interface InDeviceSettingViewController ()<UITableViewDataSource, UITableViewDelegate, DLDeviceDelegate>
@@ -73,11 +74,15 @@
             [InAlertTool showAlertWithTip:@"设备删除失败"];
         }
         else {
-            if(self.navigationController.viewControllers.count >= 3) {
-                UIViewController *vc = self.navigationController.viewControllers[2];
-                if ([vc isKindOfClass:[InDeviceListViewController class]]) {
-                    [self.navigationController popToViewController:vc animated:YES];
+            if (manager.cloudDeviceList.count > 0) {
+                if (self.navigationController.viewControllers.lastObject == self) {
+                    [self.navigationController popViewControllerAnimated:YES];
                 }
+            }
+            else {
+                // 跳转到添加界面
+                InAddDeviceStartViewController *addDeviceVC = [InAddDeviceStartViewController addDeviceStartViewController:NO];
+                [self.navigationController pushViewController:addDeviceVC animated:YES];
             }
         }
     }];

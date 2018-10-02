@@ -207,13 +207,13 @@ static DLCentralManager *instance = nil;
 //    }
     
 // 有效代码
+    NSLog(@"发现新设备: %@, %@", peripheral, RSSI);
     if ([self effectivePeripheral:advertisementData]) {
         NSString *mac = [self getDeviceMac:advertisementData];
         if (mac.length > 0) {
             DLKnowDevice *knowDevice = [_knownPeripherals objectForKey:mac];
             if (!knowDevice) {
                 // 不存在该设备，添加
-                NSLog(@"发现新设备: %@, %@", peripheral, RSSI);
                 knowDevice = [[DLKnowDevice alloc] init];
                 knowDevice.peripheral = peripheral;
                 knowDevice.rssi = RSSI;
@@ -224,6 +224,12 @@ static DLCentralManager *instance = nil;
                 }
             }
             else {
+                if(![DLCloudDeviceManager sharedInstance].cloudDeviceList[mac]) {
+                    // 发现旧设备，但不在云端列表，也返回
+                    if (self.discoverEvent) {
+                        self.discoverEvent(self, peripheral, mac);
+                    }
+                }
                 NSLog(@"发现旧设备, 更新RSSI: %@, %@", peripheral, RSSI);
                 //存在，更新rssi
                 knowDevice.rssi = RSSI;
