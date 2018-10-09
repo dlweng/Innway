@@ -254,10 +254,13 @@ static DLCentralManager *instance = nil;
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
     NSLog(@"断开与设备连接结果: peripheral = %@, error = %@", peripheral, error);
+    if (error) {
+        // 被动断开连接时，error才不为Nil，此时才需要去做重连
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceDisconnectNotification object:peripheral];
+    }
     if (self.disConnectDeviceCompletion) {
         self.disConnectDeviceCompletion(self, peripheral, error);
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceDisconnectNotification object:peripheral];
 }
 
 //#pragma mark - List
