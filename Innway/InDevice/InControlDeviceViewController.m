@@ -16,6 +16,8 @@
 #import "InCommon.h"
 #import "InLoginViewController.h"
 
+#define coverViewAlpha 0.85
+
 @interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *controlBtnBottomGapContraint;
 @property (weak, nonatomic) IBOutlet UIButton *controlDeviceBtn;
@@ -23,9 +25,6 @@
 @property (weak, nonatomic) IBOutlet UIView *topBodyView;
 @property (nonatomic, weak) UIView *settingView;
 @property (nonatomic, weak) UIViewController *settingVC;
-
-@property (nonatomic, strong) UIBarButtonItem *settingImageBarButton;
-@property (nonatomic, strong) UIBarButtonItem *SettingTitleBarButton;
 
 @property (weak, nonatomic) IBOutlet UIView *deviceMenuView;
 @property (weak, nonatomic) IBOutlet UIView *deviceMenuBackgroupView;
@@ -44,7 +43,7 @@
 @property (weak, nonatomic) IBOutlet UIView *backgroupView;
 @property (nonatomic, strong)InDeviceMenuViewController *deviceMenuVC;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceMenuHeightConstraint;
-
+@property (nonatomic, weak) UIView *coverView;
 
 @end
 
@@ -73,8 +72,8 @@
     self.bottomBodyView.layer.cornerRadius = 5;
     
     [self setupNarBar];
-    [self addSettingView];
     [self addDeviceMenu];
+    [self addSettingView];
     self.topBodyView.backgroundColor = [UIColor redColor];
     
     self.mapView.delegate = self;
@@ -114,6 +113,16 @@
 }
 
 - (void)addSettingView {
+    // 添加覆盖层
+    UIView *view = [[UIView alloc] init];
+    [self.navigationController.view.superview addSubview:view];
+    view.frame = [UIScreen mainScreen].bounds;
+    view.backgroundColor = [UIColor blackColor];
+    [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideCoverView)]];
+    view.alpha = 0;
+    self.coverView = view;
+    
+    // 添加用户设置界面
     InUserSettingViewController *settingVC = [[InUserSettingViewController alloc] init];
     [self.navigationController addChildViewController:settingVC];
     [self.navigationController.view.superview addSubview:settingVC.view];
@@ -142,35 +151,26 @@
     NSLog(@"self.view.frame = %@", [NSValue valueWithCGRect:self.view.frame]);
     NSLog(@"bounds = %@", [NSValue valueWithCGRect:[UIScreen mainScreen].bounds]);
     // 隐藏 settingView
-    [self settingViewController:settingVC touchEnd:CGPointMake(MAXFLOAT, 0)];
+    [self hideSettingView];
 }
+
+- (void)hideSettingView {
+    [self settingViewController:self.settingVC touchEnd:CGPointMake(MAXFLOAT, 0)];
+}
+
 
 - (void)setupNarBar {
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"innwayLOGO"]];
-    self.settingImageBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_setting"] style:UIBarButtonItemStylePlain target:self action:@selector(goToSettingVC)];
-    //用户设置
-    self.SettingTitleBarButton = [[UIBarButtonItem alloc] initWithTitle:@"用户设置" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.leftBarButtonItem = self.settingImageBarButton;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user"] style:UIBarButtonItemStylePlain target:self action:@selector(goToSettingVC)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_menu"] style:UIBarButtonItemStylePlain target:self action:@selector(goToMenu)];
 }
 
 - (void)goToSettingVC {
+    self.coverView.alpha = coverViewAlpha; // 显示覆盖层
     [self settingViewController:self.settingVC touchEnd:CGPointMake(-MAXFLOAT, 0)];
-    self.navigationItem.leftBarButtonItem = self.SettingTitleBarButton;
 }
 
 - (void)goToMenu {
-//    BOOL isshow = self.deviceMenuView.hidden;
-//    [UIView animateWithDuration:0.25 animations:^{
-//        self.deviceMenuView.hidden = !isshow;
-//        if (isshow) {
-//            self.bottomBodyView.hidden = YES;
-//        }
-//        else {
-//            self.bottomBodyView.hidden = NO;
-//            [self.deviceMenuVC reloadView:[self sortDeviceList]];
-//        }
-//    }];
 }
 
 #pragma mark - Action
@@ -266,8 +266,10 @@
     else {
         frame.origin.x = x;
     }
+    CGFloat alpha = (width + frame.origin.x) / width * coverViewAlpha;
     [UIView animateWithDuration:0.05 animations:^{
         settingVC.view.frame = frame;
+        self.coverView.alpha = alpha;
     }];
 }
 
@@ -281,10 +283,11 @@
     else if (x <= -0.5 * width){
         frame.origin.x = -width;
     }
+    CGFloat alpha = (width + frame.origin.x) / width * coverViewAlpha;
     [UIView animateWithDuration:0.25 animations:^{
         settingVC.view.frame = frame;
+        self.coverView.alpha = alpha;
     }];
-    self.navigationItem.leftBarButtonItem = self.settingImageBarButton;
 }
 
 - (void)updateDevice:(DLDevice *)device {
@@ -399,11 +402,16 @@
     return [connectList copy];
 }
 
+#pragma mark - Properity
 - (NSMutableDictionary *)deviceAnnotation {
     if (!_deviceAnnotation) {
         _deviceAnnotation = [NSMutableDictionary dictionary];
     }
     return _deviceAnnotation;
+}
+
+- (void)hideCoverView {
+    [self hideSettingView];
 }
 
 @end
