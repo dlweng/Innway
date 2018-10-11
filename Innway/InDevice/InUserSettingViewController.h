@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class InUserSettingViewController;
+@protocol InUserSettingViewControllerDelegate<NSObject>
+- (void)settingViewController:(InUserSettingViewController *)settingVC touchMove:(CGPoint)move;
+- (void)settingViewController:(InUserSettingViewController *)settingVC touchEnd:(CGPoint)move;
+@end
+
 @interface InUserSettingViewController : UIViewController
-
-@property (nonatomic, strong) void(^leftGestureCompleted) (UIGestureRecognizer *gesture);
 @property (nonatomic, strong) void(^logoutUser) (void);
-
+@property (nonatomic, weak) id<InUserSettingViewControllerDelegate> delegate;
 @end

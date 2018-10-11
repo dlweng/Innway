@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UISwitch *locationBtn;
 @property (weak, nonatomic) IBOutlet UIButton *logoutBtn;
+@property (nonatomic, assign) CGPoint perPoint;
+@property (nonatomic, assign) CGPoint movePoint;
 
 @end
 
@@ -27,9 +29,6 @@
     self.tableView.scrollEnabled = NO;
     
     [self addLocationBtn];
-    UISwipeGestureRecognizer *leftGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(leftGestureAction:)];
-    [leftGesture setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [self.view addGestureRecognizer:leftGesture];
     
     self.logoutBtn.layer.masksToBounds = YES;
     self.logoutBtn.layer.cornerRadius = 10;
@@ -44,12 +43,6 @@
 
 - (void)locationBtnDidClick {
     NSLog(@"按钮被点击, %d", self.locationBtn.isOn);
-}
-
-- (void)leftGestureAction: (UISwipeGestureRecognizer *)gesture {
-    if (self.leftGestureCompleted) {
-        self.leftGestureCompleted(gesture);
-    }
 }
 
 // 注销账户
@@ -128,6 +121,39 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    CGPoint originLocation = [touch locationInView:self.view];
+    self.perPoint = originLocation;
+    NSLog(@"originLocation = %@", [NSValue valueWithCGPoint:originLocation]);
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"touches.count = %zd", touches.count);
+    UITouch *touch = [touches anyObject];
+    CGPoint currentLocation = [touch locationInView:self.view];
+    NSLog(@"perPoint = %@", [NSValue valueWithCGPoint:self.perPoint]);
+    NSLog(@"currentLocation = %@", [NSValue valueWithCGPoint:currentLocation]);
+    CGPoint movePoint = CGPointMake(self.movePoint.x + self.perPoint.x - currentLocation.x, self.perPoint.y - currentLocation.y);
+    self.perPoint = currentLocation;
+    self.movePoint = movePoint;
+    NSLog(@"movePoint = %@", [NSValue valueWithCGPoint:movePoint]);
+    if ([self.delegate respondsToSelector:@selector(settingViewController:touchMove:)]) {
+        [self.delegate settingViewController:self touchMove:movePoint];
+    }
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    CGPoint currentLocation = [touch locationInView:self.view];
+    CGPoint movePoint = CGPointMake(self.perPoint.x - currentLocation.x, self.perPoint.y - currentLocation.y);
+    self.perPoint = currentLocation;
+    NSLog(@"movePoint = %@", [NSValue valueWithCGPoint:movePoint]);
+    if ([self.delegate respondsToSelector:@selector(settingViewController:touchEnd:)]) {
+        [self.delegate settingViewController:self touchEnd:movePoint];
+    }
 }
 
 @end

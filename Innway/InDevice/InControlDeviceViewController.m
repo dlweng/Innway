@@ -16,12 +16,13 @@
 #import "InCommon.h"
 #import "InLoginViewController.h"
 
-@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate, MKMapViewDelegate>
+@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *controlBtnBottomGapContraint;
 @property (weak, nonatomic) IBOutlet UIButton *controlDeviceBtn;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBodyViewTopConstraint;
 @property (weak, nonatomic) IBOutlet UIView *topBodyView;
 @property (nonatomic, weak) UIView *settingView;
+@property (nonatomic, weak) UIViewController *settingVC;
 
 @property (nonatomic, strong) UIBarButtonItem *settingImageBarButton;
 @property (nonatomic, strong) UIBarButtonItem *SettingTitleBarButton;
@@ -114,17 +115,17 @@
 
 - (void)addSettingView {
     InUserSettingViewController *settingVC = [[InUserSettingViewController alloc] init];
-    [self addChildViewController:settingVC];
-    [self.view addSubview:settingVC.view];
+    [self.navigationController addChildViewController:settingVC];
+    [self.navigationController.view.superview addSubview:settingVC.view];
     self.settingView = settingVC.view;
-    CGFloat y = self.topBodyViewTopConstraint.constant;
-    CGFloat width = self.view.frame.size.width * 0.85;
-    CGFloat height = self.view.frame.size.height - y;
-    CGFloat x = -width;
+    CGFloat x = 0;
+    CGFloat y = -44;
+    CGFloat width = [UIScreen mainScreen].bounds.size.width * 0.85;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height-y;
     settingVC.view.frame = CGRectMake(x, y, width, height);
-    settingVC.leftGestureCompleted = ^(UIGestureRecognizer *gesture) {
-            [self showSettingVC:NO];
-    };
+    settingVC.delegate = self;
+    self.settingVC = settingVC;
+    __block UIViewController *weakSettingVC = settingVC;
     settingVC.logoutUser = ^{
         if (self.navigationController.viewControllers.lastObject == self &&
             self.navigationController.viewControllers.count > 2) {
@@ -140,36 +141,8 @@
     NSLog(@"settingView.frame = %@", [NSValue valueWithCGRect:self.settingView.frame]);
     NSLog(@"self.view.frame = %@", [NSValue valueWithCGRect:self.view.frame]);
     NSLog(@"bounds = %@", [NSValue valueWithCGRect:[UIScreen mainScreen].bounds]);
-    self.settingView.hidden = YES;
-}
-
-- (void)showSettingVC: (BOOL)isShow {
-    CGRect frame = self.settingView.frame;
-    CGPoint origin = frame.origin;
-    if (isShow) {
-        //显示
-        origin.x = 0;
-        self.settingView.hidden = NO;
-    }
-    else {
-        CGFloat width = frame.size.width;
-        origin.x = -width;
-    }
-    frame.origin = origin;
-    //动画显示
-    [UIView animateWithDuration:0.35 animations:^{
-        if (isShow) {
-            self.navigationItem.leftBarButtonItem = self.SettingTitleBarButton;
-        }
-        else {
-            self.navigationItem.leftBarButtonItem = self.settingImageBarButton;
-        }
-        self.settingView.frame = frame;
-    } completion:^(BOOL finished) {
-        if (!isShow) {
-            self.settingView.hidden = YES;
-        }
-    }];
+    // 隐藏 settingView
+    [self settingViewController:settingVC touchEnd:CGPointMake(MAXFLOAT, 0)];
 }
 
 - (void)setupNarBar {
@@ -182,7 +155,7 @@
 }
 
 - (void)goToSettingVC {
-    [self showSettingVC:YES];
+    [self settingViewController:self.settingVC touchEnd:CGPointMake(-MAXFLOAT, 0)];
     self.navigationItem.leftBarButtonItem = self.SettingTitleBarButton;
 }
 
@@ -248,6 +221,7 @@
     }
 }
 
+#pragma menuViewDelegate
 - (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device {
     [self menuViewController:self.deviceMenuVC moveDown:MAXFLOAT];
     if (device != self.device) {
@@ -276,6 +250,41 @@
         }
     }
     self.deviceMenuHeightConstraint.constant -= down;
+}
+
+#pragma mark - settingVCDelegate
+- (void)settingViewController:(InUserSettingViewController *)settingVC touchMove:(CGPoint)move {
+    CGFloat width = settingVC.view.bounds.size.width;
+    CGRect frame = settingVC.view.frame;
+    CGFloat x = frame.origin.x - move.x;
+    if (x >= 0) {
+        frame.origin.x = 0;
+    }
+    else if (x <= -width){
+        frame.origin.x = -width;
+    }
+    else {
+        frame.origin.x = x;
+    }
+    [UIView animateWithDuration:0.05 animations:^{
+        settingVC.view.frame = frame;
+    }];
+}
+
+- (void)settingViewController:(InUserSettingViewController *)settingVC touchEnd:(CGPoint)move {
+    CGFloat width = settingVC.view.bounds.size.width;
+    CGRect frame = settingVC.view.frame;
+    CGFloat x = frame.origin.x - move.x;
+    if (x >= -0.5 * width) {
+        frame.origin.x = 0;
+    }
+    else if (x <= -0.5 * width){
+        frame.origin.x = -width;
+    }
+    [UIView animateWithDuration:0.25 animations:^{
+        settingVC.view.frame = frame;
+    }];
+    self.navigationItem.leftBarButtonItem = self.settingImageBarButton;
 }
 
 - (void)updateDevice:(DLDevice *)device {

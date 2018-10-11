@@ -61,6 +61,9 @@
     
     [self.view endEditing:YES];
     [InAlertTool showHUDAddedTo:self.view animated:YES];
+#warning danlyTest - 网络出现异常，直接跳转
+    [self pushToNewCotroller];
+    
     NSDictionary* body = @{@"username":self.emailTextField.text, @"password":self.passwordTextField.text, @"action":@"login"};
     [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         NSLog(@"登陆结果:responseObject = %@, error = %@", responseObject, error);
@@ -90,15 +93,17 @@
 }
 
 - (void)pushToNewCotroller {
-    // 获取云端设备列表
-    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
-        if (cloudList.count == 0) {
-            [self pushToAddDeviceController];
-        }
-        else {
-            [self pushToControlDeviceController];
-        }
-    }];
+#warning danlyTest
+    [self pushToControlDeviceController];
+//    // 获取云端设备列表
+//    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
+//        if (cloudList.count == 0) {
+//            [self pushToAddDeviceController];
+//        }
+//        else {
+//            [self pushToControlDeviceController];
+//        }
+//    }];
 }
 
 - (void)pushToControlDeviceController {
