@@ -16,6 +16,7 @@
 #import "InCommon.h"
 #import "InLoginViewController.h"
 #import "InAddDeviceStartViewController.h"
+#import "InChangePasswordViewController.h"
 
 #define coverViewAlpha 0.85  // 覆盖层的透明度
 
@@ -333,8 +334,8 @@
         case 0:
         {
             NSLog(@"跳转到忘记密码");
-            UIViewController *vc = [[UIViewController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
+            InChangePasswordViewController *changePwdVC = [[InChangePasswordViewController alloc] init];
+            [self safePushViewController:changePwdVC];
             break;
         }
         default:
@@ -449,6 +450,7 @@
 #pragma mark - 安全跳转界面
 - (void)safePopViewController: (UIViewController *)viewController {
     if (self.navigationController.viewControllers.lastObject == self) {
+        [self hideSettingView];
         [self.navigationController popToViewController:viewController animated:YES];
         return;
     }
@@ -456,6 +458,7 @@
 
 - (void)safePushViewController:(UIViewController *)viewController {
     if (self.navigationController.viewControllers.lastObject == self) {
+        [self hideSettingView];
         [self.navigationController pushViewController:viewController animated:YES];
         return;
     }

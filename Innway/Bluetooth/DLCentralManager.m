@@ -19,9 +19,13 @@ static DLCentralManager *instance = nil;
 
 @interface DLCentralManager()<CBCentralManagerDelegate> {
     NSMutableDictionary *_knownPeripherals;
+    // 计算发现时间的延时器
     NSTimer *_scanTimer;
     int _time;
     int _timeout;
+    
+    // 定时去调用一次发现新设备的定时器
+    NSTimer *_repeatScanTimer;
 }
 
 @property (nonatomic, strong) CBCentralManager *manager;
@@ -49,6 +53,8 @@ static DLCentralManager *instance = nil;
         _knownPeripherals = [NSMutableDictionary dictionary];
         _scanTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(run) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_scanTimer forMode:NSRunLoopCommonModes];
+        _repeatScanTimer = [NSTimer timerWithTimeInterval:600 target:self selector:@selector(repeatScanNewDevice) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_repeatScanTimer forMode:NSRunLoopCommonModes];
         
     }
     return self;
@@ -111,6 +117,12 @@ static DLCentralManager *instance = nil;
         [self stopScanning];
     }
 }
+
+- (void)repeatScanNewDevice {
+    NSLog(@"10分钟扫描一次设备");
+    [self startScanDeviceWithTimeout:30 discoverEvent:nil didEndDiscoverDeviceEvent:nil];
+}
+
 - (void)connectToDevice: (CBPeripheral *)peripheral completion:(DidConnectToDeviceEvent)completion {
     if (!peripheral) {
         NSLog(@"不存在设备，无法建立连接");
@@ -155,13 +167,16 @@ static DLCentralManager *instance = nil;
         case CBCentralManagerStatePoweredOff:
         {
             NSLog(@"APP的蓝牙设置处于关闭状态");
+            [_repeatScanTimer setFireDate:[NSDate distantFuture]];
             [self stopScanning];
             break;
         }
         case CBCentralManagerStatePoweredOn:
+        {
+            [_repeatScanTimer setFireDate:[NSDate distantPast]];
             NSLog(@"APP的蓝牙设置处于打开状态");
-            [self startScaning];
             break;
+        }
         case CBCentralManagerStateResetting:
             NSLog(@"APP的蓝牙设置处于重置状态");
             break;

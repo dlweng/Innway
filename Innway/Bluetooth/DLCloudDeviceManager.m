@@ -301,7 +301,6 @@ static BOOL deleteing = NO;
             self.cloudDeviceList = newList;
         }
         completion(self, [self.cloudDeviceList copy]);
-        [self autoConnectCloudDevice];
     }];
     
 }

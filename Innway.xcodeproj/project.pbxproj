@@ -208,6 +208,10 @@
 		33FFB9362171D6E700E6A8C6 /* icon_add_device@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB9342171D6E700E6A8C6 /* icon_add_device@2x.png */; };
 		33FFB9392171DC9400E6A8C6 /* InDeviceSettingFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33FFB9382171DC9400E6A8C6 /* InDeviceSettingFooterView.m */; };
 		33FFB98F2172EF8900E6A8C6 /* InUserSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB98E2172EF8800E6A8C6 /* InUserSettingViewController.xib */; };
+		33FFB993217325C200E6A8C6 /* InChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33FFB991217325C200E6A8C6 /* InChangePasswordViewController.m */; };
+		33FFB994217325C200E6A8C6 /* InChangePasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB992217325C200E6A8C6 /* InChangePasswordViewController.xib */; };
+		33FFB998217327B500E6A8C6 /* InChangePasswordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33FFB996217327B500E6A8C6 /* InChangePasswordCell.m */; };
+		33FFB999217327B500E6A8C6 /* InChangePasswordCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB997217327B500E6A8C6 /* InChangePasswordCell.xib */; };
 		E909AD2F8F529939073B9C99 /* libPods-Innway.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 548C34A61E92F52550403152 /* libPods-Innway.a */; };
 /* End PBXBuildFile section */
 
@@ -455,6 +459,12 @@
 		33FFB9372171DC9400E6A8C6 /* InDeviceSettingFooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InDeviceSettingFooterView.h; sourceTree = "<group>"; };
 		33FFB9382171DC9400E6A8C6 /* InDeviceSettingFooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InDeviceSettingFooterView.m; sourceTree = "<group>"; };
 		33FFB98E2172EF8800E6A8C6 /* InUserSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InUserSettingViewController.xib; sourceTree = "<group>"; };
+		33FFB990217325C200E6A8C6 /* InChangePasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InChangePasswordViewController.h; sourceTree = "<group>"; };
+		33FFB991217325C200E6A8C6 /* InChangePasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InChangePasswordViewController.m; sourceTree = "<group>"; };
+		33FFB992217325C200E6A8C6 /* InChangePasswordViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InChangePasswordViewController.xib; sourceTree = "<group>"; };
+		33FFB995217327B500E6A8C6 /* InChangePasswordCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InChangePasswordCell.h; sourceTree = "<group>"; };
+		33FFB996217327B500E6A8C6 /* InChangePasswordCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InChangePasswordCell.m; sourceTree = "<group>"; };
+		33FFB997217327B500E6A8C6 /* InChangePasswordCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InChangePasswordCell.xib; sourceTree = "<group>"; };
 		548C34A61E92F52550403152 /* libPods-Innway.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Innway.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B71E970440059BC688B692B6 /* Pods-Innway.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Innway.release.xcconfig"; path = "Pods/Target Support Files/Pods-Innway/Pods-Innway.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -510,6 +520,12 @@
 				3385C6C4215743E5005FAB04 /* InInputView.m */,
 				3385C6D821575E5E005FAB04 /* InTextField.h */,
 				3385C6D921575E5E005FAB04 /* InTextField.m */,
+				33FFB990217325C200E6A8C6 /* InChangePasswordViewController.h */,
+				33FFB991217325C200E6A8C6 /* InChangePasswordViewController.m */,
+				33FFB992217325C200E6A8C6 /* InChangePasswordViewController.xib */,
+				33FFB995217327B500E6A8C6 /* InChangePasswordCell.h */,
+				33FFB996217327B500E6A8C6 /* InChangePasswordCell.m */,
+				33FFB997217327B500E6A8C6 /* InChangePasswordCell.xib */,
 			);
 			path = InUser;
 			sourceTree = "<group>";
@@ -907,6 +923,7 @@
 			files = (
 				33FB62E1215D469400C6419C /* RSSI_9@2x.png in Resources */,
 				33FB629B215D453900C6419C /* 20@2x.png in Resources */,
+				33FFB994217325C200E6A8C6 /* InChangePasswordViewController.xib in Resources */,
 				3385C6D621574BCC005FAB04 /* greenLongButton@2x.png in Resources */,
 				33FB62D7215D469400C6419C /* RSSI_9@3x.png in Resources */,
 				3374C7932112077C00F83101 /* warning.png in Resources */,
@@ -939,6 +956,7 @@
 				33FB62DD215D469400C6419C /* RSSI_12@3x.png in Resources */,
 				33FB62A7215D453900C6419C /* 50@2x.png in Resources */,
 				337E505E21623C8500CB6313 /* successCard@2x.png in Resources */,
+				33FFB999217327B500E6A8C6 /* InChangePasswordCell.xib in Resources */,
 				3374C7952112077C00F83101 /* icon_more.png in Resources */,
 				3385C6D421574BCC005FAB04 /* whiteLongButton@2x.png in Resources */,
 				3374C7A02112077C00F83101 /* icon_range_down.png in Resources */,
@@ -1144,6 +1162,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33FFB993217325C200E6A8C6 /* InChangePasswordViewController.m in Sources */,
 				3379A2DE21562500008D1AA2 /* InButton.m in Sources */,
 				337E501F2161F41B00CB6313 /* InAddDeviceStartViewController.m in Sources */,
 				3328800221158F4900C4893B /* InForgetPasswordViewController.m in Sources */,
@@ -1168,6 +1187,7 @@
 				3385C6C221574254005FAB04 /* InRootViewController.m in Sources */,
 				331797F0213AF282000B8DD6 /* InAnnotationView.m in Sources */,
 				3374C74C2112013B00F83101 /* AppDelegate.m in Sources */,
+				33FFB998217327B500E6A8C6 /* InChangePasswordCell.m in Sources */,
 				33EE4C9A2116DBE000CDDC98 /* InDeviceListViewController.m in Sources */,
 				33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */,
 				3385C6DD21578D2B005FAB04 /* InBaseViewController.m in Sources */,
