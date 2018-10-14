@@ -27,7 +27,6 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *controlBtnBottomConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomBtnViewHeightConstaint;
 
-
 // 设置界面
 @property (nonatomic, weak) UIView *settingView;
 @property (nonatomic, weak) UIViewController *settingVC;
@@ -77,15 +76,13 @@
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = NO;
     self.mapView.userTrackingMode = MKUserTrackingModeFollow;
+    
     // 实时监听设备的RSSI值更新
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
-    UINavigationController *nav = [UIApplication sharedApplication].keyWindow.rootViewController;
-    NSLog(@"self.navigationController.viewControllers = %@", nav.viewControllers);
-    NSLog(@"self.navigationController.viewControllers.lastObject = %@", nav.viewControllers.lastObject);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -154,8 +151,15 @@
 //    CGFloat width = [UIScreen mainScreen].bounds.size.width * 0.85;
 //    CGFloat height = [UIScreen mainScreen].bounds.size.height-y;
 //    CGFloat x = -width;
+    // IPHONEX = 1.45
+    // XR = 1.35
+    CGFloat scale = 0.85;
+    if ([InCommon isIPhoneX]) {
+        scale = 1.35;
+    }
     CGFloat y = 0;
-    CGFloat width = [UIScreen mainScreen].bounds.size.width * 1.45;
+    
+    CGFloat width = [UIScreen mainScreen].bounds.size.width * 1.35;
     CGFloat height = [UIScreen mainScreen].bounds.size.height-y;
     CGFloat x = -width;
     settingVC.view.frame = CGRectMake(x, y, width, height);
