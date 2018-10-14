@@ -66,7 +66,6 @@
 		3374C79E2112077C00F83101 /* icon_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C77C2112077C00F83101 /* icon_menu.png */; };
 		3374C79F2112077C00F83101 /* icon_child_device.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C77D2112077C00F83101 /* icon_child_device.png */; };
 		3374C7A02112077C00F83101 /* icon_range_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C77E2112077C00F83101 /* icon_range_down.png */; };
-		3374C7A12112077C00F83101 /* icon_add_device.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C77F2112077C00F83101 /* icon_add_device.png */; };
 		3374C7A22112077C00F83101 /* icon_enter.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7802112077C00F83101 /* icon_enter.png */; };
 		3374C7A32112077C00F83101 /* icon_scan_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7812112077C00F83101 /* icon_scan_line.png */; };
 		3374C7A42112077C00F83101 /* icon_back_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7822112077C00F83101 /* icon_back_dark.png */; };
@@ -146,7 +145,6 @@
 		33E9B81B215BC83300BA3EBE /* innwayLOGO@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E9B819215BC83300BA3EBE /* innwayLOGO@3x.png */; };
 		33E9B81C215BC83300BA3EBE /* innwayLOGO@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E9B81A215BC83300BA3EBE /* innwayLOGO@2x.png */; };
 		33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */; };
-		33EE4C932116C27300CDDC98 /* InUserSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4C912116C27300CDDC98 /* InUserSettingViewController.xib */; };
 		33EE4C9A2116DBE000CDDC98 /* InDeviceMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4C982116DBE000CDDC98 /* InDeviceMenuViewController.m */; };
 		33EE4C9B2116DBE000CDDC98 /* InDeviceMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4C992116DBE000CDDC98 /* InDeviceMenuViewController.xib */; };
 		33EE4C9D2116EDD500CDDC98 /* deviceMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4C9C2116EDD500CDDC98 /* deviceMenu.png */; };
@@ -205,6 +203,14 @@
 		33FB62E1215D469400C6419C /* RSSI_9@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FB62C7215D469400C6419C /* RSSI_9@2x.png */; };
 		33FB62E2215D469400C6419C /* RSSI_5@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FB62C8215D469400C6419C /* RSSI_5@3x.png */; };
 		33FB62E3215D469400C6419C /* RSSI_0@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FB62C9215D469400C6419C /* RSSI_0@3x.png */; };
+		33FFB92F2171A4CD00E6A8C6 /* userBodyBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB92B2171A4CC00E6A8C6 /* userBodyBG@2x.png */; };
+		33FFB9302171A4CD00E6A8C6 /* userIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB92C2171A4CC00E6A8C6 /* userIcon@3x.png */; };
+		33FFB9312171A4CD00E6A8C6 /* userBodyBG@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB92D2171A4CD00E6A8C6 /* userBodyBG@3x.png */; };
+		33FFB9322171A4CD00E6A8C6 /* userIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB92E2171A4CD00E6A8C6 /* userIcon@2x.png */; };
+		33FFB9352171D6E700E6A8C6 /* icon_add_device@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB9332171D6E700E6A8C6 /* icon_add_device@3x.png */; };
+		33FFB9362171D6E700E6A8C6 /* icon_add_device@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB9342171D6E700E6A8C6 /* icon_add_device@2x.png */; };
+		33FFB9392171DC9400E6A8C6 /* InDeviceSettingFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33FFB9382171DC9400E6A8C6 /* InDeviceSettingFooterView.m */; };
+		33FFB98F2172EF8900E6A8C6 /* InUserSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB98E2172EF8800E6A8C6 /* InUserSettingViewController.xib */; };
 		E909AD2F8F529939073B9C99 /* libPods-Innway.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 548C34A61E92F52550403152 /* libPods-Innway.a */; };
 /* End PBXBuildFile section */
 
@@ -295,7 +301,6 @@
 		3374C77C2112077C00F83101 /* icon_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_menu.png; sourceTree = "<group>"; };
 		3374C77D2112077C00F83101 /* icon_child_device.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_child_device.png; sourceTree = "<group>"; };
 		3374C77E2112077C00F83101 /* icon_range_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_range_down.png; sourceTree = "<group>"; };
-		3374C77F2112077C00F83101 /* icon_add_device.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_add_device.png; sourceTree = "<group>"; };
 		3374C7802112077C00F83101 /* icon_enter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_enter.png; sourceTree = "<group>"; };
 		3374C7812112077C00F83101 /* icon_scan_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_scan_line.png; sourceTree = "<group>"; };
 		3374C7822112077C00F83101 /* icon_back_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_back_dark.png; sourceTree = "<group>"; };
@@ -388,7 +393,6 @@
 		33E9B81A215BC83300BA3EBE /* innwayLOGO@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "innwayLOGO@2x.png"; sourceTree = "<group>"; };
 		33EE4C8F2116C27300CDDC98 /* InUserSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InUserSettingViewController.h; sourceTree = "<group>"; };
 		33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InUserSettingViewController.m; sourceTree = "<group>"; };
-		33EE4C912116C27300CDDC98 /* InUserSettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InUserSettingViewController.xib; sourceTree = "<group>"; };
 		33EE4C972116DBE000CDDC98 /* InDeviceMenuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InDeviceMenuViewController.h; sourceTree = "<group>"; };
 		33EE4C982116DBE000CDDC98 /* InDeviceMenuViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InDeviceMenuViewController.m; sourceTree = "<group>"; };
 		33EE4C992116DBE000CDDC98 /* InDeviceMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InDeviceMenuViewController.xib; sourceTree = "<group>"; };
@@ -450,6 +454,15 @@
 		33FB62C7215D469400C6419C /* RSSI_9@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RSSI_9@2x.png"; sourceTree = "<group>"; };
 		33FB62C8215D469400C6419C /* RSSI_5@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RSSI_5@3x.png"; sourceTree = "<group>"; };
 		33FB62C9215D469400C6419C /* RSSI_0@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RSSI_0@3x.png"; sourceTree = "<group>"; };
+		33FFB92B2171A4CC00E6A8C6 /* userBodyBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "userBodyBG@2x.png"; sourceTree = "<group>"; };
+		33FFB92C2171A4CC00E6A8C6 /* userIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "userIcon@3x.png"; sourceTree = "<group>"; };
+		33FFB92D2171A4CD00E6A8C6 /* userBodyBG@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "userBodyBG@3x.png"; sourceTree = "<group>"; };
+		33FFB92E2171A4CD00E6A8C6 /* userIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "userIcon@2x.png"; sourceTree = "<group>"; };
+		33FFB9332171D6E700E6A8C6 /* icon_add_device@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_add_device@3x.png"; sourceTree = "<group>"; };
+		33FFB9342171D6E700E6A8C6 /* icon_add_device@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_add_device@2x.png"; sourceTree = "<group>"; };
+		33FFB9372171DC9400E6A8C6 /* InDeviceSettingFooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InDeviceSettingFooterView.h; sourceTree = "<group>"; };
+		33FFB9382171DC9400E6A8C6 /* InDeviceSettingFooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InDeviceSettingFooterView.m; sourceTree = "<group>"; };
+		33FFB98E2172EF8800E6A8C6 /* InUserSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InUserSettingViewController.xib; sourceTree = "<group>"; };
 		548C34A61E92F52550403152 /* libPods-Innway.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Innway.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B71E970440059BC688B692B6 /* Pods-Innway.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Innway.release.xcconfig"; path = "Pods/Target Support Files/Pods-Innway/Pods-Innway.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -525,7 +538,7 @@
 				33EE4C992116DBE000CDDC98 /* InDeviceMenuViewController.xib */,
 				33EE4C8F2116C27300CDDC98 /* InUserSettingViewController.h */,
 				33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */,
-				33EE4C912116C27300CDDC98 /* InUserSettingViewController.xib */,
+				33FFB98E2172EF8800E6A8C6 /* InUserSettingViewController.xib */,
 				33EE4CA32116FA9B00CDDC98 /* InDeviceSettingViewController.h */,
 				33EE4CA42116FA9B00CDDC98 /* InDeviceSettingViewController.m */,
 				33EE4CA82116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard */,
@@ -537,6 +550,8 @@
 				33179834213BEDEB000B8DD6 /* InDeviceMenuCell2.h */,
 				33179835213BEDEB000B8DD6 /* InDeviceMenuCell2.m */,
 				33179836213BEDEB000B8DD6 /* InDeviceMenuCell2.xib */,
+				33FFB9372171DC9400E6A8C6 /* InDeviceSettingFooterView.h */,
+				33FFB9382171DC9400E6A8C6 /* InDeviceSettingFooterView.m */,
 			);
 			path = InDevice;
 			sourceTree = "<group>";
@@ -628,7 +643,6 @@
 				33287FF8211557BD00C4893B /* icon_password_show.png */,
 				3374C77D2112077C00F83101 /* icon_child_device.png */,
 				3374C77E2112077C00F83101 /* icon_range_down.png */,
-				3374C77F2112077C00F83101 /* icon_add_device.png */,
 				3374C7802112077C00F83101 /* icon_enter.png */,
 				3374C7812112077C00F83101 /* icon_scan_line.png */,
 				3374C7822112077C00F83101 /* icon_back_dark.png */,
@@ -654,6 +668,12 @@
 		3379A2CC21561CDB008D1AA2 /* New */ = {
 			isa = PBXGroup;
 			children = (
+				33FFB9342171D6E700E6A8C6 /* icon_add_device@2x.png */,
+				33FFB9332171D6E700E6A8C6 /* icon_add_device@3x.png */,
+				33FFB92E2171A4CD00E6A8C6 /* userIcon@2x.png */,
+				33FFB92C2171A4CC00E6A8C6 /* userIcon@3x.png */,
+				33FFB92B2171A4CC00E6A8C6 /* userBodyBG@2x.png */,
+				33FFB92D2171A4CD00E6A8C6 /* userBodyBG@3x.png */,
 				33F6BBF7216ECB3300C57AF8 /* user@2x.png */,
 				33F6BBF8216ECB3300C57AF8 /* user@3x.png */,
 				330FB8E82163C6D90032E657 /* greencard@2x.png */,
@@ -919,6 +939,7 @@
 				33FB62A4215D453900C6419C /* 100@2x.png in Resources */,
 				33FB62D8215D469400C6419C /* RSSI_4@2x.png in Resources */,
 				33FB62AE215D45BC00C6419C /* 5@3x.png in Resources */,
+				33FFB9322171A4CD00E6A8C6 /* userIcon@2x.png in Resources */,
 				3379A2D721561E73008D1AA2 /* greenBtn@2x.png in Resources */,
 				3374C7542112013F00F83101 /* Assets.xcassets in Resources */,
 				3374C7972112077C00F83101 /* icon_close.png in Resources */,
@@ -946,12 +967,14 @@
 				337E503C2162030D00CB6313 /* chip@2x.png in Resources */,
 				3385C6E021579759005FAB04 /* narBarBackgroudImage@3x.png in Resources */,
 				33FB62DF215D469400C6419C /* RSSI_8@3x.png in Resources */,
+				33FFB9302171A4CD00E6A8C6 /* userIcon@3x.png in Resources */,
 				33FB629C215D453900C6419C /* 90@3x.png in Resources */,
 				337E505321620E1B00CB6313 /* searchCard@3x.png in Resources */,
 				330FB8EF2163C6DA0032E657 /* greencard@3x.png in Resources */,
 				33EE4CA92116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard in Resources */,
 				3374C7922112077C00F83101 /* icon_child_device_gray.png in Resources */,
 				337E503B2162030D00CB6313 /* tag@3x.png in Resources */,
+				33FFB9352171D6E700E6A8C6 /* icon_add_device@3x.png in Resources */,
 				3374C7AD2112077C00F83101 /* icon_charging.png in Resources */,
 				330FB8ED2163C6DA0032E657 /* greentag@2x.png in Resources */,
 				337E505C21623C8500CB6313 /* successCard@3x.png in Resources */,
@@ -982,6 +1005,7 @@
 				3379A2D421561E73008D1AA2 /* background@3x.png in Resources */,
 				337E50212161F42600CB6313 /* InAddDevice.storyboard in Resources */,
 				337E50292161F60F00CB6313 /* addButton@2x.png in Resources */,
+				33FFB98F2172EF8900E6A8C6 /* InUserSettingViewController.xib in Resources */,
 				3379A2D521561E73008D1AA2 /* whiteBtn@3x.png in Resources */,
 				3328800D21159E9300C4893B /* InDeviceListCell.xib in Resources */,
 				33FB62AF215D45BC00C6419C /* 5@2x.png in Resources */,
@@ -992,6 +1016,7 @@
 				33FB62D3215D469400C6419C /* RSSI_6@2x.png in Resources */,
 				33FB62D2215D469400C6419C /* RSSI_10@2x.png in Resources */,
 				337E505F21623C8500CB6313 /* successCheck@2x.png in Resources */,
+				33FFB9362171D6E700E6A8C6 /* icon_add_device@2x.png in Resources */,
 				3385C6CE2157467D005FAB04 /* Rectangle2copy@2x.png in Resources */,
 				337E50282161F60F00CB6313 /* addButtonBackgroup@2x.png in Resources */,
 				33FB6299215D453900C6419C /* 70@3x.png in Resources */,
@@ -1005,7 +1030,6 @@
 				33FB629E215D453900C6419C /* 40@3x.png in Resources */,
 				337E504E21620E1B00CB6313 /* searchImage@2x.png in Resources */,
 				337E506721623CDA00CB6313 /* failedCard@3x.png in Resources */,
-				3374C7A12112077C00F83101 /* icon_add_device.png in Resources */,
 				337E50392162030D00CB6313 /* Card@3x.png in Resources */,
 				33EE4C9B2116DBE000CDDC98 /* InDeviceMenuViewController.xib in Resources */,
 				3374C7A62112077C00F83101 /* icon_poup.png in Resources */,
@@ -1024,6 +1048,7 @@
 				337E502C2161F60F00CB6313 /* addDeviceBackground@3x.png in Resources */,
 				33FB62AA215D453900C6419C /* 70@2x.png in Resources */,
 				33FB629A215D453900C6419C /* 90@2x.png in Resources */,
+				33FFB9312171A4CD00E6A8C6 /* userBodyBG@3x.png in Resources */,
 				337E503A2162030D00CB6313 /* tag@2x.png in Resources */,
 				3317982B213BEB3D000B8DD6 /* InDeviceMenuCell1.xib in Resources */,
 				331797E2213A6958000B8DD6 /* voice3.mp3 in Resources */,
@@ -1032,6 +1057,7 @@
 				33FB62A1215D453900C6419C /* 40@2x.png in Resources */,
 				3374C7A42112077C00F83101 /* icon_back_dark.png in Resources */,
 				33FB62A3215D453900C6419C /* 30@3x.png in Resources */,
+				33FFB92F2171A4CD00E6A8C6 /* userBodyBG@2x.png in Resources */,
 				3385C6E121579759005FAB04 /* narBarBackgroudImage@2x.png in Resources */,
 				33FB62A5215D453900C6419C /* 80@3x.png in Resources */,
 				3328800F2115A00C00C4893B /* ic_launcher.png in Resources */,
@@ -1058,7 +1084,6 @@
 				3374C7A32112077C00F83101 /* icon_scan_line.png in Resources */,
 				33FB62DA215D469400C6419C /* RSSI_7@2x.png in Resources */,
 				337E505D21623C8500CB6313 /* successCheck@3x.png in Resources */,
-				33EE4C932116C27300CDDC98 /* InUserSettingViewController.xib in Resources */,
 				33F6BBFA216ECB3300C57AF8 /* user@3x.png in Resources */,
 				337E502D2161F60F00CB6313 /* addButton@3x.png in Resources */,
 				33FB62E2215D469400C6419C /* RSSI_5@3x.png in Resources */,
@@ -1142,6 +1167,7 @@
 				338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */,
 				33287FFF21158E7900C4893B /* InRegisterViewController.m in Sources */,
 				33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */,
+				33FFB9392171DC9400E6A8C6 /* InDeviceSettingFooterView.m in Sources */,
 				3374C75A2112013F00F83101 /* main.m in Sources */,
 				337E5040216203A900CB6313 /* InSelectionViewController.m in Sources */,
 				33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */,
@@ -1321,7 +1347,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4F4JWNAD79;
 				INFOPLIST_FILE = Innway/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1340,7 +1366,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4F4JWNAD79;
 				INFOPLIST_FILE = Innway/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

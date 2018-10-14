@@ -12,9 +12,11 @@
 @protocol InUserSettingViewControllerDelegate<NSObject>
 - (void)settingViewController:(InUserSettingViewController *)settingVC touchMove:(CGPoint)move;
 - (void)settingViewController:(InUserSettingViewController *)settingVC touchEnd:(CGPoint)move;
+- (void)settingViewController:(InUserSettingViewController *)settingVC didSelectRow:(NSInteger)row;
 @end
 
 @interface InUserSettingViewController : UIViewController
 @property (nonatomic, strong) void(^logoutUser) (void);
 @property (nonatomic, weak) id<InUserSettingViewControllerDelegate> delegate;
+//+ (instancetype)UserSettingViewController;
 @end

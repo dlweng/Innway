@@ -15,34 +15,35 @@
 #import <MapKit/MapKit.h>
 #import "InCommon.h"
 #import "InLoginViewController.h"
+#import "InAddDeviceStartViewController.h"
 
-#define coverViewAlpha 0.85
+#define coverViewAlpha 0.85  // 覆盖层的透明度
 
 @interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate>
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *controlBtnBottomGapContraint;
-@property (weak, nonatomic) IBOutlet UIButton *controlDeviceBtn;
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBodyViewTopConstraint;
 @property (weak, nonatomic) IBOutlet UIView *topBodyView;
+@property (weak, nonatomic) IBOutlet UIButton *controlDeviceBtn;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *controlBtnBottomConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomBtnViewHeightConstaint;
+
+
+// 设置界面
 @property (nonatomic, weak) UIView *settingView;
 @property (nonatomic, weak) UIViewController *settingVC;
 
-@property (weak, nonatomic) IBOutlet UIView *deviceMenuView;
-@property (weak, nonatomic) IBOutlet UIView *deviceMenuBackgroupView;
+// 设备列表
+@property (weak, nonatomic) IBOutlet UIView *deviceListBodyView;
+@property (weak, nonatomic) IBOutlet UIView *deviceListBackgroupView;
+@property (nonatomic, strong)InDeviceMenuViewController *deviceListVC;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceListBodyHeightConstraint;
 
-@property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+// 地图
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 // 存储掉线设备大头针的位置
 @property (nonatomic, strong) NSMutableDictionary *deviceAnnotation;
 
-@property (weak, nonatomic) IBOutlet UIButton *battery;
-
-@property (weak, nonatomic) IBOutlet UIButton *deviceSettingBtn;
-@property (weak, nonatomic) IBOutlet UIImageView *deviceImageView;
-@property (weak, nonatomic) IBOutlet UIView *bottomBodyView;
-@property (weak, nonatomic) IBOutlet UIView *backgroupView;
-@property (nonatomic, strong)InDeviceMenuViewController *deviceMenuVC;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceMenuHeightConstraint;
+// 显示设置界面的透明覆盖层
 @property (nonatomic, weak) UIView *coverView;
 
 @end
@@ -53,39 +54,38 @@
     [super viewDidLoad];
     // 自动连接云端设备
     [[DLCloudDeviceManager sharedInstance] autoConnectCloudDevice];
-    if (!self.device) {
-        [self sortDeviceList];
-    }
+    // 为设备列表排序
+    [self sortDeviceList];
     
     // 界面调整
     self.topBodyViewTopConstraint.constant += 64;
-    if ([UIScreen mainScreen].bounds.size.height == 812) { //iphonex
+    if ([InCommon isIPhoneX]) { //iphonex
         //iphoneX底部和顶部需要多留20px空白
-        self.controlBtnBottomGapContraint.constant += 20;
         self.topBodyViewTopConstraint.constant += 20;
+        self.bottomBtnViewHeightConstaint.constant += 20;
+        self.controlBtnBottomConstraint.constant += 20;
     }
     
     // 设置按钮圆弧
     self.controlDeviceBtn.layer.masksToBounds = YES;
     self.controlDeviceBtn.layer.cornerRadius = 5;
-    self.bottomBodyView.layer.masksToBounds = YES;
-    self.bottomBodyView.layer.cornerRadius = 5;
     
     [self setupNarBar];
-    [self addDeviceMenu];
+    [self addDeviceListView];
     [self addSettingView];
-    self.topBodyView.backgroundColor = [UIColor redColor];
     
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = NO;
     self.mapView.userTrackingMode = MKUserTrackingModeFollow;
-    self.deviceSettingBtn.transform = CGAffineTransformRotate(self.deviceSettingBtn.transform, M_PI * 0.5);
-    
+    // 实时监听设备的RSSI值更新
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
+    UINavigationController *nav = [UIApplication sharedApplication].keyWindow.rootViewController;
+    NSLog(@"self.navigationController.viewControllers = %@", nav.viewControllers);
+    NSLog(@"self.navigationController.viewControllers.lastObject = %@", nav.viewControllers.lastObject);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -97,72 +97,89 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceChangeOnline:) name:DeviceOnlineChangeNotification object:nil];
 }
 
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceOnlineChangeNotification object:nil];
 }
 
 
-- (void)addDeviceMenu {
-    self.deviceMenuVC = [InDeviceMenuViewController menuViewControllerWithCloudList:[self sortDeviceList]];
-    self.deviceMenuVC.delegate = self;
-    [self addChildViewController:self.deviceMenuVC];
-    [self.deviceMenuView addSubview:self.deviceMenuVC.view];
-    self.deviceMenuVC.view.frame = self.deviceMenuView.bounds;
-    [self menuViewController:self.deviceMenuVC moveDown:MAXFLOAT];
+- (void)addDeviceListView {
+    self.deviceListVC = [InDeviceMenuViewController menuViewControllerWithCloudList:[self sortDeviceList]];
+    self.deviceListVC.delegate = self;
+    [self addChildViewController:self.deviceListVC];
+    [self.deviceListBodyView addSubview:self.deviceListVC.view];
+    self.deviceListVC.view.frame = self.deviceListBodyView.bounds;
+    [self menuViewController:self.deviceListVC moveDown:MAXFLOAT];
 }
 
-- (void)addSettingView {
+- (void)addCoverView {
+    if (self.coverView != nil) {
+        return;
+    }
     // 添加覆盖层
     UIView *view = [[UIView alloc] init];
-    [self.navigationController.view.superview addSubview:view];
+//    [self.navigationController.view.superview addSubview:view];
+    [self.view addSubview:view];
     view.frame = [UIScreen mainScreen].bounds;
     view.backgroundColor = [UIColor blackColor];
     [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideCoverView)]];
     view.alpha = 0;
     self.coverView = view;
-    
+}
+
+- (void)removeCoverView {
+    [self.coverView removeFromSuperview];
+    self.coverView = nil;
+}
+
+#pragma mark - SettingView
+- (void)hideCoverView {
+    [self hideSettingView];
+}
+- (void)addSettingView {
+    if (self.settingVC) {
+        return;
+    }
+    [self addCoverView];
     // 添加用户设置界面
     InUserSettingViewController *settingVC = [[InUserSettingViewController alloc] init];
-    [self.navigationController addChildViewController:settingVC];
-    [self.navigationController.view.superview addSubview:settingVC.view];
+//    InUserSettingViewController *settingVC = [InUserSettingViewController UserSettingViewController];
+//    [self.navigationController addChildViewController:settingVC];
+//    [self.navigationController.view.superview addSubview:settingVC.view];
+    [self addChildViewController:settingVC];
+    [self.view addSubview:settingVC.view];
     self.settingView = settingVC.view;
-    CGFloat x = 0;
-    CGFloat y = -44;
-    CGFloat width = [UIScreen mainScreen].bounds.size.width * 0.85;
+//    CGFloat y = 0;
+//    CGFloat width = [UIScreen mainScreen].bounds.size.width * 0.85;
+//    CGFloat height = [UIScreen mainScreen].bounds.size.height-y;
+//    CGFloat x = -width;
+    CGFloat y = 0;
+    CGFloat width = [UIScreen mainScreen].bounds.size.width * 1.45;
     CGFloat height = [UIScreen mainScreen].bounds.size.height-y;
+    CGFloat x = -width;
     settingVC.view.frame = CGRectMake(x, y, width, height);
     settingVC.delegate = self;
     self.settingVC = settingVC;
-    __block UIViewController *weakSettingVC = settingVC;
     settingVC.logoutUser = ^{
-        if (self.navigationController.viewControllers.lastObject == self &&
-            self.navigationController.viewControllers.count > 2) {
-            UIViewController *loginVC = self.navigationController.viewControllers[1];
-            if ([loginVC isKindOfClass:[InLoginViewController class]]) {
-                NSLog(@"退出账户");
-                [self.navigationController popToViewController:loginVC animated:YES];
-//                [self.navigationController popToRootViewControllerAnimated:YES];
-            }
-            
-        }
+        UIViewController *loginVC = self.navigationController.viewControllers[1];
+        NSLog(@"退出账户");
+        [self safePopViewController:loginVC];
     };
-    NSLog(@"settingView.frame = %@", [NSValue valueWithCGRect:self.settingView.frame]);
-    NSLog(@"self.view.frame = %@", [NSValue valueWithCGRect:self.view.frame]);
-    NSLog(@"bounds = %@", [NSValue valueWithCGRect:[UIScreen mainScreen].bounds]);
-    // 隐藏 settingView
-    [self hideSettingView];
 }
 
+
 - (void)hideSettingView {
+    self.navigationController.navigationBar.hidden = NO;
     [self settingViewController:self.settingVC touchEnd:CGPointMake(MAXFLOAT, 0)];
 }
 
 
 - (void)setupNarBar {
+    self.navigationController.navigationBar.hidden = NO;
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"innwayLOGO"]];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user"] style:UIBarButtonItemStylePlain target:self action:@selector(goToSettingVC)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_menu"] style:UIBarButtonItemStylePlain target:self action:@selector(goToMenu)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_menu"] style:UIBarButtonItemStylePlain target:self action:@selector(goToGetPhoto)];
 }
 
 - (void)goToSettingVC {
@@ -170,7 +187,39 @@
     [self settingViewController:self.settingVC touchEnd:CGPointMake(-MAXFLOAT, 0)];
 }
 
-- (void)goToMenu {
+- (void)goToGetPhoto {
+    NSLog(@"去获取图片");
+}
+
+- (void)safePopViewController: (UIViewController *)viewController {
+    if (self.navigationController.viewControllers.lastObject == self) {
+        [self.navigationController popToViewController:viewController animated:YES];
+        return;
+    }
+    NSInteger count = self.navigationController.viewControllers.count;
+    if (count >= 2) {
+        if (self.navigationController.viewControllers[count - 2] == self) {
+//            [self removeSettingView];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popToViewController:viewController animated:YES];
+            });
+        }
+    }
+}
+        
+
+- (void)safePushViewController:(UIViewController *)viewController {
+    if (self.navigationController.viewControllers.lastObject == self) {
+        [self.navigationController pushViewController:viewController animated:YES];
+        return;
+    }
+    NSInteger count = self.navigationController.viewControllers.count;
+    if (count >= 2) {
+        if (self.navigationController.viewControllers[count - 2] == self) {
+//            [self removeSettingView];
+            [self.navigationController pushViewController:viewController animated:NO];
+        }
+    }
 }
 
 #pragma mark - Action
@@ -183,11 +232,9 @@
 //进入更多界面
 - (IBAction)more {
     NSLog(@"进入更多界面");
-    if (self.navigationController.viewControllers.lastObject == self) {
-        InDeviceSettingViewController *vc = [InDeviceSettingViewController deviceSettingViewController];
-        vc.device = self.device;
-        [self.navigationController pushViewController:vc animated:YES];
-    }
+    InDeviceSettingViewController *vc = [InDeviceSettingViewController deviceSettingViewController];
+    vc.device = self.device;
+    [self safePushViewController:vc];
 }
 
 - (IBAction)toSwitchMapMode {
@@ -211,7 +258,7 @@
     NSString *deviceName = self.device.deviceName;
     deviceName = @"Lily";
     [self.controlDeviceBtn setTitle:[NSString stringWithFormat:@"Ring Innway %@", deviceName] forState:UIControlStateNormal];
-    [self.deviceMenuVC reloadView:nil];
+    [self.deviceListVC reloadView:nil];
     [self updateAnnotation];
 }
 
@@ -223,33 +270,39 @@
 
 #pragma menuViewDelegate
 - (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device {
-    [self menuViewController:self.deviceMenuVC moveDown:MAXFLOAT];
+    [self menuViewController:self.deviceListVC moveDown:MAXFLOAT];
     if (device != self.device) {
         [self updateDevice:device];
     }
 }
 
+- (void)menuViewControllerDidSelectedToAddDevice:(InDeviceMenuViewController *)menuVC {
+    InAddDeviceStartViewController *addDeviceStartVC = [InAddDeviceStartViewController addDeviceStartViewController:YES];
+    [self safePushViewController:addDeviceStartVC];
+}
+
 - (void)menuViewController:(InDeviceMenuViewController *)menuVC moveDown:(CGFloat)down {
     if (down > 0) {
         //往下
-        CGFloat minHeight = 190;
+        CGFloat minHeight = 196;
+//        CGFloat minHeight = 146;
         if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 1) {
-            minHeight = 142;
+            minHeight = 146;
         }
         CGFloat maxMenuHeight = [UIScreen mainScreen].bounds.size.height * 0.5;
-        if (maxMenuHeight + self.deviceMenuHeightConstraint.constant - down < minHeight) {
-            down = maxMenuHeight + self.deviceMenuHeightConstraint.constant - minHeight;
+        if (maxMenuHeight + self.deviceListBodyHeightConstraint.constant - down < minHeight) {
+            down = maxMenuHeight + self.deviceListBodyHeightConstraint.constant - minHeight;
             menuVC.down = NO;
         }
     }
     else {
         // 往上
-        if (self.deviceMenuHeightConstraint.constant - down > 0) {
-            down = self.deviceMenuHeightConstraint.constant;
+        if (self.deviceListBodyHeightConstraint.constant - down > 0) {
+            down = self.deviceListBodyHeightConstraint.constant;
             menuVC.down = YES;
         }
     }
-    self.deviceMenuHeightConstraint.constant -= down;
+    self.deviceListBodyHeightConstraint.constant -= down;
 }
 
 #pragma mark - settingVCDelegate
@@ -274,36 +327,56 @@
 }
 
 - (void)settingViewController:(InUserSettingViewController *)settingVC touchEnd:(CGPoint)move {
+    bool hideNaviBar = NO;
     CGFloat width = settingVC.view.bounds.size.width;
     CGRect frame = settingVC.view.frame;
     CGFloat x = frame.origin.x - move.x;
     if (x >= -0.5 * width) {
         frame.origin.x = 0;
+        hideNaviBar = YES;
     }
     else if (x <= -0.5 * width){
         frame.origin.x = -width;
+        hideNaviBar = NO;
     }
     CGFloat alpha = (width + frame.origin.x) / width * coverViewAlpha;
     [UIView animateWithDuration:0.25 animations:^{
         settingVC.view.frame = frame;
         self.coverView.alpha = alpha;
+        self.navigationController.navigationBar.hidden = hideNaviBar;
     }];
+}
+
+- (void)settingViewController:(InUserSettingViewController *)settingVC didSelectRow:(NSInteger)row {
+    switch (row) {
+        case 0:
+        {
+            NSLog(@"跳转到忘记密码");
+            UIViewController *vc = [[UIViewController alloc] init];
+//            [self removeSettingView];
+            [self.navigationController pushViewController:vc animated:YES];
+            break;
+        }
+            
+        default:
+            break;
+    }
 }
 
 - (void)updateDevice:(DLDevice *)device {
     self.device.delegate = nil;
     self.device = device;
     self.device.delegate = self;
-    [self.deviceMenuVC reloadView:[self sortDeviceList]];
+    [self.deviceListVC reloadView:[self sortDeviceList]];
     [self.device getDeviceInfo];
     [self updateUI];
     [self toLocation];
 }
 
 - (void)deviceSettingBtnDidClick:(DLDevice *)device {
-    if (!device.online) {
-        return;
-    }
+//    if (!device.online) {
+//        return;
+//    }
     [self menuViewController:nil didSelectedDevice:device];
     [self more];
 }
@@ -363,6 +436,12 @@
     }
 }
 
+
+/**
+ 将设备列表排序：若当前有指定设备，第一台设备显示指定设备，其余设备按连接到未连接的顺序排序
+ 若当前没有指定设备，所有设备按连接到未连接的顺序排序
+ @return
+ */
 - (NSArray *)sortDeviceList {
     NSDictionary *cloudList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
     if (cloudList.count == 0) {
@@ -408,10 +487,6 @@
         _deviceAnnotation = [NSMutableDictionary dictionary];
     }
     return _deviceAnnotation;
-}
-
-- (void)hideCoverView {
-    [self hideSettingView];
 }
 
 @end

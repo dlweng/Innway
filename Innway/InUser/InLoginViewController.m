@@ -44,7 +44,7 @@
         self.passwordTextField.text = common.pwd;
         [self userLogin:nil]; // 自动登陆
     }
-    
+    [self.navigationController.navigationBar setHidden:NO];
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setBarTintColor:[UIColor blackColor]];
 }
@@ -61,14 +61,12 @@
     
     [self.view endEditing:YES];
     [InAlertTool showHUDAddedTo:self.view animated:YES];
-#warning danlyTest - 网络出现异常，直接跳转
-    [self pushToNewCotroller];
     
     NSDictionary* body = @{@"username":self.emailTextField.text, @"password":self.passwordTextField.text, @"action":@"login"};
     [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         NSLog(@"登陆结果:responseObject = %@, error = %@", responseObject, error);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
             [InAlertTool showAlertAutoDisappear:error.localizedDescription];
         }
         else {
@@ -84,6 +82,7 @@
                 [self pushToNewCotroller];
             }
             else {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
                 NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"登陆失败"];
                 [InAlertTool showAlertAutoDisappear:message];
             }
@@ -93,17 +92,16 @@
 }
 
 - (void)pushToNewCotroller {
-#warning danlyTest
-    [self pushToControlDeviceController];
-//    // 获取云端设备列表
-//    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
-//        if (cloudList.count == 0) {
-//            [self pushToAddDeviceController];
-//        }
-//        else {
-//            [self pushToControlDeviceController];
-//        }
-//    }];
+    // 获取云端设备列表
+    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (cloudList.count == 0) {
+            [self pushToAddDeviceController:YES];
+        }
+        else {
+            [self pushToAddDeviceController:NO];
+        }
+    }];
 }
 
 - (void)pushToControlDeviceController {
@@ -113,9 +111,9 @@
     [self.navigationController.navigationBar setHidden:NO];
 }
     
-- (void)pushToAddDeviceController {
+- (void)pushToAddDeviceController:(BOOL)animation {
     InAddDeviceStartViewController *addDeviceStartVC = [InAddDeviceStartViewController addDeviceStartViewController:NO];
-    [self.navigationController pushViewController:addDeviceStartVC animated:YES];
+    [self.navigationController pushViewController:addDeviceStartVC animated:animation];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

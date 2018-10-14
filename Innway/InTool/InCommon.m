@@ -340,6 +340,14 @@ static SystemSoundID soundID;
     [dataTask resume];
 }
 
++ (BOOL)isIPhoneX {
+    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+    if (screenHeight >= 812) {
+        return YES;
+    }
+    return NO;
+}
+
 @end
 
 static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString *key, id defaultValue) { //通用安全方法

@@ -78,21 +78,41 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jlA-c4-kAS" userLabel="backView">
+                                <rect key="frame" x="0.0" y="64" width="60" height="50"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJi-M3-q5f">
+                                        <rect key="frame" x="22.5" y="13" width="15" height="24"/>
+                                        <state key="normal" image="icon_back.png"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="KJi-M3-q5f" firstAttribute="centerX" secondItem="jlA-c4-kAS" secondAttribute="centerX" id="7CP-aM-6W2"/>
+                                    <constraint firstAttribute="width" constant="60" id="BbM-se-D80"/>
+                                    <constraint firstAttribute="height" constant="50" id="YR6-QV-PEe"/>
+                                    <constraint firstItem="KJi-M3-q5f" firstAttribute="centerY" secondItem="jlA-c4-kAS" secondAttribute="centerY" id="gm0-QN-NiJ"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="SmD-kC-UbC" firstAttribute="top" secondItem="uwI-7T-9fb" secondAttribute="top" id="9E8-cV-mMD"/>
                             <constraint firstAttribute="trailing" secondItem="qnj-ut-a2k" secondAttribute="trailing" id="Iz7-e6-uY2"/>
                             <constraint firstItem="Psa-ch-r0L" firstAttribute="centerX" secondItem="uwI-7T-9fb" secondAttribute="centerX" id="Ja9-VI-KGy"/>
+                            <constraint firstItem="jlA-c4-kAS" firstAttribute="top" secondItem="Sfd-AK-qJm" secondAttribute="bottom" id="K5l-8y-46D"/>
                             <constraint firstAttribute="trailing" secondItem="SmD-kC-UbC" secondAttribute="trailing" id="Nvi-Wf-MNS"/>
                             <constraint firstItem="SmD-kC-UbC" firstAttribute="leading" secondItem="uwI-7T-9fb" secondAttribute="leading" id="Ui4-xw-8yJ"/>
                             <constraint firstItem="qnj-ut-a2k" firstAttribute="leading" secondItem="uwI-7T-9fb" secondAttribute="leading" id="Uvf-mu-bv1"/>
                             <constraint firstItem="Fhq-GQ-RBt" firstAttribute="top" secondItem="SmD-kC-UbC" secondAttribute="bottom" id="bvb-0D-8wD"/>
                             <constraint firstItem="qnj-ut-a2k" firstAttribute="centerY" secondItem="uwI-7T-9fb" secondAttribute="centerY" id="fQa-gK-eQl"/>
                             <constraint firstItem="Psa-ch-r0L" firstAttribute="top" secondItem="Sfd-AK-qJm" secondAttribute="bottom" constant="12" id="uLT-sC-5wo"/>
+                            <constraint firstItem="jlA-c4-kAS" firstAttribute="leading" secondItem="uwI-7T-9fb" secondAttribute="leading" id="uO2-Mv-5pc"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="fRp-m8-MIr"/>
+                    <connections>
+                        <outlet property="backView" destination="jlA-c4-kAS" id="gdU-ac-jKG"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jET-hu-QZb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -517,6 +537,7 @@
         <image name="buyButton.png" width="237" height="45"/>
         <image name="failedCard.png" width="95" height="60"/>
         <image name="failedCheck.png" width="33" height="27"/>
+        <image name="icon_back.png" width="15" height="24"/>
         <image name="searchCard.png" width="120" height="147"/>
         <image name="searchImage.png" width="45" height="46"/>
         <image name="searchPhone.png" width="72" height="151"/>

@@ -17,10 +17,20 @@
 @property (weak, nonatomic) IBOutlet UIButton *logoutBtn;
 @property (nonatomic, assign) CGPoint perPoint;
 @property (nonatomic, assign) CGPoint movePoint;
+@property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *emailLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBodyViewHeigthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *userIconCenterYConstraint;
+
 
 @end
 
 @implementation InUserSettingViewController
+
+//+ (instancetype)UserSettingViewController {
+//    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"InUserSettingViewController" bundle:nil];
+//    return sb.instantiateInitialViewController;
+//}
 
 - (void)viewDidLoad {
     
@@ -32,9 +42,20 @@
     
     self.logoutBtn.layer.masksToBounds = YES;
     self.logoutBtn.layer.cornerRadius = 10;
+    self.emailLabel.text = common.email;
+    self.userNameLabel.text = @"Danly";
+    
+    if ([InCommon isIPhoneX]) {
+        self.userIconCenterYConstraint.constant += 20;
+        self.topBodyViewHeigthConstraint.constant += 20;
+    }
 }
 
 #pragma mark - Action
+- (IBAction)changeUserIcon {
+    NSLog(@"更换头像");
+}
+
 - (void)addLocationBtn {
     UISwitch *btn = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
     [btn addTarget:self action:@selector(locationBtnDidClick) forControlEvents:UIControlEventValueChanged];
@@ -47,6 +68,7 @@
 
 // 注销账户
 - (IBAction)logout{
+    NSLog(@"退出账户");
     [[InCommon sharedInstance] clearUserInfo];
     if (self.logoutUser) {
         // 清除云端列表
@@ -57,70 +79,74 @@
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    switch (section) {
-        case 0:
-            return 3;
-        case 1:
-            return 1;
-        default:
-            return 0;
-    }
+    return 5;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InSettingViewCellReuseIdentifier];
-    if (indexPath.section == 0) {
-        switch (indexPath.row) {
-            case 0:
-                cell.textLabel.text = @"修改密码";
-                break;
-            case 1:
-                cell.textLabel.text = @"问题反馈";
-                break;
-            case 2:
-                cell.textLabel.text = @"购买设备";
-                break;
-            default:
-                break;
+    cell.textLabel.textColor = [UIColor colorWithRed:51.0/255.0 green:51.0/255.0 blue:51.0/255.0 alpha:1];
+    cell.textLabel.font = [UIFont systemFontOfSize:15];
+    cell.accessoryView = nil;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    switch (indexPath.row) {
+        case 0:
+            cell.textLabel.text = @"Change Password";
+            break;
+        case 1:
+            cell.textLabel.text = @"Feedback";
+            break;
+        case 2:
+            cell.textLabel.text = @"Buy more innway";
+            break;
+        case 3:
+            cell.textLabel.text = @"Help Center";
+            break;
+        case 4:{
+            cell.textLabel.text = @"Display User Location";
+            self.locationBtn.on = YES;
+            cell.accessoryView = self.locationBtn;
+            break;
         }
-        cell.accessoryView = nil;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
-    else if(indexPath.section == 1) {
-        cell.textLabel.text = @"显示用户位置";
-        self.locationBtn.on = YES;
-        cell.accessoryView = self.locationBtn;
+        default:
+            break;
     }
     return cell;
 }
 
-// 下面两个方法都必须设置，才能成功设置分组头的值
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        NSString *email = @"8888888@qq.com";
-        return [NSString stringWithFormat:@"   用户: %@", email];
-    }
-    return nil;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        UILabel *label = [[UILabel alloc] init];
-        NSString *email = [InCommon sharedInstance].email;
-        label.text = [NSString stringWithFormat:@"   用户: %@", email];
-        label.font = [UIFont systemFontOfSize:16.0];
-        label.textColor = [UIColor darkGrayColor];
-        return label;
-    }
-    return nil;
-}
+//// 下面两个方法都必须设置，才能成功设置分组头的值
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+//    if (section == 0) {
+//        NSString *email = @"8888888@qq.com";
+//        return [NSString stringWithFormat:@"   用户: %@", email];
+//    }
+//    return nil;
+//}
+//
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    if (section == 0) {
+//        UILabel *label = [[UILabel alloc] init];
+//        NSString *email = [InCommon sharedInstance].email;
+//        label.text = [NSString stringWithFormat:@"   用户: %@", email];
+//        label.font = [UIFont systemFontOfSize:16.0];
+//        label.textColor = [UIColor darkGrayColor];
+//        return label;
+//    }
+//    return nil;
+//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if ([self.delegate respondsToSelector:@selector(settingViewController:didSelectRow:)]) {
+        [self.delegate settingViewController:self didSelectRow:indexPath.row];
+    }
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

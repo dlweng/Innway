@@ -14,7 +14,6 @@
 #import "InDeviceMenuCell1.h"
 #import "InDeviceMenuCell2.h"
 #import "InCommon.h"
-#import "InAddDeviceStartViewController.h"
 
 @interface InDeviceMenuViewController ()<UITableViewDelegate, UITableViewDataSource, InDeviceMenuCell1Delegate>
 
@@ -92,20 +91,16 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (indexPath.row == self.cloudList.count) {
-        NSLog(@"self.parentViewController = %@", self.parentViewController);
-        [self pushToAddDeviceController];
+        if ([self.delegate respondsToSelector:@selector(menuViewControllerDidSelectedToAddDevice:)]) {
+            [self.delegate menuViewControllerDidSelectedToAddDevice:self];
+        }
     }
     else {
         DLDevice *device = self.cloudList[indexPath.row];
-        if (self.delegate) {
+        if ([self.delegate respondsToSelector:@selector(menuViewController:didSelectedDevice:)]) {
             [self.delegate menuViewController:self didSelectedDevice:device];
         }
     }
-}
-
-- (void)pushToAddDeviceController {
-    InAddDeviceStartViewController *addDeviceStartVC = [InAddDeviceStartViewController addDeviceStartViewController:YES];
-    [self.navigationController pushViewController:addDeviceStartVC animated:YES];
 }
 
 - (void)deviceOnlineChange:(NSNotification *)noti {
@@ -130,7 +125,7 @@
 }
 
 - (void)upDown:(UIPanGestureRecognizer *)pan {
-    NSLog(@"pan = %@", [NSValue valueWithCGPoint:[pan locationInView:self.view]]);
+//    NSLog(@"pan = %@", [NSValue valueWithCGPoint:[pan locationInView:self.view]]);
     CGPoint point = [pan locationInView:self.view];
     if (self.down) {
         if (point.y > 0) {

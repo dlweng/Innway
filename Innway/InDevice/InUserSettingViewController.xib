@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InUserSettingViewController">
             <connections>
-                <outlet property="logoutBtn" destination="tiB-NW-H3E" id="HbZ-pf-rE3"/>
+                <outlet property="emailLabel" destination="67y-Ob-vcF" id="6zt-he-yaH"/>
                 <outlet property="tableView" destination="4Zx-z8-Alq" id="CC8-v3-yyU"/>
+                <outlet property="topBodyViewHeigthConstraint" destination="6bh-vD-vMr" id="IcJ-7K-Tzb"/>
+                <outlet property="userIconCenterYConstraint" destination="wzD-xF-c80" id="tdE-Ox-j3c"/>
+                <outlet property="userNameLabel" destination="Oa7-ea-e7W" id="3e6-Fg-2HX"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -21,41 +24,85 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="4Zx-z8-Alq">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="272"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="4Zx-z8-Alq">
+                    <rect key="frame" x="0.0" y="160" width="375" height="250"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="272" id="HKV-c2-Kov"/>
+                        <constraint firstAttribute="height" constant="250" id="HKV-c2-Kov"/>
                     </constraints>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="F6C-Of-Ivx"/>
                         <outlet property="delegate" destination="-1" id="YnC-MX-2cG"/>
                     </connections>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tiB-NW-H3E">
-                    <rect key="frame" x="137" y="310" width="100" height="40"/>
-                    <color key="backgroundColor" red="0.27017776609999999" green="0.68951356649999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aUX-EV-fgk" userLabel="TopBodyView">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="160"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="userBodyBG.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Q6-JL-uwX">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="160"/>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8uS-EP-hYs">
+                            <rect key="frame" x="24" y="39.5" width="81" height="81"/>
+                            <state key="normal" image="userIcon.png"/>
+                            <connections>
+                                <action selector="changeUserIcon" destination="-1" eventType="touchUpInside" id="Bzd-zr-KvI"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kevin" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oa7-ea-e7W">
+                            <rect key="frame" x="118" y="61.5" width="44" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="307262195@qq.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="67y-Ob-vcF">
+                            <rect key="frame" x="118" y="84.5" width="135" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="100" id="G7i-J5-Ie9"/>
-                        <constraint firstAttribute="height" constant="40" id="Hjg-IJ-bPS"/>
+                        <constraint firstItem="9Q6-JL-uwX" firstAttribute="leading" secondItem="aUX-EV-fgk" secondAttribute="leading" id="3I9-ih-pno"/>
+                        <constraint firstItem="Oa7-ea-e7W" firstAttribute="leading" secondItem="8uS-EP-hYs" secondAttribute="trailing" constant="13" id="3Xa-3S-PKL"/>
+                        <constraint firstAttribute="height" constant="160" id="6bh-vD-vMr"/>
+                        <constraint firstAttribute="bottom" secondItem="9Q6-JL-uwX" secondAttribute="bottom" id="9j5-Zi-iS1"/>
+                        <constraint firstItem="67y-Ob-vcF" firstAttribute="leading" secondItem="Oa7-ea-e7W" secondAttribute="leading" id="CYE-OK-rlc"/>
+                        <constraint firstAttribute="trailing" secondItem="9Q6-JL-uwX" secondAttribute="trailing" id="IAV-fA-EVt"/>
+                        <constraint firstItem="Oa7-ea-e7W" firstAttribute="centerY" secondItem="8uS-EP-hYs" secondAttribute="centerY" constant="-8" id="QxI-z0-FxD"/>
+                        <constraint firstItem="8uS-EP-hYs" firstAttribute="leading" secondItem="aUX-EV-fgk" secondAttribute="leading" constant="24" id="ZIG-HF-U6y"/>
+                        <constraint firstItem="9Q6-JL-uwX" firstAttribute="top" secondItem="aUX-EV-fgk" secondAttribute="top" id="ayH-mr-icM"/>
+                        <constraint firstItem="67y-Ob-vcF" firstAttribute="top" secondItem="Oa7-ea-e7W" secondAttribute="bottom" constant="2" id="dtp-uY-hC2"/>
+                        <constraint firstItem="8uS-EP-hYs" firstAttribute="centerY" secondItem="aUX-EV-fgk" secondAttribute="centerY" id="wzD-xF-c80"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                    <state key="normal" title="退出账户">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2p5-7g-hzI">
+                    <rect key="frame" x="69" y="454" width="237" height="45"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <state key="normal" title="Exit account" backgroundImage="buyButton.png">
+                        <color key="titleColor" red="0.31372549020000001" green="0.70196078429999997" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                     <connections>
-                        <action selector="logout" destination="-1" eventType="touchUpInside" id="2mp-Yi-zkJ"/>
+                        <action selector="logout" destination="-1" eventType="touchUpInside" id="AtC-Pt-B4Z"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="0.92549019610000005" green="0.92156862750000001" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="2p5-7g-hzI" firstAttribute="top" secondItem="4Zx-z8-Alq" secondAttribute="bottom" constant="44" id="1rb-Go-Gne"/>
+                <constraint firstItem="4Zx-z8-Alq" firstAttribute="top" secondItem="aUX-EV-fgk" secondAttribute="bottom" id="CNw-LK-io2"/>
                 <constraint firstAttribute="trailing" secondItem="4Zx-z8-Alq" secondAttribute="trailing" id="Gik-an-rt4"/>
-                <constraint firstItem="4Zx-z8-Alq" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="O0l-Vh-TEK"/>
-                <constraint firstItem="tiB-NW-H3E" firstAttribute="top" secondItem="4Zx-z8-Alq" secondAttribute="bottom" constant="38" id="PpZ-Fd-PEH"/>
-                <constraint firstItem="tiB-NW-H3E" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="fme-Hf-DAD"/>
+                <constraint firstItem="aUX-EV-fgk" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="O9G-RB-i9X"/>
+                <constraint firstAttribute="trailing" secondItem="aUX-EV-fgk" secondAttribute="trailing" id="Sas-dV-WfV"/>
+                <constraint firstItem="aUX-EV-fgk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="gRA-s9-zXZ"/>
+                <constraint firstItem="2p5-7g-hzI" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="nXq-AB-7b9"/>
                 <constraint firstItem="4Zx-z8-Alq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="qUK-Le-mKP"/>
             </constraints>
         </view>
     </objects>
+    <resources>
+        <image name="buyButton.png" width="237" height="45"/>
+        <image name="userBodyBG.png" width="279" height="166"/>
+        <image name="userIcon.png" width="81" height="81"/>
+    </resources>
 </document>

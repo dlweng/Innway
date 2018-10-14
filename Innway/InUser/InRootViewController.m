@@ -18,6 +18,12 @@
 
 @implementation InRootViewController
 
++ (instancetype)rootViewController {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"InUser" bundle:nil];
+    InRootViewController *rootVC = [sb instantiateViewControllerWithIdentifier:@"InRootViewController"];
+    return rootVC;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
