@@ -120,7 +120,7 @@ static DLCentralManager *instance = nil;
 
 - (void)repeatScanNewDevice {
     NSLog(@"10分钟扫描一次设备");
-    [self startScanDeviceWithTimeout:30 discoverEvent:nil didEndDiscoverDeviceEvent:nil];
+    [self startScanDeviceWithTimeout:60 discoverEvent:nil didEndDiscoverDeviceEvent:nil];
 }
 
 - (void)connectToDevice: (CBPeripheral *)peripheral completion:(DidConnectToDeviceEvent)completion {
