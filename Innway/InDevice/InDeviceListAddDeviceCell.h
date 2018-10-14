@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface InDeviceMenuCell2 : UITableViewCell
+@interface InDeviceListAddDeviceCell : UITableViewCell
 
 @end

@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InDeviceMenuViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InDeviceListViewController">
             <connections>
                 <outlet property="tableView" destination="Rog-QR-ccx" id="cWU-d7-bXJ"/>
                 <outlet property="upDownImage" destination="jhI-yt-Zoh" id="Enf-oQ-y53"/>

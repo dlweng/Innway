@@ -10,7 +10,6 @@
 #import "InDeviceSettingViewController.h"
 #import "InAlertTableViewController.h"
 #import "DLCloudDeviceManager.h"
-#import "InDeviceListViewController.h"
 #import "InAddDeviceStartViewController.h"
 #import "InDeviceSettingFooterView.h"
 #define InDeviceSettingCellReuseIdentifier @"InDeviceSettingCell"
@@ -81,9 +80,18 @@
                 }
             }
             else {
-                // 跳转到添加界面
-                InAddDeviceStartViewController *addDeviceVC = [InAddDeviceStartViewController addDeviceStartViewController:NO];
-                [self.navigationController pushViewController:addDeviceVC animated:YES];
+                // 没有设备了，跳转到添加界面
+                if (self.navigationController.viewControllers.lastObject == self) {
+                    NSArray *subViewController = self.navigationController.viewControllers;
+                    if (subViewController.count > 3) {
+                        InAddDeviceStartViewController *addDeviceStartVC = subViewController[2];
+                        addDeviceStartVC.canBack = NO;
+                        if ([addDeviceStartVC isKindOfClass:[InAddDeviceStartViewController class]]) {
+                            [self.navigationController popToViewController:addDeviceStartVC animated:YES];
+                        }
+                    }
+                }
+                
             }
         }
     }];

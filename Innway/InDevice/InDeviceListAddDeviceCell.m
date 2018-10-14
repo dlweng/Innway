@@ -6,9 +6,9 @@
 //  Copyright © 2018年 innwaytech. All rights reserved.
 //
 
-#import "InDeviceMenuCell2.h"
+#import "InDeviceListAddDeviceCell.h"
 
-@implementation InDeviceMenuCell2
+@implementation InDeviceListAddDeviceCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

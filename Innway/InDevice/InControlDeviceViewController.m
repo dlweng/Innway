@@ -8,7 +8,7 @@
 
 #import "InControlDeviceViewController.h"
 #import "InUserSettingViewController.h"
-#import "InDeviceMenuViewController.h"
+#import "InDeviceListViewController.h"
 #import "InDeviceSettingViewController.h"
 #import "DLCloudDeviceManager.h"
 #import "InAnnotationView.h"
@@ -19,7 +19,7 @@
 
 #define coverViewAlpha 0.85  // 覆盖层的透明度
 
-@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceMenuViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate>
+@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceListViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBodyViewTopConstraint;
 @property (weak, nonatomic) IBOutlet UIView *topBodyView;
@@ -34,7 +34,7 @@
 // 设备列表
 @property (weak, nonatomic) IBOutlet UIView *deviceListBodyView;
 @property (weak, nonatomic) IBOutlet UIView *deviceListBackgroupView;
-@property (nonatomic, strong)InDeviceMenuViewController *deviceListVC;
+@property (nonatomic, strong)InDeviceListViewController *deviceListVC;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceListBodyHeightConstraint;
 
 // 地图
@@ -73,16 +73,14 @@
     [self addDeviceListView];
     [self addSettingView];
     
+    //地图设置
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = NO;
     self.mapView.userTrackingMode = MKUserTrackingModeFollow;
     
     // 实时监听设备的RSSI值更新
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceChangeOnline:) name:DeviceOnlineChangeNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -91,171 +89,19 @@
     [self.device getDeviceInfo];
     [self updateAnnotation];
     [self updateUI];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceChangeOnline:) name:DeviceOnlineChangeNotification object:nil];
 }
 
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceOnlineChangeNotification object:nil];
 }
 
-
-- (void)addDeviceListView {
-    self.deviceListVC = [InDeviceMenuViewController menuViewControllerWithCloudList:[self sortDeviceList]];
-    self.deviceListVC.delegate = self;
-    [self addChildViewController:self.deviceListVC];
-    [self.deviceListBodyView addSubview:self.deviceListVC.view];
-    self.deviceListVC.view.frame = self.deviceListBodyView.bounds;
-    [self menuViewController:self.deviceListVC moveDown:MAXFLOAT];
-}
-
-- (void)addCoverView {
-    if (self.coverView != nil) {
-        return;
-    }
-    // 添加覆盖层
-    UIView *view = [[UIView alloc] init];
-//    [self.navigationController.view.superview addSubview:view];
-    [self.view addSubview:view];
-    view.frame = [UIScreen mainScreen].bounds;
-    view.backgroundColor = [UIColor blackColor];
-    [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideCoverView)]];
-    view.alpha = 0;
-    self.coverView = view;
-}
-
-- (void)removeCoverView {
-    [self.coverView removeFromSuperview];
-    self.coverView = nil;
-}
-
-#pragma mark - SettingView
-- (void)hideCoverView {
-    [self hideSettingView];
-}
-- (void)addSettingView {
-    if (self.settingVC) {
-        return;
-    }
-    [self addCoverView];
-    // 添加用户设置界面
-    InUserSettingViewController *settingVC = [[InUserSettingViewController alloc] init];
-//    InUserSettingViewController *settingVC = [InUserSettingViewController UserSettingViewController];
-//    [self.navigationController addChildViewController:settingVC];
-//    [self.navigationController.view.superview addSubview:settingVC.view];
-    [self addChildViewController:settingVC];
-    [self.view addSubview:settingVC.view];
-    self.settingView = settingVC.view;
-//    CGFloat y = 0;
-//    CGFloat width = [UIScreen mainScreen].bounds.size.width * 0.85;
-//    CGFloat height = [UIScreen mainScreen].bounds.size.height-y;
-//    CGFloat x = -width;
-    // IPHONEX = 1.45
-    // XR = 1.35
-    CGFloat scale = 0.85;
-    if ([InCommon isIPhoneX]) {
-        scale = 1.35;
-    }
-    CGFloat y = 0;
-    
-    CGFloat width = [UIScreen mainScreen].bounds.size.width * 1.35;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height-y;
-    CGFloat x = -width;
-    settingVC.view.frame = CGRectMake(x, y, width, height);
-    settingVC.delegate = self;
-    self.settingVC = settingVC;
-    settingVC.logoutUser = ^{
-        UIViewController *loginVC = self.navigationController.viewControllers[1];
-        NSLog(@"退出账户");
-        [self safePopViewController:loginVC];
-    };
-}
-
-
-- (void)hideSettingView {
-    self.navigationController.navigationBar.hidden = NO;
-    [self settingViewController:self.settingVC touchEnd:CGPointMake(MAXFLOAT, 0)];
-}
-
-
+#pragma mark UI设置
 - (void)setupNarBar {
     self.navigationController.navigationBar.hidden = NO;
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"innwayLOGO"]];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user"] style:UIBarButtonItemStylePlain target:self action:@selector(goToSettingVC)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_menu"] style:UIBarButtonItemStylePlain target:self action:@selector(goToGetPhoto)];
-}
-
-- (void)goToSettingVC {
-    self.coverView.alpha = coverViewAlpha; // 显示覆盖层
-    [self settingViewController:self.settingVC touchEnd:CGPointMake(-MAXFLOAT, 0)];
-}
-
-- (void)goToGetPhoto {
-    NSLog(@"去获取图片");
-}
-
-- (void)safePopViewController: (UIViewController *)viewController {
-    if (self.navigationController.viewControllers.lastObject == self) {
-        [self.navigationController popToViewController:viewController animated:YES];
-        return;
-    }
-    NSInteger count = self.navigationController.viewControllers.count;
-    if (count >= 2) {
-        if (self.navigationController.viewControllers[count - 2] == self) {
-//            [self removeSettingView];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.navigationController popToViewController:viewController animated:YES];
-            });
-        }
-    }
-}
-        
-
-- (void)safePushViewController:(UIViewController *)viewController {
-    if (self.navigationController.viewControllers.lastObject == self) {
-        [self.navigationController pushViewController:viewController animated:YES];
-        return;
-    }
-    NSInteger count = self.navigationController.viewControllers.count;
-    if (count >= 2) {
-        if (self.navigationController.viewControllers[count - 2] == self) {
-//            [self removeSettingView];
-            [self.navigationController pushViewController:viewController animated:NO];
-        }
-    }
-}
-
-#pragma mark - Action
-//控制设备
-- (IBAction)controlDeviceBtnDidClick:(UIButton *)sender {
-    NSLog(@"下发控制指令");
-    [self.device searchDevice];
-}
-
-//进入更多界面
-- (IBAction)more {
-    NSLog(@"进入更多界面");
-    InDeviceSettingViewController *vc = [InDeviceSettingViewController deviceSettingViewController];
-    vc.device = self.device;
-    [self safePushViewController:vc];
-}
-
-- (IBAction)toSwitchMapMode {
-    NSLog(@"切换地图模式");
-//    MKMapTypeStandard = 0,
-//    MKMapTypeSatellite,
-    if (self.mapView.mapType == MKMapTypeStandard) {
-        self.mapView.mapType = MKMapTypeSatellite;
-    }
-    else {
-        self.mapView.mapType = MKMapTypeStandard;
-    }
-}
-
-- (IBAction)toLocation {
-    NSLog(@"开始定位");
-    [self.mapView setCenterCoordinate:self.mapView.userLocation.coordinate];
 }
 
 - (void)updateUI {
@@ -266,30 +112,159 @@
     [self updateAnnotation];
 }
 
+
+- (void)addDeviceListView {
+    self.deviceListVC = [InDeviceListViewController DeviceListViewControllerWithCloudList:[self sortDeviceList]];
+    self.deviceListVC.delegate = self;
+    [self addChildViewController:self.deviceListVC];
+    [self.deviceListBodyView addSubview:self.deviceListVC.view];
+    self.deviceListVC.view.frame = self.deviceListBodyView.bounds;
+    [self deviceListViewController:self.deviceListVC moveDown:MAXFLOAT];
+}
+
+#pragma mark - SettingView
+- (void)addCoverView {
+    if (self.coverView) {
+        return;
+    }
+    // 添加覆盖层
+    UIView *view = [[UIView alloc] init];
+    [self.view addSubview:view];
+    view.frame = [UIScreen mainScreen].bounds;
+    view.backgroundColor = [UIColor blackColor];
+    [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideSettingView)]];
+    view.alpha = 0;
+    self.coverView = view;
+}
+
+- (void)addSettingView {
+    if (self.settingVC) {
+        return;
+    }
+    [self addCoverView];
+    // 添加用户设置界面
+    InUserSettingViewController *settingVC = [[InUserSettingViewController alloc] init];
+    [self addChildViewController:settingVC];
+    [self.view addSubview:settingVC.view];
+    self.settingView = settingVC.view;
+    
+    // IPHONEX = 1.45
+    // XR = 1.35
+    CGFloat scale = 0.85;
+    if ([InCommon isIPhoneX]) {
+        scale = 1.35;
+    }
+    CGFloat y = 0;
+    CGFloat width = [UIScreen mainScreen].bounds.size.width * 1.35;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height-y;
+    CGFloat x = -width;
+    settingVC.view.frame = CGRectMake(x, y, width, height);
+    settingVC.delegate = self;
+    self.settingVC = settingVC;
+    self.settingView.hidden = YES;
+    settingVC.logoutUser = ^{
+        UIViewController *loginVC = self.navigationController.viewControllers[1];
+        NSLog(@"退出账户");
+        [self safePopViewController:loginVC];
+    };
+}
+
+- (void)goToSettingVC {
+    self.coverView.alpha = coverViewAlpha; // 显示覆盖层
+    self.settingView.hidden = NO;
+    [self settingViewController:(InUserSettingViewController *)self.settingVC touchEnd:CGPointMake(-MAXFLOAT, 0)];
+}
+
+- (void)hideSettingView {
+    self.navigationController.navigationBar.hidden = NO;
+    [self settingViewController:(InUserSettingViewController *)self.settingVC touchEnd:CGPointMake(MAXFLOAT, 0)];
+}
+
+#pragma mark - Action
+//控制设备
+- (IBAction)controlDeviceBtnDidClick:(UIButton *)sender {
+    NSLog(@"下发控制指令");
+    [self.device searchDevice];
+}
+
+//进入设备设置界面
+- (void)goToDeviceSettingVC {
+    NSLog(@"进入设备设置界面");
+    InDeviceSettingViewController *vc = [InDeviceSettingViewController deviceSettingViewController];
+    vc.device = self.device;
+    [self safePushViewController:vc];
+}
+
+- (void)goToGetPhoto {
+    NSLog(@"去获取图片");
+}
+
+- (IBAction)toLocation {
+    NSLog(@"开始定位");
+    [self.mapView setCenterCoordinate:self.mapView.userLocation.coordinate];
+}
+
+- (IBAction)toSwitchMapMode {
+    NSLog(@"切换地图模式");
+    //    MKMapTypeStandard = 0,
+    //    MKMapTypeSatellite,
+    if (self.mapView.mapType == MKMapTypeStandard) {
+        self.mapView.mapType = MKMapTypeSatellite;
+    }
+    else {
+        self.mapView.mapType = MKMapTypeStandard;
+    }
+}
+
+#pragma mark - 更新设备数据
 - (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data{
     if (device == self.device) {
         [self updateUI];
     }
 }
 
-#pragma menuViewDelegate
-- (void)menuViewController:(InDeviceMenuViewController *)menuVC didSelectedDevice:(DLDevice *)device {
-    [self menuViewController:self.deviceListVC moveDown:MAXFLOAT];
+- (void)updateDevice:(DLDevice *)device {
+    self.device.delegate = nil;
+    self.device = device;
+    self.device.delegate = self;
+    [self.deviceListVC reloadView:[self sortDeviceList]];
+    [self.device getDeviceInfo];
+    [self updateUI];
+    [self toLocation];
+}
+
+- (void)deviceSettingBtnDidClick:(DLDevice *)device {
+    //    if (!device.online) {
+    //        return;
+    //    }
+    [self deviceListViewController:nil didSelectedDevice:device];
+    [self goToDeviceSettingVC];
+}
+
+#pragma mark - menuViewDelegate
+- (void)deviceListViewController:(InDeviceListViewController *)menuVC didSelectedDevice:(DLDevice *)device {
+    [self deviceListViewController:self.deviceListVC moveDown:MAXFLOAT];
     if (device != self.device) {
         [self updateDevice:device];
     }
 }
 
-- (void)menuViewControllerDidSelectedToAddDevice:(InDeviceMenuViewController *)menuVC {
-    InAddDeviceStartViewController *addDeviceStartVC = [InAddDeviceStartViewController addDeviceStartViewController:YES];
-    [self safePushViewController:addDeviceStartVC];
+- (void)deviceListViewControllerDidSelectedToAddDevice:(InDeviceListViewController *)menuVC {
+    NSArray *subViewController = self.navigationController.viewControllers;
+    if (subViewController.count > 3) {
+        InAddDeviceStartViewController *addDeviceStartVC = subViewController[2];
+        addDeviceStartVC.canBack = YES;
+        if ([addDeviceStartVC isKindOfClass:[InAddDeviceStartViewController class]]) {
+            [self safePopViewController:addDeviceStartVC];
+        }
+    }
 }
 
-- (void)menuViewController:(InDeviceMenuViewController *)menuVC moveDown:(CGFloat)down {
+// 设备列表-上下滑动的处理
+- (void)deviceListViewController:(InDeviceListViewController *)menuVC moveDown:(CGFloat)down {
     if (down > 0) {
         //往下
         CGFloat minHeight = 196;
-//        CGFloat minHeight = 146;
         if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 1) {
             minHeight = 146;
         }
@@ -310,6 +285,7 @@
 }
 
 #pragma mark - settingVCDelegate
+// 用户设置界面-左右滑动的处理
 - (void)settingViewController:(InUserSettingViewController *)settingVC touchMove:(CGPoint)move {
     CGFloat width = settingVC.view.bounds.size.width;
     CGRect frame = settingVC.view.frame;
@@ -347,6 +323,7 @@
     [UIView animateWithDuration:0.25 animations:^{
         settingVC.view.frame = frame;
         self.coverView.alpha = alpha;
+        self.settingView.hidden = !hideNaviBar;
         self.navigationController.navigationBar.hidden = hideNaviBar;
     }];
 }
@@ -357,32 +334,12 @@
         {
             NSLog(@"跳转到忘记密码");
             UIViewController *vc = [[UIViewController alloc] init];
-//            [self removeSettingView];
             [self.navigationController pushViewController:vc animated:YES];
             break;
         }
-            
         default:
             break;
     }
-}
-
-- (void)updateDevice:(DLDevice *)device {
-    self.device.delegate = nil;
-    self.device = device;
-    self.device.delegate = self;
-    [self.deviceListVC reloadView:[self sortDeviceList]];
-    [self.device getDeviceInfo];
-    [self updateUI];
-    [self toLocation];
-}
-
-- (void)deviceSettingBtnDidClick:(DLDevice *)device {
-//    if (!device.online) {
-//        return;
-//    }
-    [self menuViewController:nil didSelectedDevice:device];
-    [self more];
 }
 
 #pragma mark - Map
@@ -444,7 +401,6 @@
 /**
  将设备列表排序：若当前有指定设备，第一台设备显示指定设备，其余设备按连接到未连接的顺序排序
  若当前没有指定设备，所有设备按连接到未连接的顺序排序
- @return
  */
 - (NSArray *)sortDeviceList {
     NSDictionary *cloudList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
@@ -483,6 +439,21 @@
     }
     [connectList addObjectsFromArray:disConnectList];
     return [connectList copy];
+}
+
+#pragma mark - 安全跳转界面
+- (void)safePopViewController: (UIViewController *)viewController {
+    if (self.navigationController.viewControllers.lastObject == self) {
+        [self.navigationController popToViewController:viewController animated:YES];
+        return;
+    }
+}
+
+- (void)safePushViewController:(UIViewController *)viewController {
+    if (self.navigationController.viewControllers.lastObject == self) {
+        [self.navigationController pushViewController:viewController animated:YES];
+        return;
+    }
 }
 
 #pragma mark - Properity

@@ -1,17 +1,20 @@
 //
-//  InDeviceListCell.h
+//  InDeviceMenuCell1.h
 //  Innway
 //
-//  Created by danly on 2018/8/4.
+//  Created by danly on 2018/9/2.
 //  Copyright © 2018年 innwaytech. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import "DLDevice.h"
 
+@class InDeviceListCell;
+@protocol InDeviceListCellDelegate<NSObject>
+- (void)deviceListCellSettingBtnDidClick:(InDeviceListCell *)cell;
+@end
 @interface InDeviceListCell : UITableViewCell
-
-@property (nonatomic, copy) NSString *deviceName;
-@property (nonatomic, copy) NSString *deviceID;
-@property (nonatomic, strong) NSNumber *rssi;
-
+@property (weak, nonatomic) IBOutlet UIButton *deviceSettingBtn;
+@property (nonatomic, strong) DLDevice *device;
+@property (nonatomic, weak) id<InDeviceListCellDelegate> delegate;
 @end

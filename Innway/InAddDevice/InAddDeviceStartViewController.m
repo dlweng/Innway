@@ -11,9 +11,7 @@
 #import "InControlDeviceViewController.h"
 
 @interface InAddDeviceStartViewController ()
-
 @property (weak, nonatomic) IBOutlet UIView *backView;
-@property (nonatomic, assign) BOOL canBack;
 @end
 
 @implementation InAddDeviceStartViewController
@@ -37,12 +35,14 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:YES];
-    self.backView.hidden = !self.canBack;
-    if (!self.canBack) {
-        if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 0) {
-            [self pushToControlDeviceController];
-        }
+    NSDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+    if (cloudDeviceList.count != 0 && !self.canBack) {
+        [self pushToControlDeviceController:NO];
     }
+    if (cloudDeviceList.count == 0) {
+        self.canBack = NO;
+    }
+    self.backView.hidden = !self.canBack;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -52,15 +52,13 @@
 }
 
 - (void)goBack {
-    if (self.navigationController.viewControllers.lastObject == self) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    [self pushToControlDeviceController:YES];
 }
 
-- (void)pushToControlDeviceController {
+- (void)pushToControlDeviceController:(BOOL)animation {
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"] forBarMetrics:UIBarMetricsDefault];
     InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
-    [self.navigationController pushViewController:controlDeviceVC animated:NO];
+    [self.navigationController pushViewController:controlDeviceVC animated:animation];
     [self.navigationController.navigationBar setHidden:NO];
 }
 
