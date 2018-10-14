@@ -170,7 +170,6 @@
 }
 
 - (void)goToSettingVC {
-    self.coverView.alpha = coverViewAlpha; // 显示覆盖层
     self.settingView.hidden = NO;
     [self settingViewController:(InUserSettingViewController *)self.settingVC touchEnd:CGPointMake(-MAXFLOAT, 0)];
 }
