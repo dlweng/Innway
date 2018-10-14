@@ -64,6 +64,9 @@
 
 - (void)locationBtnDidClick {
     NSLog(@"按钮被点击, %d", self.locationBtn.isOn);
+    if ([self.delegate respondsToSelector:@selector(settingViewController:showUserLocation:)]) {
+        [self.delegate settingViewController:self showUserLocation:self.locationBtn.isOn];
+    }
 }
 
 // 注销账户
@@ -111,7 +114,7 @@
             break;
         case 4:{
             cell.textLabel.text = @"Display User Location";
-            self.locationBtn.on = YES;
+            self.locationBtn.on = [common getIsShowUserLocation];
             cell.accessoryView = self.locationBtn;
             break;
         }

@@ -35,6 +35,8 @@ typedef NS_ENUM(NSInteger, InSearchDeviceType) {
 + (instancetype)sharedInstance;
 
 - (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd;
+- (void)saveUserLocationIsShow:(BOOL)showUserLocation;
+- (BOOL)getIsShowUserLocation;
 - (void)clearUserInfo;
 
 - (void)saveCloudList:(NSArray *)cloudList;

@@ -119,6 +119,23 @@ static SystemSoundID soundID;
     }
 }
 
+- (void)saveUserLocationIsShow:(BOOL)showUserLocation {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:showUserLocation forKey:@"showUserLocation"];
+    [defaults synchronize];
+}
+
+- (BOOL)getIsShowUserLocation {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *isExit = [defaults objectForKey:@"showUserLocation"];
+    if (!isExit) {
+        // 默认显示用户位置
+        [defaults setBool:YES forKey:@"showUserLocation"];
+        return YES;
+    }
+    return [defaults boolForKey:@"showUserLocation"];
+}
+
 - (void)removeDeviceByCloudList:(DLDevice *)device {
     if (device) {
         NSMutableArray *cloudList = [NSMutableArray arrayWithArray:[self getCloudList]];

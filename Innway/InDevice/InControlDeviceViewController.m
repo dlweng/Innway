@@ -75,7 +75,6 @@
     
     //地图设置
     self.mapView.delegate = self;
-    self.mapView.showsUserLocation = NO;
     self.mapView.userTrackingMode = MKUserTrackingModeFollow;
     
     // 实时监听设备的RSSI值更新
@@ -89,6 +88,8 @@
     [self.device getDeviceInfo];
     [self updateAnnotation];
     [self updateUI];
+    // 在viewDidLoad设置没有效果
+    self.mapView.showsUserLocation = [common getIsShowUserLocation];
 }
 
 - (void)dealloc {
@@ -339,6 +340,11 @@
         default:
             break;
     }
+}
+
+- (void)settingViewController:(InUserSettingViewController *)settingVC showUserLocation:(BOOL)showUserLocation {
+    [common saveUserLocationIsShow:showUserLocation];
+    self.mapView.showsUserLocation = showUserLocation;
 }
 
 #pragma mark - Map

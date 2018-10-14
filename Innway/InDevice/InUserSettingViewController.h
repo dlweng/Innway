@@ -13,6 +13,7 @@
 - (void)settingViewController:(InUserSettingViewController *)settingVC touchMove:(CGPoint)move;
 - (void)settingViewController:(InUserSettingViewController *)settingVC touchEnd:(CGPoint)move;
 - (void)settingViewController:(InUserSettingViewController *)settingVC didSelectRow:(NSInteger)row;
+- (void)settingViewController:(InUserSettingViewController *)settingVC showUserLocation:(BOOL)showUserLocation;
 @end
 
 @interface InUserSettingViewController : UIViewController
