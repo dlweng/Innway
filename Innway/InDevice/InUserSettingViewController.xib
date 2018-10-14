@@ -43,6 +43,10 @@
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8uS-EP-hYs">
                             <rect key="frame" x="24" y="39.5" width="81" height="81"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="81" id="Y44-bb-2pO"/>
+                                <constraint firstAttribute="width" constant="81" id="am0-hc-VKj"/>
+                            </constraints>
                             <state key="normal" image="userIcon.png"/>
                             <connections>
                                 <action selector="changeUserIcon" destination="-1" eventType="touchUpInside" id="Bzd-zr-KvI"/>

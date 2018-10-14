@@ -17,10 +17,10 @@
 #import "InLoginViewController.h"
 #import "InAddDeviceStartViewController.h"
 #import "InChangePasswordViewController.h"
-
+#import <AVFoundation/AVFoundation.h>
 #define coverViewAlpha 0.85  // 覆盖层的透明度
 
-@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceListViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate>
+@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceListViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBodyViewTopConstraint;
 @property (weak, nonatomic) IBOutlet UIView *topBodyView;
@@ -46,6 +46,13 @@
 // 显示设置界面的透明覆盖层
 @property (nonatomic, weak) UIView *coverView;
 
+// 拍照
+@property (strong, nonatomic) IBOutlet UIView *customTakePhotoView;
+@property (weak, nonatomic) IBOutlet UIView *imageBodyView;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (nonatomic, assign) BOOL takeAPhtot;
+@property (strong,nonatomic)UIImagePickerController * imagePikerViewController;
+@property (nonatomic, strong) UIImagePickerController *libraryPikerViewController;
 @end
 
 @implementation InControlDeviceViewController
@@ -73,6 +80,7 @@
     [self setupNarBar];
     [self addDeviceListView];
     [self addSettingView];
+    [self setUpImagePiker];
     
     //地图设置
     self.mapView.delegate = self;
@@ -194,10 +202,6 @@
     InDeviceSettingViewController *vc = [InDeviceSettingViewController deviceSettingViewController];
     vc.device = self.device;
     [self safePushViewController:vc];
-}
-
-- (void)goToGetPhoto {
-    NSLog(@"去获取图片");
 }
 
 - (IBAction)toLocation {
@@ -463,6 +467,119 @@
         return;
     }
 }
+
+#pragma mark - Take photo
+- (void)goToGetPhoto {
+//    NSLog(@"去获取图片");
+    self.imagePikerViewController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    self.imagePikerViewController.showsCameraControls = NO;
+    [[NSBundle mainBundle] loadNibNamed:@"InCustomTablePhotoVuew" owner:self options:nil];
+    self.customTakePhotoView.frame = self.imagePikerViewController.cameraOverlayView.frame;
+    self.customTakePhotoView.backgroundColor = [UIColor clearColor];
+    self.imagePikerViewController.cameraOverlayView = self.customTakePhotoView;
+    self.customTakePhotoView = nil;
+    [self presentViewController:self.imagePikerViewController animated:YES completion:NULL];
+    self.imageBodyView.hidden = YES;
+    self.takeAPhtot = NO;
+}
+
+- (void)setUpImagePiker {
+    // 设置相机的
+    self.imagePikerViewController = [[UIImagePickerController alloc] init];
+    self.imagePikerViewController.delegate = self;
+    self.imagePikerViewController.allowsEditing = YES;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    // 设置相册的
+    self.libraryPikerViewController = [[UIImagePickerController alloc] init];
+    self.libraryPikerViewController.delegate = self;
+    self.libraryPikerViewController.allowsEditing = YES;
+    // 设置相册的导航栏
+    [self.libraryPikerViewController.navigationBar setBarTintColor:[UIColor clearColor]];
+    [self.libraryPikerViewController.navigationBar setTranslucent:NO];
+    [self.libraryPikerViewController.navigationBar setTintColor:[UIColor whiteColor]];
+    [self.libraryPikerViewController.navigationBar setBackgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"] forBarMetrics:UIBarMetricsDefault];
+    // 设置标题颜色
+    NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
+    attrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
+    [self.libraryPikerViewController.navigationBar setTitleTextAttributes:attrs];
+}
+- (IBAction)setPhotoSharkLight {
+    if (self.takeAPhtot) {
+        return;
+    }
+    NSLog(@"设置闪光灯");
+    AVCaptureDevice *camera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    //修改前必须先锁定
+    [camera lockForConfiguration:nil];
+    //必须判定是否有闪光灯，否则如果没有闪光灯会崩溃
+    if ([camera hasFlash]) {
+        
+        if (camera.flashMode == AVCaptureFlashModeOff || camera.flashMode == AVCaptureFlashModeAuto) {
+            camera.flashMode = AVCaptureFlashModeOn;
+            camera.torchMode = AVCaptureTorchModeOn;
+        } else if (camera.flashMode == AVCaptureFlashModeOn) {
+            camera.flashMode = AVCaptureFlashModeOff;
+            camera.torchMode = AVCaptureTorchModeOff;
+        }
+        
+    }
+    [camera unlockForConfiguration];
+}
+
+- (IBAction)goPhotoLibrary {
+    NSLog(@"进入相册");
+    self.libraryPikerViewController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self.imagePikerViewController presentViewController:self.libraryPikerViewController animated:YES completion:NULL];
+    
+}
+
+- (IBAction)takePhoto {
+    if (self.takeAPhtot) {
+        return;
+    }
+    NSLog(@"拍照保存");
+    self.takeAPhtot = YES;
+    [self.imagePikerViewController takePicture];
+}
+
+- (IBAction)takePhotoBack {
+    NSLog(@"拍完照返回");
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)goBackTakePhotoView {
+    [self.imagePikerViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    self.imageBodyView.hidden = NO;
+    if (picker == self.libraryPikerViewController) {
+        // 相册界面点击图片显示
+        UIImage * image = info[UIImagePickerControllerOriginalImage];
+        self.imageView.image = image;
+        [self.imagePikerViewController dismissViewControllerAnimated:YES completion:NULL];
+        return;
+    }
+    else if (picker == self.imagePikerViewController) {
+        // 相机拍完照进入保存
+        UIImage * image = info[UIImagePickerControllerEditedImage];
+        if (!image) {
+            image = info[UIImagePickerControllerOriginalImage];
+        }
+        self.imageView.image = image;
+        UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSaveImageWithError:contextInfo:), (__bridge void *)self);
+    }
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self goBackTakePhotoView];
+}
+
+- (void)image:(UIImage *)image didFinishSaveImageWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    NSLog(@"保存图片结果: image = %@, error = %@, contextInfo = %@", image, error, contextInfo);
+}
+
+
 
 #pragma mark - Properity
 - (NSMutableDictionary *)deviceAnnotation {
