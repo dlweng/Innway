@@ -96,6 +96,5 @@ typedef NS_ENUM(NSInteger, InSearchDeviceType) {
 typedef void (^confirmHanler)(void);
 @interface InAlertView : UIView
 + (void)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmHanler:(confirmHanler)confirmHanler;
-- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message confirm:(NSString *)confirm confirm:(confirmHanler)confirmHanler;
-- (void)show;
++ (void)showAlertWithMessage:(NSString *)message confirmHanler:(confirmHanler)confirmHanler cancleHanler:(confirmHanler)cancleHanler;
 @end

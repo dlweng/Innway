@@ -40,6 +40,16 @@
 		3328800F2115A00C00C4893B /* ic_launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 3328800E2115A00C00C4893B /* ic_launcher.png */; };
 		3328801B2115AA4900C4893B /* InControlDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 332880192115AA4900C4893B /* InControlDeviceViewController.m */; };
 		3328801C2115AA4900C4893B /* InControlDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3328801A2115AA4900C4893B /* InControlDeviceViewController.xib */; };
+		33639505217B4036006719EA /* whiteBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33639503217B4035006719EA /* whiteBtn@2x.png */; };
+		33639506217B4036006719EA /* whiteBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33639504217B4036006719EA /* whiteBtn@3x.png */; };
+		33639509217B4D27006719EA /* InChangeDeviceNameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33639508217B4D27006719EA /* InChangeDeviceNameView.m */; };
+		3363950D217B5AAE006719EA /* InChangeDeviceNameView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3363950C217B5AAE006719EA /* InChangeDeviceNameView.xib */; };
+		33639512217B6181006719EA /* check@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3363950E217B6180006719EA /* check@3x.png */; };
+		33639513217B6181006719EA /* uncheck@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3363950F217B6180006719EA /* uncheck@2x.png */; };
+		33639514217B6181006719EA /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33639510217B6180006719EA /* check@2x.png */; };
+		33639515217B6181006719EA /* uncheck@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33639511217B6180006719EA /* uncheck@3x.png */; };
+		33639518217B61C5006719EA /* InAlarmTypeSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33639517217B61C5006719EA /* InAlarmTypeSelectionView.m */; };
+		3363951A217B61D0006719EA /* InAlarmTypeSelectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33639519217B61D0006719EA /* InAlarmTypeSelectionView.xib */; };
 		3374C74C2112013B00F83101 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C74B2112013B00F83101 /* AppDelegate.m */; };
 		3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C74E2112013B00F83101 /* InLoginViewController.m */; };
 		3374C7522112013B00F83101 /* InUser.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7502112013B00F83101 /* InUser.storyboard */; };
@@ -80,10 +90,10 @@
 		3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7902112077C00F83101 /* icon_dot_down.png */; };
 		3379A2D321561E73008D1AA2 /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2CD21561E72008D1AA2 /* background@2x.png */; };
 		3379A2D421561E73008D1AA2 /* background@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2CE21561E72008D1AA2 /* background@3x.png */; };
-		3379A2D521561E73008D1AA2 /* whiteBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2CF21561E72008D1AA2 /* whiteBtn@3x.png */; };
+		3379A2D521561E73008D1AA2 /* sWhiteBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2CF21561E72008D1AA2 /* sWhiteBtn@3x.png */; };
 		3379A2D621561E73008D1AA2 /* greenBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2D021561E72008D1AA2 /* greenBtn@3x.png */; };
 		3379A2D721561E73008D1AA2 /* greenBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2D121561E72008D1AA2 /* greenBtn@2x.png */; };
-		3379A2D821561E73008D1AA2 /* whiteBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2D221561E73008D1AA2 /* whiteBtn@2x.png */; };
+		3379A2D821561E73008D1AA2 /* sWhiteBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3379A2D221561E73008D1AA2 /* sWhiteBtn@2x.png */; };
 		3379A2DE21562500008D1AA2 /* InButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3379A2DD21562500008D1AA2 /* InButton.m */; };
 		337E501F2161F41B00CB6313 /* InAddDeviceStartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 337E501E2161F41B00CB6313 /* InAddDeviceStartViewController.m */; };
 		337E50212161F42600CB6313 /* InAddDevice.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 337E50202161F42600CB6313 /* InAddDevice.storyboard */; };
@@ -148,7 +158,6 @@
 		33EE4C9D2116EDD500CDDC98 /* deviceMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4C9C2116EDD500CDDC98 /* deviceMenu.png */; };
 		33EE4CA62116FA9B00CDDC98 /* InDeviceSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4CA42116FA9B00CDDC98 /* InDeviceSettingViewController.m */; };
 		33EE4CA92116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33EE4CA82116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard */; };
-		33EE4CAC21170C1500CDDC98 /* InAlertTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4CAB21170C1500CDDC98 /* InAlertTableViewController.m */; };
 		33F6BBF9216ECB3300C57AF8 /* user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33F6BBF7216ECB3300C57AF8 /* user@2x.png */; };
 		33F6BBFA216ECB3300C57AF8 /* user@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33F6BBF8216ECB3300C57AF8 /* user@3x.png */; };
 		33FB6296215D453900C6419C /* 60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FB6280215D453500C6419C /* 60@2x.png */; };
@@ -280,6 +289,18 @@
 		332880182115AA4900C4893B /* InControlDeviceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InControlDeviceViewController.h; sourceTree = "<group>"; };
 		332880192115AA4900C4893B /* InControlDeviceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InControlDeviceViewController.m; sourceTree = "<group>"; };
 		3328801A2115AA4900C4893B /* InControlDeviceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InControlDeviceViewController.xib; sourceTree = "<group>"; };
+		33639503217B4035006719EA /* whiteBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteBtn@2x.png"; sourceTree = "<group>"; };
+		33639504217B4036006719EA /* whiteBtn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteBtn@3x.png"; sourceTree = "<group>"; };
+		33639507217B4D27006719EA /* InChangeDeviceNameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InChangeDeviceNameView.h; sourceTree = "<group>"; };
+		33639508217B4D27006719EA /* InChangeDeviceNameView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InChangeDeviceNameView.m; sourceTree = "<group>"; };
+		3363950C217B5AAE006719EA /* InChangeDeviceNameView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InChangeDeviceNameView.xib; sourceTree = "<group>"; };
+		3363950E217B6180006719EA /* check@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@3x.png"; sourceTree = "<group>"; };
+		3363950F217B6180006719EA /* uncheck@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uncheck@2x.png"; sourceTree = "<group>"; };
+		33639510217B6180006719EA /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@2x.png"; sourceTree = "<group>"; };
+		33639511217B6180006719EA /* uncheck@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uncheck@3x.png"; sourceTree = "<group>"; };
+		33639516217B61C5006719EA /* InAlarmTypeSelectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAlarmTypeSelectionView.h; sourceTree = "<group>"; };
+		33639517217B61C5006719EA /* InAlarmTypeSelectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAlarmTypeSelectionView.m; sourceTree = "<group>"; };
+		33639519217B61D0006719EA /* InAlarmTypeSelectionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InAlarmTypeSelectionView.xib; sourceTree = "<group>"; };
 		3374C7472112013A00F83101 /* Innway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Innway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3374C74A2112013B00F83101 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3374C74B2112013B00F83101 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -326,10 +347,10 @@
 		3374C7902112077C00F83101 /* icon_dot_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_dot_down.png; sourceTree = "<group>"; };
 		3379A2CD21561E72008D1AA2 /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
 		3379A2CE21561E72008D1AA2 /* background@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@3x.png"; sourceTree = "<group>"; };
-		3379A2CF21561E72008D1AA2 /* whiteBtn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteBtn@3x.png"; sourceTree = "<group>"; };
+		3379A2CF21561E72008D1AA2 /* sWhiteBtn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sWhiteBtn@3x.png"; sourceTree = "<group>"; };
 		3379A2D021561E72008D1AA2 /* greenBtn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenBtn@3x.png"; sourceTree = "<group>"; };
 		3379A2D121561E72008D1AA2 /* greenBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenBtn@2x.png"; sourceTree = "<group>"; };
-		3379A2D221561E73008D1AA2 /* whiteBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteBtn@2x.png"; sourceTree = "<group>"; };
+		3379A2D221561E73008D1AA2 /* sWhiteBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sWhiteBtn@2x.png"; sourceTree = "<group>"; };
 		3379A2DC21562500008D1AA2 /* InButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InButton.h; sourceTree = "<group>"; };
 		3379A2DD21562500008D1AA2 /* InButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InButton.m; sourceTree = "<group>"; };
 		337E501D2161F41B00CB6313 /* InAddDeviceStartViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAddDeviceStartViewController.h; sourceTree = "<group>"; };
@@ -409,8 +430,6 @@
 		33EE4CA32116FA9B00CDDC98 /* InDeviceSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InDeviceSettingViewController.h; sourceTree = "<group>"; };
 		33EE4CA42116FA9B00CDDC98 /* InDeviceSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InDeviceSettingViewController.m; sourceTree = "<group>"; };
 		33EE4CA82116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InDeviceSettingViewController.storyboard; sourceTree = "<group>"; };
-		33EE4CAA21170C1500CDDC98 /* InAlertTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAlertTableViewController.h; sourceTree = "<group>"; };
-		33EE4CAB21170C1500CDDC98 /* InAlertTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAlertTableViewController.m; sourceTree = "<group>"; };
 		33F6BBF7216ECB3300C57AF8 /* user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user@2x.png"; sourceTree = "<group>"; };
 		33F6BBF8216ECB3300C57AF8 /* user@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user@3x.png"; sourceTree = "<group>"; };
 		33FB6280215D453500C6419C /* 60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "60@2x.png"; sourceTree = "<group>"; };
@@ -570,8 +589,6 @@
 				33EE4CA32116FA9B00CDDC98 /* InDeviceSettingViewController.h */,
 				33EE4CA42116FA9B00CDDC98 /* InDeviceSettingViewController.m */,
 				33EE4CA82116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard */,
-				33EE4CAA21170C1500CDDC98 /* InAlertTableViewController.h */,
-				33EE4CAB21170C1500CDDC98 /* InAlertTableViewController.m */,
 				33EE4C972116DBE000CDDC98 /* InDeviceListViewController.h */,
 				33EE4C982116DBE000CDDC98 /* InDeviceListViewController.m */,
 				33EE4C992116DBE000CDDC98 /* InDeviceListViewController.xib */,
@@ -581,6 +598,12 @@
 				33179834213BEDEB000B8DD6 /* InDeviceListAddDeviceCell.h */,
 				33179835213BEDEB000B8DD6 /* InDeviceListAddDeviceCell.m */,
 				33179836213BEDEB000B8DD6 /* InDeviceListAddDeviceCell.xib */,
+				33639507217B4D27006719EA /* InChangeDeviceNameView.h */,
+				33639508217B4D27006719EA /* InChangeDeviceNameView.m */,
+				3363950C217B5AAE006719EA /* InChangeDeviceNameView.xib */,
+				33639516217B61C5006719EA /* InAlarmTypeSelectionView.h */,
+				33639517217B61C5006719EA /* InAlarmTypeSelectionView.m */,
+				33639519217B61D0006719EA /* InAlarmTypeSelectionView.xib */,
 			);
 			path = InDevice;
 			sourceTree = "<group>";
@@ -645,10 +668,12 @@
 				3379A2CC21561CDB008D1AA2 /* New */,
 				3379A2D121561E72008D1AA2 /* greenBtn@2x.png */,
 				3379A2D021561E72008D1AA2 /* greenBtn@3x.png */,
+				33639503217B4035006719EA /* whiteBtn@2x.png */,
+				33639504217B4036006719EA /* whiteBtn@3x.png */,
 				3379A2CD21561E72008D1AA2 /* background@2x.png */,
 				3379A2CE21561E72008D1AA2 /* background@3x.png */,
-				3379A2D221561E73008D1AA2 /* whiteBtn@2x.png */,
-				3379A2CF21561E72008D1AA2 /* whiteBtn@3x.png */,
+				3379A2D221561E73008D1AA2 /* sWhiteBtn@2x.png */,
+				3379A2CF21561E72008D1AA2 /* sWhiteBtn@3x.png */,
 				3385C6DF21579758005FAB04 /* narBarBackgroudImage@2x.png */,
 				3385C6DE21579758005FAB04 /* narBarBackgroudImage@3x.png */,
 				331797F1213AF364000B8DD6 /* bubble.png */,
@@ -698,6 +723,10 @@
 		3379A2CC21561CDB008D1AA2 /* New */ = {
 			isa = PBXGroup;
 			children = (
+				33639510217B6180006719EA /* check@2x.png */,
+				3363950E217B6180006719EA /* check@3x.png */,
+				3363950F217B6180006719EA /* uncheck@2x.png */,
+				33639511217B6180006719EA /* uncheck@3x.png */,
 				33FFB9AD21733F6600E6A8C6 /* photoLibrary@2x.png */,
 				33FFB9AE21733F6600E6A8C6 /* photoLibrary@3x.png */,
 				33FFB9A921733E9100E6A8C6 /* photoBackground@2x.png */,
@@ -1009,6 +1038,7 @@
 				33FB62CB215D469400C6419C /* RSSI_3@3x.png in Resources */,
 				337E504F21620E1B00CB6313 /* searchPhone@2x.png in Resources */,
 				3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */,
+				3363950D217B5AAE006719EA /* InChangeDeviceNameView.xib in Resources */,
 				330FB8E3216370790032E657 /* loginBackground@2x.png in Resources */,
 				3374C7522112013B00F83101 /* InUser.storyboard in Resources */,
 				330FB8F02163C6DA0032E657 /* greentag@3x.png in Resources */,
@@ -1024,10 +1054,12 @@
 				33FB629C215D453900C6419C /* 90@3x.png in Resources */,
 				337E505321620E1B00CB6313 /* searchCard@3x.png in Resources */,
 				330FB8EF2163C6DA0032E657 /* greencard@3x.png in Resources */,
+				33639513217B6181006719EA /* uncheck@2x.png in Resources */,
 				33EE4CA92116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard in Resources */,
 				3374C7922112077C00F83101 /* icon_child_device_gray.png in Resources */,
 				337E503B2162030D00CB6313 /* tag@3x.png in Resources */,
 				33FFB9A02173392400E6A8C6 /* photoBack@2x.png in Resources */,
+				33639505217B4036006719EA /* whiteBtn@2x.png in Resources */,
 				33FFB9352171D6E700E6A8C6 /* icon_add_device@3x.png in Resources */,
 				3374C7AD2112077C00F83101 /* icon_charging.png in Resources */,
 				330FB8ED2163C6DA0032E657 /* greentag@2x.png in Resources */,
@@ -1035,14 +1067,16 @@
 				3374C7A72112077C00F83101 /* icon_location.png in Resources */,
 				3374C7A92112077C00F83101 /* icon_user.png in Resources */,
 				3374C79B2112077C00F83101 /* icon_track_down.png in Resources */,
-				3379A2D821561E73008D1AA2 /* whiteBtn@2x.png in Resources */,
+				3379A2D821561E73008D1AA2 /* sWhiteBtn@2x.png in Resources */,
 				33FB62DB215D469400C6419C /* RSSI_3@2x.png in Resources */,
 				33FB6297215D453900C6419C /* 60@3x.png in Resources */,
 				33FB62A8215D453900C6419C /* 0@3x.png in Resources */,
+				33639515217B6181006719EA /* uncheck@3x.png in Resources */,
 				331797F8213BBB5B000B8DD6 /* icon_splash.jpg in Resources */,
 				330FB8DC21636F830032E657 /* down@2x.png in Resources */,
 				330FB8D421636F6E0032E657 /* annotation@3x.png in Resources */,
 				33FB62A0215D453900C6419C /* 30@2x.png in Resources */,
+				33639514217B6181006719EA /* check@2x.png in Resources */,
 				330FB8E4216370790032E657 /* loginBackground@3x.png in Resources */,
 				337E50382162030D00CB6313 /* chip@3x.png in Resources */,
 				33FB62AB215D453900C6419C /* 50@3x.png in Resources */,
@@ -1060,7 +1094,7 @@
 				337E50212161F42600CB6313 /* InAddDevice.storyboard in Resources */,
 				337E50292161F60F00CB6313 /* addButton@2x.png in Resources */,
 				33FFB98F2172EF8900E6A8C6 /* InUserSettingViewController.xib in Resources */,
-				3379A2D521561E73008D1AA2 /* whiteBtn@3x.png in Resources */,
+				3379A2D521561E73008D1AA2 /* sWhiteBtn@3x.png in Resources */,
 				33FB62AF215D45BC00C6419C /* 5@2x.png in Resources */,
 				33FFB9A52173392400E6A8C6 /* photoBack@3x.png in Resources */,
 				33FB62D4215D469400C6419C /* RSSI_1@3x.png in Resources */,
@@ -1089,6 +1123,7 @@
 				337E50392162030D00CB6313 /* Card@3x.png in Resources */,
 				33EE4C9B2116DBE000CDDC98 /* InDeviceListViewController.xib in Resources */,
 				3374C7A62112077C00F83101 /* icon_poup.png in Resources */,
+				3363951A217B61D0006719EA /* InAlarmTypeSelectionView.xib in Resources */,
 				33FB62A6215D453900C6419C /* 100@3x.png in Resources */,
 				3379A2D621561E73008D1AA2 /* greenBtn@3x.png in Resources */,
 				3385C6D721574BCC005FAB04 /* whiteLongButton@3x.png in Resources */,
@@ -1112,6 +1147,7 @@
 				337E50372162030D00CB6313 /* Card@2x.png in Resources */,
 				33FFB9AB21733E9200E6A8C6 /* photoBackground@2x.png in Resources */,
 				33FB62A1215D453900C6419C /* 40@2x.png in Resources */,
+				33639506217B4036006719EA /* whiteBtn@3x.png in Resources */,
 				3374C7A42112077C00F83101 /* icon_back_dark.png in Resources */,
 				33FB62A3215D453900C6419C /* 30@3x.png in Resources */,
 				33FFB92F2171A4CD00E6A8C6 /* userBodyBG@2x.png in Resources */,
@@ -1144,6 +1180,7 @@
 				3374C7A32112077C00F83101 /* icon_scan_line.png in Resources */,
 				33FB62DA215D469400C6419C /* RSSI_7@2x.png in Resources */,
 				337E505D21623C8500CB6313 /* successCheck@3x.png in Resources */,
+				33639512217B6181006719EA /* check@3x.png in Resources */,
 				33F6BBFA216ECB3300C57AF8 /* user@3x.png in Resources */,
 				337E502D2161F60F00CB6313 /* addButton@3x.png in Resources */,
 				33FB62E2215D469400C6419C /* RSSI_5@3x.png in Resources */,
@@ -1222,7 +1259,6 @@
 				3379A2DE21562500008D1AA2 /* InButton.m in Sources */,
 				337E501F2161F41B00CB6313 /* InAddDeviceStartViewController.m in Sources */,
 				3328800221158F4900C4893B /* InForgetPasswordViewController.m in Sources */,
-				33EE4CAC21170C1500CDDC98 /* InAlertTableViewController.m in Sources */,
 				3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */,
 				338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */,
 				33287FFF21158E7900C4893B /* InRegisterViewController.m in Sources */,
@@ -1239,12 +1275,14 @@
 				338CDF7F21297F6000A018EA /* DLDevice.m in Sources */,
 				338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */,
 				3385C6DA21575E5E005FAB04 /* InTextField.m in Sources */,
+				33639509217B4D27006719EA /* InChangeDeviceNameView.m in Sources */,
 				338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */,
 				3385C6C221574254005FAB04 /* InRootViewController.m in Sources */,
 				331797F0213AF282000B8DD6 /* InAnnotationView.m in Sources */,
 				3374C74C2112013B00F83101 /* AppDelegate.m in Sources */,
 				33FFB998217327B500E6A8C6 /* InChangePasswordCell.m in Sources */,
 				33EE4C9A2116DBE000CDDC98 /* InDeviceListViewController.m in Sources */,
+				33639518217B61C5006719EA /* InAlarmTypeSelectionView.m in Sources */,
 				33287FFC21155B3200C4893B /* InUserTableViewController.m in Sources */,
 				3385C6DD21578D2B005FAB04 /* InBaseViewController.m in Sources */,
 				3317982A213BEB3D000B8DD6 /* InDeviceListCell.m in Sources */,

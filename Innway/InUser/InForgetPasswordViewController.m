@@ -35,6 +35,9 @@
     }
     [self.view endEditing:YES];
     NSLog(@"重置密码, 邮箱:%@", self.emailTextField.text);
+    [InAlertView showAlertWithTitle:@"Information" message:@"An email has been sent to the provided email with further instructions." confirmHanler:^{
+        NSLog(@"发送重置密码邮件");
+    }];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

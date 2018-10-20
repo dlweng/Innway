@@ -9,6 +9,7 @@
 #import "InUserSettingViewController.h"
 #import "InCommon.h"
 #import "DLCloudDeviceManager.h"
+#import "InAlarmTypeSelectionView.h"
 #define InSettingViewCellReuseIdentifier @"InSettingViewCell"
 
 @interface InUserSettingViewController () <UITableViewDelegate, UITableViewDataSource>

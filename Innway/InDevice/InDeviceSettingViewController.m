@@ -8,10 +8,11 @@
 
 #import "InCommon.h"
 #import "InDeviceSettingViewController.h"
-#import "InAlertTableViewController.h"
 #import "DLCloudDeviceManager.h"
 #import "InAddDeviceStartViewController.h"
 #import "InDeviceSettingFooterView.h"
+#import "InChangeDeviceNameView.h"
+#import "InAlarmTypeSelectionView.h"
 #define InDeviceSettingCellReuseIdentifier @"InDeviceSettingCell"
 
 @interface InDeviceSettingViewController ()<UITableViewDataSource, UITableViewDelegate, DLDeviceDelegate>
@@ -53,8 +54,6 @@
         [self.tableView setContentOffset:CGPointZero animated:NO];
     });
     self.device.delegate = self;
-    
-    self.phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
     NSLog(@"手机警报声音: %zd", self.phoneAlertMusic.integerValue);
     if (!self.phoneAlertMusic) {
         self.phoneAlertMusic = @(1);
@@ -63,6 +62,12 @@
 }
 
 - (IBAction)deleteDeviceBtnDidClick {
+    [InAlertView showAlertWithMessage:@"Confirm delete device？" confirmHanler:^{
+        [self deleteDevice];
+    } cancleHanler:nil];
+}
+
+- (void)deleteDevice {
     [InAlertTool showHUDAddedTo:self.view tips:@"正在删除设备，请稍候！" tag:1 animated:YES];
     [[DLCloudDeviceManager sharedInstance] deleteDevice:self.device.mac completion:^(DLCloudDeviceManager *manager, NSError *error) {
         [InAlertTool hideHUDForView:self.view tag:1];
@@ -235,6 +240,7 @@
                 }
                 case 1:
                 {
+                    self.phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
                     cell.textLabel.text = @"Cell phone alarm sound";
                     switch (self.phoneAlertMusic.integerValue) {
                         case 2:
@@ -278,7 +284,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    InAlertViewType alertType = InDeviceAlert;
+    InAlarmType alertType = InDeviceAlert;
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        [InChangeDeviceNameView showChangeDeviceNameView:self.device.deviceName confirmHandle:^(NSString * _Nonnull newDeviceName) {
+            NSLog(@"新设备名称: %@", newDeviceName);
+        }];
+        return;
+    }
     if (indexPath.section == 2) {
         switch (indexPath.row) {
             case 0:
@@ -290,10 +302,41 @@
             default:
                 break;
         }
-        InAlertTableViewController *alertVC = [[InAlertTableViewController alloc] initWithAlertType:alertType withDevice:self.device];
-        if (self.navigationController.viewControllers.lastObject == self) {
-            [self.navigationController pushViewController:alertVC animated:YES];
+        // 获取当前的报警声音
+        NSInteger currentAlarmVoice = 0;
+        switch (alertType) {
+            case InPhoneAlert:
+            {
+                NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
+                currentAlarmVoice = phoneAlertMusic.integerValue - 1;
+                break;
+            }
+            case InDeviceAlert:
+            {
+                NSNumber *alertMusic = self.device.lastData[AlertMusicKey];
+                currentAlarmVoice = alertMusic.integerValue - 1;
+                break;
+            }
+            default:
+                break;
         }
+        // 弹出选择框
+        [InAlarmTypeSelectionView showAlarmTypeSelectionView:alertType title:@"select ringtone" currentAlarmVoice:currentAlarmVoice confirmHanler:^(NSInteger newAlertVoice) {
+            switch (alertType) {
+                case InPhoneAlert:
+                {
+                    [[NSUserDefaults standardUserDefaults] setValue:@(newAlertVoice) forKey:PhoneAlertMusicKey];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }
+                    break;
+                case InDeviceAlert:
+                    [self.device selecteDiconnectAlertMusic:newAlertVoice];
+                    break;
+                default:
+                    break;
+            }
+            [self.tableView reloadData];
+        }];
     }
 }
 

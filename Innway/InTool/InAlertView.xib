@@ -21,7 +21,7 @@
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ca4-1m-YN4" userLabel="alertView">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ca4-1m-YN4" userLabel="confirmAlert">
                     <rect key="frame" x="20" y="140" width="335" height="200"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Information" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ymm-u8-0aw" userLabel="title">
@@ -79,21 +79,90 @@
                         <constraint firstItem="xMa-pI-7Ss" firstAttribute="centerX" secondItem="ca4-1m-YN4" secondAttribute="centerX" id="x04-gV-ogm"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Eed-Fa-yD3" userLabel="confirmCancleAlert">
+                    <rect key="frame" x="20" y="140" width="335" height="190"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YEM-bE-pd7">
+                            <rect key="frame" x="20" y="20" width="295" height="100"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wkX-Xw-Y4u">
+                                    <rect key="frame" x="0.0" y="40.5" width="295" height="19.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="wkX-Xw-Y4u" firstAttribute="leading" secondItem="YEM-bE-pd7" secondAttribute="leading" id="DKF-Qg-WWy"/>
+                                <constraint firstAttribute="height" constant="100" id="RKD-lO-NSi"/>
+                                <constraint firstItem="wkX-Xw-Y4u" firstAttribute="centerY" secondItem="YEM-bE-pd7" secondAttribute="centerY" id="cHh-eU-mYf"/>
+                                <constraint firstAttribute="trailing" secondItem="wkX-Xw-Y4u" secondAttribute="trailing" id="lBc-cM-cun"/>
+                                <constraint firstItem="wkX-Xw-Y4u" firstAttribute="centerX" secondItem="YEM-bE-pd7" secondAttribute="centerX" id="rW7-SH-Gxo"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UZP-a1-XZA">
+                            <rect key="frame" x="24" y="128" width="127" height="45"/>
+                            <constraints>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="YSj-l6-No9"/>
+                                <constraint firstAttribute="width" constant="127" id="q4E-pp-Qzr"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                            <state key="normal" title="Confirm" backgroundImage="greenBtn.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="confirmDidClick" destination="iN0-l3-epB" eventType="touchUpInside" id="ZEa-ob-WuD"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYM-Di-dkM">
+                            <rect key="frame" x="184" y="128" width="127" height="45"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="45" id="CvB-l9-X7y"/>
+                                <constraint firstAttribute="width" constant="127" id="zRE-Rq-5TT"/>
+                            </constraints>
+                            <state key="normal" title="Cancel" backgroundImage="whiteBtn.png">
+                                <color key="titleColor" red="0.31372549020000001" green="0.70196078429999997" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="cancleDidClick" destination="iN0-l3-epB" eventType="touchUpInside" id="aan-11-tyi"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="fYM-Di-dkM" firstAttribute="top" secondItem="YEM-bE-pd7" secondAttribute="bottom" constant="8" id="9WJ-gM-bTB"/>
+                        <constraint firstItem="YEM-bE-pd7" firstAttribute="leading" secondItem="Eed-Fa-yD3" secondAttribute="leading" constant="20" id="FtC-jE-DGP"/>
+                        <constraint firstAttribute="trailing" secondItem="YEM-bE-pd7" secondAttribute="trailing" constant="20" id="PVg-fl-DqE"/>
+                        <constraint firstAttribute="trailing" secondItem="fYM-Di-dkM" secondAttribute="trailing" constant="24" id="PyE-36-CWn"/>
+                        <constraint firstAttribute="height" constant="190" id="Z7M-5r-s5j"/>
+                        <constraint firstItem="UZP-a1-XZA" firstAttribute="leading" secondItem="Eed-Fa-yD3" secondAttribute="leading" constant="24" id="adf-KB-OHO"/>
+                        <constraint firstItem="YEM-bE-pd7" firstAttribute="top" secondItem="Eed-Fa-yD3" secondAttribute="top" constant="20" id="bc2-2G-yck"/>
+                        <constraint firstItem="UZP-a1-XZA" firstAttribute="top" secondItem="YEM-bE-pd7" secondAttribute="bottom" constant="8" id="xvo-eJ-eVF"/>
+                    </constraints>
+                </view>
             </subviews>
             <constraints>
                 <constraint firstItem="KU2-2N-16h" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="3qf-S1-EvS"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="KU2-2N-16h" secondAttribute="bottom" id="Dtw-hK-z4v"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Eed-Fa-yD3" secondAttribute="trailing" constant="20" id="Fip-Hi-l9H"/>
+                <constraint firstItem="Eed-Fa-yD3" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="120" id="JX5-05-aYu"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="ca4-1m-YN4" secondAttribute="trailing" constant="20" id="NcL-iv-5mG"/>
                 <constraint firstItem="ca4-1m-YN4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="OhC-DF-JJL"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="KU2-2N-16h" secondAttribute="trailing" id="Su2-F5-XFw"/>
                 <constraint firstItem="KU2-2N-16h" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="ZTU-5B-QSa"/>
                 <constraint firstItem="ca4-1m-YN4" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="120" id="aCP-3p-Q7U"/>
+                <constraint firstItem="Eed-Fa-yD3" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="mwp-dR-TCA"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
-                <outlet property="alertView" destination="ca4-1m-YN4" id="Mk7-8l-uXx"/>
-                <outlet property="confirmBtn" destination="xMa-pI-7Ss" id="6RN-RI-Her"/>
-                <outlet property="messageLabel" destination="ERl-Qo-xhD" id="ewi-Ex-leV"/>
+                <outlet property="cancelBtnWidthConstraint" destination="zRE-Rq-5TT" id="exR-O7-iZD"/>
+                <outlet property="confirmAlertView" destination="ca4-1m-YN4" id="WE0-cB-qEk"/>
+                <outlet property="confirmBtn" destination="UZP-a1-XZA" id="rTO-GS-h88"/>
+                <outlet property="confirmBtnWidthConstraint" destination="q4E-pp-Qzr" id="koc-Ah-yCt"/>
+                <outlet property="confirmCancelAlertView" destination="Eed-Fa-yD3" id="kFK-68-w8T"/>
+                <outlet property="confirmCancelMessageLabel" destination="wkX-Xw-Y4u" id="gXi-tR-s9J"/>
+                <outlet property="confirmMessageLabel" destination="ERl-Qo-xhD" id="wff-Ws-dYo"/>
                 <outlet property="titleLabel" destination="Ymm-u8-0aw" id="o0f-SG-wuB"/>
             </connections>
             <point key="canvasLocation" x="71" y="149"/>
@@ -101,5 +170,7 @@
     </objects>
     <resources>
         <image name="buyButton.png" width="237" height="45"/>
+        <image name="greenBtn.png" width="127" height="45"/>
+        <image name="whiteBtn.png" width="127" height="45"/>
     </resources>
 </document>

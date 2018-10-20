@@ -557,10 +557,16 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
 @interface InAlertView ()
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
+@property (weak, nonatomic) IBOutlet UILabel *confirmMessageLabel;
+@property (weak, nonatomic) IBOutlet UILabel *confirmCancelMessageLabel;
 @property (weak, nonatomic) IBOutlet UIButton *confirmBtn;
-@property (weak, nonatomic) IBOutlet UIView *alertView;
+@property (weak, nonatomic) IBOutlet UIView *confirmAlertView;
+@property (weak, nonatomic) IBOutlet UIView *confirmCancelAlertView;
 @property (nonatomic, strong) confirmHanler confirmHanler;
+@property (nonatomic, strong) confirmHanler cancleHanler;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *confirmBtnWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *cancelBtnWidthConstraint;
+
 
 @end
 
@@ -570,6 +576,10 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
     [[[InAlertView alloc] initWithTitle:title message:message confirm:confirmHanler] show];
 }
 
++ (void)showAlertWithMessage:(NSString *)message confirmHanler:(confirmHanler)confirmHanler cancleHanler:(confirmHanler)cancleHanler; {
+    [[[InAlertView alloc] initWithMessage:message confirm:confirmHanler cancleHanler:cancleHanler] show];
+}
+
 - (instancetype)init {
     if (self = [super init]) {
         self = [[[NSBundle mainBundle] loadNibNamed:@"InAlertView" owner:self options:nil] lastObject];
@@ -577,14 +587,33 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message confirm:(confirmHanler)confirmHanler{
+- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message confirm:(confirmHanler)confirmHanler {
     if (self = [self init]) {
-        self.alertView.backgroundColor = [UIColor whiteColor];
-        self.alertView.layer.cornerRadius = 5.0;
+        self.confirmCancelAlertView.hidden = YES;
+        self.confirmAlertView.backgroundColor = [UIColor whiteColor];
+        self.confirmAlertView.layer.cornerRadius = 5.0;
         self.titleLabel.text = title;
-        self.messageLabel.text = message;
+        self.confirmMessageLabel.text = message;
         self.confirmHanler = confirmHanler;
 //        [self.confirmBtn setTitle:confirm forState:UIControlStateNormal];
+    }
+    return self;
+}
+
+- (instancetype)initWithMessage:(NSString *)message confirm:(confirmHanler)confirmHanler cancleHanler:(confirmHanler)cancleHanler{
+    if (self = [self init]) {
+        self.confirmAlertView.hidden = YES;
+        self.confirmCancelAlertView.backgroundColor = [UIColor whiteColor];
+        self.confirmCancelAlertView.layer.cornerRadius = 5.0;
+//        self.titleLabel.text = title;
+        self.confirmCancelMessageLabel.text = message;
+        self.confirmHanler = confirmHanler;
+        self.cancleHanler = cancleHanler;
+        //        [self.confirmBtn setTitle:confirm forState:UIControlStateNormal];
+        if ([UIScreen mainScreen].bounds.size.width == 320) {
+            self.confirmBtnWidthConstraint.constant = 110;
+            self.cancelBtnWidthConstraint.constant = 110;
+        }
     }
     return self;
 }
@@ -602,6 +631,15 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
         self.confirmHanler();
     }
 }
+
+- (IBAction)cancleDidClick {
+    [self removeFromSuperview];
+    if (self.cancleHanler) {
+        self.cancleHanler();
+    }
+}
+
+
 
 
 @end
