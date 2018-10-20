@@ -61,8 +61,6 @@
     [super viewDidLoad];
     // 自动连接云端设备
     [[DLCloudDeviceManager sharedInstance] autoConnectCloudDevice];
-    // 为设备列表排序
-    [self sortDeviceList];
     
     // 界面调整
     self.topBodyViewTopConstraint.constant += 64;
@@ -93,7 +91,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.device.delegate = self;
+    // 为设备列表排序
+    [self sortDeviceList];
     [self.device getDeviceInfo];
     [self updateAnnotation];
     [self updateUI];
@@ -229,9 +228,7 @@
 }
 
 - (void)updateDevice:(DLDevice *)device {
-    self.device.delegate = nil;
     self.device = device;
-    self.device.delegate = self;
     [self.deviceListVC reloadView:[self sortDeviceList]];
     [self.device getDeviceInfo];
     [self updateUI];
@@ -248,7 +245,7 @@
 
 #pragma mark - menuViewDelegate
 - (void)deviceListViewController:(InDeviceListViewController *)menuVC didSelectedDevice:(DLDevice *)device {
-    [self deviceListViewController:self.deviceListVC moveDown:MAXFLOAT];
+//    [self deviceListViewController:self.deviceListVC moveDown:MAXFLOAT];
     if (device != self.device) {
         [self updateDevice:device];
     }
@@ -270,9 +267,9 @@
     if (down > 0) {
         //往下
         CGFloat minHeight = 196;
-        if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 1) {
-            minHeight = 146;
-        }
+//        if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 1) {
+//            minHeight = 146;
+//        }
         CGFloat maxMenuHeight = [UIScreen mainScreen].bounds.size.height * 0.5;
         if (maxMenuHeight + self.deviceListBodyHeightConstraint.constant - down < minHeight) {
             down = maxMenuHeight + self.deviceListBodyHeightConstraint.constant - minHeight;

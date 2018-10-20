@@ -22,9 +22,8 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Rog-QR-ccx">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Rog-QR-ccx">
                     <rect key="frame" x="0.0" y="44" width="375" height="623"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="GNe-EC-Wh9"/>
@@ -53,8 +52,12 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="Rog-QR-ccx" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="17f-Mm-e8z"/>
                 <constraint firstItem="WFs-iN-ins" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="8JM-ix-Cm6"/>
+                <constraint firstItem="Rog-QR-ccx" firstAttribute="top" secondItem="WFs-iN-ins" secondAttribute="bottom" constant="14" id="Aq8-lV-Cfr"/>
                 <constraint firstItem="WFs-iN-ins" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Tsj-ex-6cR"/>
+                <constraint firstAttribute="trailing" secondItem="Rog-QR-ccx" secondAttribute="trailing" id="XKM-nO-mk3"/>
+                <constraint firstAttribute="bottom" secondItem="Rog-QR-ccx" secondAttribute="bottom" id="cLv-vZ-f92"/>
             </constraints>
             <point key="canvasLocation" x="53.600000000000001" y="82.3088455772114"/>
         </view>

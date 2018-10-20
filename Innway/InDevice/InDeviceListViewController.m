@@ -14,7 +14,7 @@
 #import "InDeviceListAddDeviceCell.h"
 #import "InCommon.h"
 
-@interface InDeviceListViewController ()<UITableViewDelegate, UITableViewDataSource, InDeviceListCellDelegate>
+@interface InDeviceListViewController ()<UITableViewDelegate, UITableViewDataSource, InDeviceListCellDelegate, DLDeviceDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *cloudList;
@@ -81,6 +81,7 @@
         InDeviceListCell *cell = [tableView dequeueReusableCellWithIdentifier:InDeviceListCellReuseIdentifier];
         cell.backgroundColor = [UIColor clearColor];
         DLDevice *device = self.cloudList[indexPath.row];
+        device.delegate = self;
         cell.device = device;
         cell.delegate = self;
         return cell;
@@ -146,6 +147,11 @@
     else {
         self.upDownImage.image = [UIImage imageNamed:@"up"];
     }
+}
+
+- (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data{
+    NSLog(@"接收到设备数据， device.mac = %@， data = %@", device.mac, data);
+    [self.tableView reloadData];
 }
 
 

@@ -222,8 +222,8 @@ static DLCentralManager *instance = nil;
 //    }
     
 // 有效代码
-    NSLog(@"发现新设备: %@, %@", peripheral, RSSI);
     if ([self effectivePeripheral:advertisementData]) {
+        NSLog(@"发现新设备: %@, advertisementData = %@", peripheral, advertisementData);
         NSString *mac = [self getDeviceMac:advertisementData];
         if (mac.length > 0) {
             DLKnowDevice *knowDevice = [_knownPeripherals objectForKey:mac];

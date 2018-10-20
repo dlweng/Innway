@@ -125,6 +125,7 @@
 }
 
 - (void)getDeviceInfo {
+    NSLog(@"mac = %@, 去获取设备硬件数据", self.mac);
     char getDeviceInfo[4] = {0xEE, 0x01, 0x00, 0x00};
     [self write:[NSData dataWithBytes:getDeviceInfo length:strlen(getDeviceInfo)]];
 }
