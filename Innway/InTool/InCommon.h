@@ -58,6 +58,7 @@ typedef NS_ENUM(NSInteger, InSearchDeviceType) {
 + (void)sendHttpMethod:(NSString *)method URLString:(NSString *)URLString body:(NSDictionary *)body completionHandler:(nullable void (^)(NSURLResponse *response, NSDictionary *responseObject,  NSError * _Nullable error))completionHandler;
 
 + (BOOL)isIPhoneX;
++ (void)setNavgationBar:(UINavigationBar *)bar backgroundImage:(UIImage *)backgroundImage;
 
 @end
 
@@ -90,4 +91,11 @@ typedef NS_ENUM(NSInteger, InSearchDeviceType) {
 + (void)showHUDAddedTo:(UIView *)view tips:(NSString *)tips tag:(NSInteger)tag animated:(BOOL)animated;
 + (void)hideHUDForView:(UIView *)view tag:(NSInteger)tag;
 
+@end
+
+typedef void (^confirmHanler)(void);
+@interface InAlertView : UIView
++ (void)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmHanler:(confirmHanler)confirmHanler;
+- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message confirm:(NSString *)confirm confirm:(confirmHanler)confirmHanler;
+- (void)show;
 @end

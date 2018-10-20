@@ -9,6 +9,7 @@
 #import "InAddDeviceStartViewController.h"
 #import "DLCloudDeviceManager.h"
 #import "InControlDeviceViewController.h"
+#import "InCommon.h"
 
 @interface InAddDeviceStartViewController ()
 @property (weak, nonatomic) IBOutlet UIView *backView;
@@ -48,7 +49,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.navigationController.navigationBar setHidden:NO];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"] forBarMetrics:UIBarMetricsDefault];
+    [InCommon setNavgationBar:self.navigationController.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
 }
 
 - (void)goBack {
@@ -56,7 +57,7 @@
 }
 
 - (void)pushToControlDeviceController:(BOOL)animation {
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"] forBarMetrics:UIBarMetricsDefault];
+    [InCommon setNavgationBar:self.navigationController.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
     InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
     [self.navigationController pushViewController:controlDeviceVC animated:animation];
     [self.navigationController.navigationBar setHidden:NO];

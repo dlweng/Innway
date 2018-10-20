@@ -68,10 +68,10 @@
         [InAlertTool hideHUDForView:self.view tag:1];
         if (error) {
             if (error.code == -1) {
-                [InAlertTool showAlertWithTip:@"网络连接异常"];
+                [InAlertView showAlertWithTitle:@"Information" message:@"网络连接异常" confirmHanler:nil];
                 return ;
             }
-            [InAlertTool showAlertWithTip:@"设备删除失败"];
+            [InAlertView showAlertWithTitle:@"Information" message:@"设备删除失败" confirmHanler:nil];
         }
         else {
             if (manager.cloudDeviceList.count > 0) {

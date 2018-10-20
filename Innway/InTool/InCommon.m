@@ -365,6 +365,12 @@ static SystemSoundID soundID;
     return NO;
 }
 
++ (void)setNavgationBar:(UINavigationBar *)bar backgroundImage:(UIImage *)backgroundImage {
+    backgroundImage = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+    
+    [bar setBackgroundImage:backgroundImage forBarMetrics:UIBarMetricsDefault];
+}
+
 @end
 
 static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString *key, id defaultValue) { //通用安全方法
@@ -545,5 +551,57 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
     }
     return nil;
 }
+
+@end
+
+@interface InAlertView ()
+
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
+@property (weak, nonatomic) IBOutlet UIButton *confirmBtn;
+@property (weak, nonatomic) IBOutlet UIView *alertView;
+@property (nonatomic, strong) confirmHanler confirmHanler;
+
+@end
+
+@implementation InAlertView
+
++ (void)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmHanler:(confirmHanler)confirmHanler {
+    [[[InAlertView alloc] initWithTitle:title message:message confirm:confirmHanler] show];
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        self = [[[NSBundle mainBundle] loadNibNamed:@"InAlertView" owner:self options:nil] lastObject];
+    }
+    return self;
+}
+
+- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message confirm:(confirmHanler)confirmHanler{
+    if (self = [self init]) {
+        self.alertView.backgroundColor = [UIColor whiteColor];
+        self.alertView.layer.cornerRadius = 5.0;
+        self.titleLabel.text = title;
+        self.messageLabel.text = message;
+        self.confirmHanler = confirmHanler;
+//        [self.confirmBtn setTitle:confirm forState:UIControlStateNormal];
+    }
+    return self;
+}
+
+- (void)show {
+    UIWindow *rootWindow = [UIApplication sharedApplication].keyWindow;
+    [rootWindow addSubview:self];
+    self.frame = [UIScreen mainScreen].bounds;
+}
+
+
+- (IBAction)confirmDidClick {
+    [self removeFromSuperview];
+    if (self.confirmHanler) {
+        self.confirmHanler();
+    }
+}
+
 
 @end

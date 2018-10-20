@@ -36,7 +36,7 @@
 - (IBAction)changePasswordDidClick {
     NSLog(@"修改密码");
     NSLog(@"旧密码：%@， 新密码：%@， 确认密码：%@", self.oldPwd, self.pwdNew, self.confirmPwd);
-    [InAlertTool showAlertWithTip:@"暂未支持"];
+    [InAlertView showAlertWithTitle:@"Information" message:@"暂未支持" confirmHanler:nil];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

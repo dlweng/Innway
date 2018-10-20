@@ -31,6 +31,8 @@
 // 设置界面
 @property (nonatomic, weak) UIView *settingView;
 @property (nonatomic, weak) UIViewController *settingVC;
+@property (nonatomic, strong) NSLayoutConstraint *settingViewLeftConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *settingViewHeightConstraint;
 
 // 设备列表
 @property (weak, nonatomic) IBOutlet UIView *deviceListBodyView;
@@ -146,6 +148,35 @@
     self.coverView = view;
 }
 
+//- (void)addSettingView {
+//    if (self.settingVC) {
+//        return;
+//    }
+//    [self addCoverView];
+//    // 添加用户设置界面
+//    InUserSettingViewController *settingVC = [[InUserSettingViewController alloc] init];
+//    [self addChildViewController:settingVC];
+//    [self.view addSubview:settingVC.view];
+//    self.settingView = settingVC.view;
+//    UIView *settingView = settingVC.view;
+//    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.settingView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.settingView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
+//    self.settingViewLeftConstraint = [NSLayoutConstraint constraintWithItem:self.settingView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:0];
+//    [self.view addConstraint:self.settingViewLeftConstraint];
+//    self.settingViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.settingView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:screenWidth * 0.85];
+//    [self.view addConstraint:self.settingViewHeightConstraint];
+//
+//    settingVC.delegate = self;
+//    self.settingVC = settingVC;
+//    self.settingView.hidden = YES;
+//    settingVC.logoutUser = ^{
+//        UIViewController *loginVC = self.navigationController.viewControllers[1];
+//        NSLog(@"退出账户");
+//        [self safePopViewController:loginVC];
+//    };
+//}
+
 - (void)addSettingView {
     if (self.settingVC) {
         return;
@@ -156,16 +187,29 @@
     [self addChildViewController:settingVC];
     [self.view addSubview:settingVC.view];
     self.settingView = settingVC.view;
-    
+
     // IPHONEX = 1.45
     // XR = 1.35
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat scale = 0.85;
-    if ([InCommon isIPhoneX]) {
-        scale = 1.35;
-    }
     CGFloat y = 0;
-    CGFloat width = [UIScreen mainScreen].bounds.size.width * 1.35;
     CGFloat height = [UIScreen mainScreen].bounds.size.height-y;
+    NSLog(@"screenWidth = %f, screenHeight = %f", screenWidth, [UIScreen mainScreen].bounds.size.height);
+    if (screenWidth == 375) {
+        //iPhoneX = iPhoneXS = 375 * 812
+        scale = 1.4;
+    }
+    else if (screenWidth == 414) {
+        // iPhone XR, iPhoneXS Max 414 * 896
+        // iPhone 8P, 414 * 736
+        scale = 1.25;
+    }
+    else if (screenWidth == 320) {
+        // iphone 5s
+        scale = 1.7;
+        height += 50;
+    }
+    CGFloat width = [UIScreen mainScreen].bounds.size.width * scale;
     CGFloat x = -width;
     settingVC.view.frame = CGRectMake(x, y, width, height);
     settingVC.delegate = self;
@@ -287,6 +331,48 @@
 }
 
 #pragma mark - settingVCDelegate
+//- (void)settingViewController:(InUserSettingViewController *)settingVC touchMove:(CGPoint)move {
+//    CGFloat width = self.settingViewHeightConstraint.constant;
+//    CGFloat cureentLeft = self.settingViewLeftConstraint.constant;
+//    CGFloat x = cureentLeft - move.x;
+//    if (x >= 0) {
+//        x = 0;
+//    }
+//    else if (x <= -width){
+//        x = -width;
+//    }
+//    else {
+//        x = x;
+//    }
+//    CGFloat alpha = (width + x) / width * coverViewAlpha;
+//    [UIView animateWithDuration:0.05 animations:^{
+//        self.settingViewLeftConstraint.constant = x;
+//        self.coverView.alpha = alpha;
+//    }];
+//}
+//
+//- (void)settingViewController:(InUserSettingViewController *)settingVC touchEnd:(CGPoint)move {
+//    bool hideNaviBar = NO;
+//    CGFloat width = self.settingViewHeightConstraint.constant;
+//    CGFloat cureentLeft = self.settingViewLeftConstraint.constant;
+//    CGFloat x = cureentLeft - move.x;
+//    if (x >= -0.5 * width) {
+//        x = 0;
+//        hideNaviBar = YES;
+//    }
+//    else if (x <= -0.5 * width){
+//        x = -width;
+//        hideNaviBar = NO;
+//    }
+//    CGFloat alpha = (width + x) / width * coverViewAlpha;
+//    [UIView animateWithDuration:0.25 animations:^{
+//        self.settingViewLeftConstraint.constant = x;
+//        self.coverView.alpha = alpha;
+//        self.settingView.hidden = !hideNaviBar;
+//        self.navigationController.navigationBar.hidden = hideNaviBar;
+//    }];
+//}
+
 // 用户设置界面-左右滑动的处理
 - (void)settingViewController:(InUserSettingViewController *)settingVC touchMove:(CGPoint)move {
     CGFloat width = settingVC.view.bounds.size.width;
@@ -494,7 +580,7 @@
     [self.libraryPikerViewController.navigationBar setBarTintColor:[UIColor clearColor]];
     [self.libraryPikerViewController.navigationBar setTranslucent:NO];
     [self.libraryPikerViewController.navigationBar setTintColor:[UIColor whiteColor]];
-    [self.libraryPikerViewController.navigationBar setBackgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"] forBarMetrics:UIBarMetricsDefault];
+    [InCommon setNavgationBar:self.libraryPikerViewController.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
     // 设置标题颜色
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
     attrs[NSForegroundColorAttributeName] = [UIColor whiteColor];

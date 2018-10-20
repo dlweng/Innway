@@ -53,13 +53,13 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kevin" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oa7-ea-e7W">
-                            <rect key="frame" x="118" y="61.5" width="44" height="21"/>
+                            <rect key="frame" x="118" y="61.5" width="237" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="307262195@qq.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="67y-Ob-vcF">
-                            <rect key="frame" x="118" y="84.5" width="135" height="17"/>
+                            <rect key="frame" x="118" y="84.5" width="237" height="17"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -73,6 +73,8 @@
                         <constraint firstAttribute="bottom" secondItem="9Q6-JL-uwX" secondAttribute="bottom" id="9j5-Zi-iS1"/>
                         <constraint firstItem="67y-Ob-vcF" firstAttribute="leading" secondItem="Oa7-ea-e7W" secondAttribute="leading" id="CYE-OK-rlc"/>
                         <constraint firstAttribute="trailing" secondItem="9Q6-JL-uwX" secondAttribute="trailing" id="IAV-fA-EVt"/>
+                        <constraint firstAttribute="trailing" secondItem="Oa7-ea-e7W" secondAttribute="trailing" constant="20" id="Lo3-TG-O7o"/>
+                        <constraint firstAttribute="trailing" secondItem="67y-Ob-vcF" secondAttribute="trailing" constant="20" id="Onl-UO-dhZ"/>
                         <constraint firstItem="Oa7-ea-e7W" firstAttribute="centerY" secondItem="8uS-EP-hYs" secondAttribute="centerY" constant="-8" id="QxI-z0-FxD"/>
                         <constraint firstItem="8uS-EP-hYs" firstAttribute="leading" secondItem="aUX-EV-fgk" secondAttribute="leading" constant="24" id="ZIG-HF-U6y"/>
                         <constraint firstItem="9Q6-JL-uwX" firstAttribute="top" secondItem="aUX-EV-fgk" secondAttribute="top" id="ayH-mr-icM"/>

@@ -196,9 +196,7 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 - (void)addNewDevice {
     [[DLCloudDeviceManager sharedInstance] addDevice:self.findDeviceMac completion:^(DLCloudDeviceManager *manager, DLDevice *device, NSError *error) {
         if (error) {
-            [InAlertTool showAlert:@"Tip" message:@"添加设备失败" confirmHanler:^{
-               
-            }];
+            [InAlertView showAlertWithTitle:@"Information" message:@"添加设备失败" confirmHanler:nil];
         }
         else {
             InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];

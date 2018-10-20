@@ -30,7 +30,7 @@
 
 - (IBAction)resetBtnDidClick:(UIButton *)sender {
     if (self.emailTextField.text.length == 0) {
-        [InAlertTool showAlertWithTip:@"请输入邮箱"];
+        [InAlertView showAlertWithTitle:@"Information" message:@"请输入邮箱" confirmHanler:nil];
         return;
     }
     [self.view endEditing:YES];

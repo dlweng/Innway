@@ -51,11 +51,11 @@
 
 - (IBAction)userLogin:(UIButton *)sender {
     if (self.emailTextField.text.length == 0) {
-        [InAlertTool showAlertWithTip:@"请输入邮箱"];
+        [InAlertView showAlertWithTitle:@"Information" message:@"请输入邮箱" confirmHanler:nil];
         return;
     }
     else if (self.passwordTextField.text.length == 0) {
-        [InAlertTool showAlertWithTip:@"请输入密码"];
+        [InAlertView showAlertWithTitle:@"Information" message:@"请输入密码" confirmHanler:nil];
         return;
     }
     
@@ -67,7 +67,7 @@
         NSLog(@"登陆结果:responseObject = %@, error = %@", responseObject, error);
         if (error) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [InAlertTool showAlertAutoDisappear:error.localizedDescription];
+            [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
         }
         else {
             NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
@@ -83,8 +83,9 @@
             }
             else {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
+                
                 NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"登陆失败"];
-                [InAlertTool showAlertAutoDisappear:message];
+                [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
             }
             
         }
@@ -105,7 +106,7 @@
 }
 
 - (void)pushToControlDeviceController {
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"] forBarMetrics:UIBarMetricsDefault];
+    [InCommon setNavgationBar:self.navigationController.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
     InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
     [self.navigationController pushViewController:controlDeviceVC animated:YES];
     [self.navigationController.navigationBar setHidden:NO];

@@ -33,11 +33,11 @@
 
 - (IBAction)registerBtnDidClick:(UIButton *)sender {
     if (self.emailTextField.text.length == 0) {
-        [InAlertTool showAlertWithTip:@"请输入邮箱"];
+        [InAlertView showAlertWithTitle:@"Information" message:@"请输入邮箱" confirmHanler:nil];
         return;
     }
     else if (self.passwordTextField.text.length == 0) {
-        [InAlertTool showAlertWithTip:@"请输入密码"];
+        [InAlertView showAlertWithTitle:@"Information" message:@"请输入密码" confirmHanler:nil];
         return;
     }
     
@@ -49,12 +49,12 @@
         NSLog(@"注册结果:responseObject = %@, error = %@", responseObject, error);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (error) {
-            [InAlertTool showAlertAutoDisappear:error.localizedDescription];
+            [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
         }
         else {
 //            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
             NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"注册失败"];
-            [InAlertTool showAlertAutoDisappear:message];
+            [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
         }
     }];
 }
