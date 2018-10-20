@@ -13,7 +13,7 @@
 @protocol InDeviceListViewControllerDelegate<NSObject>
 - (void)deviceListViewController:(InDeviceListViewController *)menuVC didSelectedDevice:(DLDevice *)device;
 - (void)deviceListViewControllerDidSelectedToAddDevice:(InDeviceListViewController *)menuVC;
-- (void)deviceListViewController:(InDeviceListViewController *)menuVC moveDown:(CGFloat)down;
+- (void)deviceListViewController:(InDeviceListViewController *)menuVC moveDown:(BOOL)down;
 - (void)deviceSettingBtnDidClick:(DLDevice *)device;
 @end
 

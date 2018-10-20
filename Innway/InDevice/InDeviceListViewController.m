@@ -43,7 +43,17 @@
     self.tableView.backgroundColor = [UIColor clearColor];
     
     self.upDownView.userInteractionEnabled = YES;
-    [self.upDownView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(upDown:)]];
+//    [self.upDownView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(upDown:)]];
+    // 添加点击手势
+    [self.upDownView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(upDown:)]];
+    [self.upDownView addGestureRecognizer:[[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(upDown:)]];
+    // 添加上下清扫手势
+    UISwipeGestureRecognizer *upSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(turnUp)];
+    [self.view addGestureRecognizer:upSwipeGestureRecognizer];
+    upSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionUp;
+    UISwipeGestureRecognizer *downSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(turnDown)];
+    [self.view addGestureRecognizer:downSwipeGestureRecognizer];
+    downSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
     self.down = YES;
 }
 
@@ -124,17 +134,42 @@
     [self.tableView reloadData];
 }
 
+//- (void)upDown:(UIPanGestureRecognizer *)pan {
+////    NSLog(@"pan = %@", [NSValue valueWithCGPoint:[pan locationInView:self.view]]);
+//    CGPoint point = [pan locationInView:self.view];
+//    if (self.down) {
+//        if (point.y > 0) {
+//            [self.delegate deviceListViewController:self moveDown:point.y];
+//        }
+//    }
+//    else {
+//        if (point.y < 0) {
+//            [self.delegate deviceListViewController:self moveDown:point.y];
+//        }
+//    }
+//}
+
 - (void)upDown:(UIPanGestureRecognizer *)pan {
-//    NSLog(@"pan = %@", [NSValue valueWithCGPoint:[pan locationInView:self.view]]);
-    CGPoint point = [pan locationInView:self.view];
+    self.down = !self.down;
+    if ([self.delegate respondsToSelector:@selector(deviceListViewController:moveDown:)]) {
+         [self.delegate deviceListViewController:self moveDown:self.down];
+    }
+}
+
+- (void)turnUp {
     if (self.down) {
-        if (point.y > 0) {
-            [self.delegate deviceListViewController:self moveDown:point.y];
+        self.down = NO;
+        if ([self.delegate respondsToSelector:@selector(deviceListViewController:moveDown:)]) {
+            [self.delegate deviceListViewController:self moveDown:self.down];
         }
     }
-    else {
-        if (point.y < 0) {
-            [self.delegate deviceListViewController:self moveDown:point.y];
+}
+
+- (void)turnDown {
+    if (!self.down) {
+        self.down = YES;
+        if ([self.delegate respondsToSelector:@selector(deviceListViewController:moveDown:)]) {
+            [self.delegate deviceListViewController:self moveDown:self.down];
         }
     }
 }
@@ -142,10 +177,10 @@
 - (void)setDown:(BOOL)down {
     _down = down;
     if (down) {
-        self.upDownImage.image = [UIImage imageNamed:@"down"];
+        self.upDownImage.image = [UIImage imageNamed:@"up"];
     }
     else {
-        self.upDownImage.image = [UIImage imageNamed:@"up"];
+        self.upDownImage.image = [UIImage imageNamed:@"down"];
     }
 }
 

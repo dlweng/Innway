@@ -130,7 +130,7 @@
     [self addChildViewController:self.deviceListVC];
     [self.deviceListBodyView addSubview:self.deviceListVC.view];
     self.deviceListVC.view.frame = self.deviceListBodyView.bounds;
-    [self deviceListViewController:self.deviceListVC moveDown:MAXFLOAT];
+    [self deviceListViewController:self.deviceListVC moveDown:YES];
 }
 
 #pragma mark - SettingView
@@ -307,28 +307,48 @@
 }
 
 // 设备列表-上下滑动的处理
-- (void)deviceListViewController:(InDeviceListViewController *)menuVC moveDown:(CGFloat)down {
-    if (down > 0) {
+- (void)deviceListViewController:(InDeviceListViewController *)menuVC moveDown:(BOOL)down {
+    CGFloat heightConstant;
+    if (down) {
         //往下
         CGFloat minHeight = 196;
-//        if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 1) {
-//            minHeight = 146;
-//        }
+        //        if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 1) {
+        //            minHeight = 146;
+        //        }
         CGFloat maxMenuHeight = [UIScreen mainScreen].bounds.size.height * 0.5;
-        if (maxMenuHeight + self.deviceListBodyHeightConstraint.constant - down < minHeight) {
-            down = maxMenuHeight + self.deviceListBodyHeightConstraint.constant - minHeight;
-            menuVC.down = NO;
-        }
+        heightConstant = minHeight - maxMenuHeight;
     }
     else {
         // 往上
-        if (self.deviceListBodyHeightConstraint.constant - down > 0) {
-            down = self.deviceListBodyHeightConstraint.constant;
-            menuVC.down = YES;
-        }
+        heightConstant = 0;
     }
-    self.deviceListBodyHeightConstraint.constant -= down;
+    [UIView animateWithDuration:0.25 animations:^{
+        self.deviceListBodyHeightConstraint.constant = heightConstant;
+    }];
+  
 }
+//- (void)deviceListViewController:(InDeviceListViewController *)menuVC moveDown:(CGFloat)down {
+//    if (down > 0) {
+//        //往下
+//        CGFloat minHeight = 196;
+////        if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 1) {
+////            minHeight = 146;
+////        }
+//        CGFloat maxMenuHeight = [UIScreen mainScreen].bounds.size.height * 0.5;
+//        if (maxMenuHeight + self.deviceListBodyHeightConstraint.constant - down < minHeight) {
+//            down = maxMenuHeight + self.deviceListBodyHeightConstraint.constant - minHeight;
+//            menuVC.down = NO;
+//        }
+//    }
+//    else {
+//        // 往上
+//        if (self.deviceListBodyHeightConstraint.constant - down > 0) {
+//            down = self.deviceListBodyHeightConstraint.constant;
+//            menuVC.down = YES;
+//        }
+//    }
+//    self.deviceListBodyHeightConstraint.constant -= down;
+//}
 
 #pragma mark - settingVCDelegate
 //- (void)settingViewController:(InUserSettingViewController *)settingVC touchMove:(CGPoint)move {
