@@ -121,7 +121,7 @@ static DLCentralManager *instance = nil;
 
 
 - (void)run {
-//    NSLog(@"定时器计时:_time = %d", _time);
+    NSLog(@"定时器计时:_time = %d", _time);
     _time++;
     if (_time >= _timeout) {
         // 关闭定时器，停止扫描

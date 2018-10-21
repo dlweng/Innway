@@ -10,10 +10,17 @@
 #import "DLDevice.h"
 #import <AFNetworking.h>
 #import <objc/runtime.h>
+#import <AVFoundation/AVFoundation.h>
 
-static SystemSoundID soundID;
-@interface InCommon ()<CLLocationManagerDelegate>
+//static SystemSoundID soundID;
+@interface InCommon ()<CLLocationManagerDelegate> {
+    NSTimer *_sharkTimer;
+}
 @property (nonatomic, strong) CLLocationManager *locationManager;
+
+// 音频播放
+@property (nonatomic, strong) AVAudioSession *audioSession;
+@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 @end
 
 @implementation InCommon
@@ -30,10 +37,25 @@ static SystemSoundID soundID;
 - (instancetype)init {
     if (self = [super init]) {
         [self getUserInfo];
-        soundID = 1;
+//        soundID = 1;
         [self.locationManager requestAlwaysAuthorization];
+        
+        // 设置后台播放代码
+        _audioSession = [AVAudioSession sharedInstance];
+        [_audioSession setActive:YES error:nil];
+        [_audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+        
+        // 设置闪光灯定时器
+        _sharkTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(setupSharkLight) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_sharkTimer forMode:NSRunLoopCommonModes];
+        [self stopSharkAnimation];
     }
     return self;
+}
+
+- (void)dealloc {
+    [_sharkTimer invalidate];
+    _sharkTimer = nil;
 }
 
 - (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd {
@@ -166,7 +188,6 @@ static SystemSoundID soundID;
 
 #pragma mark - 手机报警
 - (void)playSound {
-    AudioServicesDisposeSystemSoundID(soundID);
     NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
     NSString *alertMusic;
     switch (phoneAlertMusic.integerValue) {
@@ -180,15 +201,83 @@ static SystemSoundID soundID;
             alertMusic = @"voice1.mp3";
             break;
     }
-    //    创建一个系统声音的服务
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef _Nonnull)([[NSBundle mainBundle]URLForResource:alertMusic withExtension:nil]), &soundID);
-    //    播放系统声音
-    AudioServicesPlayAlertSound(soundID);
+    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:alertMusic withExtension:nil];
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
+    self.audioPlayer.numberOfLoops = MAXFLOAT;
+    self.audioPlayer.volume = 1;
+    [self.audioPlayer play];
+    [self startSharkAnimation];
 }
 
 - (void)stopSound {
-    AudioServicesDisposeSystemSoundID(soundID);
+    [self.audioPlayer stop];
+    [self stopSharkAnimation];
 }
+
+#pragma mark - 闪光灯动画
+- (void)startSharkAnimation {
+    [_sharkTimer setFireDate:[NSDate distantPast]];
+}
+
+- (void)stopSharkAnimation {
+    [_sharkTimer setFireDate:[NSDate distantFuture]];
+    [self closeSharkLight];
+}
+
+- (void)setupSharkLight {
+    AVCaptureDevice *camera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    //修改前必须先锁定
+    [camera lockForConfiguration:nil];
+    //必须判定是否有闪光灯，否则如果没有闪光灯会崩溃
+    if ([camera hasFlash]) {
+        if (camera.flashMode == AVCaptureFlashModeOff || camera.flashMode == AVCaptureFlashModeAuto) {
+            camera.flashMode = AVCaptureFlashModeOn;
+            camera.torchMode = AVCaptureTorchModeOn;
+        } else if (camera.flashMode == AVCaptureFlashModeOn) {
+            camera.flashMode = AVCaptureFlashModeOff;
+            camera.torchMode = AVCaptureTorchModeOff;
+        }
+        
+    }
+    [camera unlockForConfiguration];
+}
+
+- (void)closeSharkLight {
+    AVCaptureDevice *camera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    //修改前必须先锁定
+    [camera lockForConfiguration:nil];
+    //必须判定是否有闪光灯，否则如果没有闪光灯会崩溃
+    if ([camera hasFlash]) {
+        camera.flashMode = AVCaptureFlashModeOff;
+        camera.torchMode = AVCaptureTorchModeOff;
+    }
+    [camera unlockForConfiguration];
+}
+
+//- (void)playSound {
+//    AudioServicesDisposeSystemSoundID(soundID);
+//    NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
+//    NSString *alertMusic;
+//    switch (phoneAlertMusic.integerValue) {
+//        case 2:
+//            alertMusic = @"voice2.mp3";
+//            break;
+//        case 3:
+//            alertMusic = @"voice3.mp3";
+//            break;
+//        default:
+//            alertMusic = @"voice1.mp3";
+//            break;
+//    }
+//    //    创建一个系统声音的服务
+//    AudioServicesCreateSystemSoundID((__bridge CFURLRef _Nonnull)([[NSBundle mainBundle]URLForResource:alertMusic withExtension:nil]), &soundID);
+//    //    播放系统声音
+//    AudioServicesPlayAlertSound(soundID);
+//}
+//
+//- (void)stopSound {
+//    AudioServicesDisposeSystemSoundID(soundID);
+//}
 
 #pragma mark - 定位
 - (void)uploadDeviceLocation:(DLDevice *)device {
@@ -370,6 +459,7 @@ static SystemSoundID soundID;
     
     [bar setBackgroundImage:backgroundImage forBarMetrics:UIBarMetricsDefault];
 }
+
 
 @end
 

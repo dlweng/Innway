@@ -55,6 +55,12 @@
 @property (nonatomic, assign) BOOL takeAPhtot;
 @property (strong,nonatomic)UIImagePickerController * imagePikerViewController;
 @property (nonatomic, strong) UIImagePickerController *libraryPikerViewController;
+
+// 按钮闪烁动画
+@property (nonatomic, strong) NSTimer *animationTimer;
+@property (nonatomic, assign) BOOL btnTextIsHide;
+@property (nonatomic, assign) BOOL isSearchPhone;
+@property (nonatomic, assign) BOOL isSearchDevice;
 @end
 
 @implementation InControlDeviceViewController
@@ -87,9 +93,16 @@
     // 实时监听设备的RSSI值更新
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceChangeOnline:) name:DeviceOnlineChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchPhone) name:DeviceSearchPhoneNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchDeviceAlert:) name:DeviceSearchDeviceAlertNotification object:nil];
     
     // 添加云端列表的监视
     [[DLCloudDeviceManager sharedInstance] addObserver:self forKeyPath:@"cloudDeviceList" options:NSKeyValueObservingOptionNew context:nil];
+    
+    // 设置定时器
+    self.animationTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(showBtnAnimation) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.animationTimer forMode:NSRunLoopCommonModes];
+    [self stopBtnAnimation];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -107,7 +120,11 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceOnlineChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceSearchPhoneNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceSearchDeviceAlertNotification object:nil];
     [[DLCloudDeviceManager sharedInstance] removeObserver:self forKeyPath:@"cloudDeviceList"];
+    [self.animationTimer invalidate];
+    self.animationTimer = nil;
 }
 
 #pragma mark UI设置
@@ -119,13 +136,16 @@
 }
 
 - (void)updateUI {
-    NSString *deviceName = self.device.deviceName;
-    deviceName = @"Lily";
-    [self.controlDeviceBtn setTitle:[NSString stringWithFormat:@"Ring Innway %@", deviceName] forState:UIControlStateNormal];
+    [self setupControlDeviceBtnText];
     [self.deviceListVC reloadView:nil];
     [self updateAnnotation];
 }
 
+- (void)setupControlDeviceBtnText {
+    NSString *deviceName = self.device.deviceName;
+    deviceName = @"Lily";
+    [self.controlDeviceBtn setTitle:[NSString stringWithFormat:@"Ring Innway %@", deviceName] forState:UIControlStateNormal];
+}
 
 - (void)addDeviceListView {
     self.deviceListVC = [InDeviceListViewController deviceListViewController];
@@ -242,7 +262,19 @@
 #pragma mark - Action
 //控制设备
 - (IBAction)controlDeviceBtnDidClick:(UIButton *)sender {
+    if (self.isSearchPhone) {
+        [self stopSearchPhone];
+        return;
+    }
     NSLog(@"下发控制指令");
+    if (self.isSearchDevice) {
+        self.isSearchDevice = NO;
+        [self stopBtnAnimation];
+    }
+    else {
+        self.isSearchDevice = YES;
+        [self startBtnAnimation];
+    }
     [self.device searchDevice];
 }
 
@@ -626,22 +658,7 @@
         return;
     }
     NSLog(@"设置闪光灯");
-    AVCaptureDevice *camera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    //修改前必须先锁定
-    [camera lockForConfiguration:nil];
-    //必须判定是否有闪光灯，否则如果没有闪光灯会崩溃
-    if ([camera hasFlash]) {
-        
-        if (camera.flashMode == AVCaptureFlashModeOff || camera.flashMode == AVCaptureFlashModeAuto) {
-            camera.flashMode = AVCaptureFlashModeOn;
-            camera.torchMode = AVCaptureTorchModeOn;
-        } else if (camera.flashMode == AVCaptureFlashModeOn) {
-            camera.flashMode = AVCaptureFlashModeOff;
-            camera.torchMode = AVCaptureTorchModeOff;
-        }
-        
-    }
-    [camera unlockForConfiguration];
+    [common setupSharkLight];
 }
 
 - (IBAction)goPhotoLibrary {
@@ -697,7 +714,56 @@
     NSLog(@"保存图片结果: image = %@, error = %@, contextInfo = %@", image, error, contextInfo);
 }
 
+#pragma mark - 按钮动画
+- (void)startBtnAnimation {
+    self.btnTextIsHide = YES; // 保持步调一致
+    [self.animationTimer setFireDate:[NSDate distantPast]];
+}
 
+- (void)stopBtnAnimation {
+    [self.animationTimer setFireDate:[NSDate distantFuture]];
+    // 显示按钮文字
+    self.btnTextIsHide = YES;
+    [self showBtnAnimation];
+}
+
+- (void)showBtnAnimation {
+    self.btnTextIsHide = !self.btnTextIsHide;
+    if (!self.btnTextIsHide) {
+        [self setupControlDeviceBtnText];
+    }
+    else {
+        [self.controlDeviceBtn setTitle:@"" forState:UIControlStateNormal];
+    }
+}
+
+- (void)searchPhone {
+    if (self.isSearchPhone) {
+        [self stopSearchPhone];
+        return;
+    }
+    self.isSearchPhone = YES;
+    [common playSound];
+    [self startBtnAnimation];
+}
+
+- (void)stopSearchPhone {
+    self.isSearchPhone = NO;
+    [common stopSound];
+    [self stopBtnAnimation];
+}
+
+- (void)searchDeviceAlert:(NSNotification *)noti {
+    BOOL alertStatus = [noti.userInfo boolValueForKey:AlertStatusKey defaultValue:NO];
+    if (alertStatus) {
+        self.isSearchDevice = YES;
+        [self startBtnAnimation];
+    }
+    else {
+        self.isSearchDevice = NO;
+        [self stopBtnAnimation];
+    }
+}
 
 #pragma mark - Properity
 - (NSMutableDictionary *)deviceAnnotation {

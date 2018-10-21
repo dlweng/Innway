@@ -20,6 +20,7 @@
 
 #define DeviceOnlineChangeNotification @"DeviceOnlineChangeNotification"
 #define DeviceSearchPhoneNotification @"DeviceSearchPhoneNotification"
+#define DeviceSearchDeviceAlertNotification @"DeviceSearchDeviceAlertNotification"
 #define DeviceRSSIChangeNotification  @"DeviceRSSIChangeNotification"
 
 @class DLDevice;
@@ -42,6 +43,7 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 @property (nonatomic, assign, readonly) BOOL connected;
 @property (nonatomic, strong) NSNumber *rssi;
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
+
 
 + (instancetype)device:(CBPeripheral *)peripheral;
 - (void)setCoordinate:(NSString *)gps;

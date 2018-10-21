@@ -44,9 +44,12 @@ typedef NS_ENUM(NSInteger, InSearchDeviceType) {
 - (void)removeDeviceByCloudList:(DLDevice *)device;
 - (NSArray *)getCloudList;
 
-
+//音频
 - (void)playSound;
 - (void)stopSound;
+
+// 设置闪光灯 打开的时候关闭，关闭的时候打开
+- (void)setupSharkLight;
 
 // 返回false，说明当前APP没有开启定位功能
 - (NSString *)getCurrentGps;

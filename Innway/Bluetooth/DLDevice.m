@@ -209,11 +209,10 @@
         NSString *alertStatus = [payload substringWithRange:NSMakeRange(0, 2)];
         NSLog(@"alertStatus = %@", alertStatus);
         [self.data setValue:@(alertStatus.boolValue) forKey:AlertStatusKey];
-
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchDeviceAlertNotification object:self userInfo:@{AlertStatusKey:@(alertStatus.boolValue)}];
     }
     else if ([cmd isEqualToString:@"05"]) {
         NSLog(@"设备寻找手机，手机要发出警报");
-        [[InCommon sharedInstance] playSound];
         [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchPhoneNotification object:self];
     }
     else if ([cmd isEqualToString:@"08"]) {
