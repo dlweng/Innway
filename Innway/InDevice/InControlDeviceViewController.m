@@ -93,7 +93,7 @@
     // 实时监听设备的RSSI值更新
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceChangeOnline:) name:DeviceOnlineChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchPhone) name:DeviceSearchPhoneNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchPhone:) name:DeviceSearchPhoneNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchDeviceAlert:) name:DeviceSearchDeviceAlertNotification object:nil];
     
     // 添加云端列表的监视
@@ -737,7 +737,7 @@
     }
 }
 
-- (void)searchPhone {
+- (void)searchPhone:(NSNotification *)noti {
     if (self.isSearchPhone) {
         [self stopSearchPhone];
         return;
@@ -745,6 +745,10 @@
     self.isSearchPhone = YES;
     [common playSound];
     [self startBtnAnimation];
+    
+    // 发送本地通知
+    DLDevice *device = noti.userInfo[@"Device"];
+    [self sendLocalNotification:device];
 }
 
 - (void)stopSearchPhone {
@@ -763,6 +767,15 @@
         self.isSearchDevice = NO;
         [self stopBtnAnimation];
     }
+}
+
+- (void)sendLocalNotification:(DLDevice *)device {
+    // 1.创建通知
+    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    // 2.设置通知的必选参数
+    // 设置通知显示的内容
+    localNotification.alertBody = [NSString stringWithFormat:@"Innway %@ is finding iPhone now!", device.deviceName];
+     [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
 }
 
 #pragma mark - Properity

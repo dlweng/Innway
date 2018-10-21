@@ -638,9 +638,9 @@
 		3374C7492112013A00F83101 /* Innway */ = {
 			isa = PBXGroup;
 			children = (
-				337E501C2161F38B00CB6313 /* InAddDevice */,
 				3385C6DB21578D2B005FAB04 /* InBaseViewController.h */,
 				3385C6DC21578D2B005FAB04 /* InBaseViewController.m */,
+				337E501C2161F38B00CB6313 /* InAddDevice */,
 				338CDF8221297F8C00A018EA /* Bluetooth */,
 				3374C76E2112077C00F83101 /* image */,
 				33027C1F211EC5140003C5D9 /* InTool */,

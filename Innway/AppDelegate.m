@@ -20,8 +20,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    // 设置导航栏
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     navigationBar.tintColor = [UIColor whiteColor];
+    // 启动蓝牙功能
     [DLCentralManager startSDKCompletion:^(DLCentralManager *manager, CBCentralManagerState state) {
         if (state == CBCentralManagerStatePoweredOff) {
             [InAlertView showAlertWithTitle:@"Information" message:@"请打开蓝牙" confirmHanler:nil];
@@ -30,7 +32,13 @@
         }
     }];
     
+    // 设置状态栏
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    // 设置通知
+    UIUserNotificationType type = UIUserNotificationTypeAlert | UIUserNotificationTypeSound;
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     return YES;
 }
 

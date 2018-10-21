@@ -213,7 +213,7 @@
     }
     else if ([cmd isEqualToString:@"05"]) {
         NSLog(@"设备寻找手机，手机要发出警报");
-        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchPhoneNotification object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchPhoneNotification object:self userInfo:@{@"Device":self}];
     }
     else if ([cmd isEqualToString:@"08"]) {
         [self.data setValue:@(self.disconnectAlert) forKey:DisconnectAlertKey];
