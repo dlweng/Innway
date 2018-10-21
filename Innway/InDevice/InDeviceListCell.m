@@ -43,41 +43,44 @@
 }
 
 - (void)updateBattery:(DLDevice *)device {
-    if (device.data.count > 0) {
-        NSString *batteryImageName = @"10";
-        NSInteger battery = [device.data integerValueForKey:ElectricKey defaultValue:0];
-        if (battery > 90) {
-            batteryImageName = @"100";
-        }
-        else if (battery > 80) {
-            batteryImageName = @"90";
-        }
-        else if (battery > 70) {
-            batteryImageName = @"80";
-        }
-        else if (battery > 60) {
-            batteryImageName = @"70";
-        }
-        else if (battery > 50) {
-            batteryImageName = @"60";
-        }
-        else if (battery > 40) {
-            batteryImageName = @"50";
-        }
-        else if (battery > 30) {
-            batteryImageName = @"40";
-        }
-        else if (battery > 20) {
-            batteryImageName = @"30";
-        }
-        else if (battery > 10) {
-            batteryImageName = @"20";
-        } else if(battery >= 5){
-            batteryImageName = @"10";
-        } else if(battery > 0){
-            batteryImageName = @"5";
-        } else if(battery == 0){
-            batteryImageName = @"0";
+    if (device.lastData.count > 0) {
+        NSString *batteryImageName = @"charge";
+        NSInteger charge = [device.lastData integerValueForKey:ChargingStateKey defaultValue:0];
+        if (!charge) {
+            NSInteger battery = [device.lastData integerValueForKey:ElectricKey defaultValue:0];
+            if (battery > 90) {
+                batteryImageName = @"100";
+            }
+            else if (battery > 80) {
+                batteryImageName = @"90";
+            }
+            else if (battery > 70) {
+                batteryImageName = @"80";
+            }
+            else if (battery > 60) {
+                batteryImageName = @"70";
+            }
+            else if (battery > 50) {
+                batteryImageName = @"60";
+            }
+            else if (battery > 40) {
+                batteryImageName = @"50";
+            }
+            else if (battery > 30) {
+                batteryImageName = @"40";
+            }
+            else if (battery > 20) {
+                batteryImageName = @"30";
+            }
+            else if (battery > 10) {
+                batteryImageName = @"20";
+            } else if(battery >= 5){
+                batteryImageName = @"10";
+            } else if(battery > 0){
+                batteryImageName = @"5";
+            } else if(battery == 0){
+                batteryImageName = @"0";
+            }
         }
         if (batteryImageName.integerValue == 5) {
             self.batteryImageView.hidden = YES;

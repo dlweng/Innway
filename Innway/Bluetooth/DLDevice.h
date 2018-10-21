@@ -31,31 +31,40 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 
 // 云端设备类
 @interface DLDevice : NSObject<CBPeripheralDelegate>
-@property (nonatomic, strong) NSMutableDictionary *data;
-@property (nonatomic, strong) CBPeripheral *peripheral;
-@property (nonatomic, copy) NSString *deviceName;
-@property (nonatomic, copy) NSString *mac;
-@property (nonatomic, strong, readonly) NSDictionary *lastData;
 @property (nonatomic, weak) id<DLDeviceDelegate> delegate;
+@property (nonatomic, strong) CBPeripheral *peripheral;
 @property (nonatomic, assign) NSInteger cloudID;
-@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
+@property (nonatomic, copy) NSString *mac;
+@property (nonatomic, copy) NSString *deviceName;
+// 最新的设备数据
+@property (nonatomic, strong, readonly) NSDictionary *lastData;
 @property (nonatomic, assign) BOOL online;
 @property (nonatomic, assign, readonly) BOOL connected;
 @property (nonatomic, strong) NSNumber *rssi;
+@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 
-- (BOOL)discoverServices;
-
++ (instancetype)device:(CBPeripheral *)peripheral;
 - (void)setCoordinate:(NSString *)gps;
 // 在线设备获取的是当前手机的经纬度； 离线设备获取的是保存的经纬度
 - (NSString *)getGps;
 
-+ (instancetype)device:(CBPeripheral *)peripheral;
-- (void)write:(NSData *)data;
+// 连接方法
+- (void)connectToDevice:(void (^)(DLDevice *device, NSError *error))completion;
+- (void)disConnectToDevice:(void (^)(DLDevice *device, NSError *error))completion;
 
+
+
+
+#pragma mark - 控制方法
+- (void)write:(NSData *)data;
+// 获取硬件信息
 - (void)getDeviceInfo;
+// 通过手机查找防丢设备
 - (void)searchDevice;
+// 设置断开连接通知和重连通知
 - (void)setDisconnectAlert:(BOOL)disconnectAlert reconnectAlert:(BOOL)reconnectAlert;
-- (void)activeDevice; //激活设备
+//激活设备
+- (void)activeDevice;
 //警报音编码，可选 01，02，03
 - (void)selecteDiconnectAlertMusic:(NSInteger)alertMusic;
 @end

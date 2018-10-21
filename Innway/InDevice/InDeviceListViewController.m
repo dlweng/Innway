@@ -26,10 +26,10 @@
 
 @implementation InDeviceListViewController
 
-+ (instancetype)DeviceListViewControllerWithCloudList:(NSArray *)cloudList {
++ (instancetype)deviceListViewController {
     InDeviceListViewController *menuVC = [[InDeviceListViewController alloc] init];
     menuVC.tableView.backgroundColor = [UIColor redColor];
-    menuVC.cloudList = cloudList;
+    menuVC.cloudList = [NSMutableArray array];
     return menuVC;
 }
 
@@ -59,6 +59,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
 }
 
 - (void)dealloc {

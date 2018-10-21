@@ -81,8 +81,9 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
     }
     self.type = InSearch;
     [self updateView];
-    [self stopAnimation];
-    [self hideAllWating];
+//    [self stopAnimation];
+//    [self hideAllWating];
+    [self confirm];
     self.findDeviceMac = nil;
 }
 
@@ -194,7 +195,9 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 }
 
 - (void)addNewDevice {
+    [InAlertTool showHUDAddedTo:self.view animated:YES];
     [[DLCloudDeviceManager sharedInstance] addDevice:self.findDeviceMac completion:^(DLCloudDeviceManager *manager, DLDevice *device, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (error) {
             [InAlertView showAlertWithTitle:@"Information" message:@"添加设备失败" confirmHanler:nil];
         }

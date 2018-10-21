@@ -61,9 +61,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // 自动连接云端设备
-    [[DLCloudDeviceManager sharedInstance] autoConnectCloudDevice];
-    
     // 界面调整
     self.topBodyViewTopConstraint.constant += 64;
     if ([InCommon isIPhoneX]) { //iphonex
@@ -81,6 +78,7 @@
     [self addDeviceListView];
     [self addSettingView];
     [self setUpImagePiker];
+    [[DLCloudDeviceManager sharedInstance] autoConnectCloudDevice];
     
     //地图设置
     self.mapView.delegate = self;
@@ -89,6 +87,9 @@
     // 实时监听设备的RSSI值更新
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRSSIChange:) name:DeviceRSSIChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceChangeOnline:) name:DeviceOnlineChangeNotification object:nil];
+    
+    // 添加云端列表的监视
+    [[DLCloudDeviceManager sharedInstance] addObserver:self forKeyPath:@"cloudDeviceList" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -100,11 +101,13 @@
     [self updateUI];
     // 在viewDidLoad设置没有效果
     self.mapView.showsUserLocation = [common getIsShowUserLocation];
+    
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceOnlineChangeNotification object:nil];
+    [[DLCloudDeviceManager sharedInstance] removeObserver:self forKeyPath:@"cloudDeviceList"];
 }
 
 #pragma mark UI设置
@@ -125,12 +128,16 @@
 
 
 - (void)addDeviceListView {
-    self.deviceListVC = [InDeviceListViewController DeviceListViewControllerWithCloudList:[self sortDeviceList]];
+    self.deviceListVC = [InDeviceListViewController deviceListViewController];
     self.deviceListVC.delegate = self;
     [self addChildViewController:self.deviceListVC];
     [self.deviceListBodyView addSubview:self.deviceListVC.view];
     self.deviceListVC.view.frame = self.deviceListBodyView.bounds;
     [self deviceListViewController:self.deviceListVC moveDown:YES];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    NSLog(@"keyPath = %@发生改变, change = %@, object = %@",keyPath, change, object);
 }
 
 #pragma mark - SettingView
@@ -194,7 +201,7 @@
     CGFloat scale = 0.85;
     CGFloat y = 0;
     CGFloat height = [UIScreen mainScreen].bounds.size.height-y;
-    NSLog(@"screenWidth = %f, screenHeight = %f", screenWidth, [UIScreen mainScreen].bounds.size.height);
+//    NSLog(@"screenWidth = %f, screenHeight = %f", screenWidth, [UIScreen mainScreen].bounds.size.height);
     if (screenWidth == 375) {
         //iPhoneX = iPhoneXS = 375 * 812
         scale = 1.4;
@@ -273,7 +280,7 @@
 
 - (void)updateDevice:(DLDevice *)device {
     self.device = device;
-    [self.deviceListVC reloadView:[self sortDeviceList]];
+    [self sortDeviceList];
     [self.device getDeviceInfo];
     [self updateUI];
     [self toLocation];
@@ -287,7 +294,7 @@
     [self goToDeviceSettingVC];
 }
 
-#pragma mark - menuViewDelegate
+#pragma mark - deviceListDelegate
 - (void)deviceListViewController:(InDeviceListViewController *)menuVC didSelectedDevice:(DLDevice *)device {
 //    [self deviceListViewController:self.deviceListVC moveDown:MAXFLOAT];
     if (device != self.device) {
@@ -478,7 +485,7 @@
 }
 
 - (void)deviceChangeOnline:(NSNotification *)notification {
-    NSLog(@"接收到设备状态改变的通知: %@", notification.object);
+//    NSLog(@"接收到设备:%@, 状态改变的通知: %@",  notification.object);
     [self updateAnnotation];
 }
 
@@ -515,10 +522,17 @@
  将设备列表排序：若当前有指定设备，第一台设备显示指定设备，其余设备按连接到未连接的顺序排序
  若当前没有指定设备，所有设备按连接到未连接的顺序排序
  */
-- (NSArray *)sortDeviceList {
+- (void)sortDeviceList {
     NSDictionary *cloudList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
     if (cloudList.count == 0) {
-        return @[];
+        [self.deviceListVC reloadView:@[]];
+    }
+    if (self.device) {
+        if (![cloudList objectForKey:self.device.mac]) {
+            // 如果云端不存在该设备，将当前设备设置为空
+            // 当删除设备，重回控制界面的情况
+            self.device = nil;
+        }
     }
     if (!self.device) {
         for (NSString *mac in cloudList.allKeys) {
@@ -551,7 +565,8 @@
         }
     }
     [connectList addObjectsFromArray:disConnectList];
-    return [connectList copy];
+    NSLog(@"cloudList = %@, connectList = %@", cloudList, connectList);
+    [self.deviceListVC reloadView:[connectList copy]];
 }
 
 #pragma mark - 安全跳转界面

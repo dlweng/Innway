@@ -19,7 +19,7 @@
 
 @interface InDeviceListViewController : UIViewController
 
-+ (instancetype)DeviceListViewControllerWithCloudList:(NSArray *)cloudList;
++ (instancetype)deviceListViewController;
 - (void)reloadView:(NSArray *)cloudList;
 
 @property (nonatomic, weak) id<InDeviceListViewControllerDelegate> delegate;

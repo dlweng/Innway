@@ -150,6 +150,8 @@
 		338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7921297F5F00A018EA /* DLCentralManager.m */; };
 		338CDF7F21297F6000A018EA /* DLDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7B21297F6000A018EA /* DLDevice.m */; };
 		33ADF2CF217B36430037769C /* InAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33ADF2CD217B36420037769C /* InAlertView.xib */; };
+		33E36F2B217CCAEB00FA79B9 /* charge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E36F29217CCAEA00FA79B9 /* charge@2x.png */; };
+		33E36F2C217CCAEB00FA79B9 /* charge@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E36F2A217CCAEA00FA79B9 /* charge@3x.png */; };
 		33E9B81B215BC83300BA3EBE /* innwayLOGO@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E9B819215BC83300BA3EBE /* innwayLOGO@3x.png */; };
 		33E9B81C215BC83300BA3EBE /* innwayLOGO@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E9B81A215BC83300BA3EBE /* innwayLOGO@2x.png */; };
 		33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE4C902116C27300CDDC98 /* InUserSettingViewController.m */; };
@@ -419,6 +421,8 @@
 		338CDF7A21297F6000A018EA /* DLUUIDTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLUUIDTool.h; sourceTree = "<group>"; };
 		338CDF7B21297F6000A018EA /* DLDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLDevice.m; sourceTree = "<group>"; };
 		33ADF2CD217B36420037769C /* InAlertView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InAlertView.xib; sourceTree = "<group>"; };
+		33E36F29217CCAEA00FA79B9 /* charge@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "charge@2x.png"; sourceTree = "<group>"; };
+		33E36F2A217CCAEA00FA79B9 /* charge@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "charge@3x.png"; sourceTree = "<group>"; };
 		33E9B819215BC83300BA3EBE /* innwayLOGO@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "innwayLOGO@3x.png"; sourceTree = "<group>"; };
 		33E9B81A215BC83300BA3EBE /* innwayLOGO@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "innwayLOGO@2x.png"; sourceTree = "<group>"; };
 		33EE4C8F2116C27300CDDC98 /* InUserSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InUserSettingViewController.h; sourceTree = "<group>"; };
@@ -789,6 +793,8 @@
 				337E50242161F60F00CB6313 /* addButtonBackgroup@3x.png */,
 				337E50252161F60F00CB6313 /* addDeviceBackground@2x.png */,
 				337E50262161F60F00CB6313 /* addDeviceBackground@3x.png */,
+				33E36F29217CCAEA00FA79B9 /* charge@2x.png */,
+				33E36F2A217CCAEA00FA79B9 /* charge@3x.png */,
 				33FB6287215D453700C6419C /* 0@2x.png */,
 				33FB6292215D453800C6419C /* 0@3x.png */,
 				33FB62AD215D45BC00C6419C /* 5@2x.png */,
@@ -1158,8 +1164,10 @@
 				33FB62CC215D469400C6419C /* RSSI_11@3x.png in Resources */,
 				33287FF9211557BD00C4893B /* icon_password_show.png in Resources */,
 				330FB8D321636F6E0032E657 /* annotation@2x.png in Resources */,
+				33E36F2C217CCAEB00FA79B9 /* charge@3x.png in Resources */,
 				337E502A2161F60F00CB6313 /* addButtonBackgroup@3x.png in Resources */,
 				3374C7942112077C00F83101 /* icon_track_up.png in Resources */,
+				33E36F2B217CCAEB00FA79B9 /* charge@2x.png in Resources */,
 				330FB8D821636F790032E657 /* up@3x.png in Resources */,
 				3374C79E2112077C00F83101 /* icon_menu.png in Resources */,
 				33FFB9A22173392400E6A8C6 /* photoGreenCamera@2x.png in Resources */,

@@ -18,12 +18,14 @@
     NSNumber *_rssi;
     NSTimer *_readRSSITimer;
     int _time;
+    BOOL _disConnect; // 标识用户主动断开了设备连接，不做重连
 }
 
 // 保存设置的值，等ack回来之后更新本地数据
 @property (nonatomic, assign) BOOL disconnectAlert;
 @property (nonatomic, assign) BOOL reconnectAlert;
 @property (nonatomic, assign) NSInteger alertMusic;
+@property (nonatomic, strong) NSMutableDictionary *data;
 @end
 
 @implementation DLDevice
@@ -31,7 +33,7 @@
 + (instancetype)device:(CBPeripheral *)peripheral {
     DLDevice *device = [[DLDevice alloc] init];
     device.peripheral = peripheral;
-    NSLog(@"设置peripheral--创建设备mac, peripheral = %@", peripheral);
+    // 增加断开连接通知
     [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(reconnectDevice:) name:DeviceDisconnectNotification object:nil];
     return device;
 }
@@ -40,45 +42,53 @@
     if (self = [super init]) {
         // 设置默认位置 22.55694872036483,114.11126873029583
         _coordinate = CLLocationCoordinate2DMake(22.55694872036483, 114.11126873029583);
+        
+        // 初始化15秒扫描一次RSSI的定时器
         _readRSSITimer = [NSTimer timerWithTimeInterval:15 target:self selector:@selector(readRSSI) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_readRSSITimer forMode:NSRunLoopCommonModes];
+        
+        _disConnect = NO;
     }
     return self;
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceDisconnectNotification object:nil];
-    //移除
+    //移除扫描RSSI定时器
     [_readRSSITimer invalidate];
     _readRSSITimer = nil;
 }
 
 - (void)reconnectDevice:(NSNotification *)notification {
     CBPeripheral *peripheral = notification.object;
-    NSLog(@"设备连接被断开，去重连设备");
-    self.online = NO;
-    if ([peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
-        [[DLCentralManager sharedInstance] connectToDevice:peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
-            if (error) {
-                NSLog(@"重连失败");
-            }
-            else {
-                NSLog(@"重连成功");
-                [self discoverServices];
-            }
-        }];
+    if ([peripheral.identifier.UUIDString isEqualToString:self. peripheral.identifier.UUIDString]) {
+        if (!_disConnect) { //
+            // cloudID > 0, 表示设备处于被添加状态，需要重连
+            NSLog(@"设备连接被断开，去重连设备, mac = %@", self.mac);
+            [self connectToDevice:^(DLDevice *device, NSError *error) {
+                if (error) {
+                    self.online = NO;
+                    // 掉线了，要上传设备位置
+                    [[InCommon sharedInstance] uploadDeviceLocation:self];
+                    NSLog(@"mac: %@, 设备重连失败", self.mac);
+                }
+                else {
+                    NSLog(@"mac: %@, 设备重连成功", self.mac);
+                }
+            }];
+        }
     }
 }
 
-- (BOOL)discoverServices {
+- (void)discoverServices {
     if (_peripheral) {
-        self.online = YES;  //设置在线
-        [_peripheral setDelegate:self];
+        NSLog(@"去获取设备服务:%@", self.mac);
         CBUUID *serviceUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
         [_peripheral discoverServices:@[serviceUUID]];
-        return YES;
     }
-    return NO;
+    else {
+        NSLog(@"无法去获取设备服务:%@, 外设不存在", self.mac);
+    }
 }
 
 - (void)peripheral:(CBPeripheral *)_peripheral didDiscoverServices:(NSError *)error {
@@ -86,7 +96,7 @@
     CBUUID *serverUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
     for (CBService *service in services) {
         if ([service.UUID.UUIDString isEqualToString:serverUUID.UUIDString]) {
-            NSLog(@"发现服务0xE001");
+//            NSLog(@"发现服务0xE001");
             CBUUID *ntfUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
             CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
             [self.peripheral discoverCharacteristics:@[ntfUUID, writeUUID] forService:service];
@@ -95,18 +105,17 @@
 }
 
 - (void) peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
-//    NSLog(@"Characteristics for service %@ (%@)", [service UUID], service);
     CBUUID *ntfUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
     CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
     NSArray *characteristics = [service characteristics];
     for (CBCharacteristic *characteristic in characteristics) {
         if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
-            NSLog(@"发现E002写角色，开始激活设备，并获取设备信息");
+//            NSLog(@"发现E002写角色，开始激活设备，并获取设备信息");
             [self activeDevice];
             [self getDeviceInfo];
         }
         if ([characteristic.UUID.UUIDString isEqualToString:ntfUUID.UUIDString]) {
-            NSLog(@"发现E003, 打开监听来自设备通知的功能");
+//            NSLog(@"发现E003, 打开监听来自设备通知的功能");
             [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral on:YES];
         }
     }
@@ -174,7 +183,7 @@
     NSString *length = [dataStr substringWithRange:NSMakeRange(5, 2)];
     NSString *payload = [dataStr substringWithRange:NSMakeRange(7, length.integerValue * 2)];
     //校验和
-    NSString *cs = [dataStr substringWithRange:NSMakeRange(7+length.integerValue*2, 2)];
+//    NSString *cs = [dataStr substringWithRange:NSMakeRange(7+length.integerValue*2, 2)];
 //    NSLog(@"cmd = %@, length = %@, payload = %@, cs = %@", cmd, length, payload, cs);
     if ([cmd isEqualToString:@"02"]) {
         if (payload.length != 10) {
@@ -218,12 +227,12 @@
 
 #pragma mark - 写数据
 - (void) write:(NSData *)data {
-    if (self.peripheral) {
+    if (self.peripheral && self.connected) {
         [self writeValue:DLServiceUUID characteristicUUID:DLWriteCharacteristicUUID p:self.peripheral data:data andResponseType:CBCharacteristicWriteWithoutResponse];
     }
-    else {
-        NSLog(@"查找不到外设，无法写入数据");
-    }
+//    else {
+//        NSLog(@"查找不到设备mac:%@,的外设 ，无法写入数据", self.mac);
+//    }
 }
 
 - (void) writeValue:(int)serviceUUID characteristicUUID:(int)characteristicUUID p:(CBPeripheral *)p data:(NSData *)data andResponseType:(CBCharacteristicWriteType)responseType
@@ -232,51 +241,51 @@
     CBUUID *cu = [DLUUIDTool CBUUIDFromInt:characteristicUUID];
     CBService *service = [self findServiceFromUUID:su p:p];
     if (!service) {
-        NSLog(@"写数据查找不到服务: %s", [self CBUUIDToString:su]);
-        [self discoverServices];
+        NSLog(@"mac:%@, 写数据查找不到服务: %s", self.mac, [self CBUUIDToString:su]);
+        [self discoverServices]; // 去发现服务
         return;
     }
     CBCharacteristic *characteristic = [self findCharacteristicFromUUID:cu service:service];
     if (!characteristic) {
-        NSLog(@"写数据查找不到角色: %s", [self CBUUIDToString:cu]);
-        [self peripheral:p didDiscoverServices:nil];
+        NSLog(@"mac:%@, 写数据查找不到角色: %s", self.mac, [self CBUUIDToString:cu]);
+        [self peripheral:p didDiscoverServices:nil]; // 去发现角色
         return;
     }
     [p writeValue:data forCharacteristic:characteristic type:responseType];
 }
 
 - (void) peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    NSLog(@"写入的响应值: %@,  %@", characteristic, error);
+    NSLog(@"mac:%@, 写入的响应值: %@,  %@", self.mac, characteristic, error);
 //    [self readData];
 }
 
-- (void)readData {
-    if (self.peripheral) {
-        [self readValue:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral];
-    }
-    else {
-        NSLog(@"查找不到外设，无法读数据");
-    }
-}
+//- (void)readData {
+//    if (self.peripheral) {
+//        [self readValue:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral];
+//    }
+//    else {
+//        NSLog(@"mac:%@, 查找不到外设，无法读数据", self.mac);
+//    }
+//}
 
 -(void) readValue: (int)serviceUUID characteristicUUID:(int)characteristicUUID p:(CBPeripheral *)p {
     CBUUID *su = [DLUUIDTool CBUUIDFromInt:serviceUUID];
     CBUUID *cu = [DLUUIDTool CBUUIDFromInt:characteristicUUID];
     CBService *service = [self findServiceFromUUID:su p:p];
     if (!service) {
-        NSLog(@"读数据查找不到服务: %s", [self CBUUIDToString:su]);
+        NSLog(@"mac:%@, 读数据查找不到服务: %s", self.mac, [self CBUUIDToString:su]);
         return;
     }
     CBCharacteristic *characteristic = [self findCharacteristicFromUUID:cu service:service];
     if (!characteristic) {
-        NSLog(@"读数据查找不到角色: %s", [self CBUUIDToString:cu]);
+        NSLog(@"mac:%@, 读数据查找不到角色: %s", self.mac, [self CBUUIDToString:cu]);
         return;
     }
     [p readValueForCharacteristic:characteristic];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    NSLog(@"接收读响应数据, characteristic = %@, error = %@", characteristic.value, error);
+    NSLog(@"mac:%@, 接收读响应数据, characteristic = %@, error = %@", self.mac, characteristic.value, error);
     [self parseData:characteristic.value];
     if (self.delegate) {
         [self.delegate device:self didUpdateData:self.lastData];
@@ -302,12 +311,12 @@
     CBUUID *cu = [DLUUIDTool CBUUIDFromInt:characteristicUUID];
     CBService *service = [self findServiceFromUUID:su p:p];
     if (!service) {
-        NSLog(@"通知功能更查找不到服务: %s", [self CBUUIDToString:su]);
+        NSLog(@"mac:%@, 通知功能更查找不到服务: %s", self.mac, [self CBUUIDToString:su]);
         return;
     }
     CBCharacteristic *characteristic = [self findCharacteristicFromUUID:cu service:service];
     if (!characteristic) {
-        NSLog(@"通知功能更查找不到角色: %s", [self CBUUIDToString:cu]);
+        NSLog(@"mac:%@,  通知功能更查找不到角色: %s", self.mac, [self CBUUIDToString:cu]);
         return;
     }
     [p setNotifyValue:on forCharacteristic:characteristic];
@@ -323,8 +332,57 @@
  *  @discussion                This method returns the result of a @link setNotifyValue:forCharacteristic: @/link call.
  */
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error {
-    NSLog(@"接收来自设备的通知, characteristic = %@, error = %@", characteristic, error);
+    NSLog(@"mac:%@, 接收来自设备的通知, characteristic = %@, error = %@", self.mac, characteristic, error);
     [self parseData:characteristic.value];
+}
+
+#pragma mark - 连接与断开连接
+- (void)connectToDevice:(void (^)(DLDevice *device, NSError *error))completion {
+    _disConnect = NO; // 重新设置断开连接的标识
+    if (!self.peripheral) {
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([DLCentralManager class]) code:-2 userInfo:@{NSLocalizedDescriptionKey: @"与设备建立连接失败"}];
+        if (completion) {
+            completion(self, error);
+        }
+        return;
+    }
+    if (self.peripheral.state == CBPeripheralStateDisconnected || self.peripheral.state == CBPeripheralStateDisconnecting) {
+        NSLog(@"开始去连接设备:%@", self.mac);
+        [[DLCentralManager sharedInstance] connectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
+            if (!error) {
+                NSLog(@"连接设备成功:%@", self.mac);
+                // 连接成功，去获取设备服务
+                self.online = YES;  //设置在线
+                peripheral.delegate = self;
+                [self discoverServices];
+            }
+            if (completion) {
+                completion(self, error);
+            }
+        }];
+    }
+    else {
+        if (completion) {
+            completion(self, nil);
+        }
+    }
+}
+
+- (void)disConnectToDevice:(void (^)(DLDevice *device, NSError *error))completion {
+    _disConnect = YES;
+    if (!self.peripheral) {
+        // 不存在外设，当成断开设备连接成功
+        if (completion) {
+            completion(self, nil);
+        }
+        return;
+    }
+    NSLog(@"开始去断开设备连接:%@", self.mac);
+    [[DLCentralManager sharedInstance] disConnectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
+        if (completion) {
+            completion(self, error);
+        }
+    }];
 }
 
 #pragma mark - 查找服务和角色的作用
@@ -406,29 +464,16 @@
 
 #pragma mark - Properity
 - (void)setPeripheral:(CBPeripheral *)peripheral {
-    NSLog(@"设置外设: %@", peripheral);
     if ([_peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
+        // 已经赋值过的设备不需要重新设置
         return;
     }
     self.online = NO;
-    if (_peripheral) {
-        // 外设地址发生变化
-        NSLog(@"执行方法:%s, 外设地址放生变化: 旧的外设:%@, 新的外设:%@", __func__, peripheral, _peripheral);
-        [_peripheral setDelegate:nil];
-        _peripheral = peripheral;
+    [_peripheral setDelegate:nil];
+    _peripheral = peripheral;
+    if (peripheral) {
         [peripheral setDelegate:self];
-        [[DLCentralManager sharedInstance] connectToDevice:peripheral completion:^(DLCentralManager *manager, CBPeripheral *connectPeripheral, NSError *error) {
-            if (peripheral == connectPeripheral && !error){
-                //连接成功
-                [self discoverServices];
-            }
-        }];
     }
-    else {
-        // 第一次赋值外设
-        _peripheral = peripheral;
-        [peripheral setDelegate:self];
-    }  
 }
 
 - (NSMutableDictionary *)data {
@@ -459,20 +504,11 @@
 }
 
 - (void)setOnline:(BOOL)online {
-    if (_online != online) {
-        NSLog(@"设置在线状态: %d", online);
-        _online = online;
-        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(online)];
-        [[InCommon sharedInstance] uploadDeviceLocation:self];
-        if (!online) {
-            //掉线，将RSSI设置为-120
-            self.rssi = offlineRSSI;
-        }
-        else {
-            [self.peripheral readRSSI];
-        }
-    }
     _online = online;
+    if (!_online) {
+        _rssi = offlineRSSI;  // 设置rssi掉线
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(online)];
 }
 
 - (BOOL)connected {
@@ -512,19 +548,23 @@
 
 - (void)setRssi:(NSNumber *)rssi {
     _rssi = rssi;
-    if (rssi.integerValue > -100 && !self.connected && !self.online && self.peripheral) {
-        [[DLCentralManager sharedInstance] connectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
-            if (!error) {
-                [self discoverServices];
-            }
-        }];
+    if (rssi.integerValue > -100 && !self.connected) {
+        // 设备信号高了，要去重连设备
+        [self connectToDevice:nil];
     }
+    if (rssi.intValue == offlineRSSI.intValue) {
+        // 设置设备离线
+        self.online = NO;
+        // 掉线了，要上传设备位置
+        [[InCommon sharedInstance] uploadDeviceLocation:self];
+    }
+    // RSSI改变要发出通知
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceRSSIChangeNotification object:self];
 }
 
 - (void)readRSSI {
-    if (self.online) {
-        NSLog(@"定时读取设备的RSSI值: %@", self.mac);
+    if (self.connected) {
+//        NSLog(@"定时读取设备的RSSI值: %@", self.mac);
         [self.peripheral readRSSI];
     }
 }
