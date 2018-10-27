@@ -671,7 +671,7 @@
     NSLog(@"进入相册");
     // 解决iPhone5S上导航栏会消失的Bug
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    self.libraryPikerViewController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    self.libraryPikerViewController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
     [self.imagePikerViewController presentViewController:self.libraryPikerViewController animated:YES completion:NULL];
     
 }
@@ -692,10 +692,10 @@
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     if (picker == self.libraryPikerViewController) {
-        self.imageBodyView.hidden = NO;
+//        self.imageBodyView.hidden = NO;
         // 相册界面点击图片显示
-        UIImage * image = info[UIImagePickerControllerOriginalImage];
-        self.imageView.image = image;
+//        UIImage * image = info[UIImagePickerControllerOriginalImage];
+//        self.imageView.image = image;
         [self.imagePikerViewController dismissViewControllerAnimated:YES completion:NULL];
         return;
     }
