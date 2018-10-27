@@ -99,6 +99,7 @@
 
 - (IBAction)buyNewInnway {
     NSLog(@"跳转到购买设备链接");
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];  
 }
 
 

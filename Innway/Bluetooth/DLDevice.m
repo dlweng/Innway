@@ -350,7 +350,7 @@
         NSLog(@"开始去连接设备:%@", self.mac);
         [[DLCentralManager sharedInstance] connectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
             if (!error) {
-                [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已建立连接", self.deviceName]];
+//                [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已建立连接", self.deviceName]];
                 NSLog(@"连接设备成功:%@", self.mac);
                 // 连接成功，去获取设备服务
                 self.online = YES;  //设置在线

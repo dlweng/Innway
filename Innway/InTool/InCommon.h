@@ -60,8 +60,8 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 - (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd;
 - (void)saveUserLocationIsShow:(BOOL)showUserLocation;
 - (BOOL)getIsShowUserLocation;
+- (void)goToAPPSetupView;
 - (void)clearUserInfo;
-
 - (void)saveCloudList:(NSArray *)cloudList;
 - (void)saveCloudListWithDevice:(DLDevice *)device;
 - (void)removeDeviceByCloudList:(DLDevice *)device;
@@ -78,6 +78,7 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 - (NSString *)getCurrentGps;
 - (BOOL)startUpdatingLocation;
 - (void)uploadDeviceLocation:(DLDevice *)device;
+- (BOOL)isOpensLocation;
 
 - (NSString *)getImageName:(NSNumber *)rssi;
 // 根据外设获取设备类型

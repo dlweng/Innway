@@ -116,6 +116,16 @@
     self.mapView.showsUserLocation = [common getIsShowUserLocation];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (![common isOpensLocation]) {
+        [InAlertView showAlertWithTitle:@"Tip" message:@"需要打开定位功能" confirmHanler:^{
+            NSLog(@"跳转到设置定位功能的界面");
+            [common goToAPPSetupView];
+        }];
+    }
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceOnlineChangeNotification object:nil];
@@ -493,6 +503,11 @@
             InChangePasswordViewController *changePwdVC = [[InChangePasswordViewController alloc] init];
             [self safePushViewController:changePwdVC];
             break;
+        }
+        case 2:
+        {
+            NSLog(@"跳转到购买中心");
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];  
         }
         default:
             break;

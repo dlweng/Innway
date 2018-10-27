@@ -305,6 +305,27 @@
     return gps;
 }
 
+- (BOOL)isOpensLocation {
+    if (([CLLocationManager locationServicesEnabled]) &&
+        ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse ||
+//        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined ||
+        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+
+- (void)goToAPPSetupView {
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if([[UIApplication sharedApplication] canOpenURL:url]) {
+        NSURL*url =[NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        //此处可以做一下版本适配，至于为何要做版本适配，大家应该很清楚
+        [[UIApplication sharedApplication] openURL:url];
+    }
+}
+
 /**
  *  当授权状态发生改变了就会调用该代理方法
  *
