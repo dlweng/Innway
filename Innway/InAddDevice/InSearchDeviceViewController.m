@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 
 @property (nonatomic, strong) NSTimer *searchAnimationTimer;
 @property (nonatomic, copy) NSString *findDeviceMac;
+@property (nonatomic, strong) void(^comeback)(void);
 
 /**
  动画的显示标识
@@ -57,9 +58,10 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 
 @implementation InSearchDeviceViewController
 
-+ (instancetype)searchDeviceViewController {
++ (instancetype)searchDeviceViewController:(void (^)(void))comeback {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"InAddDevice" bundle:nil];
     InSearchDeviceViewController *searchVC = [sb instantiateViewControllerWithIdentifier:@"InSearchDeviceViewController"];
+    searchVC.comeback = comeback;
     return searchVC;
 }
 
@@ -202,9 +204,17 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
             [InAlertView showAlertWithTitle:@"Information" message:@"添加设备失败" confirmHanler:nil];
         }
         else {
-            InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
-            controlDeviceVC.device = device;
-            [self.navigationController pushViewController:controlDeviceVC animated:YES];
+            // 添加设备成功， 去建立连接
+            if (self.comeback) {
+                // 从控制界面弹出的添加，需要在这里返回控制界面
+                self.comeback();
+            }
+            else {
+                // 没有控制界面的添加，需要重新创建控制界面
+                InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
+                controlDeviceVC.device = device;
+                [self.navigationController pushViewController:controlDeviceVC animated:YES];
+            }
         }
     }];
 }

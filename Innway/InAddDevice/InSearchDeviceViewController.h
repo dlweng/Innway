@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface InSearchDeviceViewController : UIViewController
 
-+ (instancetype)searchDeviceViewController;
++ (instancetype)searchDeviceViewController:(void (^)(void))comeback;
 
 @end
 

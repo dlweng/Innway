@@ -121,7 +121,7 @@
         <!--In Selection View Controller-->
         <scene sceneID="HbH-YI-9gR">
             <objects>
-                <viewController id="fGj-VC-VeB" customClass="InSelectionViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InSelectionViewController" id="fGj-VC-VeB" customClass="InSelectionViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sgd-fc-Prz"/>
                         <viewControllerLayoutGuide type="bottom" id="6Sb-43-NlK"/>

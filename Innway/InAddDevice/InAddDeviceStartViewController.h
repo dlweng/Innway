@@ -12,8 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface InAddDeviceStartViewController : UIViewController
 
-+ (instancetype)addDeviceStartViewController:(BOOL)canBack;
-@property (nonatomic, assign) BOOL canBack;
++ (instancetype)addDeviceStartViewController;
 
 @end
 

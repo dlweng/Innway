@@ -14,10 +14,19 @@
 
 @property (nonatomic, strong) NSArray *arr;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+//(^DidDiscoverDeviceEvent)(DLCentralManager *manager, CBPeripheral *peripheral, NSString *mac)
+@property (nonatomic, strong) void(^comeback)(void);
 
 @end
 
 @implementation InSelectionViewController
+
++ (instancetype)selectionViewController:(void (^)(void))comeback {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"InAddDevice" bundle:nil];
+    InSelectionViewController *selectionVC = [sb instantiateViewControllerWithIdentifier:@"InSelectionViewController"];
+    selectionVC.comeback = comeback;
+    return selectionVC;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -39,6 +48,10 @@
 }
 
 - (void)goBack {
+    if (self.comeback) {
+        self.comeback();
+        return;
+    }
     if (self.navigationController.viewControllers.lastObject == self) {
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -80,7 +93,7 @@
     }
     NSLog(@"去搜索设备类型: %zd", common.deviceType);
     if (self.navigationController.viewControllers.lastObject == self) {
-        [self.navigationController pushViewController:[InSearchDeviceViewController searchDeviceViewController] animated:YES];
+        [self.navigationController pushViewController:[InSearchDeviceViewController searchDeviceViewController:self.comeback] animated:YES];
     }
 }
 

@@ -17,6 +17,7 @@
 #import "InLoginViewController.h"
 #import "InAddDeviceStartViewController.h"
 #import "InChangePasswordViewController.h"
+#import "InSelectionViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #define coverViewAlpha 0.85  // 覆盖层的透明度
 
@@ -265,14 +266,15 @@
         return;
     }
     NSLog(@"下发控制指令");
-    if (self.isSearchDevice) {
-        self.isSearchDevice = NO;
-        [self stopBtnAnimation];
-    }
-    else {
-        self.isSearchDevice = YES;
-        [self startBtnAnimation];
-    }
+
+//    if (self.isSearchDevice) {
+//        self.isSearchDevice = NO;
+//        [self stopBtnAnimation];
+//    }
+//    else {
+//        self.isSearchDevice = YES;
+//        [self startBtnAnimation];
+//    }
     [self.device searchDevice];
 }
 
@@ -333,14 +335,24 @@
 }
 
 - (void)deviceListViewControllerDidSelectedToAddDevice:(InDeviceListViewController *)menuVC {
-    NSArray *subViewController = self.navigationController.viewControllers;
-    if (subViewController.count > 3) {
-        InAddDeviceStartViewController *addDeviceStartVC = subViewController[2];
-        addDeviceStartVC.canBack = YES;
-        if ([addDeviceStartVC isKindOfClass:[InAddDeviceStartViewController class]]) {
-            [self safePopViewController:addDeviceStartVC];
-        }
-    }
+    InSelectionViewController *selectionViewController = [InSelectionViewController selectionViewController:^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:selectionViewController];
+    [self presentViewController:nav animated:YES completion:nil];
+    [InCommon setNavgationBar:nav.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
+    // 设置导航栏标题颜色
+    NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
+    attrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
+    [nav.navigationBar setTitleTextAttributes:attrs];
+//    NSArray *subViewController = self.navigationController.viewControllers;
+//    if (subViewController.count > 3) {
+//        InAddDeviceStartViewController *addDeviceStartVC = subViewController[2];
+//        addDeviceStartVC.canBack = YES;
+//        if ([addDeviceStartVC isKindOfClass:[InAddDeviceStartViewController class]]) {
+//            [self safePopViewController:addDeviceStartVC];
+//        }
+//    }
 }
 
 // 设备列表-上下滑动的处理
@@ -659,7 +671,7 @@
     NSLog(@"进入相册");
     // 解决iPhone5S上导航栏会消失的Bug
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    self.libraryPikerViewController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    self.libraryPikerViewController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     [self.imagePikerViewController presentViewController:self.libraryPikerViewController animated:YES completion:NULL];
     
 }

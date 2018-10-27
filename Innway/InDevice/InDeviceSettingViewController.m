@@ -90,7 +90,6 @@
                     NSArray *subViewController = self.navigationController.viewControllers;
                     if (subViewController.count > 3) {
                         InAddDeviceStartViewController *addDeviceStartVC = subViewController[2];
-                        addDeviceStartVC.canBack = NO;
                         if ([addDeviceStartVC isKindOfClass:[InAddDeviceStartViewController class]]) {
                             [self.navigationController popToViewController:addDeviceStartVC animated:YES];
                         }

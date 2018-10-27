@@ -62,15 +62,16 @@
 - (void)reconnectDevice:(NSNotification *)notification {
     CBPeripheral *peripheral = notification.object;
     if ([peripheral.identifier.UUIDString isEqualToString:self. peripheral.identifier.UUIDString]) {
-        if (!_disConnect) { //
+        if (!_disConnect) {
+            // 设备掉线，做掉线通知
+            self.online = NO;
+            // 掉线了，要上传设备位置
+            [[InCommon sharedInstance] uploadDeviceLocation:self];
+            [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
             NSLog(@"设备连接被断开，去重连设备, mac = %@", self.mac);
             [self connectToDevice:^(DLDevice *device, NSError *error) {
                 if (error) {
-                    self.online = NO;
-                    // 掉线了，要上传设备位置
-                    [[InCommon sharedInstance] uploadDeviceLocation:self];
-                    [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
-                    NSLog(@"mac: %@, 设备重连失败, 发出掉线通知", self.mac);
+                    NSLog(@"mac: %@, 设备重连失败", self.mac);
                 }
                 else {
                     NSLog(@"mac: %@, 设备重连成功", self.mac);
@@ -349,6 +350,7 @@
         NSLog(@"开始去连接设备:%@", self.mac);
         [[DLCentralManager sharedInstance] connectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
             if (!error) {
+                [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已建立连接", self.deviceName]];
                 NSLog(@"连接设备成功:%@", self.mac);
                 // 连接成功，去获取设备服务
                 self.online = YES;  //设置在线
@@ -549,6 +551,7 @@
     _rssi = rssi;
     if (rssi.integerValue > -100 && !self.connected) {
         // 设备信号高了，要去重连设备
+        NSLog(@"设备信号变强，去重新连接设备");
         [self connectToDevice:nil];
     }
     if (rssi.intValue == offlineRSSI.intValue) {

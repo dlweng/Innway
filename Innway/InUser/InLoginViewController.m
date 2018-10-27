@@ -113,7 +113,7 @@
 }
     
 - (void)pushToAddDeviceController:(BOOL)animation {
-    InAddDeviceStartViewController *addDeviceStartVC = [InAddDeviceStartViewController addDeviceStartViewController:NO];
+    InAddDeviceStartViewController *addDeviceStartVC = [InAddDeviceStartViewController addDeviceStartViewController];
     [self.navigationController pushViewController:addDeviceStartVC animated:animation];
 }
 

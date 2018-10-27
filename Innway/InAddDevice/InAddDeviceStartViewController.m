@@ -17,10 +17,9 @@
 
 @implementation InAddDeviceStartViewController
 
-+ (instancetype)addDeviceStartViewController:(BOOL)canBack {
++ (instancetype)addDeviceStartViewController {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"InAddDevice" bundle:nil];
     InAddDeviceStartViewController *addDeviceStartVC = [sb instantiateViewControllerWithIdentifier:@"InAddDeviceStartViewController"];
-    addDeviceStartVC.canBack = canBack;
     return addDeviceStartVC;
 }
 
@@ -37,13 +36,10 @@
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:YES];
     NSDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
-    if (cloudDeviceList.count != 0 && !self.canBack) {
+    if (cloudDeviceList.count != 0) {
         [self pushToControlDeviceController:NO];
     }
-    if (cloudDeviceList.count == 0) {
-        self.canBack = NO;
-    }
-    self.backView.hidden = !self.canBack;
+    self.backView.hidden = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

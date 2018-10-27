@@ -62,6 +62,7 @@ static DLCloudDeviceManager *instance = nil;
                 // 添加到云端列表
                 [self.cloudDeviceList setValue:newDevice forKey:mac];
                 [common saveCloudListWithDevice:newDevice];
+                [newDevice connectToDevice:nil]; // 自动建立与设备的连接
                 completion(self, newDevice, nil);
                 return ;
             }

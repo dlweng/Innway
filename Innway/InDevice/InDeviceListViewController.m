@@ -100,6 +100,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (indexPath.row == self.cloudList.count) {
         if ([self.delegate respondsToSelector:@selector(deviceListViewControllerDidSelectedToAddDevice:)]) {
             [self.delegate deviceListViewControllerDidSelectedToAddDevice:self];

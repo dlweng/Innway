@@ -83,7 +83,7 @@ static DLCentralManager *instance = nil;
 }
 
 - (void)startScanDeviceWithTimeout:(int)timeout discoverEvent:(DidDiscoverDeviceEvent)discoverEvent didEndDiscoverDeviceEvent:(DidEndDiscoverDeviceEvent)endDiscoverEvent {
-        NSLog(@"开启扫描新设备");
+        NSLog(@"开启设备发现功能");
     
     // 重置扫描设备参数
     _timeout = timeout;
@@ -266,7 +266,6 @@ static DLCentralManager *instance = nil;
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
-    NSLog(@"设备断开连接: %@, error = %@", peripheral, error);
     // 被动断开连接时，error才不为Nil，此时才需要去做重连
     // 发出断开连接通知
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceDisconnectNotification object:peripheral];
