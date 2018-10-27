@@ -19,6 +19,8 @@
 #import "InChangePasswordViewController.h"
 #import "InSelectionViewController.h"
 #import <AVFoundation/AVFoundation.h>
+#import "InFeedbackViewController.h"
+#import "InHelpCenterSelectionController.h"
 #define coverViewAlpha 0.85  // 覆盖层的透明度
 
 @interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceListViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -118,12 +120,12 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (![common isOpensLocation]) {
-        [InAlertView showAlertWithTitle:@"Tip" message:@"需要打开定位功能" confirmHanler:^{
-            NSLog(@"跳转到设置定位功能的界面");
-            [common goToAPPSetupView];
-        }];
-    }
+//    if (![common isOpensLocation]) {
+//        [InAlertView showAlertWithTitle:@"Tip" message:@"需要打开定位功能" confirmHanler:^{
+//            NSLog(@"跳转到设置定位功能的界面");
+//            [common goToAPPSetupView];
+//        }];
+//    }
 }
 
 - (void)dealloc {
@@ -504,10 +506,24 @@
             [self safePushViewController:changePwdVC];
             break;
         }
+        case 1:
+        {
+            NSLog(@"跳转到反馈中心");
+            InFeedbackViewController *feedbackVC = [[InFeedbackViewController alloc] init];
+            [self safePushViewController:feedbackVC];
+            break;
+        }
         case 2:
         {
             NSLog(@"跳转到购买中心");
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];  
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];
+            break;
+        }
+        case 3:
+        {
+            NSLog(@"跳转到帮助中心");
+            InHelpCenterSelectionController *helpCenterSelectionVC = [[InHelpCenterSelectionController alloc] init];
+            [self safePushViewController:helpCenterSelectionVC];
         }
         default:
             break;

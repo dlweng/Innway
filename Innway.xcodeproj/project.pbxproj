@@ -53,6 +53,14 @@
 		3368B83A2184152300AC943F /* user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3368B8382184152300AC943F /* user@2x.png */; };
 		3368B83D2184157000AC943F /* icon_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3368B83B2184156F00AC943F /* icon_menu@2x.png */; };
 		3368B83E2184157000AC943F /* icon_menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3368B83C2184157000AC943F /* icon_menu@3x.png */; };
+		3368B8422184ADCA00AC943F /* InFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3368B8402184ADCA00AC943F /* InFeedbackViewController.m */; };
+		3368B8432184ADCA00AC943F /* InFeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3368B8412184ADCA00AC943F /* InFeedbackViewController.xib */; };
+		3368B8462184B6C400AC943F /* InHelpCenterSelectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3368B8452184B6C300AC943F /* InHelpCenterSelectionController.m */; };
+		3368B8482184BBF000AC943F /* InHelpCenterSelectionController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3368B8472184BBF000AC943F /* InHelpCenterSelectionController.xib */; };
+		3368B84B2184C0CC00AC943F /* InHelpCenterInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3368B84A2184C0CB00AC943F /* InHelpCenterInfoController.m */; };
+		3368B84F2184C38200AC943F /* InHelpCenterInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3368B84D2184C38200AC943F /* InHelpCenterInfoCell.m */; };
+		3368B8502184C38200AC943F /* InHelpCenterInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3368B84E2184C38200AC943F /* InHelpCenterInfoCell.xib */; };
+		3368B8522184C76500AC943F /* InHelpCenterInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3368B8512184C76500AC943F /* InHelpCenterInfoController.xib */; };
 		3374C74C2112013B00F83101 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C74B2112013B00F83101 /* AppDelegate.m */; };
 		3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3374C74E2112013B00F83101 /* InLoginViewController.m */; };
 		3374C7522112013B00F83101 /* InUser.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3374C7502112013B00F83101 /* InUser.storyboard */; };
@@ -306,6 +314,18 @@
 		3368B8382184152300AC943F /* user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user@2x.png"; sourceTree = "<group>"; };
 		3368B83B2184156F00AC943F /* icon_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_menu@2x.png"; sourceTree = "<group>"; };
 		3368B83C2184157000AC943F /* icon_menu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_menu@3x.png"; sourceTree = "<group>"; };
+		3368B83F2184ADCA00AC943F /* InFeedbackViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InFeedbackViewController.h; sourceTree = "<group>"; };
+		3368B8402184ADCA00AC943F /* InFeedbackViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InFeedbackViewController.m; sourceTree = "<group>"; };
+		3368B8412184ADCA00AC943F /* InFeedbackViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InFeedbackViewController.xib; sourceTree = "<group>"; };
+		3368B8442184B6C300AC943F /* InHelpCenterSelectionController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InHelpCenterSelectionController.h; sourceTree = "<group>"; };
+		3368B8452184B6C300AC943F /* InHelpCenterSelectionController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InHelpCenterSelectionController.m; sourceTree = "<group>"; };
+		3368B8472184BBF000AC943F /* InHelpCenterSelectionController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InHelpCenterSelectionController.xib; sourceTree = "<group>"; };
+		3368B8492184C0CB00AC943F /* InHelpCenterInfoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InHelpCenterInfoController.h; sourceTree = "<group>"; };
+		3368B84A2184C0CB00AC943F /* InHelpCenterInfoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InHelpCenterInfoController.m; sourceTree = "<group>"; };
+		3368B84C2184C38200AC943F /* InHelpCenterInfoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InHelpCenterInfoCell.h; sourceTree = "<group>"; };
+		3368B84D2184C38200AC943F /* InHelpCenterInfoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InHelpCenterInfoCell.m; sourceTree = "<group>"; };
+		3368B84E2184C38200AC943F /* InHelpCenterInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InHelpCenterInfoCell.xib; sourceTree = "<group>"; };
+		3368B8512184C76500AC943F /* InHelpCenterInfoController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InHelpCenterInfoController.xib; sourceTree = "<group>"; };
 		3374C7472112013A00F83101 /* Innway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Innway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3374C74A2112013B00F83101 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3374C74B2112013B00F83101 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -608,6 +628,18 @@
 				33639516217B61C5006719EA /* InAlarmTypeSelectionView.h */,
 				33639517217B61C5006719EA /* InAlarmTypeSelectionView.m */,
 				33639519217B61D0006719EA /* InAlarmTypeSelectionView.xib */,
+				3368B83F2184ADCA00AC943F /* InFeedbackViewController.h */,
+				3368B8402184ADCA00AC943F /* InFeedbackViewController.m */,
+				3368B8412184ADCA00AC943F /* InFeedbackViewController.xib */,
+				3368B8442184B6C300AC943F /* InHelpCenterSelectionController.h */,
+				3368B8452184B6C300AC943F /* InHelpCenterSelectionController.m */,
+				3368B8472184BBF000AC943F /* InHelpCenterSelectionController.xib */,
+				3368B8492184C0CB00AC943F /* InHelpCenterInfoController.h */,
+				3368B84A2184C0CB00AC943F /* InHelpCenterInfoController.m */,
+				3368B8512184C76500AC943F /* InHelpCenterInfoController.xib */,
+				3368B84C2184C38200AC943F /* InHelpCenterInfoCell.h */,
+				3368B84D2184C38200AC943F /* InHelpCenterInfoCell.m */,
+				3368B84E2184C38200AC943F /* InHelpCenterInfoCell.xib */,
 			);
 			path = InDevice;
 			sourceTree = "<group>";
@@ -1044,6 +1076,7 @@
 				33FB62CB215D469400C6419C /* RSSI_3@3x.png in Resources */,
 				337E504F21620E1B00CB6313 /* searchPhone@2x.png in Resources */,
 				3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */,
+				3368B8522184C76500AC943F /* InHelpCenterInfoController.xib in Resources */,
 				3363950D217B5AAE006719EA /* InChangeDeviceNameView.xib in Resources */,
 				330FB8E3216370790032E657 /* loginBackground@2x.png in Resources */,
 				3374C7522112013B00F83101 /* InUser.storyboard in Resources */,
@@ -1108,6 +1141,7 @@
 				3374C7912112077C00F83101 /* icon_map_type.png in Resources */,
 				337E502B2161F60F00CB6313 /* addDeviceBackground@2x.png in Resources */,
 				33FB62CA215D469400C6419C /* RSSI_12@2x.png in Resources */,
+				3368B8432184ADCA00AC943F /* InFeedbackViewController.xib in Resources */,
 				33FB62D3215D469400C6419C /* RSSI_6@2x.png in Resources */,
 				33FB62D2215D469400C6419C /* RSSI_10@2x.png in Resources */,
 				337E505F21623C8500CB6313 /* successCheck@2x.png in Resources */,
@@ -1123,6 +1157,7 @@
 				3385C6CC2157467D005FAB04 /* Rectangle2copy@3x.png in Resources */,
 				330FB8D721636F790032E657 /* up@2x.png in Resources */,
 				330FB8EB2163C6DA0032E657 /* greenchip@2x.png in Resources */,
+				3368B8502184C38200AC943F /* InHelpCenterInfoCell.xib in Resources */,
 				33FB629E215D453900C6419C /* 40@3x.png in Resources */,
 				337E504E21620E1B00CB6313 /* searchImage@2x.png in Resources */,
 				3368B8392184152300AC943F /* user@3x.png in Resources */,
@@ -1189,6 +1224,7 @@
 				3374C7A32112077C00F83101 /* icon_scan_line.png in Resources */,
 				33FB62DA215D469400C6419C /* RSSI_7@2x.png in Resources */,
 				337E505D21623C8500CB6313 /* successCheck@3x.png in Resources */,
+				3368B8482184BBF000AC943F /* InHelpCenterSelectionController.xib in Resources */,
 				33639512217B6181006719EA /* check@3x.png in Resources */,
 				337E502D2161F60F00CB6313 /* addButton@3x.png in Resources */,
 				33FB62E2215D469400C6419C /* RSSI_5@3x.png in Resources */,
@@ -1265,6 +1301,7 @@
 			files = (
 				33FFB993217325C200E6A8C6 /* InChangePasswordViewController.m in Sources */,
 				3379A2DE21562500008D1AA2 /* InButton.m in Sources */,
+				3368B8462184B6C400AC943F /* InHelpCenterSelectionController.m in Sources */,
 				337E501F2161F41B00CB6313 /* InAddDeviceStartViewController.m in Sources */,
 				3328800221158F4900C4893B /* InForgetPasswordViewController.m in Sources */,
 				3374C74F2112013B00F83101 /* InLoginViewController.m in Sources */,
@@ -1279,14 +1316,17 @@
 				337E504321620ABD00CB6313 /* InSearchDeviceViewController.m in Sources */,
 				3328801B2115AA4900C4893B /* InControlDeviceViewController.m in Sources */,
 				3385C6C6215743E5005FAB04 /* InInputView.m in Sources */,
+				3368B8422184ADCA00AC943F /* InFeedbackViewController.m in Sources */,
 				33179837213BEDEB000B8DD6 /* InDeviceListAddDeviceCell.m in Sources */,
 				338CDF7F21297F6000A018EA /* DLDevice.m in Sources */,
 				338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */,
+				3368B84F2184C38200AC943F /* InHelpCenterInfoCell.m in Sources */,
 				3385C6DA21575E5E005FAB04 /* InTextField.m in Sources */,
 				33639509217B4D27006719EA /* InChangeDeviceNameView.m in Sources */,
 				338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */,
 				3385C6C221574254005FAB04 /* InRootViewController.m in Sources */,
 				331797F0213AF282000B8DD6 /* InAnnotationView.m in Sources */,
+				3368B84B2184C0CC00AC943F /* InHelpCenterInfoController.m in Sources */,
 				3374C74C2112013B00F83101 /* AppDelegate.m in Sources */,
 				33FFB998217327B500E6A8C6 /* InChangePasswordCell.m in Sources */,
 				33EE4C9A2116DBE000CDDC98 /* InDeviceListViewController.m in Sources */,
