@@ -52,7 +52,6 @@
 @property (strong, nonatomic) IBOutlet UIView *customTakePhotoView;
 @property (weak, nonatomic) IBOutlet UIView *imageBodyView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (nonatomic, assign) BOOL takeAPhtot;
 @property (strong,nonatomic)UIImagePickerController * imagePikerViewController;
 @property (nonatomic, strong) UIImagePickerController *libraryPikerViewController;
 
@@ -114,7 +113,6 @@
     [self updateUI];
     // 在viewDidLoad设置没有效果
     self.mapView.showsUserLocation = [common getIsShowUserLocation];
-    
 }
 
 - (void)dealloc {
@@ -630,7 +628,6 @@
     self.customTakePhotoView = nil;
     [self presentViewController:self.imagePikerViewController animated:YES completion:NULL];
     self.imageBodyView.hidden = YES;
-    self.takeAPhtot = NO;
 }
 
 - (void)setUpImagePiker {
@@ -638,11 +635,11 @@
     self.imagePikerViewController = [[UIImagePickerController alloc] init];
     self.imagePikerViewController.delegate = self;
     self.imagePikerViewController.allowsEditing = YES;
-    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     // 设置相册的
     self.libraryPikerViewController = [[UIImagePickerController alloc] init];
     self.libraryPikerViewController.delegate = self;
     self.libraryPikerViewController.allowsEditing = YES;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     // 设置相册的导航栏
     [self.libraryPikerViewController.navigationBar setBarTintColor:[UIColor clearColor]];
     [self.libraryPikerViewController.navigationBar setTranslucent:NO];
@@ -654,26 +651,21 @@
     [self.libraryPikerViewController.navigationBar setTitleTextAttributes:attrs];
 }
 - (IBAction)setPhotoSharkLight {
-    if (self.takeAPhtot) {
-        return;
-    }
     NSLog(@"设置闪光灯");
     [common setupSharkLight];
 }
 
 - (IBAction)goPhotoLibrary {
     NSLog(@"进入相册");
-    self.libraryPikerViewController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    // 解决iPhone5S上导航栏会消失的Bug
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    self.libraryPikerViewController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
     [self.imagePikerViewController presentViewController:self.libraryPikerViewController animated:YES completion:NULL];
     
 }
 
 - (IBAction)takePhoto {
-    if (self.takeAPhtot) {
-        return;
-    }
     NSLog(@"拍照保存");
-    self.takeAPhtot = YES;
     [self.imagePikerViewController takePicture];
 }
 
@@ -687,8 +679,8 @@
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    self.imageBodyView.hidden = NO;
     if (picker == self.libraryPikerViewController) {
+        self.imageBodyView.hidden = NO;
         // 相册界面点击图片显示
         UIImage * image = info[UIImagePickerControllerOriginalImage];
         self.imageView.image = image;
@@ -701,7 +693,7 @@
         if (!image) {
             image = info[UIImagePickerControllerOriginalImage];
         }
-        self.imageView.image = image;
+//        self.imageView.image = image;
         UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSaveImageWithError:contextInfo:), (__bridge void *)self);
     }
 }
@@ -748,7 +740,7 @@
     
     // 发送本地通知
     DLDevice *device = noti.userInfo[@"Device"];
-    [self sendLocalNotification:device];
+    [common sendLocalNotification:[NSString stringWithFormat:@"Innway %@ is finding iPhone now!", device.deviceName]];
 }
 
 - (void)stopSearchPhone {
@@ -767,15 +759,6 @@
         self.isSearchDevice = NO;
         [self stopBtnAnimation];
     }
-}
-
-- (void)sendLocalNotification:(DLDevice *)device {
-    // 1.创建通知
-    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-    // 2.设置通知的必选参数
-    // 设置通知显示的内容
-    localNotification.alertBody = [NSString stringWithFormat:@"Innway %@ is finding iPhone now!", device.deviceName];
-     [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
 }
 
 #pragma mark - Properity

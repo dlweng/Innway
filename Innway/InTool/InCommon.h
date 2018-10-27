@@ -11,16 +11,39 @@
 #import <CoreLocation/CoreLocation.h>
 #import <UIKit/UIKit.h>
 #import <MBProgressHUD.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 
 #define common [InCommon sharedInstance]
 
 /**
  界面显示类型
  */
-typedef NS_ENUM(NSInteger, InSearchDeviceType) {
-    InDeviceTag = 0,
-    InDeviceChip = 1,
-    InDeviceCard = 2
+typedef NS_ENUM(NSInteger, InDeviceType) {
+    
+    /**
+     未知设备类型
+     */
+    InDeviceNone = 0,
+    
+    /**
+     card设备
+     */
+    InDeviceCard = 1,
+    
+    /**
+     chip设备
+     */
+    InDeviceChip = 2,
+    
+    /**
+     tag设备
+     */
+    InDeviceTag = 3,
+    
+    /**
+     所有设备类型
+     */
+    InDeviceAll = 4,
 };
 
 @class DLDevice;
@@ -31,7 +54,7 @@ typedef NS_ENUM(NSInteger, InSearchDeviceType) {
 //标识是否支持定位功能
 @property (nonatomic, assign) BOOL isLocation;
 @property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
-@property (nonatomic, assign) InSearchDeviceType searchDeviceType;
+@property (nonatomic, assign) InDeviceType deviceType;
 + (instancetype)sharedInstance;
 
 - (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd;
@@ -57,6 +80,10 @@ typedef NS_ENUM(NSInteger, InSearchDeviceType) {
 - (void)uploadDeviceLocation:(DLDevice *)device;
 
 - (NSString *)getImageName:(NSNumber *)rssi;
+// 根据外设获取设备类型
+- (InDeviceType)getDeviceType:(CBPeripheral *)peripheral;
+// 发送本地通知
+- (void)sendLocalNotification:(NSString *)message;
 
 + (void)sendHttpMethod:(NSString *)method URLString:(NSString *)URLString body:(NSDictionary *)body completionHandler:(nullable void (^)(NSURLResponse *response, NSDictionary *responseObject,  NSError * _Nullable error))completionHandler;
 

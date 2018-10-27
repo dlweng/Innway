@@ -64,8 +64,21 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    common.searchDeviceType = indexPath.row;
-    NSLog(@"去搜索设备类型: %zd", common.searchDeviceType);
+    common.deviceType = indexPath.row;
+    switch (indexPath.row) {
+        case 0:
+            common.deviceType = InDeviceTag;
+            break;
+        case 1:
+            common.deviceType = InDeviceChip;
+            break;
+        case 2:
+            common.deviceType = InDeviceCard;
+            break;
+        default:
+            break;
+    }
+    NSLog(@"去搜索设备类型: %zd", common.deviceType);
     if (self.navigationController.viewControllers.lastObject == self) {
         [self.navigationController pushViewController:[InSearchDeviceViewController searchDeviceViewController] animated:YES];
     }

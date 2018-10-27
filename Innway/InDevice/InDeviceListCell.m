@@ -12,7 +12,10 @@
 @interface InDeviceListCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *alertImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *batteryImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet UIImageView *rssiView;
+@property (weak, nonatomic) IBOutlet UIImageView *chipView;
+@property (weak, nonatomic) IBOutlet UIImageView *cardView;
+
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @end
@@ -38,8 +41,30 @@
 - (void)setDevice:(DLDevice *)device {
     _device = device;
     [self updateBattery:device];
-    self.iconView.image = [UIImage imageNamed:[[InCommon sharedInstance] getImageName:device.rssi]];
+    self.rssiView.image = [UIImage imageNamed:[[InCommon sharedInstance] getImageName:device.rssi]];
     self.titleLabel.text = device.deviceName;
+    switch (_device.type) {
+        case InDeviceTag:
+        {
+            self.chipView.image = [UIImage imageNamed:@"greentag"];
+            self.chipView.hidden = NO;
+            self.cardView.hidden = YES;
+            break;
+        }
+        case InDeviceChip:
+        {
+            self.chipView.image = [UIImage imageNamed:@"greenchip"];
+            self.chipView.hidden = NO;
+            self.cardView.hidden = YES;
+            break;
+        }
+        default:
+        {
+            self.chipView.hidden = YES;
+            self.cardView.hidden = NO;
+            break;
+        }
+    }
 }
 
 - (void)updateBattery:(DLDevice *)device {

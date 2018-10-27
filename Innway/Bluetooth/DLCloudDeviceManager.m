@@ -56,6 +56,7 @@ static DLCloudDeviceManager *instance = nil;
 //                NSLog(@"添加设备http请求成功");
                 // 创建对象
                 DLDevice *newDevice = [DLDevice device:peripheral];
+                newDevice.type = [common getDeviceType:peripheral];
                 newDevice.cloudID = data;
                 newDevice.mac = mac;
                 // 添加到云端列表
@@ -153,6 +154,8 @@ static DLCloudDeviceManager *instance = nil;
                     DLKnowDevice *knowDevice = [self.centralManager.knownPeripherals objectForKey:mac];
                     CBPeripheral *peripheral = knowDevice.peripheral;
                     device = [DLDevice device:peripheral];
+#warning  从云端获取设备的类型 云端还没做，默认是card类型
+                    device.type = InDeviceCard;
                     device.rssi = knowDevice.rssi;
                 }
                 device.mac = mac;

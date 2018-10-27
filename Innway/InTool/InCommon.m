@@ -426,6 +426,31 @@
     return imageName;
 }
 
+- (InDeviceType)getDeviceType:(CBPeripheral *)peripheral {
+    if (!peripheral) {
+        InDeviceNone;
+    }
+    InDeviceType deviceType = InDeviceNone;
+    if ([peripheral.name isEqualToString:@"Card"] || [peripheral.name isEqualToString:@"Lily"]) {
+        deviceType = InDeviceCard;
+    }
+    else if ([peripheral.name isEqualToString:@"Chip"]) {
+        deviceType = InDeviceChip;
+    } else if ([peripheral.name isEqualToString:@"Tag"]) {
+        deviceType = InDeviceTag;
+    }
+    return deviceType;
+}
+
+- (void)sendLocalNotification:(NSString *)message {
+    // 1.创建通知
+    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    // 2.设置通知的必选参数
+    // 设置通知显示的内容
+    localNotification.alertBody = message;
+    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+}
+
 #pragma mark - HTTP
 + (void)sendHttpMethod:(NSString *)method URLString:(NSString *)URLString body:(NSDictionary *)body completionHandler:(nullable void (^)(NSURLResponse *response, NSDictionary *responseObject,  NSError * _Nullable error))completionHandler {
     if (URLString.length == 0) {

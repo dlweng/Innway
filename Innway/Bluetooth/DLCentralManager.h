@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "DLDevice.h"
+#import "InCommon.h"
 
 #define DeviceDisconnectNotification @"DeviceDisconnectNotification"
 

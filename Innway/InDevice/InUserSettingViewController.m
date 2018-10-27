@@ -44,7 +44,7 @@
     self.logoutBtn.layer.masksToBounds = YES;
     self.logoutBtn.layer.cornerRadius = 10;
     self.emailLabel.text = common.email;
-    self.userNameLabel.text = @"Danly";
+    self.userNameLabel.text = @"User";
     
     if ([InCommon isIPhoneX]) {
         self.userIconCenterYConstraint.constant += 20;

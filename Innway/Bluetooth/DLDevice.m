@@ -43,8 +43,8 @@
         // 设置默认位置 22.55694872036483,114.11126873029583
         _coordinate = CLLocationCoordinate2DMake(22.55694872036483, 114.11126873029583);
         
-        // 初始化15秒扫描一次RSSI的定时器
-        _readRSSITimer = [NSTimer timerWithTimeInterval:15 target:self selector:@selector(readRSSI) userInfo:nil repeats:YES];
+        // 初始化1秒扫描一次RSSI的定时器
+        _readRSSITimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(readRSSI) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_readRSSITimer forMode:NSRunLoopCommonModes];
         
         _disConnect = NO;
@@ -63,14 +63,14 @@
     CBPeripheral *peripheral = notification.object;
     if ([peripheral.identifier.UUIDString isEqualToString:self. peripheral.identifier.UUIDString]) {
         if (!_disConnect) { //
-            // cloudID > 0, 表示设备处于被添加状态，需要重连
             NSLog(@"设备连接被断开，去重连设备, mac = %@", self.mac);
             [self connectToDevice:^(DLDevice *device, NSError *error) {
                 if (error) {
                     self.online = NO;
                     // 掉线了，要上传设备位置
                     [[InCommon sharedInstance] uploadDeviceLocation:self];
-                    NSLog(@"mac: %@, 设备重连失败", self.mac);
+                    [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+                    NSLog(@"mac: %@, 设备重连失败, 发出掉线通知", self.mac);
                 }
                 else {
                     NSLog(@"mac: %@, 设备重连成功", self.mac);

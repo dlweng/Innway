@@ -23,7 +23,7 @@
         [self.deleteBtn sizeToFit];
         self.deleteBtn.center = self.contentView.center;
         [self.deleteBtn setTitle:@"Delete device" forState:UIControlStateNormal];
-        [self.deleteBtn setFont:[UIFont systemFontOfSize:17]];
+        [self.deleteBtn setFont:[UIFont systemFontOfSize:18]];
         [self.deleteBtn setTitleColor:[UIColor colorWithRed:80/255.0 green:179/255.0 blue:122/255.0 alpha:1] forState:UIControlStateNormal];
     }
 }

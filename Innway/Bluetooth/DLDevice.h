@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <MapKit/MapKit.h>
+#import "InCommon.h"
 
 #define ElectricKey @"Electric"
 #define ChargingStateKey @"ChargingState"
@@ -43,6 +44,8 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 @property (nonatomic, assign, readonly) BOOL connected;
 @property (nonatomic, strong) NSNumber *rssi;
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
+// 标识设备是哪种设备
+@property (nonatomic, assign) InDeviceType type;
 
 
 + (instancetype)device:(CBPeripheral *)peripheral;
