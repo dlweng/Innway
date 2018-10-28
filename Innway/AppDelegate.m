@@ -45,6 +45,8 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     NSLog(@"APP被杀死");
+    // 杀死APP要报设备离线。
+    [[NSNotificationCenter defaultCenter] postNotificationName:BluetoothPoweredOffNotification object:nil];
 }
 
 

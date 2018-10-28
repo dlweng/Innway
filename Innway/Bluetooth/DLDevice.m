@@ -502,6 +502,8 @@
 - (void)setOnline:(BOOL)online {
     if (_online && !online) {
         // 从在线变为离线, 上传设备的新位置并做掉线通知
+        // 保存设备离线状态和时间
+        
         _coordinate = [InCommon sharedInstance].currentLocation;
         [[InCommon sharedInstance] uploadDeviceLocation:self];
         if ([self.lastData boolValueForKey:DisconnectAlertKey defaultValue:NO]) {
