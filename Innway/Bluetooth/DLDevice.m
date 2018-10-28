@@ -548,7 +548,7 @@
 
 - (NSString *)getGps{
     CLLocationCoordinate2D deviceLocation = _coordinate;
-    NSString *gps = [NSString stringWithFormat:@"%f,%f", deviceLocation.latitude, deviceLocation.longitude];
+    NSString *gps = [NSString stringWithFormat:@"%lf,%lf", deviceLocation.latitude, deviceLocation.longitude];
     return gps;
 }
 

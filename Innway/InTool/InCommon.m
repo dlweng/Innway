@@ -629,6 +629,7 @@
     NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
     if (oldDeviceInfo) {
         NSString *offlineTime = [oldDeviceInfo valueForKey:@"offlineTime"];
+//        23.226792,113.304648
         NSString *gps = [oldDeviceInfo valueForKey:@"gps"];
         if (completion) {
             completion(offlineTime, gps);
