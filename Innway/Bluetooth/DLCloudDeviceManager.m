@@ -11,7 +11,9 @@
 
 
 static DLCloudDeviceManager *instance = nil;
-@interface DLCloudDeviceManager()
+@interface DLCloudDeviceManager() {
+    NSTimer *_getDeviceInfoTimer;
+}
 
 @property (nonatomic, weak) DLCentralManager *centralManager;
 
@@ -26,6 +28,19 @@ static DLCloudDeviceManager *instance = nil;
         instance.centralManager = [DLCentralManager sharedInstance];
     });
     return instance;
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        // 在初始化云端管理对象30秒之后，每10分钟获取一次设备的状态
+        _getDeviceInfoTimer = [NSTimer timerWithTimeInterval:600 target:self selector:@selector(autoGetDeviceInfo) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_getDeviceInfoTimer forMode:NSRunLoopCommonModes];
+        __weak typeof(NSTimer *) weakTimer = _getDeviceInfoTimer;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakTimer setFireDate:[NSDate distantPast]];
+        });
+    }
+    return self;
 }
 
 - (void)addDevice:(NSString *)mac completion:(DidAddDeviceEvent)completion {
@@ -214,6 +229,15 @@ static DLCloudDeviceManager *instance = nil;
         _cloudDeviceList = [NSMutableDictionary dictionary];
     }
     return _cloudDeviceList;
+}
+
+- (void)autoGetDeviceInfo {
+    for (NSString *mac in self.cloudDeviceList.allKeys) {
+        DLDevice *device = self.cloudDeviceList[mac];
+        if (device.connected) {
+            [device getDeviceInfo];
+        }
+    }
 }
 
 //- (void)addDevice:(NSString *)mac completion:(DidAddDeviceEvent)completion {

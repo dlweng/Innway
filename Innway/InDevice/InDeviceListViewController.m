@@ -114,6 +114,10 @@
     }
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    NSLog(@"开始拖动");
+}
+
 - (void)deviceOnlineChange:(NSNotification *)noti {
     [self.tableView reloadData];
 }
@@ -134,6 +138,7 @@
     }
     [self.tableView reloadData];
 }
+
 
 //- (void)upDown:(UIPanGestureRecognizer *)pan {
 ////    NSLog(@"pan = %@", [NSValue valueWithCGPoint:[pan locationInView:self.view]]);

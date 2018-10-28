@@ -63,6 +63,7 @@
 @property (nonatomic, assign) BOOL btnTextIsHide;
 @property (nonatomic, assign) BOOL isSearchPhone;
 @property (nonatomic, assign) BOOL isSearchDevice;
+
 @end
 
 @implementation InControlDeviceViewController
