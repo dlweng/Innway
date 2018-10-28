@@ -12,6 +12,7 @@
 
 @interface InHelpCenterSelectionController ()<UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableViewHeightConstraint;
 
 @end
 
@@ -24,6 +25,10 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     self.tableView.scrollEnabled = NO;
+    
+    if (self.view.bounds.size.width > 320) {
+        self.tableViewHeightConstraint.constant = 210;
+    }
 }
 
 - (void)setupNarBar {

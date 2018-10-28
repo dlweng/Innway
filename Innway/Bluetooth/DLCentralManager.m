@@ -147,7 +147,12 @@ static DLCentralManager *instance = nil;
 
 - (void)disConnectToDevice: (CBPeripheral *)peripheral completion:(DidDisConnectToDeviceEvent)completion {
     [self.manager cancelPeripheralConnection:peripheral];
-    
+    if (self.manager.state != CBCentralManagerStatePoweredOn) {
+        if (completion) {
+            completion(self, peripheral, nil);
+        }
+        return;
+    }
     if (completion) {
         [self.disConnectDeviceEventDict setValue:completion forKey:peripheral.identifier.UUIDString];
     }

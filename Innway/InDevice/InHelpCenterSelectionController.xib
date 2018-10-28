@@ -13,6 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InHelpCenterSelectionController">
             <connections>
                 <outlet property="tableView" destination="CLw-cR-d5L" id="0mg-bK-bph"/>
+                <outlet property="tableViewHeightConstraint" destination="1XW-kn-4jd" id="Vub-qW-Mhv"/>
                 <outlet property="view" destination="iN0-l3-epB" id="3az-VX-0Zh"/>
             </connections>
         </placeholder>

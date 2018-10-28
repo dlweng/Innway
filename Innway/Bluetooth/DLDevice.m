@@ -507,7 +507,10 @@
         // 从在线变为离线, 上传设备的新位置并做掉线通知
         _coordinate = [InCommon sharedInstance].currentLocation;
         [[InCommon sharedInstance] uploadDeviceLocation:self];
-        [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+        if ([self.lastData boolValueForKey:DisconnectAlertKey defaultValue:NO]) {
+            // 关闭的断开连接通知，则不通知
+            [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+        }
     }
     _online = online;
     if (!_online) {
