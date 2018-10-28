@@ -542,20 +542,20 @@
     [InCommon sharedInstance].currentLocation = userLocation.coordinate;
 }
 
-// 画自定义大头针的方法
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
-{
-    if ([annotation isKindOfClass:[InAnnotation class]]) {
-        NSString *reuseID = @"InAnnotationView";
-        InAnnotationView *annotationView = (InAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseID];
-        if (annotationView == nil) {
-            annotationView = [[InAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseID];
-            
-        }
-        return annotationView;
-    }
-    return nil;
-}
+//// 画自定义大头针的方法
+//- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
+//{
+//    if ([annotation isKindOfClass:[InAnnotation class]]) {
+//        NSString *reuseID = @"InAnnotationView";
+//        InAnnotationView *annotationView = (InAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseID];
+//        if (annotationView == nil) {
+//            annotationView = [[InAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseID];
+//
+//        }
+//        return annotationView;
+//    }
+//    return nil;
+//}
 
 - (void)deviceChangeOnline:(NSNotification *)notification {
 //    NSLog(@"接收到设备:%@, 状态改变的通知: %@",  notification.object);
@@ -566,7 +566,7 @@
     NSMutableDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
     for (NSString *mac in cloudDeviceList.allKeys) {
         DLDevice *device = cloudDeviceList[mac];
-        InAnnotation *annotation = [self.deviceAnnotation objectForKey:mac];
+        MKPointAnnotation *annotation = [self.deviceAnnotation objectForKey:mac];
         if (device.online && annotation) {
             // 设备在线，但是存在大头针，删除大头针
             [self.deviceAnnotation removeObjectForKey:mac];
@@ -574,15 +574,37 @@
         }
         else if (!device.online && !annotation) {
             // 设备不在线，且不存在大头针，需要增加
-            annotation = [[InAnnotation alloc] init];
+            annotation = [[MKPointAnnotation alloc] init];
             annotation.coordinate = device.coordinate;
             annotation.title = device.deviceName;
-            annotation.title = @"dsa";
+            annotation.subtitle = @"永康路巷155号";
             [self.deviceAnnotation setObject:annotation forKey:mac];
             [self.mapView addAnnotation:annotation];
         }
     }
 }
+
+//- (void)updateAnnotation{
+//    NSMutableDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+//    for (NSString *mac in cloudDeviceList.allKeys) {
+//        DLDevice *device = cloudDeviceList[mac];
+//        InAnnotation *annotation = [self.deviceAnnotation objectForKey:mac];
+//        if (device.online && annotation) {
+//            // 设备在线，但是存在大头针，删除大头针
+//            [self.deviceAnnotation removeObjectForKey:mac];
+//            [self.mapView removeAnnotation:annotation];
+//        }
+//        else if (!device.online && !annotation) {
+//            // 设备不在线，且不存在大头针，需要增加
+//            annotation = [[InAnnotation alloc] init];
+//            annotation.coordinate = device.coordinate;
+//            annotation.title = device.deviceName;
+//            annotation.title = @"dsa";
+//            [self.deviceAnnotation setObject:annotation forKey:mac];
+//            [self.mapView addAnnotation:annotation];
+//        }
+//    }
+//}
 
 - (void)deviceRSSIChange:(NSNotification *)noti {
     DLDevice *device = noti.object;
