@@ -178,6 +178,14 @@ static DLCloudDeviceManager *instance = nil;
                 device.cloudID = [cloudDevice integerValueForKey:@"id" defaultValue:-1];
                 device.deviceName = [cloudDevice stringValueForKey:@"name" defaultValue:@""];
                 device.coordinate = [cloudDevice stringValueForKey:@"gps" defaultValue:@""];
+                // 获取本地保存的离线信息和设备名称
+                [common getDeviceName:device];
+                [common getDeviceOfflineInfo:device completion:^(NSString *offlineTime, NSString *gps) {
+                    if (offlineTime && gps) {
+                        device.offlineTimeStr2 = offlineTime;
+                        device.coordinate = gps;
+                    }
+                }];
                 [newList setValue:device forKey:mac];
             }
             self.cloudDeviceList = newList;

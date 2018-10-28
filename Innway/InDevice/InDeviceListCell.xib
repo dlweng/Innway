@@ -33,7 +33,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lily" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eec-Tj-d5Q">
-                        <rect key="frame" x="74" y="8.5" width="134.5" height="23"/>
+                        <rect key="frame" x="74" y="8.5" width="148" height="23"/>
                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
@@ -46,7 +46,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last seen just now" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zfY-9c-UiS">
-                        <rect key="frame" x="74" y="33.5" width="134.5" height="19.5"/>
+                        <rect key="frame" x="74" y="33.5" width="148" height="19.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
@@ -97,6 +97,7 @@
                     <constraint firstItem="UCe-5T-RAX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="L7o-va-Evp"/>
                     <constraint firstItem="Yzj-qe-W8F" firstAttribute="centerY" secondItem="7or-9c-kQW" secondAttribute="centerY" id="Luj-g2-I01"/>
                     <constraint firstItem="eec-Tj-d5Q" firstAttribute="centerY" secondItem="7or-9c-kQW" secondAttribute="centerY" constant="-10" id="Mju-4D-Xgq"/>
+                    <constraint firstItem="UCe-5T-RAX" firstAttribute="leading" secondItem="zfY-9c-UiS" secondAttribute="trailing" constant="8" id="Mw0-Xg-UkY"/>
                     <constraint firstAttribute="bottom" secondItem="UCe-5T-RAX" secondAttribute="bottom" id="VXK-AV-bIT"/>
                     <constraint firstItem="Yzj-qe-W8F" firstAttribute="centerX" secondItem="7or-9c-kQW" secondAttribute="centerX" id="Xaf-9s-mWQ"/>
                     <constraint firstItem="zfY-9c-UiS" firstAttribute="top" secondItem="eec-Tj-d5Q" secondAttribute="bottom" constant="2" id="asH-Vw-1EZ"/>

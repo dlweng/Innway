@@ -23,6 +23,7 @@
 #define DeviceSearchPhoneNotification @"DeviceSearchPhoneNotification"
 #define DeviceSearchDeviceAlertNotification @"DeviceSearchDeviceAlertNotification"
 #define DeviceRSSIChangeNotification  @"DeviceRSSIChangeNotification"
+#define DeviceUpdateOfflineTimeNotification  @"DeviceUpdateOfflineTimeNotification"
 
 @class DLDevice;
 typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *error);
@@ -47,6 +48,8 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 // 标识设备是哪种设备
 @property (nonatomic, assign) InDeviceType type;
 
+@property (nonatomic, strong) NSString *offlineTimeStr1;
+@property (nonatomic, strong) NSString *offlineTimeStr2;
 
 + (instancetype)device:(CBPeripheral *)peripheral;
 - (void)setCoordinate:(NSString *)gps;

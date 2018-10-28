@@ -506,6 +506,162 @@
     [bar setBackgroundImage:backgroundImage forBarMetrics:UIBarMetricsDefault];
 }
 
+#pragma mark - date
+//获取当前的时间 1980-01-01 00:00:01
+- (NSString *)getCurrentTime{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    NSDate *datenow = [NSDate date];
+    NSString *currentTimeString = [formatter stringFromDate:datenow];
+    return currentTimeString;
+}
+
+// 字符串转换为日期  字符串格式：1980-01-01 00:00:01
+- (NSDate *)dateFromStr:(NSString *)str {
+    NSDateFormatter* dateFormat = [[NSDateFormatter alloc] init];//实例化一个NSDateFormatter对象
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];//设定时间格式,这里可以设置成自己需要的格式
+    NSDate *date =[dateFormat dateFromString:str];
+    return date;
+}
+
+// 字符串转换为日期
+- (NSString *)dateStrFromDate:(NSDate *)date {
+    NSDateFormatter* dateFormat = [[NSDateFormatter alloc] init];//实例化一个NSDateFormatter对象
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];//设定时间格式,这里可以设置成自己需要的格式
+    NSString *currentDateStr = [dateFormat stringFromDate:date];
+    return currentDateStr;
+}
+
+
+//  入参是NSDate类型
+- (int)compareOneDate:(NSDate *)oneDate withAnotherDate:(NSDate *)anotherDate
+{
+    NSDateFormatter *df = [[NSDateFormatter alloc]init];
+    [df setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+    
+    NSString *oneDayStr = [df stringFromDate:oneDate];
+    
+    NSString *anotherDayStr = [df stringFromDate:anotherDate];
+    
+    NSDate *dateA = [df dateFromString:oneDayStr];
+    
+    NSDate *dateB = [df dateFromString:anotherDayStr];
+    
+    NSComparisonResult result = [dateA compare:dateB];
+    
+    if (result == NSOrderedAscending)
+    {  // oneDate < anotherDate
+        return 1;
+        
+    }else if (result == NSOrderedDescending)
+    {  // oneDate > anotherDate
+        return -1;
+    }
+    
+    // oneDate = anotherDate
+    return 0;
+}
+
+//  入参是NSString类型
+- (int)compareOneDateStr:(NSString *)oneDateStr withAnotherDateStr:(NSString *)anotherDateStr
+{
+    NSDateFormatter *df = [[NSDateFormatter alloc]init];
+    
+    [df setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    NSDate *dateA = [[NSDate alloc]init];
+    
+    NSDate *dateB = [[NSDate alloc]init];
+    
+    dateA = [df dateFromString:oneDateStr];
+    
+    dateB = [df dateFromString:anotherDateStr];
+    
+    NSComparisonResult result = [dateA compare:dateB];
+    
+    if (result == NSOrderedAscending)
+    {  // oneDateStr < anotherDateStr
+        return 1;
+        
+    }else if (result == NSOrderedDescending)
+    {  // oneDateStr > anotherDateStr
+        return -1;
+    }
+    
+    // oneDateStr = anotherDateStr
+    return 0;
+}
+
+
+- (NSDateComponents *)differentWithDate:(NSString *)expireDateStr{
+    NSDateFormatter *dateFomatter = [[NSDateFormatter alloc] init];
+    dateFomatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    // 当前时间字符串格式
+    NSDate *nowDate = [NSDate date];
+    // 截止时间data格式
+    NSDate *expireDate = [dateFomatter dateFromString:expireDateStr];
+    // 当前日历
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    // 需要对比的时间数据
+    NSCalendarUnit unit = NSCalendarUnitYear | NSCalendarUnitMonth
+    | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+    // 对比时间差
+    NSDateComponents *dateCom = [calendar components:unit fromDate:expireDate toDate:nowDate options:0];
+    NSLog(@"dateCom.year = %zd, dateCom.month = %zd, dateCom.day = %zd, dateCom.hour = %zd, dateCom.minute = %zd, dateCom.second = %zd", dateCom.year, dateCom.month, dateCom.day, dateCom.hour, dateCom.minute, dateCom.second);
+    return dateCom;
+}
+
+- (void)saveDeviceOfflineInfo:(DLDevice *)device {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    if (!oldDeviceInfo) {
+        oldDeviceInfo = [NSMutableDictionary dictionary];
+    }
+    NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
+    [newDeviceInfo setValue:[self getCurrentTime] forKey:@"offlineTime"];
+    [newDeviceInfo setValue:[device getGps] forKey:@"gps"];
+    [defaults setValue:newDeviceInfo forKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    [defaults synchronize];
+}
+
+- (void)getDeviceOfflineInfo:(DLDevice *)device completion:(void (^)(NSString * offlineTime, NSString * gps))completion {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    if (oldDeviceInfo) {
+        NSString *offlineTime = [oldDeviceInfo valueForKey:@"offlineTime"];
+        NSString *gps = [oldDeviceInfo valueForKey:@"gps"];
+        if (completion) {
+            completion(offlineTime, gps);
+        }
+    }
+    else {
+        if (completion) {
+            completion(nil, nil);
+        }
+    }
+}
+
+- (void)saveDeviceName:(DLDevice *)device {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    if (!oldDeviceInfo) {
+        oldDeviceInfo = [NSMutableDictionary dictionary];
+    }
+    NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
+    [newDeviceInfo setValue:device.deviceName forKey:@"name"];
+    [defaults setValue:newDeviceInfo forKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    [defaults synchronize];
+}
+
+- (void)getDeviceName:(DLDevice *)device {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    if (oldDeviceInfo) {
+        NSString *name = [oldDeviceInfo valueForKey:@"name"];
+        device.deviceName = name;
+    }
+}
+
 
 @end
 

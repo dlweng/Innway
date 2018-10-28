@@ -47,7 +47,6 @@
         // 初始化1秒扫描一次RSSI的定时器
         _readRSSITimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(readRSSI) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_readRSSITimer forMode:NSRunLoopCommonModes];
-        
         _disConnect = NO;
     }
     return self;
@@ -503,7 +502,8 @@
     if (_online && !online) {
         // 从在线变为离线, 上传设备的新位置并做掉线通知
         // 保存设备离线状态和时间
-        
+        [common saveDeviceOfflineInfo:self];
+        _offlineTimeStr2 = [common getCurrentTime]; // 获取当前离线的shijian
         _coordinate = [InCommon sharedInstance].currentLocation;
         [[InCommon sharedInstance] uploadDeviceLocation:self];
         if ([self.lastData boolValueForKey:DisconnectAlertKey defaultValue:NO]) {
@@ -513,7 +513,12 @@
     }
     _online = online;
     if (!_online) {
+        // 离线
         _rssi = offlineRSSI;  // 设置rssi掉线
+    }
+    else {
+        // 关闭定时器
+        _offlineTimeStr2 = nil; // 初始化时间
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(online)];
 }
@@ -578,6 +583,52 @@
 
 - (void)bluetoothPoweredOff {
     self.online = NO;
+}
+
+- (NSString *)offlineTimeStr1 {
+    if (_online) {
+    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceUpdateOfflineTimeNotification object:nil];
+        return @"Last seen just now";
+    }
+    [self compareOfflineTimer];
+    return _offlineTimeStr1;
+}
+
+- (NSString *)offlineTimeStr2 {
+    if (!_offlineTimeStr2) {
+        _offlineTimeStr2 = [common getCurrentTime];
+        return _offlineTimeStr2;
+    }
+    return _offlineTimeStr2;
+}
+
+- (void)compareOfflineTimer {
+    NSDateComponents *comp = [common differentWithDate:self.offlineTimeStr2];
+    NSInteger year = comp.year;
+    NSInteger mouth = comp.month;
+    NSInteger day = comp.day;
+    NSInteger hour = comp.hour;
+    NSInteger minute = comp.minute;
+    NSInteger second = comp.second;
+    if (year == 0 && mouth == 0 && day == 0 && hour == 0 && minute == 0) {
+        _offlineTimeStr1 = [NSString stringWithFormat:@"Last seen %zd second ago", second];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceUpdateOfflineTimeNotification object:nil];
+        return;
+    }
+    if (year == 0 && mouth == 0 && day == 0 && hour == 0) {
+        _offlineTimeStr1 = [NSString stringWithFormat:@"Last seen %zd minutes %zd seconds ago", minute ,second];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceUpdateOfflineTimeNotification object:nil];
+        return;
+    }
+    if (year == 0 && mouth == 0 && day == 0) {
+        _offlineTimeStr1 = [NSString stringWithFormat:@"Last seen %zd hours %zd minutes ago", hour, minute];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceUpdateOfflineTimeNotification object:nil];
+        return;
+    }
+    day = mouth * 30 + year * 365 + day;
+    _offlineTimeStr1 = [NSString stringWithFormat:@"Last seen %zd days %zd hours ago", day, hour];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceUpdateOfflineTimeNotification object:nil];
+    return;
 }
 
 @end

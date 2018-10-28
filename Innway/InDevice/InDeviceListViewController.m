@@ -14,7 +14,9 @@
 #import "InDeviceListAddDeviceCell.h"
 #import "InCommon.h"
 
-@interface InDeviceListViewController ()<UITableViewDelegate, UITableViewDataSource, InDeviceListCellDelegate, DLDeviceDelegate>
+@interface InDeviceListViewController ()<UITableViewDelegate, UITableViewDataSource, InDeviceListCellDelegate, DLDeviceDelegate> {
+    NSTimer *_offlineTimer;
+}
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *cloudList;
@@ -55,6 +57,9 @@
     [self.view addGestureRecognizer:downSwipeGestureRecognizer];
     downSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
     self.down = YES;
+    _offlineTimer = [NSTimer timerWithTimeInterval:10 target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:_offlineTimer forMode:NSRunLoopCommonModes];
+    [_offlineTimer setFireDate:[NSDate distantPast]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -65,6 +70,9 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceOnlineChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceRSSIChangeNotification object:nil];
+    [_offlineTimer setFireDate:[NSDate distantFuture]];
+    [_offlineTimer invalidate];
+    _offlineTimer = nil;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -94,6 +102,7 @@
         DLDevice *device = self.cloudList[indexPath.row];
         device.delegate = self;
         cell.device = device;
+        
         cell.delegate = self;
         return cell;
     }

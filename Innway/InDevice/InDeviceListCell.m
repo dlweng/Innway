@@ -65,6 +65,7 @@
             break;
         }
     }
+    self.timeLabel.text = device.offlineTimeStr1;
 }
 
 - (void)updateBattery:(DLDevice *)device {

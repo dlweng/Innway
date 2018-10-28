@@ -287,6 +287,9 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         [InChangeDeviceNameView showChangeDeviceNameView:self.device.deviceName confirmHandle:^(NSString * _Nonnull newDeviceName) {
             NSLog(@"新设备名称: %@", newDeviceName);
+            self.device.deviceName = newDeviceName;
+            [common saveDeviceName:self.device];
+            [self.tableView reloadData];
         }];
         return;
     }

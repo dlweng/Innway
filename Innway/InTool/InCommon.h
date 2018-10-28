@@ -91,6 +91,22 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 + (BOOL)isIPhoneX;
 + (void)setNavgationBar:(UINavigationBar *)bar backgroundImage:(UIImage *)backgroundImage;
 
+#pragma mark - date
+//获取当前的时间 1980-01-01 00:00:01
+- (NSString *)getCurrentTime;
+// 字符串转换为日期  字符串格式：1980-01-01 00:00:01
+- (NSDate *)dateFromStr:(NSString *)str;
+// 字符串转换为日期
+- (NSString *)dateStrFromDate:(NSDate *)date;
+//  入参是NSDate类型
+- (int)compareOneDate:(NSDate *)oneDate withAnotherDate:(NSDate *)anotherDate;
+//  入参是NSString类型
+- (int)compareOneDateStr:(NSString *)oneDateStr withAnotherDateStr:(NSString *)anotherDateStr;
+- (NSDateComponents *)differentWithDate:(NSString *)expireDateStr;
+- (void)saveDeviceOfflineInfo:(DLDevice *)device;
+- (void)getDeviceOfflineInfo:(DLDevice *)device completion:(void (^)(NSString * offlineTime, NSString * gps))completion;
+- (void)saveDeviceName:(DLDevice *)device;
+- (void)getDeviceName:(DLDevice *)device;
 @end
 
 @interface NSDictionary (GetValue)
