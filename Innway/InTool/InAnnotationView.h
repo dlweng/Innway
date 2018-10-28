@@ -8,13 +8,12 @@
 
 #import <MapKit/MapKit.h>
 
-@interface InAnnotation : NSObject <MKAnnotation>
-
-@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
-@property (nonatomic, copy, nullable) NSString *title;
-
+@class InAnnotationView;
+@class DLDevice;
+@interface InAnnotation : MKPointAnnotation
+@property (nonatomic, strong) InAnnotationView *annotationView;
+@property (nonatomic, strong) DLDevice *device;
 @end
-
 
 
 @interface InAnnotationView : MKAnnotationView

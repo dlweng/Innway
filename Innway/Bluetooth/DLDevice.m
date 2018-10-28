@@ -496,8 +496,8 @@
     if (_deviceName.length == 0) {
         _deviceName = self.peripheral.name;
     }
-    if (_deviceName.length == 0) {
-        _deviceName = @"Lily";
+    if (_deviceName.length == 0 || [_deviceName isEqualToString:@"Lily"]) {
+        _deviceName = @"Card";
     }
     return _deviceName;
 }
@@ -534,6 +534,7 @@
             NSString *longitude = strs[1];
             _coordinate.latitude = latitude.doubleValue;
             _coordinate.longitude = longitude.doubleValue;
+            NSLog(@"_coordinate.latitude = %f, _coordinate.longitude = %f", _coordinate.latitude, _coordinate.longitude);
         }
     }
 }

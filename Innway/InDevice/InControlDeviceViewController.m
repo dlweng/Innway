@@ -115,17 +115,14 @@
     [self updateAnnotation];
     [self updateUI];
     // 在viewDidLoad设置没有效果
-    self.mapView.showsUserLocation = [common getIsShowUserLocation];
+    self.mapView.showsUserLocation = YES;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.mapView.showsUserLocation = [common getIsShowUserLocation];
+    });
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-//    if (![common isOpensLocation]) {
-//        [InAlertView showAlertWithTitle:@"Tip" message:@"需要打开定位功能" confirmHanler:^{
-//            NSLog(@"跳转到设置定位功能的界面");
-//            [common goToAPPSetupView];
-//        }];
-//    }
 }
 
 - (void)dealloc {
@@ -154,7 +151,6 @@
 
 - (void)setupControlDeviceBtnText {
     NSString *deviceName = self.device.deviceName;
-    deviceName = @"Lily";
     [self.controlDeviceBtn setTitle:[NSString stringWithFormat:@"Ring Innway %@", deviceName] forState:UIControlStateNormal];
 }
 
@@ -532,7 +528,7 @@
 
 - (void)settingViewController:(InUserSettingViewController *)settingVC showUserLocation:(BOOL)showUserLocation {
     [common saveUserLocationIsShow:showUserLocation];
-    self.mapView.showsUserLocation = showUserLocation;
+    self.mapView.showsUserLocation = [common getIsShowUserLocation];
 }
 
 #pragma mark - Map
@@ -545,16 +541,48 @@
 // 画自定义大头针的方法
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
+    NSLog(@"%@", NSStringFromClass([annotation class]));
     if ([annotation isKindOfClass:[InAnnotation class]]) {
+        InAnnotation *myAnnotation = (InAnnotation *)annotation;
         NSString *reuseID = @"InAnnotationView";
         InAnnotationView *annotationView = (InAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseID];
         if (annotationView == nil) {
             annotationView = [[InAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseID];
-
+            annotationView.canShowCallout = YES;
+            NSString *deviceImageName = @"Card";
+            if (myAnnotation.device) {
+                switch (myAnnotation.device.type) {
+                    case InDeviceChip:
+                        deviceImageName = @"chip";
+                        break;
+                    case InDeviceTag:
+                        deviceImageName = @"tag";
+                    default:
+                        break;
+                }
+            }
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 38, 38)];
+            [imageView setImage:[UIImage imageNamed:deviceImageName]];
+            annotationView.leftCalloutAccessoryView = imageView;
+            UIButton *locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 38, 38)];
+            [locationBtn setImage:[UIImage imageNamed:@"icon_location"] forState:UIControlStateNormal];
+            [locationBtn addTarget:self action:@selector(goToLocationOfflineDevice:) forControlEvents:UIControlEventTouchUpInside];
+            annotationView.rightCalloutAccessoryView = locationBtn;
         }
+        myAnnotation.annotationView = annotationView;
         return annotationView;
     }
     return nil;
+}
+
+- (void)goToLocationOfflineDevice:(UIButton *)btn {
+    for (NSString *mac in self.deviceAnnotation.allKeys) {
+        InAnnotation *annotation = self.deviceAnnotation[mac];
+        if (annotation.annotationView.rightCalloutAccessoryView == btn) {
+            [self goThereWithAddress:@"DJDS" andLat:[NSString stringWithFormat:@"%f", annotation.coordinate.latitude] andLon:[NSString stringWithFormat:@"%f", annotation.coordinate.longitude]];
+            NSLog(@"去定位离线设备的位置, %f, %f", annotation.coordinate.longitude, annotation.coordinate.latitude);
+        }
+    }
 }
 
 - (void)deviceChangeOnline:(NSNotification *)notification {
@@ -573,14 +601,111 @@
             [self.mapView removeAnnotation:annotation];
         }
         else if (!device.online && !annotation) {
-            // 设备不在线，且不存在大头针，需要增加
             annotation = [[InAnnotation alloc] init];
+            annotation.title = @"innway card";
+            switch (device.type) {
+                case InDeviceChip:
+                    annotation.title = @"innway chip";
+                    break;
+                case InDeviceTag:
+                    annotation.title = @"innway tag";
+                    break;
+                default:
+                    break;
+            }
             annotation.coordinate = device.coordinate;
-            annotation.title = device.deviceName;
+            [self reversGeocode:annotation.coordinate completion:^(NSString *str) {
+                annotation.subtitle = str;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.75 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.mapView selectAnnotation:annotation animated:YES];
+                });
+            }];
+            annotation.device = device;
             [self.deviceAnnotation setObject:annotation forKey:mac];
             [self.mapView addAnnotation:annotation];
         }
     }
+}
+
+/**
+ *  反地理编码: 把经纬度转换地名
+ */
+- (void)reversGeocode:(CLLocationCoordinate2D)coordinate completion:(void (^)(NSString *))completion{
+    //  1. 取出经纬度信息
+    NSString *latitudeStr = [NSString stringWithFormat:@"%f", coordinate.latitude];
+    NSString *longitudeStr = [NSString stringWithFormat:@"%f", coordinate.longitude];
+    
+    //  创建位置对象
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:latitudeStr.doubleValue longitude:longitudeStr.doubleValue];
+    
+    //  1. 创建地理编码器
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    //  2. 反地理编码,
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        
+        for (CLPlacemark *placemark in placemarks) {
+            NSMutableString *address = [NSMutableString stringWithString:@"Near "];
+            if (placemark.subThoroughfare.length > 0) {
+                [address appendFormat:@"%@ ", placemark.subThoroughfare];
+            }
+            if (placemark.thoroughfare.length > 0) {
+                [address appendFormat:@"%@, ", placemark.thoroughfare];
+            }
+            if (placemark.subLocality.length > 0) {
+                [address appendFormat:@"%@ ", placemark.subLocality];
+            }
+            if (placemark.locality.length > 0) {
+                [address appendFormat:@"%@", placemark.locality];
+            }
+            if (completion) {
+                completion(address);
+            }
+        }
+    }];
+}
+
+-(BOOL)canOpenUrl:(NSString *)string {
+    
+    return  [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:string]];
+    
+}
+
+- (void)goThereWithAddress:(NSString *)address andLat:(NSString *)lat andLon:(NSString *)lon {
+    
+    if ([self canOpenUrl:@"baidumap://"]) {///跳转百度地图
+        
+        NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin={{我的位置}}&destination=latlng:%@,%@|name=%@&mode=driving&coord_type=bd09ll",lat, lon,address] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+        
+        return;
+        
+    }else if ([self canOpenUrl:@"iosamap://"]) {///跳转高德地图
+        
+        NSString *urlString = [[NSString stringWithFormat:@"iosamap://navi?sourceApplication=%@&backScheme=%@&lat=%@&lon=%@&dev=0&style=2",@"神骑出行",@"TrunkHelper",lat, lon] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+        
+        return;
+        
+    }else{////跳转系统地图
+        
+        CLLocationCoordinate2D loc = CLLocationCoordinate2DMake([lat doubleValue], [lon doubleValue]);
+        
+        MKMapItem *currentLocation = [MKMapItem mapItemForCurrentLocation];
+        
+        MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:loc addressDictionary:nil]];
+        
+        [MKMapItem openMapsWithItems:@[currentLocation, toLocation]
+         
+                       launchOptions:@{MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+                                       
+                                       MKLaunchOptionsShowsTrafficKey: [NSNumber numberWithBool:YES]}];
+        
+        return;
+        
+    }
+    
 }
 
 - (void)deviceRSSIChange:(NSNotification *)noti {
