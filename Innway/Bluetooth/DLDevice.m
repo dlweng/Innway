@@ -228,9 +228,6 @@
     if (self.peripheral && self.connected) {
         [self writeValue:DLServiceUUID characteristicUUID:DLWriteCharacteristicUUID p:self.peripheral data:data andResponseType:CBCharacteristicWriteWithoutResponse];
     }
-//    else {
-//        NSLog(@"查找不到设备mac:%@,的外设 ，无法写入数据", self.mac);
-//    }
 }
 
 - (void) writeValue:(int)serviceUUID characteristicUUID:(int)characteristicUUID p:(CBPeripheral *)p data:(NSData *)data andResponseType:(CBCharacteristicWriteType)responseType
@@ -304,7 +301,7 @@
  *  If this is found, the notfication is set.
  *
  */
--(void) notification:(int)serviceUUID characteristicUUID:(int)characteristicUUID p:(CBPeripheral *)p on:(BOOL)on {
+- (void)notification:(int)serviceUUID characteristicUUID:(int)characteristicUUID p:(CBPeripheral *)p on:(BOOL)on {
     CBUUID *su = [DLUUIDTool CBUUIDFromInt:serviceUUID];
     CBUUID *cu = [DLUUIDTool CBUUIDFromInt:characteristicUUID];
     CBService *service = [self findServiceFromUUID:su p:p];

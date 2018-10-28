@@ -26,7 +26,7 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     self.tableView.scrollEnabled = NO;
     
-    if (self.view.bounds.size.width > 320) {
+    if ([UIScreen mainScreen].bounds.size.width > 320) {
         self.tableViewHeightConstraint.constant = 210;
     }
 }

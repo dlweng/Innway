@@ -105,6 +105,9 @@
     self.animationTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(showBtnAnimation) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:self.animationTimer forMode:NSRunLoopCommonModes];
     [self stopBtnAnimation];
+    [InAlertView showAlertWithMessage:@"跳转打开定位功能" confirmHanler:^{
+        [common goToAPPSetupView];
+    } cancleHanler:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
