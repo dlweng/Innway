@@ -24,13 +24,7 @@
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     navigationBar.tintColor = [UIColor whiteColor];
     // 启动蓝牙功能
-    [DLCentralManager startSDKCompletion:^(DLCentralManager *manager, CBCentralManagerState state) {
-        if (state == CBCentralManagerStatePoweredOff) {
-            [InAlertView showAlertWithTitle:@"Information" message:@"请打开蓝牙" confirmHanler:nil];
-        }
-        else if (state == CBCentralManagerStatePoweredOn) {
-        }
-    }];
+    [DLCentralManager startSDKCompletion:nil];
     
     // 设置状态栏
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
