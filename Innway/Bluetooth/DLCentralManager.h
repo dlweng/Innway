@@ -12,6 +12,7 @@
 #import "InCommon.h"
 
 #define DeviceDisconnectNotification @"DeviceDisconnectNotification"
+#define BluetoothPoweredOffNotification @"BluetoothPoweredOffNotification"
 
 @interface DLKnowDevice:NSObject
 @property (nonatomic, strong) CBPeripheral *peripheral;
@@ -28,6 +29,7 @@ typedef void (^DidDisConnectToDeviceEvent)(DLCentralManager *manager, CBPeripher
 @interface DLCentralManager : NSObject
 
 @property (nonatomic, strong, readonly) NSMutableDictionary<NSString *, DLKnowDevice*>* knownPeripherals;
+@property (nonatomic, assign) CBCentralManagerState state;
 //@property (nonatomic, strong) NSMutableDictionary<NSString *, CBPeripheral*>* connectedPeripherals;
 
 + (instancetype)sharedInstance;

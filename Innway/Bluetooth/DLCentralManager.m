@@ -166,6 +166,7 @@ static DLCentralManager *instance = nil;
             NSLog(@"APP的蓝牙设置处于关闭状态");
             [_repeatScanTimer setFireDate:[NSDate distantFuture]];
             [self stopScanning];
+            [[NSNotificationCenter defaultCenter] postNotificationName:BluetoothPoweredOffNotification object:nil];
             break;
         }
         case CBCentralManagerStatePoweredOn:
@@ -366,5 +367,9 @@ static DLCentralManager *instance = nil;
 //    }
 //    return _connectedPeripherals;
 //}
+
+- (CBCentralManagerState)state {
+    return self.manager.state;
+}
 
 @end

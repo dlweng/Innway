@@ -577,6 +577,7 @@
             annotation = [[InAnnotation alloc] init];
             annotation.coordinate = device.coordinate;
             annotation.title = device.deviceName;
+            annotation.title = @"dsa";
             [self.deviceAnnotation setObject:annotation forKey:mac];
             [self.mapView addAnnotation:annotation];
         }

@@ -66,11 +66,8 @@
         [self.bubble setTitle:self.annotation.title forState:UIControlStateNormal];
         CGSize titleSize = [self.annotation.title sizeWithText: [UIFont systemFontOfSize:TitleFont] maxSize:MaxSize];
         CGFloat width = titleSize.width + 20;
-        if (width < 50) {
-            width = 50;  // 气泡设置一个最小的宽度50
-        }
         CGFloat height = titleSize.height + 32;
-        CGFloat x = self.frame.size.width * 0.5 - width * 0.3;
+        CGFloat x = self.frame.size.width * 0.5 - 26;
         CGFloat y = -height;
         self.bubble.frame = CGRectMake(x, y, width, height);
         
@@ -84,8 +81,9 @@
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont systemFontOfSize:TitleFont];
         UIImage *image = [UIImage imageNamed:@"bubble"];
-        UIEdgeInsets insets = UIEdgeInsetsMake(10, 10, 50, 10);
-        image = [image resizableImageWithCapInsets:insets resizingMode:UIImageResizingModeStretch];
+        // 在图片端设置变型w
+//        UIEdgeInsets insets = UIEdgeInsetsMake(10, 10, 50, 10);
+//        image = [image resizableImageWithCapInsets:insets resizingMode:UIImageResizingModeStretch];
         [btn setBackgroundImage:image forState:UIControlStateNormal];
         [self addSubview:btn];
         _bubble = btn;

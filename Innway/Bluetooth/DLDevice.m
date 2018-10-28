@@ -35,6 +35,7 @@
     device.peripheral = peripheral;
     // 增加断开连接通知
     [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(reconnectDevice:) name:DeviceDisconnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(bluetoothPoweredOff) name:BluetoothPoweredOffNotification object:nil];
     return device;
 }
 
@@ -54,6 +55,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceDisconnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:BluetoothPoweredOffNotification object:nil];
     //移除扫描RSSI定时器
     [_readRSSITimer invalidate];
     _readRSSITimer = nil;
@@ -62,12 +64,8 @@
 - (void)reconnectDevice:(NSNotification *)notification {
     CBPeripheral *peripheral = notification.object;
     if ([peripheral.identifier.UUIDString isEqualToString:self. peripheral.identifier.UUIDString]) {
-        if (!_disConnect) {
-            // 设备掉线，做掉线通知
-            self.online = NO;
-            // 掉线了，要上传设备位置
-            [[InCommon sharedInstance] uploadDeviceLocation:self];
-            [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+        self.online = NO;
+        if (!_disConnect) { //被动的掉线，做重连
             NSLog(@"设备连接被断开，去重连设备, mac = %@", self.mac);
             [self connectToDevice:^(DLDevice *device, NSError *error) {
                 if (error) {
@@ -505,6 +503,12 @@
 }
 
 - (void)setOnline:(BOOL)online {
+    if (_online && !online) {
+        // 从在线变为离线, 上传设备的新位置并做掉线通知
+        _coordinate = [InCommon sharedInstance].currentLocation;
+        [[InCommon sharedInstance] uploadDeviceLocation:self];
+        [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+    }
     _online = online;
     if (!_online) {
         _rssi = offlineRSSI;  // 设置rssi掉线
@@ -513,6 +517,9 @@
 }
 
 - (BOOL)connected {
+    if ([DLCentralManager sharedInstance].state != CBCentralManagerStatePoweredOn) {
+        return NO;
+    }
     if (_peripheral && (_peripheral.state == CBPeripheralStateConnected || _peripheral.state == CBPeripheralStateConnecting)) {
         return YES;
     }
@@ -532,9 +539,6 @@
 }
 
 - (NSString *)getGps{
-    if (self.online) {
-        _coordinate = [InCommon sharedInstance].currentLocation;
-    }
     CLLocationCoordinate2D deviceLocation = _coordinate;
     NSString *gps = [NSString stringWithFormat:@"%f,%f", deviceLocation.latitude, deviceLocation.longitude];
     return gps;
@@ -557,8 +561,6 @@
     if (rssi.intValue == offlineRSSI.intValue) {
         // 设置设备离线
         self.online = NO;
-        // 掉线了，要上传设备位置
-        [[InCommon sharedInstance] uploadDeviceLocation:self];
     }
     // RSSI改变要发出通知
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceRSSIChangeNotification object:self];
@@ -569,6 +571,10 @@
 //        NSLog(@"定时读取设备的RSSI值: %@", self.mac);
         [self.peripheral readRSSI];
     }
+}
+
+- (void)bluetoothPoweredOff {
+    self.online = NO;
 }
 
 @end
