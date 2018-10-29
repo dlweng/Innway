@@ -501,10 +501,11 @@
 - (void)setOnline:(BOOL)online {
     if (_online && !online) {
         // 从在线变为离线, 上传设备的新位置并做掉线通知
-        // 保存设备离线状态和时间
+        // 获取最新位置,保存设备离线位置和时间
+        _coordinate = [InCommon sharedInstance].currentLocation;
         [common saveDeviceOfflineInfo:self];
         _offlineTimeStr2 = [common getCurrentTime]; // 获取当前离线的shijian
-        _coordinate = [InCommon sharedInstance].currentLocation;
+        
         [[InCommon sharedInstance] uploadDeviceLocation:self];
         if ([self.lastData boolValueForKey:DisconnectAlertKey defaultValue:NO]) {
             // 关闭的断开连接通知，则不通知

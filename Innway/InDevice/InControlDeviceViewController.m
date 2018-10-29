@@ -608,17 +608,7 @@
         }
         else if (!device.online && !annotation) {
             annotation = [[InAnnotation alloc] init];
-            annotation.title = @"innway card";
-            switch (device.type) {
-                case InDeviceChip:
-                    annotation.title = @"innway chip";
-                    break;
-                case InDeviceTag:
-                    annotation.title = @"innway tag";
-                    break;
-                default:
-                    break;
-            }
+            annotation.title = [NSString stringWithFormat:@"innway %@", device.deviceName];
             annotation.coordinate = device.coordinate;
             [self reversGeocode:annotation.coordinate completion:^(NSString *str) {
                 annotation.subtitle = str;
