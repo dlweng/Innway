@@ -452,12 +452,12 @@
         InDeviceNone;
     }
     InDeviceType deviceType = InDeviceNone;
-    if ([peripheral.name isEqualToString:@"Card"] || [peripheral.name isEqualToString:@"Lily"]) {
+    if ([peripheral.name isEqualToString:@"Innway Card"] || [peripheral.name isEqualToString:@"Lily"]) {
         deviceType = InDeviceCard;
     }
-    else if ([peripheral.name isEqualToString:@"Chip"]) {
+    else if ([peripheral.name isEqualToString:@"Innway Chip"]) {
         deviceType = InDeviceChip;
-    } else if ([peripheral.name isEqualToString:@"Tag"]) {
+    } else if ([peripheral.name isEqualToString:@"Innway Tag"]) {
         deviceType = InDeviceTag;
     }
     return deviceType;

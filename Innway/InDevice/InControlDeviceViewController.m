@@ -63,7 +63,8 @@
 @property (nonatomic, assign) BOOL btnTextIsHide;
 @property (nonatomic, assign) BOOL isSearchPhone;
 @property (nonatomic, assign) BOOL isSearchDevice;
-
+// 标识当前是否在拍照界面，是的话接收到设备的05命令不要发出查找手机的警报，而是要拍照
+@property (nonatomic, assign) BOOL inTakePhoto;
 @end
 
 @implementation InControlDeviceViewController
@@ -157,7 +158,7 @@
 
 - (void)setupControlDeviceBtnText {
     NSString *deviceName = self.device.deviceName;
-    [self.controlDeviceBtn setTitle:[NSString stringWithFormat:@"Ring Innway %@", deviceName] forState:UIControlStateNormal];
+    [self.controlDeviceBtn setTitle:[NSString stringWithFormat:@"Ring %@", deviceName] forState:UIControlStateNormal];
 }
 
 - (void)addDeviceListView {
@@ -792,6 +793,7 @@
     self.customTakePhotoView = nil;
     [self presentViewController:self.imagePikerViewController animated:YES completion:NULL];
     self.imageBodyView.hidden = YES;
+    self.inTakePhoto = YES;
 }
 
 - (void)setUpImagePiker {
@@ -825,7 +827,7 @@
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.libraryPikerViewController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
     [self.imagePikerViewController presentViewController:self.libraryPikerViewController animated:YES completion:NULL];
-    
+    self.inTakePhoto = NO;
 }
 
 - (IBAction)takePhoto {
@@ -836,10 +838,12 @@
 - (IBAction)takePhotoBack {
     NSLog(@"拍完照返回");
     [self dismissViewControllerAnimated:YES completion:NULL];
+    self.inTakePhoto = NO;
 }
 
 - (void)goBackTakePhotoView {
     [self.imagePikerViewController dismissViewControllerAnimated:YES completion:nil];
+    self.inTakePhoto = YES;
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
@@ -848,7 +852,7 @@
         // 相册界面点击图片显示
 //        UIImage * image = info[UIImagePickerControllerOriginalImage];
 //        self.imageView.image = image;
-        [self.imagePikerViewController dismissViewControllerAnimated:YES completion:NULL];
+        [self goBackTakePhotoView];
         return;
     }
     else if (picker == self.imagePikerViewController) {
@@ -894,6 +898,10 @@
 }
 
 - (void)searchPhone:(NSNotification *)noti {
+    if (self.inTakePhoto) {
+        [self takePhoto];
+        return;
+    }
     if (self.isSearchPhone) {
         [self stopSearchPhone];
         return;

@@ -55,7 +55,7 @@ static DLCloudDeviceManager *instance = nil;
     CBPeripheral *peripheral = knowDevice.peripheral;
     NSString *peripheralName = peripheral.name;
     if (peripheralName.length == 0 || [peripheralName isEqualToString:@"Lily"]) {
-        peripheralName = @"Card";
+        peripheralName = @"Innway Card";
     }
     NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"name":peripheralName, @"mac":mac, @"action":@"addDevice", @"gps":[common getCurrentGps]};
     [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {

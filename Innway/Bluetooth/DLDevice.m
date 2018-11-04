@@ -493,7 +493,7 @@
         _deviceName = self.peripheral.name;
     }
     if (_deviceName.length == 0 || [_deviceName isEqualToString:@"Lily"]) {
-        _deviceName = @"Card";
+        _deviceName = @"Innway Card";
     }
     return _deviceName;
 }
