@@ -499,6 +499,9 @@
 }
 
 - (void)setOnline:(BOOL)online {
+    if ([_mac isEqualToString:@"00:00:00:00:00:20"]) {
+        NSLog(@"设备mac:%@旧的值: %d, 新的在线值:%d", _mac, _online, online);
+    }
     if (_online && !online) {
         // 从在线变为离线, 上传设备的新位置并做掉线通知
         // 获取最新位置,保存设备离线位置和时间
@@ -562,6 +565,7 @@
 
 - (void)setRssi:(NSNumber *)rssi {
     _rssi = rssi;
+    
     if (rssi.integerValue > -100 && !self.connected) {
         // 设备信号高了，要去重连设备
         NSLog(@"设备信号变强，去重新连接设备");

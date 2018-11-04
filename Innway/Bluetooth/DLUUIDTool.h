@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
-#define DLDeviceMAC   0xD006
+#define DLDeviceMAC   0xD888
 #define DLServiceUUID 0xE001
 #define DLWriteCharacteristicUUID 0xE002
 #define DLNTFCharacteristicUUID 0xE003

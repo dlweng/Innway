@@ -208,7 +208,7 @@ static DLCentralManager *instance = nil;
 //        kCBAdvDataIsConnectable = 1;
 //        kCBAdvDataLocalName = Lily;  // 设备名称
 //        kCBAdvDataServiceData =     {
-//            D006 = <00000000 0014>;   // D006表示设备mac地址
+//            D888 = <00000000 0014>;   // D888表示设备mac地址
 //        };
 //        kCBAdvDataServiceUUIDs =     (
 //                                      E001 // E001表示是innway的设备
@@ -293,6 +293,11 @@ static DLCentralManager *instance = nil;
         if (kCBAdvDataServiceData) {
             CBUUID *macUUID = [DLUUIDTool CBUUIDFromInt:DLDeviceMAC];
             NSData *data = kCBAdvDataServiceData[macUUID];
+            if (!data) {
+                // 适配旧的测试设备
+                macUUID = [DLUUIDTool CBUUIDFromInt:0xD006];
+                data = kCBAdvDataServiceData[macUUID];
+            }
             if (data) {
                 NSString *tempStr = [data.description stringByReplacingOccurrencesOfString:@" " withString:@""];
                 NSMutableString *mac = [NSMutableString stringWithString:[tempStr substringWithRange:NSMakeRange(1, 2)]];
