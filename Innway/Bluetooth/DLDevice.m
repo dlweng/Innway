@@ -35,7 +35,7 @@
     device.peripheral = peripheral;
     // 增加断开连接通知
     [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(reconnectDevice:) name:DeviceDisconnectNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(changeStatusToDisconnect) name:BluetoothPoweredOffNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(bluetoothPoweredOff) name:BluetoothPoweredOffNotification object:nil];
     return device;
 }
 
@@ -505,6 +505,7 @@
         // 关闭定时器
         _offlineTime = nil; // 初始化时间信息
     }
+
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(online)];
 }
 
@@ -581,6 +582,12 @@
         [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
     }
 
+}
+
+- (void)bluetoothPoweredOff {
+    if (self.online) {
+        [self changeStatusToDisconnect];
+    }
 }
 
 - (NSString *)offlineTimeInfo {
