@@ -85,6 +85,7 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 - (InDeviceType)getDeviceType:(CBPeripheral *)peripheral;
 // 发送本地通知
 - (void)sendLocalNotification:(NSString *)message;
+- (void)clearLocalNotification;
 
 + (void)sendHttpMethod:(NSString *)method URLString:(NSString *)URLString body:(NSDictionary *)body completionHandler:(nullable void (^)(NSURLResponse *response, NSDictionary *responseObject,  NSError * _Nullable error))completionHandler;
 

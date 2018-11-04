@@ -35,7 +35,7 @@
     device.peripheral = peripheral;
     // 增加断开连接通知
     [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(reconnectDevice:) name:DeviceDisconnectNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(bluetoothPoweredOff) name:BluetoothPoweredOffNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(changeStatusToDisconnect) name:BluetoothPoweredOffNotification object:nil];
     return device;
 }
 
@@ -63,7 +63,8 @@
 - (void)reconnectDevice:(NSNotification *)notification {
     CBPeripheral *peripheral = notification.object;
     if ([peripheral.identifier.UUIDString isEqualToString:self. peripheral.identifier.UUIDString]) {
-        self.online = NO;
+        // 做掉线处理
+        [self changeStatusToDisconnect];
         if (!_disConnect) { //被动的掉线，做重连
             NSLog(@"设备连接被断开，去重连设备, mac = %@", self.mac);
             [self connectToDevice:^(DLDevice *device, NSError *error) {
@@ -499,30 +500,10 @@
 }
 
 - (void)setOnline:(BOOL)online {
-    if ([_mac isEqualToString:@"00:00:00:00:00:20"]) {
-        NSLog(@"设备mac:%@旧的值: %d, 新的在线值:%d", _mac, _online, online);
-    }
-    if (_online && !online) {
-        // 从在线变为离线, 上传设备的新位置并做掉线通知
-        // 获取最新位置,保存设备离线位置和时间
-        _coordinate = [InCommon sharedInstance].currentLocation;
-        [common saveDeviceOfflineInfo:self];
-        _offlineTimeStr2 = [common getCurrentTime]; // 获取当前离线的shijian
-        
-        [[InCommon sharedInstance] uploadDeviceLocation:self];
-        if ([self.lastData boolValueForKey:DisconnectAlertKey defaultValue:NO]) {
-            // 关闭的断开连接通知，则不通知
-            [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
-        }
-    }
     _online = online;
-    if (!_online) {
-        // 离线
-        _rssi = offlineRSSI;  // 设置rssi掉线
-    }
-    else {
+    if (_online) {
         // 关闭定时器
-        _offlineTimeStr2 = nil; // 初始化时间
+        _offlineTime = nil; // 初始化时间信息
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(online)];
 }
@@ -571,9 +552,9 @@
         NSLog(@"设备信号变强，去重新连接设备");
         [self connectToDevice:nil];
     }
-    if (rssi.intValue == offlineRSSI.intValue) {
+    if (rssi.intValue == offlineRSSI.intValue && self.online) {
         // 设置设备离线
-        self.online = NO;
+        [self changeStatusToDisconnect];
     }
     // RSSI改变要发出通知
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceRSSIChangeNotification object:self];
@@ -586,29 +567,40 @@
     }
 }
 
-- (void)bluetoothPoweredOff {
+- (void)changeStatusToDisconnect{
     self.online = NO;
+    _rssi = offlineRSSI;  // 1.设置rssi掉线
+    // 2.获取最新位置,保存设备离线位置和时间
+    _coordinate = [InCommon sharedInstance].currentLocation;
+    [common saveDeviceOfflineInfo:self];
+    _offlineTime = [common getCurrentTime]; // 3.获取当前离线的时间
+    // 3.上传设备的新位置并做掉线通知
+    [[InCommon sharedInstance] uploadDeviceLocation:self];
+    if ([self.lastData boolValueForKey:DisconnectAlertKey defaultValue:NO]) {
+        // 关闭的断开连接通知，则不通知
+        [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+    }
+
 }
 
-- (NSString *)offlineTimeStr1 {
+- (NSString *)offlineTimeInfo {
     if (_online) {
-    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceUpdateOfflineTimeNotification object:nil];
         return @"Last seen just now";
     }
     [self compareOfflineTimer];
-    return _offlineTimeStr1;
+    return _offlineTimeInfo;
 }
 
-- (NSString *)offlineTimeStr2 {
-    if (!_offlineTimeStr2) {
-        _offlineTimeStr2 = [common getCurrentTime];
-        return _offlineTimeStr2;
+- (NSString *)offlineTime {
+    if (!_offlineTime) {
+        _offlineTime = [common getCurrentTime];
+        return _offlineTime;
     }
-    return _offlineTimeStr2;
+    return _offlineTime;
 }
 
 - (void)compareOfflineTimer {
-    NSDateComponents *comp = [common differentWithDate:self.offlineTimeStr2];
+    NSDateComponents *comp = [common differentWithDate:self.offlineTime];
     NSInteger year = comp.year;
     NSInteger mouth = comp.month;
     NSInteger day = comp.day;
@@ -616,23 +608,19 @@
     NSInteger minute = comp.minute;
     NSInteger second = comp.second;
     if (year == 0 && mouth == 0 && day == 0 && hour == 0 && minute == 0) {
-        _offlineTimeStr1 = [NSString stringWithFormat:@"Last seen %zd second ago", second];
-        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceUpdateOfflineTimeNotification object:nil];
+        _offlineTimeInfo = [NSString stringWithFormat:@"Last seen %zd second ago", second];
         return;
     }
     if (year == 0 && mouth == 0 && day == 0 && hour == 0) {
-        _offlineTimeStr1 = [NSString stringWithFormat:@"Last seen %zd minutes %zd seconds ago", minute ,second];
-        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceUpdateOfflineTimeNotification object:nil];
+        _offlineTimeInfo = [NSString stringWithFormat:@"Last seen %zd minutes %zd seconds ago", minute ,second];
         return;
     }
     if (year == 0 && mouth == 0 && day == 0) {
-        _offlineTimeStr1 = [NSString stringWithFormat:@"Last seen %zd hours %zd minutes ago", hour, minute];
-        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceUpdateOfflineTimeNotification object:nil];
+        _offlineTimeInfo = [NSString stringWithFormat:@"Last seen %zd hours %zd minutes ago", hour, minute];
         return;
     }
     day = mouth * 30 + year * 365 + day;
-    _offlineTimeStr1 = [NSString stringWithFormat:@"Last seen %zd days %zd hours ago", day, hour];
-    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceUpdateOfflineTimeNotification object:nil];
+    _offlineTimeInfo = [NSString stringWithFormat:@"Last seen %zd days %zd hours ago", day, hour];
     return;
 }
 

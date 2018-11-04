@@ -65,10 +65,16 @@
             break;
         }
     }
-    self.timeLabel.text = device.offlineTimeStr1;
+    self.timeLabel.text = device.offlineTimeInfo;
 }
 
 - (void)updateBattery:(DLDevice *)device {
+    if (!device.online) {
+        //设备掉线，不显示电池电量
+        self.batteryImageView.hidden = YES;
+        self.alertImageView.hidden = YES;
+        return;
+    }
     if (device.lastData.count > 0) {
         NSString *batteryImageName = @"charge";
         NSInteger charge = [device.lastData integerValueForKey:ChargingStateKey defaultValue:0];

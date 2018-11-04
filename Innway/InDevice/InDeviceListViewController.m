@@ -56,7 +56,9 @@
     UISwipeGestureRecognizer *downSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(turnDown)];
     [self.view addGestureRecognizer:downSwipeGestureRecognizer];
     downSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
+    
     self.down = YES;
+    
     _offlineTimer = [NSTimer timerWithTimeInterval:10 target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:_offlineTimer forMode:NSRunLoopCommonModes];
     [_offlineTimer setFireDate:[NSDate distantPast]];

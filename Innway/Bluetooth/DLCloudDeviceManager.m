@@ -182,7 +182,7 @@ static DLCloudDeviceManager *instance = nil;
                 [common getDeviceName:device];
                 [common getDeviceOfflineInfo:device completion:^(NSString *offlineTime, NSString *gps) {
                     if (offlineTime && gps) {
-                        device.offlineTimeStr2 = offlineTime;
+                        device.offlineTime = offlineTime;
                         device.coordinate = gps;
                     }
                 }];
