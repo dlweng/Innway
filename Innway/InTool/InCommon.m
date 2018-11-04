@@ -469,33 +469,7 @@
     // 2.设置通知的必选参数
     // 设置通知显示的内容
     localNotification.alertBody = message;
-    NSDictionary *dict =[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:9529],@"localNotification",nil];
-    [localNotification setUserInfo:dict];
     [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-}
-
-- (void)clearLocalNotification {
-    //   手动删除通知
-    //   这里我们要根据我们添加时设置的key和自定义的ID来删
-    NSArray *narry=[[UIApplication sharedApplication] scheduledLocalNotifications];
-    NSUInteger acount=[narry count];
-    if (acount>0)
-    {
-        // 遍历找到对应nfkey和notificationtag的通知
-        for (int i=0; i<acount; i++)
-        {
-            UILocalNotification *myUILocalNotification = [narry objectAtIndex:i];
-            NSDictionary *userInfo = myUILocalNotification.userInfo;
-            NSNumber *obj = [userInfo objectForKey:@"localNotification"];
-            int mytag=[obj intValue];
-            if (mytag==9529)
-            {
-                // 删除本地通知
-                [[UIApplication sharedApplication] cancelLocalNotification:myUILocalNotification];
-                break;
-            }
-        }
-    }
 }
 
 #pragma mark - HTTP
