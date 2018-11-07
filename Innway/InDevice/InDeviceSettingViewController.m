@@ -53,12 +53,16 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.tableView setContentOffset:CGPointZero animated:NO];
     });
-    self.device.delegate = self;
     NSLog(@"手机警报声音: %zd", self.phoneAlertMusic.integerValue);
     if (!self.phoneAlertMusic) {
         self.phoneAlertMusic = @(1);
     }
     [self.tableView reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.device.delegate = self;
 }
 
 - (IBAction)deleteDeviceBtnDidClick {

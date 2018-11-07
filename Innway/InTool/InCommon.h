@@ -68,6 +68,8 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 - (NSArray *)getCloudList;
 
 //音频
+- (void)playSoundAlertMusic;
+- (void)stopSoundAlertMusic;
 - (void)playSound;
 - (void)stopSound;
 

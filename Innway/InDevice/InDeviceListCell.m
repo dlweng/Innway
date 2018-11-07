@@ -106,24 +106,34 @@
             }
             else if (battery > 10) {
                 batteryImageName = @"20";
-            } else if(battery >= 5){
-                batteryImageName = @"10";
             } else if(battery > 0){
-                batteryImageName = @"5";
+                batteryImageName = @"10";
             } else if(battery == 0){
                 batteryImageName = @"0";
             }
         }
-        if (batteryImageName.integerValue == 5) {
-            self.batteryImageView.hidden = YES;
-            self.alertImageView.hidden = NO;
-        }
-        else {
-            self.alertImageView.hidden = YES;
-            self.batteryImageView.hidden = NO;
-            [self.batteryImageView setImage:[UIImage imageNamed:batteryImageName]];
-        }
+        self.batteryImageView.hidden = NO;
+         [self.batteryImageView setImage:[UIImage imageNamed:batteryImageName]];
+//        if (batteryImageName.integerValue == 5) {
+//            self.batteryImageView.hidden = YES;
+//            self.alertImageView.hidden = NO;
+//        }
+//        else {
+//            self.alertImageView.hidden = YES;
+//            self.batteryImageView.hidden = NO;
+//            [self.batteryImageView setImage:[UIImage imageNamed:batteryImageName]];
+//        }
     }
+}
+
+- (void)setBeSelected:(BOOL)beSelected {
+    _beSelected = beSelected;
+    UIColor *color = [UIColor whiteColor];
+    if (beSelected) {
+        color = [UIColor colorWithRed:80.0/255.0f green:179.0/255.0f blue:122/255.0f alpha:1];
+    }
+    self.timeLabel.textColor = color;
+    self.titleLabel.textColor = color;
 }
 
 @end

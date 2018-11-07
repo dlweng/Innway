@@ -577,11 +577,13 @@
     _offlineTime = [common getCurrentTime]; // 3.获取当前离线的时间
     // 3.上传设备的新位置并做掉线通知
     [[InCommon sharedInstance] uploadDeviceLocation:self];
-    if ([self.lastData boolValueForKey:DisconnectAlertKey defaultValue:NO]) {
-        // 关闭的断开连接通知，则不通知
-        [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        if ([self.lastData boolValueForKey:DisconnectAlertKey defaultValue:NO]) {
+            // 关闭的断开连接通知，则不通知
+            [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+            [common playSound];
+        }
     }
-
 }
 
 - (void)bluetoothPoweredOff {

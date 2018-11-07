@@ -16,5 +16,6 @@
 @interface InDeviceListCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *deviceSettingBtn;
 @property (nonatomic, strong) DLDevice *device;
+@property (nonatomic, assign) BOOL beSelected; // 被选中也没被选中颜色不同
 @property (nonatomic, weak) id<InDeviceListCellDelegate> delegate;
 @end

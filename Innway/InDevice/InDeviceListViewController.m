@@ -104,8 +104,8 @@
         DLDevice *device = self.cloudList[indexPath.row];
         device.delegate = self;
         cell.device = device;
-        
         cell.delegate = self;
+        cell.beSelected = self.selectDevice == device ? YES : NO;
         return cell;
     }
 }
@@ -119,6 +119,8 @@
     }
     else {
         DLDevice *device = self.cloudList[indexPath.row];
+        self.selectDevice = device; // 标识哪台设备被选中，并更新界面
+        [self.tableView reloadData];
         if ([self.delegate respondsToSelector:@selector(deviceListViewController:didSelectedDevice:)]) {
             [self.delegate deviceListViewController:self didSelectedDevice:device];
         }
@@ -205,6 +207,5 @@
     NSLog(@"接收到设备数据， device.mac = %@， data = %@", device.mac, data);
     [self.tableView reloadData];
 }
-
 
 @end

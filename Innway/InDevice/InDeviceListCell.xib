@@ -72,7 +72,7 @@
                                     <constraint firstAttribute="height" constant="15.300000000000001" id="VmL-GL-gpv"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="5.png" translatesAutoresizingMaskIntoConstraints="NO" id="VR3-KF-34Z" userLabel="Alert">
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="5.png" translatesAutoresizingMaskIntoConstraints="NO" id="VR3-KF-34Z" userLabel="Alert">
                                 <rect key="frame" x="2.5" y="16" width="33.5" height="27.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="27.300000000000001" id="N3H-32-X4c"/>

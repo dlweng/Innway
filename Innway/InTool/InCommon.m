@@ -12,9 +12,10 @@
 #import <objc/runtime.h>
 #import <AVFoundation/AVFoundation.h>
 
-//static SystemSoundID soundID;
+static SystemSoundID soundID;
 @interface InCommon ()<CLLocationManagerDelegate> {
-    NSTimer *_sharkTimer;
+    NSTimer *_sharkTimer; // 闪光灯计时器
+    NSTimer *_shakeTimer; // 震动计时器
 }
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
@@ -37,7 +38,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         [self getUserInfo];
-//        soundID = 1;
+        soundID = 1;
         [self.locationManager requestAlwaysAuthorization];
         
         // 设置后台播放代码
@@ -187,7 +188,7 @@
 }
 
 #pragma mark - 手机报警
-- (void)playSound {
+- (void)playSoundAlertMusic {
     NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
     NSString *alertMusic;
     switch (phoneAlertMusic.integerValue) {
@@ -202,14 +203,14 @@
             break;
     }
     NSURL *fileURL = [[NSBundle mainBundle] URLForResource:alertMusic withExtension:nil];
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
+    NSError *error = nil;
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
     self.audioPlayer.numberOfLoops = MAXFLOAT;
-    self.audioPlayer.volume = 1;
     [self.audioPlayer play];
     [self startSharkAnimation];
 }
 
-- (void)stopSound {
+- (void)stopSoundAlertMusic {
     [self.audioPlayer stop];
     [self stopSharkAnimation];
 }
@@ -254,29 +255,42 @@
     [camera unlockForConfiguration];
 }
 
-//- (void)playSound {
-//    AudioServicesDisposeSystemSoundID(soundID);
-//    NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
-//    NSString *alertMusic;
-//    switch (phoneAlertMusic.integerValue) {
-//        case 2:
-//            alertMusic = @"voice2.mp3";
-//            break;
-//        case 3:
-//            alertMusic = @"voice3.mp3";
-//            break;
-//        default:
-//            alertMusic = @"voice1.mp3";
-//            break;
-//    }
-//    //    创建一个系统声音的服务
-//    AudioServicesCreateSystemSoundID((__bridge CFURLRef _Nonnull)([[NSBundle mainBundle]URLForResource:alertMusic withExtension:nil]), &soundID);
-//    //    播放系统声音
-//    AudioServicesPlayAlertSound(soundID);
+- (void)playSound {
+    AudioServicesDisposeSystemSoundID(soundID);
+    NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
+    NSString *alertMusic;
+    switch (phoneAlertMusic.integerValue) {
+        case 2:
+            alertMusic = @"voice2.mp3";
+            break;
+        case 3:
+            alertMusic = @"voice3.mp3";
+            break;
+        default:
+            alertMusic = @"voice1.mp3";
+            break;
+    }
+    //    创建一个系统声音的服务
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef _Nonnull)([[NSBundle mainBundle]URLForResource:alertMusic withExtension:nil]), &soundID);
+    //    播放系统声音
+    AudioServicesPlayAlertSound(soundID);
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+}
+
+//- (void)playShake {
+//    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+//}
+
+//void soundCompleteCallback(SystemSoundID sound,void * clientData) {
+//    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);  //震动
+//    AudioServicesPlaySystemSound(sound);
 //}
 //
 //- (void)stopSound {
-//    AudioServicesDisposeSystemSoundID(soundID);
+//    [_shakeTimer timeInterval];
+//    _shakeTimer = nil;
+//    AudioServicesDisposeSystemSoundID(kSystemSoundID_Vibrate);
+//    AudioServicesRemoveSystemSoundCompletion(kSystemSoundID_Vibrate);
 //}
 
 #pragma mark - 定位

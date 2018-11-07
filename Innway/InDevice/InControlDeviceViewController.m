@@ -61,10 +61,11 @@
 // 按钮闪烁动画
 @property (nonatomic, strong) NSTimer *animationTimer;
 @property (nonatomic, assign) BOOL btnTextIsHide;
-@property (nonatomic, assign) BOOL isSearchPhone;
 @property (nonatomic, assign) BOOL isSearchDevice;
 // 标识当前是否在拍照界面，是的话接收到设备的05命令不要发出查找手机的警报，而是要拍照
 @property (nonatomic, assign) BOOL inTakePhoto;
+// 标识当前正在查找手机的设备
+@property (nonatomic, strong) NSMutableDictionary *searchPhoneDevices;
 @end
 
 @implementation InControlDeviceViewController
@@ -112,12 +113,13 @@
             [common goToAPPSetupView];
         } cancleHanler:nil];
     }
+    self.searchPhoneDevices = [NSMutableDictionary dictionary];
+    // 为设备列表排序
+    [self sortDeviceList];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    // 为设备列表排序
-    [self sortDeviceList];
     [self.device getDeviceInfo];
     [self updateAnnotation];
     [self updateUI];
@@ -276,7 +278,13 @@
 #pragma mark - Action
 //控制设备
 - (IBAction)controlDeviceBtnDidClick:(UIButton *)sender {
-    if (self.isSearchPhone) {
+    if (self.searchPhoneDevices.count > 0) {
+        // 清楚所有正在查找手机的设备信息
+        for (NSString *mac in self.searchPhoneDevices.allKeys) {
+            DLDevice *device = self.searchPhoneDevices[mac];
+            device.isSearchPhone = NO;
+        }
+        [self.searchPhoneDevices removeAllObjects];
         [self stopSearchPhone];
         return;
     }
@@ -294,10 +302,10 @@
 }
 
 //进入设备设置界面
-- (void)goToDeviceSettingVC {
+- (void)goToDeviceSettingVC:(DLDevice *)device {
     NSLog(@"进入设备设置界面");
     InDeviceSettingViewController *vc = [InDeviceSettingViewController deviceSettingViewController];
-    vc.device = self.device;
+    vc.device = device;
     [self safePushViewController:vc];
 }
 
@@ -327,7 +335,7 @@
 
 - (void)updateDevice:(DLDevice *)device {
     self.device = device;
-    [self sortDeviceList];
+//    [self sortDeviceList];
     [self.device getDeviceInfo];
     [self updateUI];
     [self toLocation];
@@ -338,7 +346,7 @@
     //        return;
     //    }
     [self deviceListViewController:nil didSelectedDevice:device];
-    [self goToDeviceSettingVC];
+    [self goToDeviceSettingVC:device];
 }
 
 #pragma mark - deviceListDelegate
@@ -761,6 +769,7 @@
     }
     [connectList addObjectsFromArray:disConnectList];
     NSLog(@"cloudList = %@, connectList = %@", cloudList, connectList);
+    self.deviceListVC.selectDevice = self.device;
     [self.deviceListVC reloadView:[connectList copy]];
 }
 
@@ -902,23 +911,34 @@
         [self takePhoto];
         return;
     }
-    if (self.isSearchPhone) {
-        [self stopSearchPhone];
-        return;
-    }
-    self.isSearchPhone = YES;
-    [common playSound];
-    [self startBtnAnimation];
-    
-    // 发送本地通知
     DLDevice *device = noti.userInfo[@"Device"];
-    [common sendLocalNotification:[NSString stringWithFormat:@"Innway %@ is finding iPhone now!", device.deviceName]];
+    if (device.isSearchPhone) {
+        device.isSearchPhone = NO;
+        [self.searchPhoneDevices removeObjectForKey:device.mac];
+        [self stopSearchPhone];
+    }
+    else {
+        if (self.searchPhoneDevices.count == 0) {
+            // 只有在当前没有声音和闪光动画的时候才需要去开启
+            [common playSoundAlertMusic];
+            [self startBtnAnimation];
+        }
+        
+        device.isSearchPhone = YES;
+        [self.searchPhoneDevices setValue:device forKey:device.mac];
+        
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+            // 发送本地通知
+            [common sendLocalNotification:[NSString stringWithFormat:@"%@ is finding iPhone now!", device.deviceName]];
+        }
+    }
 }
 
 - (void)stopSearchPhone {
-    self.isSearchPhone = NO;
-    [common stopSound];
-    [self stopBtnAnimation];
+    if (self.searchPhoneDevices.count == 0) {
+        [common stopSoundAlertMusic];
+        [self stopBtnAnimation];
+    }
 }
 
 - (void)searchDeviceAlert:(NSNotification *)noti {

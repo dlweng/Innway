@@ -50,6 +50,8 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 @property (nonatomic, strong) NSString *offlineTimeInfo;
 @property (nonatomic, strong) NSString *offlineTime;
 
+@property (nonatomic, assign) BOOL isSearchPhone;
+
 + (instancetype)device:(CBPeripheral *)peripheral;
 - (void)setCoordinate:(NSString *)gps;
 // 在线设备获取的是当前手机的经纬度； 离线设备获取的是保存的经纬度
