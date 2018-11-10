@@ -202,6 +202,7 @@ static DLCentralManager *instance = nil;
 }
 
 - (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
+    NSLog(@"发现新设备： %@, advertisementData = %@", peripheral, advertisementData);
 // 有效代码
 // 广播数据案例
 //    advertisementData = {

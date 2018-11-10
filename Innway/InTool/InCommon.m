@@ -621,7 +621,7 @@ static SystemSoundID soundID;
     | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
     // 对比时间差
     NSDateComponents *dateCom = [calendar components:unit fromDate:expireDate toDate:nowDate options:0];
-    NSLog(@"dateCom.year = %zd, dateCom.month = %zd, dateCom.day = %zd, dateCom.hour = %zd, dateCom.minute = %zd, dateCom.second = %zd", dateCom.year, dateCom.month, dateCom.day, dateCom.hour, dateCom.minute, dateCom.second);
+//    NSLog(@"dateCom.year = %zd, dateCom.month = %zd, dateCom.day = %zd, dateCom.hour = %zd, dateCom.minute = %zd, dateCom.second = %zd", dateCom.year, dateCom.month, dateCom.day, dateCom.hour, dateCom.minute, dateCom.second);
     return dateCom;
 }
 
@@ -677,6 +677,13 @@ static SystemSoundID soundID;
     }
 }
 
+- (NSInteger)getIntValueByHex:(NSString *)getStr
+{
+    NSScanner *tempScaner=[[NSScanner alloc] initWithString:getStr];
+    uint32_t tempValue;
+    [tempScaner scanHexInt:&tempValue];
+    return tempValue;
+}
 
 @end
 

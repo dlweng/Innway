@@ -109,6 +109,7 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 - (void)getDeviceOfflineInfo:(DLDevice *)device completion:(void (^)(NSString * offlineTime, NSString * gps))completion;
 - (void)saveDeviceName:(DLDevice *)device;
 - (void)getDeviceName:(DLDevice *)device;
+- (NSInteger)getIntValueByHex:(NSString *)getStr;
 @end
 
 @interface NSDictionary (GetValue)

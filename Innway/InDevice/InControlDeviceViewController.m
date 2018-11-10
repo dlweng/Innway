@@ -114,12 +114,12 @@
         } cancleHanler:nil];
     }
     self.searchPhoneDevices = [NSMutableDictionary dictionary];
-    // 为设备列表排序
-    [self sortDeviceList];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    // 为设备列表排序
+    [self sortDeviceList];
     [self.device getDeviceInfo];
     [self updateAnnotation];
     [self updateUI];
@@ -617,7 +617,7 @@
         }
         else if (!device.online && !annotation) {
             annotation = [[InAnnotation alloc] init];
-            annotation.title = [NSString stringWithFormat:@"innway %@", device.deviceName];
+            annotation.title = [NSString stringWithFormat:@"%@", device.deviceName];
             annotation.coordinate = device.coordinate;
             [self reversGeocode:annotation.coordinate completion:^(NSString *str) {
                 annotation.subtitle = str;

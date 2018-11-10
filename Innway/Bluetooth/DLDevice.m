@@ -143,6 +143,12 @@
     [self write:[NSData dataWithBytes:search length:strlen(search)]];
 }
 
+- (void)searchPhoneACK {
+    NSLog(@"回应设备:%@ 的查找数据", _mac);
+    char search[4] = {0xEE, 0x06, 0x00, 0x00};
+    [self write:[NSData dataWithBytes:search length:strlen(search)]];
+}
+
 - (void)setDisconnectAlert:(BOOL)disconnectAlert reconnectAlert:(BOOL)reconnectAlert {
     self.disconnectAlert = disconnectAlert;
     self.reconnectAlert = reconnectAlert;
@@ -178,7 +184,6 @@
     NSString *dataStr = data.description;
     dataStr =  [dataStr stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSString *cmd = [dataStr substringWithRange:NSMakeRange(3, 2)];
-//    NSLog(@"cmd = %@", cmd);
     NSString *length = [dataStr substringWithRange:NSMakeRange(5, 2)];
     NSString *payload = [dataStr substringWithRange:NSMakeRange(7, length.integerValue * 2)];
     //校验和
@@ -194,7 +199,9 @@
         NSString *disconnectAlert = [payload substringWithRange:NSMakeRange(4, 2)];
         NSString *reconnectAlert = [payload substringWithRange:NSMakeRange(6, 2)];
         NSString *alertMusic = [payload substringWithRange:NSMakeRange(8, 2)];
-        [self.data setValue:@(electric.integerValue) forKey:ElectricKey];
+        NSInteger electricNum = [common getIntValueByHex:electric];
+        [self.data setValue:@(electricNum) forKey:ElectricKey];
+        NSLog(@"mac:%@ 电量：16进制:%@, 10进制:%zd", _mac, electric, electricNum);
         [self.data setValue:@(chargingState.boolValue) forKey:ChargingStateKey];
         [self.data setValue:@(disconnectAlert.boolValue) forKey:DisconnectAlertKey];
         [self.data setValue:@(reconnectAlert.boolValue) forKey:ReconnectAlertKey];
@@ -211,7 +218,9 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchDeviceAlertNotification object:self userInfo:@{AlertStatusKey:@(alertStatus.boolValue)}];
     }
     else if ([cmd isEqualToString:@"05"]) {
-        NSLog(@"设备寻找手机，手机要发出警报");
+        NSLog(@"设备:%@ 寻找手机，手机要发出警报，05数据:%@", _mac, data);
+        // 收到设备查找，要做出回应
+        [self searchPhoneACK];
         [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchPhoneNotification object:self userInfo:@{@"Device":self}];
     }
     else if ([cmd isEqualToString:@"08"]) {
@@ -280,10 +289,12 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    NSLog(@"mac:%@, 接收读响应数据, characteristic = %@, error = %@", self.mac, characteristic.value, error);
-    [self parseData:characteristic.value];
-    if (self.delegate) {
-        [self.delegate device:self didUpdateData:self.lastData];
+    if ([peripheral.identifier.UUIDString isEqualToString:self.peripheral.identifier.UUIDString]) {
+        NSLog(@"mac:%@, 接收读响应数据, characteristic = %@, error = %@", self.mac, characteristic.value, error);
+        [self parseData:characteristic.value];
+        if (self.delegate) {
+            [self.delegate device:self didUpdateData:self.lastData];
+        }
     }
 }
 
@@ -550,7 +561,7 @@
     
     if (rssi.integerValue > -100 && !self.connected) {
         // 设备信号高了，要去重连设备
-        NSLog(@"设备信号变强，去重新连接设备");
+        NSLog(@"设备:%@ 信号变强，去重新连接设备", _mac);
         [self connectToDevice:nil];
     }
     if (rssi.intValue == offlineRSSI.intValue && self.online) {
