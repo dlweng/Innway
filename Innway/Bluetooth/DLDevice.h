@@ -23,6 +23,7 @@
 #define DeviceSearchPhoneNotification @"DeviceSearchPhoneNotification"
 #define DeviceSearchDeviceAlertNotification @"DeviceSearchDeviceAlertNotification"
 #define DeviceRSSIChangeNotification  @"DeviceRSSIChangeNotification"
+#define DeviceGetAckFailedNotification @"DeviceGetAckFailedNotification"
 
 @class DLDevice;
 typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *error);
@@ -51,7 +52,7 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 @property (nonatomic, strong) NSString *offlineTime;
 
 @property (nonatomic, assign) BOOL isSearchPhone;
-@property (nonatomic, assign) BOOL searchingDevice;
+@property (nonatomic, assign) BOOL isSearchDevice;
 
 + (instancetype)device:(CBPeripheral *)peripheral;
 - (void)setCoordinate:(NSString *)gps;
@@ -77,4 +78,7 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 - (void)activeDevice;
 //警报音编码，可选 01，02，03
 - (void)selecteDiconnectAlertMusic:(NSInteger)alertMusic;
+
+- (void)startSearchDeviceTimer;
+- (void)stopSearchTimer;
 @end

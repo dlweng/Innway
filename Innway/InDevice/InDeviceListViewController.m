@@ -203,7 +203,7 @@
 }
 
 - (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data{
-    NSLog(@"接收到设备数据， device.mac = %@， data = %@", device.mac, data);
+//    NSLog(@"接收到设备数据， device.mac = %@， data = %@", device.mac, data);
     [self.tableView reloadData];
 }
 

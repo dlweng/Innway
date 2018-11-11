@@ -60,8 +60,8 @@
 
 // 按钮闪烁动画
 @property (nonatomic, strong) NSTimer *animationTimer;
+@property (nonatomic, assign) BOOL isBtnAnimation; // 标识按钮动画是否开启
 @property (nonatomic, assign) BOOL btnTextIsHide;
-@property (nonatomic, assign) BOOL isSearchDevice;
 // 标识当前是否在拍照界面，是的话接收到设备的05命令不要发出查找手机的警报，而是要拍照
 @property (nonatomic, assign) BOOL inTakePhoto;
 // 标识当前正在查找手机的设备
@@ -100,12 +100,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceChangeOnline:) name:DeviceOnlineChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchPhone:) name:DeviceSearchPhoneNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchDeviceAlert:) name:DeviceSearchDeviceAlertNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopBtnAnimation) name:DeviceGetAckFailedNotification object:nil];
     
     // 添加云端列表的监视
     [[DLCloudDeviceManager sharedInstance] addObserver:self forKeyPath:@"cloudDeviceList" options:NSKeyValueObservingOptionNew context:nil];
     
     // 设置定时器
-    self.animationTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(showBtnAnimation) userInfo:nil repeats:YES];
+    self.animationTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(showBtnAnimation) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:self.animationTimer forMode:NSRunLoopCommonModes];
     [self stopBtnAnimation];
     if (![common isOpensLocation]) {
@@ -146,6 +147,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceOnlineChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceSearchPhoneNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceSearchDeviceAlertNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceGetAckFailedNotification object:nil];
     [[DLCloudDeviceManager sharedInstance] removeObserver:self forKeyPath:@"cloudDeviceList"];
     [self.animationTimer invalidate];
     self.animationTimer = nil;
@@ -295,17 +297,21 @@
         [self stopSearchPhone];
         return;
     }
-    NSLog(@"下发控制指令");
-
-//    if (self.isSearchDevice) {
-//        self.isSearchDevice = NO;
-//        [self stopBtnAnimation];
-//    }
-//    else {
-//        self.isSearchDevice = YES;
-//        [self startBtnAnimation];
-//    }
-    [self.device searchDevice];
+//    NSLog(@"下发控制指令");
+    if (self.device.online) {
+        if (self.device.isSearchDevice) {
+            self.device.isSearchDevice = NO;
+            NSLog(@"关闭查找设备");
+            [self stopBtnAnimation];
+        }
+        else {
+            NSLog(@"打开查找设备");
+            self.device.isSearchDevice = YES;
+            [self startBtnAnimation];
+            [self.device startSearchDeviceTimer]; // 开启查找需要监听，防止出现发送失败，一直在闪烁按钮的问题
+        }
+        [self.device searchDevice];
+    }
 }
 
 //进入设备设置界面
@@ -890,13 +896,20 @@
 }
 
 #pragma mark - 按钮动画
+// 查找设备的按钮动画存在一个问题：由于查找设备回复和通过设备主动控制上报的值是相同的，无法分辨，在打开设备的时候，去关闭，马上又打开，可能会出现动画被停止重新开始的情况：手机打开 -> 设备回复在被查找，并警报 -> 手机关闭按钮 -> 手机打开按钮 ->(关闭到打开的时间太短，所以这里又回了一次设备被关闭的回复，动画被关闭) -> 刚刚最后一次打开的回复（动画重新被打开）
+// 没有改进方案，因为无法辨别是回复还是设备被找到，设备的按钮被按的情况，所以在每次回复都肯定要处理,否则没有处理回复，意味着按设备按钮无法关闭手机按钮的动画,下发指令到回复测试2秒左右
 - (void)startBtnAnimation {
-    [self.animationTimer setFireDate:[NSDate distantFuture]];
-    self.btnTextIsHide = YES; // 保持步调一致
-    [self.animationTimer setFireDate:[NSDate distantPast]];
+//    NSLog(@"打开按钮动画");
+    if (!self.isBtnAnimation) {
+        self.isBtnAnimation = YES;
+        self.btnTextIsHide = NO;
+        [self.animationTimer setFireDate:[NSDate distantPast]];
+    }
 }
 
 - (void)stopBtnAnimation {
+//    NSLog(@"关闭按钮动画");
+    self.isBtnAnimation = NO;
     [self.animationTimer setFireDate:[NSDate distantFuture]];
     // 显示按钮文字
     self.btnTextIsHide = YES;
@@ -949,14 +962,14 @@
 }
 
 - (void)searchDeviceAlert:(NSNotification *)noti {
-    BOOL alertStatus = [noti.userInfo boolValueForKey:AlertStatusKey defaultValue:NO];
-    if (alertStatus) {
-        self.isSearchDevice = YES;
-        [self startBtnAnimation];
-    }
-    else {
-        self.isSearchDevice = NO;
-        [self stopBtnAnimation];
+    DLDevice *device = noti.userInfo[@"device"];
+    if (device == self.device) {
+        if (device.isSearchDevice) {
+            [self startBtnAnimation];
+        }
+        else {
+            [self stopBtnAnimation];
+        }
     }
 }
 

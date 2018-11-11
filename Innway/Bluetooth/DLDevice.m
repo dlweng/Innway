@@ -17,6 +17,7 @@
 @interface DLDevice() {
     NSNumber *_rssi;
     NSTimer *_readRSSITimer;
+    dispatch_source_t _ackDelayTimer;// 计算ack的延时计算器
     int _time;
     BOOL _disConnect; // 标识用户主动断开了设备连接，不做重连
 }
@@ -24,6 +25,7 @@
 // 保存设置的值，等ack回来之后更新本地数据
 @property (nonatomic, assign) BOOL disconnectAlert;
 @property (nonatomic, assign) BOOL reconnectAlert;
+@property (nonatomic, assign) BOOL isGetAck; // 标识下发查找设备命令得到ack否
 @property (nonatomic, assign) NSInteger alertMusic;
 @property (nonatomic, strong) NSMutableDictionary *data;
 @end
@@ -48,6 +50,7 @@
         _readRSSITimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(readRSSI) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_readRSSITimer forMode:NSRunLoopCommonModes];
         _disConnect = NO;
+        _isGetAck = NO;
     }
     return self;
 }
@@ -216,10 +219,17 @@
         if (payload.length != 2) {
             return;
         }
+        _isGetAck = YES; //标识获得了查找设备的ack
         NSString *alertStatus = [payload substringWithRange:NSMakeRange(0, 2)];
-        NSLog(@"alertStatus = %@", alertStatus);
-        [self.data setValue:@(alertStatus.boolValue) forKey:AlertStatusKey];
-        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchDeviceAlertNotification object:self userInfo:@{AlertStatusKey:@(alertStatus.boolValue)}];
+        if (!alertStatus.boolValue) {
+            _isSearchDevice = NO;
+//            NSLog(@"接收到设备状态通知，关闭查找设备");
+        }
+        else {
+            _isSearchDevice = YES;
+//            NSLog(@"接收到设备状态通知，打开查找设备");
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchDeviceAlertNotification object:self userInfo:@{@"device":self}];
     }
     else if ([cmd isEqualToString:@"05"]) {
         NSLog(@"设备:%@ 寻找手机，手机要发出警报，05数据:%@", _mac, data);
@@ -604,6 +614,10 @@
 - (void)bluetoothPoweredOff {
     if (self.online) {
         [self changeStatusToDisconnect];
+        
+        if (!_isGetAck) { // 关闭蓝牙的时候，肯定接受不到设备的回复，如果按钮有正在查找设备的动画，需要关闭
+            [[NSNotificationCenter defaultCenter] postNotificationName:DeviceGetAckFailedNotification object:nil];
+        }
     }
 }
 
@@ -646,6 +660,33 @@
     day = mouth * 30 + year * 365 + day;
     _offlineTimeInfo = [NSString stringWithFormat:@"Last seen %zd days %zd hours ago", day, hour];
     return;
+}
+
+- (void)startSearchDeviceTimer {
+    _isGetAck = NO;
+    _ackDelayTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    __weak typeof(self) weakSelf = self;
+    __weak typeof(_ackDelayTimer) weakTimer = _ackDelayTimer;
+    dispatch_source_set_event_handler(_ackDelayTimer, ^{
+        dispatch_source_cancel(weakTimer);
+        [weakSelf checkAckReuslt];
+    });
+    // 设置3秒超时
+    dispatch_source_set_timer(_ackDelayTimer, dispatch_time(DISPATCH_TIME_NOW, 3*NSEC_PER_SEC), 0, 0);
+    dispatch_resume(_ackDelayTimer);
+}
+
+- (void)checkAckReuslt {
+    if (!_isGetAck) { // 获取ack失败，发出通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceGetAckFailedNotification object:nil];
+    }
+    [self stopSearchDeviceTimer];
+}
+
+- (void)stopSearchDeviceTimer {
+    NSLog(@"结束查找设备定时器");
+    dispatch_source_cancel(_ackDelayTimer);
+    _ackDelayTimer = nil;
 }
 
 @end

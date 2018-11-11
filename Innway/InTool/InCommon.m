@@ -48,7 +48,7 @@ static SystemSoundID soundID;
         [_audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
         
         // 设置闪光灯定时器
-        _sharkTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(setupSharkLight) userInfo:nil repeats:YES];
+        _sharkTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(setupSharkLight) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_sharkTimer forMode:NSRunLoopCommonModes];
         [self stopSharkAnimation];
     }
