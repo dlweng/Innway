@@ -19,7 +19,7 @@
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) NSArray *cloudList;
+@property (nonatomic, strong) NSDictionary *cloudList;
 @property (weak, nonatomic) IBOutlet UIView *upDownView;
 @property (nonatomic, assign) CGPoint oldPoint;
 @property (weak, nonatomic) IBOutlet UIImageView *upDownImage;
@@ -101,7 +101,8 @@
     else {
         InDeviceListCell *cell = [tableView dequeueReusableCellWithIdentifier:InDeviceListCellReuseIdentifier];
         cell.backgroundColor = [UIColor clearColor];
-        DLDevice *device = self.cloudList[indexPath.row];
+        NSString *mac = self.cloudList.allKeys[indexPath.row];
+        DLDevice *device = self.cloudList[mac];
         device.delegate = self;
         cell.device = device;
         cell.delegate = self;
@@ -118,7 +119,8 @@
         }
     }
     else {
-        DLDevice *device = self.cloudList[indexPath.row];
+        NSString *mac = self.cloudList.allKeys[indexPath.row];
+        DLDevice *device = self.cloudList[mac];
         self.selectDevice = device; // 标识哪台设备被选中，并更新界面
         [self.tableView reloadData];
         if ([self.delegate respondsToSelector:@selector(deviceListViewController:didSelectedDevice:)]) {
@@ -145,10 +147,7 @@
     [self.tableView reloadData];
 }
 
-- (void)reloadView:(NSArray *)cloudList {
-    if (cloudList) {
-        self.cloudList = cloudList;
-    }
+- (void)reloadView {
     [self.tableView reloadData];
 }
 
@@ -206,6 +205,10 @@
 - (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data{
     NSLog(@"接收到设备数据， device.mac = %@， data = %@", device.mac, data);
     [self.tableView reloadData];
+}
+
+- (NSDictionary *)cloudList {
+    return [[DLCloudDeviceManager sharedInstance].cloudDeviceList copy];
 }
 
 @end

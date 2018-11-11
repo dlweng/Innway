@@ -20,7 +20,7 @@
 @interface InDeviceListViewController : UIViewController
 
 + (instancetype)deviceListViewController;
-- (void)reloadView:(NSArray *)cloudList;
+- (void)reloadView;
 
 // 控制界面当前选中的设备
 @property (nonatomic, strong) DLDevice *selectDevice;

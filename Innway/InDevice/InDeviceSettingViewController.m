@@ -106,12 +106,12 @@
 }
 
 - (void)disconnectAlertBtnDidClick: (UISwitch *)btn {
-    NSLog(@"断开警告被点击: %d", btn.isOn);
+//    NSLog(@"断开警告被点击: %d", btn.isOn);
     [self.device setDisconnectAlert:btn.isOn reconnectAlert:self.reconnectTipBtn.isOn];
 }
 
 - (void)reconnectTipBtnDidClick:(UISwitch *)btn {
-    NSLog(@"重连提示被点击: %d", btn.isOn);
+//    NSLog(@"重连提示被点击: %d", btn.isOn);
     [self.device setDisconnectAlert:self.disconnectAlertBtn.isOn reconnectAlert:btn.isOn];
 }
 

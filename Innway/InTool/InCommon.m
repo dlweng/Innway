@@ -13,7 +13,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 static SystemSoundID soundID;
-@interface InCommon ()<CLLocationManagerDelegate> {
+@interface InCommon ()<CLLocationManagerDelegate, AVAudioPlayerDelegate> {
     NSTimer *_sharkTimer; // 闪光灯计时器
     NSTimer *_shakeTimer; // 震动计时器
 }
@@ -22,6 +22,7 @@ static SystemSoundID soundID;
 // 音频播放
 @property (nonatomic, strong) AVAudioSession *audioSession;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier oldPlayMusicBackTaskID;
 @end
 
 @implementation InCommon
@@ -205,14 +206,20 @@ static SystemSoundID soundID;
     NSURL *fileURL = [[NSBundle mainBundle] URLForResource:alertMusic withExtension:nil];
     NSError *error = nil;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
-    self.audioPlayer.numberOfLoops = MAXFLOAT;
+    self.audioPlayer.numberOfLoops = 1000;
+    [self.audioPlayer prepareToPlay];
     [self.audioPlayer play];
     [self startSharkAnimation];
 }
 
 - (void)stopSoundAlertMusic {
+    NSLog(@"停止查找手机的报警声音");
     [self.audioPlayer stop];
     [self stopSharkAnimation];
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    NSLog(@"监听到音乐结束");
 }
 
 #pragma mark - 闪光灯动画

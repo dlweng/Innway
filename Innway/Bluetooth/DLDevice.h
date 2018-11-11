@@ -51,6 +51,7 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 @property (nonatomic, strong) NSString *offlineTime;
 
 @property (nonatomic, assign) BOOL isSearchPhone;
+@property (nonatomic, assign) BOOL searchingDevice;
 
 + (instancetype)device:(CBPeripheral *)peripheral;
 - (void)setCoordinate:(NSString *)gps;

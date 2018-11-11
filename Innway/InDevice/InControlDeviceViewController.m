@@ -114,12 +114,19 @@
         } cancleHanler:nil];
     }
     self.searchPhoneDevices = [NSMutableDictionary dictionary];
+    
+    // 设置云列表的第一台设备未当前选中的设备
+    DLCloudDeviceManager *cloudManager = [DLCloudDeviceManager sharedInstance];
+    if (cloudManager.cloudDeviceList.count > 0) {
+        NSString *mac = cloudManager.cloudDeviceList.allKeys[0];
+        DLDevice *device = cloudManager.cloudDeviceList[mac];
+        self.device = device;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    // 为设备列表排序
-    [self sortDeviceList];
+    [self.deviceListVC reloadView];
     [self.device getDeviceInfo];
     [self updateAnnotation];
     [self updateUI];
@@ -154,7 +161,7 @@
 
 - (void)updateUI {
     [self setupControlDeviceBtnText];
-    [self.deviceListVC reloadView:nil];
+    [self.deviceListVC reloadView];
     [self updateAnnotation];
 }
 
@@ -335,7 +342,6 @@
 
 - (void)updateDevice:(DLDevice *)device {
     self.device = device;
-//    [self sortDeviceList];
     [self.device getDeviceInfo];
     [self updateUI];
     [self toLocation];
@@ -549,7 +555,7 @@
 #pragma mark - Map
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    NSLog(@"地图用户位置更新, %f, %f", userLocation.coordinate.latitude, userLocation.coordinate.longitude);
+//    NSLog(@"地图用户位置更新, %f, %f", userLocation.coordinate.latitude, userLocation.coordinate.longitude);
     [InCommon sharedInstance].currentLocation = userLocation.coordinate;
 }
 
@@ -721,57 +727,57 @@
 }
 
 
-/**
- 将设备列表排序：若当前有指定设备，第一台设备显示指定设备，其余设备按连接到未连接的顺序排序
- 若当前没有指定设备，所有设备按连接到未连接的顺序排序
- */
-- (void)sortDeviceList {
-    NSDictionary *cloudList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
-    if (cloudList.count == 0) {
-        [self.deviceListVC reloadView:@[]];
-    }
-    if (self.device) {
-        if (![cloudList objectForKey:self.device.mac]) {
-            // 如果云端不存在该设备，将当前设备设置为空
-            // 当删除设备，重回控制界面的情况
-            self.device = nil;
-        }
-    }
-    if (!self.device) {
-        for (NSString *mac in cloudList.allKeys) {
-            //第一个连接的设备是赋值为self.device
-            DLDevice *device = cloudList[mac];
-            if (device.connected) {
-                self.device = device;
-                break;
-            }
-        }
-        
-    }
-    if (!self.device) {
-        //全部设备都没有连接，将第一个设备设置为self.device
-        self.device = cloudList[cloudList.allKeys[0]];
-    }
-    NSMutableArray *connectList = [NSMutableArray array];
-    [connectList addObject:self.device];
-    NSMutableArray *disConnectList = [NSMutableArray array];
-    // 先将已经连接的筛选出来
-    for (NSString *mac in cloudList.allKeys) {
-        DLDevice *device = cloudList[mac];
-        if (device != self.device) {
-            if (device.connected) {
-                [connectList addObject:device];
-            }
-            else {
-                [disConnectList addObject:device];
-            }
-        }
-    }
-    [connectList addObjectsFromArray:disConnectList];
-    NSLog(@"cloudList = %@, connectList = %@", cloudList, connectList);
-    self.deviceListVC.selectDevice = self.device;
-    [self.deviceListVC reloadView:[connectList copy]];
-}
+///**
+// 将设备列表排序：若当前有指定设备，第一台设备显示指定设备，其余设备按连接到未连接的顺序排序
+// 若当前没有指定设备，所有设备按连接到未连接的顺序排序
+// */
+//- (void)sortDeviceList {
+//    NSDictionary *cloudList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+//    if (cloudList.count == 0) {
+//        [self.deviceListVC reloadView:@[]];
+//    }
+//    if (self.device) {
+//        if (![cloudList objectForKey:self.device.mac]) {
+//            // 如果云端不存在该设备，将当前设备设置为空
+//            // 当删除设备，重回控制界面的情况
+//            self.device = nil;
+//        }
+//    }
+//    if (!self.device) {
+//        for (NSString *mac in cloudList.allKeys) {
+//            //第一个连接的设备是赋值为self.device
+//            DLDevice *device = cloudList[mac];
+//            if (device.connected) {
+//                self.device = device;
+//                break;
+//            }
+//        }
+//
+//    }
+//    if (!self.device) {
+//        //全部设备都没有连接，将第一个设备设置为self.device
+//        self.device = cloudList[cloudList.allKeys[0]];
+//    }
+//    NSMutableArray *connectList = [NSMutableArray array];
+//    [connectList addObject:self.device];
+//    NSMutableArray *disConnectList = [NSMutableArray array];
+//    // 先将已经连接的筛选出来
+//    for (NSString *mac in cloudList.allKeys) {
+//        DLDevice *device = cloudList[mac];
+//        if (device != self.device) {
+//            if (device.connected) {
+//                [connectList addObject:device];
+//            }
+//            else {
+//                [disConnectList addObject:device];
+//            }
+//        }
+//    }
+//    [connectList addObjectsFromArray:disConnectList];
+//    NSLog(@"cloudList = %@, connectList = %@", cloudList, connectList);
+//    self.deviceListVC.selectDevice = self.device;
+//    [self.deviceListVC reloadView:[connectList copy]];
+//}
 
 #pragma mark - 安全跳转界面
 - (void)safePopViewController: (UIViewController *)viewController {
@@ -885,6 +891,7 @@
 
 #pragma mark - 按钮动画
 - (void)startBtnAnimation {
+    [self.animationTimer setFireDate:[NSDate distantFuture]];
     self.btnTextIsHide = YES; // 保持步调一致
     [self.animationTimer setFireDate:[NSDate distantPast]];
 }

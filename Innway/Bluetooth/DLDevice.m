@@ -109,9 +109,12 @@
     NSArray *characteristics = [service characteristics];
     for (CBCharacteristic *characteristic in characteristics) {
         if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
-//            NSLog(@"发现E002写角色，开始激活设备，并获取设备信息");
+            NSLog(@"去激活设备: %@", _mac);
             [self activeDevice];
-            [self getDeviceInfo];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self getDeviceInfo]; //防止两次发生时间太接近，导致下发失败
+            });
+            
         }
         if ([characteristic.UUID.UUIDString isEqualToString:ntfUUID.UUIDString]) {
 //            NSLog(@"发现E003, 打开监听来自设备通知的功能");
@@ -129,24 +132,24 @@
 #pragma mark - 写数据快捷接口
 - (void)activeDevice {
     char active[1] = {0x01};
-    [self write:[NSData dataWithBytes:active length:strlen(active)]];
+    [self write:[NSData dataWithBytes:active length:1]];
 }
 
 - (void)getDeviceInfo {
-    NSLog(@"mac = %@, 去获取设备硬件数据", self.mac);
     char getDeviceInfo[4] = {0xEE, 0x01, 0x00, 0x00};
+    NSLog(@"mac = %@, 去获取设备硬件数据， %@", self.mac, [NSData dataWithBytes:getDeviceInfo length:4]);
     [self write:[NSData dataWithBytes:getDeviceInfo length:strlen(getDeviceInfo)]];
 }
 
 - (void)searchDevice {
     char search[4] = {0xEE, 0x03, 0x00, 0x00};
-    [self write:[NSData dataWithBytes:search length:strlen(search)]];
+    [self write:[NSData dataWithBytes:search length:4]];
 }
 
 - (void)searchPhoneACK {
     NSLog(@"回应设备:%@ 的查找数据", _mac);
     char search[4] = {0xEE, 0x06, 0x00, 0x00};
-    [self write:[NSData dataWithBytes:search length:strlen(search)]];
+    [self write:[NSData dataWithBytes:search length:4]];
 }
 
 - (void)setDisconnectAlert:(BOOL)disconnectAlert reconnectAlert:(BOOL)reconnectAlert {
@@ -154,8 +157,9 @@
     self.reconnectAlert = reconnectAlert;
     int disconnect = disconnectAlert? 0x01 : 0x00;
     int reconnect = reconnectAlert? 0x01: 0x00;
-    char command[6] = {0xEE, 0x07, 0x02, disconnect, reconnect, 0x00};
-    [self write:[NSData dataWithBytes:command length:strlen(command)]];
+    char command[] = {0xEE, 0x07, 0x02, disconnect, reconnect, 0x00};
+    NSLog(@"改变设备：%@, 断连通知：%d, 重连通知：%d， 写数据: %@", _mac, disconnectAlert, reconnectAlert, [NSData dataWithBytes:command length:6]);
+    [self write:[NSData dataWithBytes:command length:6]];
 }
 
 //警报音编码，可选 01，02，03
@@ -176,8 +180,8 @@
             alert = 0x01;
             break;
     }
-    char command[6] = {0xEE, 0x09, 0x01, alert, 0x00};
-    [self write:[NSData dataWithBytes:command length:strlen(command)]];
+    char command[5] = {0xEE, 0x09, 0x01, alert, 0x00};
+    [self write:[NSData dataWithBytes:command length:5]];
 }
 
 - (void)parseData:(NSData *)data {
@@ -516,8 +520,6 @@
         // 关闭定时器
         _offlineTime = nil; // 初始化时间信息
     }
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(online)];
 }
 
 - (BOOL)connected {
@@ -595,6 +597,8 @@
             [common playSound];
         }
     }
+    // 做完离线处理再做离线通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(self.online)];
 }
 
 - (void)bluetoothPoweredOff {
