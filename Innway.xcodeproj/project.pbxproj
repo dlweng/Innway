@@ -22,9 +22,6 @@
 		330FB8EE2163C6DA0032E657 /* greencard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E82163C6D90032E657 /* greencard@2x.png */; };
 		330FB8EF2163C6DA0032E657 /* greencard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E92163C6DA0032E657 /* greencard@3x.png */; };
 		330FB8F02163C6DA0032E657 /* greentag@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8EA2163C6DA0032E657 /* greentag@3x.png */; };
-		331797E1213A6958000B8DD6 /* voice1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 331797DE213A6957000B8DD6 /* voice1.mp3 */; };
-		331797E2213A6958000B8DD6 /* voice3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 331797DF213A6957000B8DD6 /* voice3.mp3 */; };
-		331797E3213A6958000B8DD6 /* voice2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 331797E0213A6958000B8DD6 /* voice2.mp3 */; };
 		331797F0213AF282000B8DD6 /* InAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 331797EF213AF282000B8DD6 /* InAnnotationView.m */; };
 		331797F8213BBB5B000B8DD6 /* icon_splash.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 331797F7213BBB5B000B8DD6 /* icon_splash.jpg */; };
 		3317982A213BEB3D000B8DD6 /* InDeviceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33179828213BEB3D000B8DD6 /* InDeviceListCell.m */; };
@@ -159,6 +156,9 @@
 		338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7721297F5F00A018EA /* DLCloudDeviceManager.m */; };
 		338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7921297F5F00A018EA /* DLCentralManager.m */; };
 		338CDF7F21297F6000A018EA /* DLDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7B21297F6000A018EA /* DLDevice.m */; };
+		33A4102E2198759B008E7360 /* voice2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 33A4102B2198759A008E7360 /* voice2.mp3 */; };
+		33A4102F2198759B008E7360 /* voice3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 33A4102C2198759A008E7360 /* voice3.mp3 */; };
+		33A410302198759B008E7360 /* voice1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 33A4102D2198759A008E7360 /* voice1.mp3 */; };
 		33ADF2CF217B36430037769C /* InAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33ADF2CD217B36420037769C /* InAlertView.xib */; };
 		33E36F2B217CCAEB00FA79B9 /* charge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E36F29217CCAEA00FA79B9 /* charge@2x.png */; };
 		33E36F2C217CCAEB00FA79B9 /* charge@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E36F2A217CCAEA00FA79B9 /* charge@3x.png */; };
@@ -274,9 +274,6 @@
 		330FB8E82163C6D90032E657 /* greencard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greencard@2x.png"; sourceTree = "<group>"; };
 		330FB8E92163C6DA0032E657 /* greencard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greencard@3x.png"; sourceTree = "<group>"; };
 		330FB8EA2163C6DA0032E657 /* greentag@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greentag@3x.png"; sourceTree = "<group>"; };
-		331797DE213A6957000B8DD6 /* voice1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice1.mp3; sourceTree = "<group>"; };
-		331797DF213A6957000B8DD6 /* voice3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice3.mp3; sourceTree = "<group>"; };
-		331797E0213A6958000B8DD6 /* voice2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice2.mp3; sourceTree = "<group>"; };
 		331797EE213AF282000B8DD6 /* InAnnotationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAnnotationView.h; sourceTree = "<group>"; };
 		331797EF213AF282000B8DD6 /* InAnnotationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAnnotationView.m; sourceTree = "<group>"; };
 		331797F7213BBB5B000B8DD6 /* icon_splash.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = icon_splash.jpg; sourceTree = "<group>"; };
@@ -442,6 +439,9 @@
 		338CDF7921297F5F00A018EA /* DLCentralManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLCentralManager.m; sourceTree = "<group>"; };
 		338CDF7A21297F6000A018EA /* DLUUIDTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLUUIDTool.h; sourceTree = "<group>"; };
 		338CDF7B21297F6000A018EA /* DLDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLDevice.m; sourceTree = "<group>"; };
+		33A4102B2198759A008E7360 /* voice2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice2.mp3; sourceTree = "<group>"; };
+		33A4102C2198759A008E7360 /* voice3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice3.mp3; sourceTree = "<group>"; };
+		33A4102D2198759A008E7360 /* voice1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice1.mp3; sourceTree = "<group>"; };
 		33ADF2CD217B36420037769C /* InAlertView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InAlertView.xib; sourceTree = "<group>"; };
 		33E36F29217CCAEA00FA79B9 /* charge@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "charge@2x.png"; sourceTree = "<group>"; };
 		33E36F2A217CCAEA00FA79B9 /* charge@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "charge@3x.png"; sourceTree = "<group>"; };
@@ -647,9 +647,6 @@
 		3374C73E2112013A00F83101 = {
 			isa = PBXGroup;
 			children = (
-				331797DE213A6957000B8DD6 /* voice1.mp3 */,
-				331797E0213A6958000B8DD6 /* voice2.mp3 */,
-				331797DF213A6957000B8DD6 /* voice3.mp3 */,
 				3374C7492112013A00F83101 /* Innway */,
 				3374C7622112014000F83101 /* InnwayUITests */,
 				3374C7482112013A00F83101 /* Products */,
@@ -670,15 +667,17 @@
 		3374C7492112013A00F83101 /* Innway */ = {
 			isa = PBXGroup;
 			children = (
+				33A4102D2198759A008E7360 /* voice1.mp3 */,
+				33A4102B2198759A008E7360 /* voice2.mp3 */,
+				33A4102C2198759A008E7360 /* voice3.mp3 */,
+				3374C76E2112077C00F83101 /* image */,
 				3385C6DB21578D2B005FAB04 /* InBaseViewController.h */,
 				3385C6DC21578D2B005FAB04 /* InBaseViewController.m */,
 				337E501C2161F38B00CB6313 /* InAddDevice */,
 				338CDF8221297F8C00A018EA /* Bluetooth */,
-				3374C76E2112077C00F83101 /* image */,
 				33027C1F211EC5140003C5D9 /* InTool */,
 				332880032115997400C4893B /* InUser */,
 				33288005211599F100C4893B /* InDevice */,
-				33FFB9A6217339A200E6A8C6 /* InTakePhoto */,
 				3374C74A2112013B00F83101 /* AppDelegate.h */,
 				3374C74B2112013B00F83101 /* AppDelegate.m */,
 				3374C7532112013F00F83101 /* Assets.xcassets */,
@@ -918,13 +917,6 @@
 			path = Bluetooth;
 			sourceTree = "<group>";
 		};
-		33FFB9A6217339A200E6A8C6 /* InTakePhoto */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = InTakePhoto;
-			sourceTree = "<group>";
-		};
 		646857F1B258D174F8BFBE5B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1064,7 +1056,6 @@
 				33E9B81B215BC83300BA3EBE /* innwayLOGO@3x.png in Resources */,
 				337E504D21620E1B00CB6313 /* searchImage@3x.png in Resources */,
 				3374C7982112077C00F83101 /* icon_back.png in Resources */,
-				331797E1213A6958000B8DD6 /* voice1.mp3 in Resources */,
 				33E9B81C215BC83300BA3EBE /* innwayLOGO@2x.png in Resources */,
 				33FB62DD215D469400C6419C /* RSSI_12@3x.png in Resources */,
 				33FB62A7215D453900C6419C /* 50@2x.png in Resources */,
@@ -1129,7 +1120,6 @@
 				3374C7AF2112077C00F83101 /* icon_range_up.png in Resources */,
 				33FB62A9215D453900C6419C /* 10@3x.png in Resources */,
 				337E505221620E1B00CB6313 /* searchLine@3x.png in Resources */,
-				331797E3213A6958000B8DD6 /* voice2.mp3 in Resources */,
 				3379A2D421561E73008D1AA2 /* background@3x.png in Resources */,
 				337E50212161F42600CB6313 /* InAddDevice.storyboard in Resources */,
 				337E50292161F60F00CB6313 /* addButton@2x.png in Resources */,
@@ -1153,6 +1143,7 @@
 				3374C7AE2112077C00F83101 /* icon_dot_up.png in Resources */,
 				33FB62CE215D469400C6419C /* RSSI_4@3x.png in Resources */,
 				33FFB9AC21733E9200E6A8C6 /* photoBackground@3x.png in Resources */,
+				33A4102F2198759B008E7360 /* voice3.mp3 in Resources */,
 				33FB62CD215D469400C6419C /* RSSI_6@3x.png in Resources */,
 				3385C6CC2157467D005FAB04 /* Rectangle2copy@3x.png in Resources */,
 				330FB8D721636F790032E657 /* up@2x.png in Resources */,
@@ -1171,6 +1162,7 @@
 				3379A2D621561E73008D1AA2 /* greenBtn@3x.png in Resources */,
 				3385C6D721574BCC005FAB04 /* whiteLongButton@3x.png in Resources */,
 				33FB62D1215D469400C6419C /* RSSI_10@3x.png in Resources */,
+				33A4102E2198759B008E7360 /* voice2.mp3 in Resources */,
 				3385C6CF2157467D005FAB04 /* lockicon@2x.png in Resources */,
 				3328801C2115AA4900C4893B /* InControlDeviceViewController.xib in Resources */,
 				33FB62DC215D469400C6419C /* RSSI_5@2x.png in Resources */,
@@ -1185,10 +1177,10 @@
 				33FFB9312171A4CD00E6A8C6 /* userBodyBG@3x.png in Resources */,
 				337E503A2162030D00CB6313 /* tag@2x.png in Resources */,
 				3317982B213BEB3D000B8DD6 /* InDeviceListCell.xib in Resources */,
-				331797E2213A6958000B8DD6 /* voice3.mp3 in Resources */,
 				3379A2D321561E73008D1AA2 /* background@2x.png in Resources */,
 				337E50372162030D00CB6313 /* Card@2x.png in Resources */,
 				33FFB9AB21733E9200E6A8C6 /* photoBackground@2x.png in Resources */,
+				33A410302198759B008E7360 /* voice1.mp3 in Resources */,
 				33FB62A1215D453900C6419C /* 40@2x.png in Resources */,
 				3368B83A2184152300AC943F /* user@2x.png in Resources */,
 				33639506217B4036006719EA /* whiteBtn@3x.png in Resources */,

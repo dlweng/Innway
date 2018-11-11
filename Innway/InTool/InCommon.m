@@ -49,8 +49,10 @@ static SystemSoundID soundID;
         
         // 设置后台播放代码
         _audioSession = [AVAudioSession sharedInstance];
+        NSError *error = nil;
+        [_audioSession setCategory:AVAudioSessionCategoryPlayback error:&error];
         [_audioSession setActive:YES error:nil];
-        [_audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+        NSLog(@"设置会话分类： %@", error);
         
         // 设置闪光灯定时器
         _sharkTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(setupSharkLight) userInfo:nil repeats:YES];
@@ -208,11 +210,14 @@ static SystemSoundID soundID;
             alertMusic = @"voice1.mp3";
             break;
     }
-    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:alertMusic withExtension:nil];
+    NSString *musicPath = [[NSBundle mainBundle] pathForResource:alertMusic ofType:nil];
+    NSURL *fileURL = [NSURL fileURLWithPath:musicPath];
+    NSLog(@"fileURL = %@", fileURL.absoluteString);
     NSError *error = nil;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
     self.audioPlayer.delegate = self;
     self.audioPlayer.numberOfLoops = 1000;
+    self.audioPlayer.volume = 1.0;
     [self.audioPlayer play];
     [self startSharkAnimation];
 }

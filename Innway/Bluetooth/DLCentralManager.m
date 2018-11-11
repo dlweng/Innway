@@ -55,7 +55,7 @@ static DLCentralManager *instance = nil;
         _knownPeripherals = [NSMutableDictionary dictionary];
         _scanTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(run) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_scanTimer forMode:NSRunLoopCommonModes];
-        _repeatScanTimer = [NSTimer timerWithTimeInterval:120 target:self selector:@selector(repeatScanNewDevice) userInfo:nil repeats:YES];
+        _repeatScanTimer = [NSTimer timerWithTimeInterval:30 target:self selector:@selector(repeatScanNewDevice) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_repeatScanTimer forMode:NSRunLoopCommonModes];
         
         _connectDeviceEventDict = [NSMutableDictionary dictionary];

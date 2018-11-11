@@ -417,13 +417,22 @@
     _disConnect = YES;
     if (self.peripheral) {
         NSLog(@"开始去断开设备连接:%@", self.mac);
-        [[DLCentralManager sharedInstance] disConnectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
+        if (self.connected) {
+            [[DLCentralManager sharedInstance] disConnectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
+                [self connectToDevice:^(DLDevice *device, NSError *error) {
+                    if (completion) {
+                        completion(device, error);
+                    }
+                }];
+            }];
+        }
+        else {
             [self connectToDevice:^(DLDevice *device, NSError *error) {
                 if (completion) {
                     completion(device, error);
                 }
             }];
-        }];
+        }
     }
     else {
         if (completion) {
@@ -600,6 +609,7 @@
     if (rssi.integerValue > -100 && !self.connected) {
         // 设备信号高了，要去重连设备
         NSLog(@"设备:%@ 信号变强，去重新连接设备", _mac);
+        [self disConnectAndReconnectDevice:nil];
         [self connectToDevice:nil];
     }
     if (rssi.intValue == offlineRSSI.intValue && self.online) {
