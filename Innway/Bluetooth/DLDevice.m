@@ -208,7 +208,7 @@
         NSString *alertMusic = [payload substringWithRange:NSMakeRange(8, 2)];
         NSInteger electricNum = [common getIntValueByHex:electric];
         [self.data setValue:@(electricNum) forKey:ElectricKey];
-        NSLog(@"mac:%@ 电量：16进制:%@, 10进制:%zd", _mac, electric, electricNum);
+        NSLog(@"mac:%@ 电量：16进制:%@, 10进制:%zd, peripheral = %@", _mac, electric, electricNum, self.peripheral);
         [self.data setValue:@(chargingState.boolValue) forKey:ChargingStateKey];
         [self.data setValue:@(disconnectAlert.boolValue) forKey:DisconnectAlertKey];
         [self.data setValue:@(reconnectAlert.boolValue) forKey:ReconnectAlertKey];
@@ -304,7 +304,7 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if ([peripheral.identifier.UUIDString isEqualToString:self.peripheral.identifier.UUIDString]) {
-        NSLog(@"mac:%@, 接收读响应数据, characteristic = %@, error = %@", self.mac, characteristic.value, error);
+        NSLog(@"mac:%@, 接收读响应数据, peripheral：%@,  characteristic = %@, error = %@", self.mac, self.peripheral, characteristic.value, error);
         [self parseData:characteristic.value];
         if (self.delegate) {
             [self.delegate device:self didUpdateData:self.lastData];

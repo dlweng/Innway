@@ -41,7 +41,7 @@
 	<string>需要打开相册选择用户头像</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>App plays audio</string>
+		<string>audio</string>
 		<string>bluetooth-central</string>
 		<string>bluetooth-peripheral</string>
 	</array>

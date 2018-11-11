@@ -315,7 +315,7 @@ static SystemSoundID soundID;
         else {
             NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
             NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"gps更新失败"];
-            NSLog(@"上传设备位置code = %zd, message = %@", code, message);
+//            NSLog(@"上传设备位置code = %zd, message = %@", code, message);
         }
     }];
 }
@@ -414,47 +414,47 @@ static SystemSoundID soundID;
 - (NSString *)getImageName:(NSNumber *)rssi {
     NSInteger rSSI = rssi.integerValue;
     NSString *imageName = @"RSSI_11";
-    if(rSSI>=-45)
+    if(rSSI>=-60)
     {
         imageName = @"RSSI_12";
     }
-    else if(rSSI>-50)//>90%
+    else if(rSSI>-64)//>90%
     {
         imageName = @"RSSI_11";
     }
-    else if(rSSI>-55)//>80%
+    else if(rSSI>-68)//>80%
     {
         imageName = @"RSSI_10";
     }
-    else if(rSSI>-60)//>70%
+    else if(rSSI>-72)//>70%
     {
         imageName = @"RSSI_9";
     }
-    else if(rSSI>-65)//>60%
+    else if(rSSI>-76)//>60%
     {
         imageName = @"RSSI_8";
     }
-    else if(rSSI>-70)//>50%
+    else if(rSSI>-80)//>50%
     {
         imageName = @"RSSI_7";
     }
-    else if(rSSI>-75)//>40%
+    else if(rSSI>-83)//>40%
     {
         imageName = @"RSSI_6";
     }
-    else if(rSSI>-80)//>30%
+    else if(rSSI>-86)//>30%
     {
         imageName = @"RSSI_5";
     }
-    else if(rSSI>-85)//>20%
+    else if(rSSI>-89)//>20%
     {
         imageName = @"RSSI_4";
     }
-    else if(rSSI>-90)//>10%
+    else if(rSSI>-92)//>10%
     {
         imageName = @"RSSI_3";
     }
-    else if(rSSI>-95)//>10%
+    else if(rSSI>-96)//>10%
     {
         imageName = @"RSSI_2";
     }
