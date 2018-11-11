@@ -18,6 +18,7 @@
     NSNumber *_rssi;
     NSTimer *_readRSSITimer;
     dispatch_source_t _ackDelayTimer;// 计算ack的延时计算器
+    dispatch_source_t _disciverServerTimer;// 计算获取服务时间的延时计算器
     int _time;
     BOOL _disConnect; // 标识用户主动断开了设备连接，不做重连
 }
@@ -26,6 +27,7 @@
 @property (nonatomic, assign) BOOL disconnectAlert;
 @property (nonatomic, assign) BOOL reconnectAlert;
 @property (nonatomic, assign) BOOL isGetAck; // 标识下发查找设备命令得到ack否
+@property (nonatomic, assign) BOOL isDiscoverServer; //是否获取到服务
 @property (nonatomic, assign) NSInteger alertMusic;
 @property (nonatomic, strong) NSMutableDictionary *data;
 @end
@@ -87,6 +89,8 @@
         NSLog(@"去获取设备服务:%@", self.mac);
         CBUUID *serviceUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
         [_peripheral discoverServices:@[serviceUUID]];
+        self.isDiscoverServer = NO;
+        [self startDiscoverServerTimer];
     }
     else {
         NSLog(@"无法去获取设备服务:%@, 外设不存在", self.mac);
@@ -112,6 +116,8 @@
     NSArray *characteristics = [service characteristics];
     for (CBCharacteristic *characteristic in characteristics) {
         if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
+            self.isDiscoverServer = YES;
+            self.online = YES;  //设置在线
             NSLog(@"去激活设备: %@", _mac);
             [self activeDevice];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -255,18 +261,19 @@
 
 - (void) writeValue:(int)serviceUUID characteristicUUID:(int)characteristicUUID p:(CBPeripheral *)p data:(NSData *)data andResponseType:(CBCharacteristicWriteType)responseType
 {
+    if (!self.connected) {
+        return;
+    }
     CBUUID *su = [DLUUIDTool CBUUIDFromInt:serviceUUID];
     CBUUID *cu = [DLUUIDTool CBUUIDFromInt:characteristicUUID];
     CBService *service = [self findServiceFromUUID:su p:p];
     if (!service) {
-        NSLog(@"mac:%@, 写数据查找不到服务: %s", self.mac, [self CBUUIDToString:su]);
-        [self discoverServices]; // 去发现服务
+        NSLog(@"mac:%@, 重连设备 %s", self.mac, [self CBUUIDToString:su]);
         return;
     }
     CBCharacteristic *characteristic = [self findCharacteristicFromUUID:cu service:service];
     if (!characteristic) {
         NSLog(@"mac:%@, 写数据查找不到角色: %s", self.mac, [self CBUUIDToString:cu]);
-        [self peripheral:p didDiscoverServices:nil]; // 去发现角色
         return;
     }
     [p writeValue:data forCharacteristic:characteristic type:responseType];
@@ -373,7 +380,6 @@
 //                [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已建立连接", self.deviceName]];
                 NSLog(@"连接设备成功:%@", self.mac);
                 // 连接成功，去获取设备服务
-                self.online = YES;  //设置在线
                 peripheral.delegate = self;
                 [self discoverServices];
             }
@@ -404,6 +410,26 @@
             completion(self, error);
         }
     }];
+}
+
+// 获取不到服务的情况下，必须断开重连
+- (void)disConnectAndReconnectDevice:(void (^)(DLDevice *device, NSError *error))completion {
+    _disConnect = YES;
+    if (self.peripheral) {
+        NSLog(@"开始去断开设备连接:%@", self.mac);
+        [[DLCentralManager sharedInstance] disConnectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
+            [self connectToDevice:^(DLDevice *device, NSError *error) {
+                if (completion) {
+                    completion(device, error);
+                }
+            }];
+        }];
+    }
+    else {
+        if (completion) {
+            completion(self, nil); //不存在外设的情况不处理
+        }
+    }
 }
 
 #pragma mark - 查找服务和角色的作用
@@ -660,6 +686,20 @@
     day = mouth * 30 + year * 365 + day;
     _offlineTimeInfo = [NSString stringWithFormat:@"Last seen %zd days %zd hours ago", day, hour];
     return;
+}
+
+- (void)startDiscoverServerTimer {
+    _disciverServerTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    __weak typeof(_disciverServerTimer) weakTimer = _disciverServerTimer;
+    dispatch_source_set_event_handler(_disciverServerTimer, ^{
+        dispatch_source_cancel(weakTimer);
+        if (!self.isDiscoverServer) {
+            [self disConnectAndReconnectDevice:nil];
+        }
+    });
+    // 设置10秒超时
+    dispatch_source_set_timer(_disciverServerTimer, dispatch_time(DISPATCH_TIME_NOW, 5*NSEC_PER_SEC), 0, 0);
+    dispatch_resume(_disciverServerTimer);
 }
 
 - (void)startSearchDeviceTimer {

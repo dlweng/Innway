@@ -160,7 +160,12 @@ static DLCentralManager *instance = nil;
 
 #pragma mark - 内部工具方法
 - (void)startScaning {
-    [self.manager scanForPeripheralsWithServices:nil options:nil];
+    CBUUID *serverUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
+    NSArray *arr = nil;
+    if (serverUUID) {
+        arr = [NSArray arrayWithObject:serverUUID];
+    }
+    [self.manager scanForPeripheralsWithServices:arr options:nil];;
 }
 
 #pragma mark - CBCentralManagerDelegate

@@ -72,6 +72,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // 设置云列表的第一台设备未当前选中的设备
+    DLCloudDeviceManager *cloudManager = [DLCloudDeviceManager sharedInstance];
+    if (cloudManager.cloudDeviceList.count > 0) {
+        NSString *mac = cloudManager.cloudDeviceList.allKeys[0];
+        DLDevice *device = cloudManager.cloudDeviceList[mac];
+        self.device = device;
+    }
+    
     // 界面调整
     self.topBodyViewTopConstraint.constant += 64;
     if ([InCommon isIPhoneX]) { //iphonex
@@ -115,21 +123,12 @@
         } cancleHanler:nil];
     }
     self.searchPhoneDevices = [NSMutableDictionary dictionary];
-    
-    // 设置云列表的第一台设备未当前选中的设备
-    DLCloudDeviceManager *cloudManager = [DLCloudDeviceManager sharedInstance];
-    if (cloudManager.cloudDeviceList.count > 0) {
-        NSString *mac = cloudManager.cloudDeviceList.allKeys[0];
-        DLDevice *device = cloudManager.cloudDeviceList[mac];
-        self.device = device;
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.deviceListVC reloadView];
     [self.device getDeviceInfo];
-    [self updateAnnotation];
     [self updateUI];
     // 在viewDidLoad设置没有效果
     self.mapView.showsUserLocation = YES;
@@ -162,6 +161,9 @@
 }
 
 - (void)updateUI {
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        return;
+    }
     [self setupControlDeviceBtnText];
     [self.deviceListVC reloadView];
     [self updateAnnotation];
@@ -175,6 +177,7 @@
 - (void)addDeviceListView {
     self.deviceListVC = [InDeviceListViewController deviceListViewController];
     self.deviceListVC.delegate = self;
+    self.deviceListVC.selectDevice = self.device;
     [self addChildViewController:self.deviceListVC];
     [self.deviceListBodyView addSubview:self.deviceListVC.view];
     self.deviceListVC.view.frame = self.deviceListBodyView.bounds;

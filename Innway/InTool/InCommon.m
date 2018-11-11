@@ -893,12 +893,16 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
 
 @implementation InAlertView
 
-+ (void)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmHanler:(confirmHanler)confirmHanler {
-    [[[InAlertView alloc] initWithTitle:title message:message confirm:confirmHanler] show];
++ (InAlertView *)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmHanler:(confirmHanler)confirmHanler {
+    InAlertView *alertView = [[InAlertView alloc] initWithTitle:title message:message confirm:confirmHanler];
+    [alertView show];
+    return alertView;
 }
 
-+ (void)showAlertWithMessage:(NSString *)message confirmHanler:(confirmHanler)confirmHanler cancleHanler:(confirmHanler)cancleHanler; {
-    [[[InAlertView alloc] initWithMessage:message confirm:confirmHanler cancleHanler:cancleHanler] show];
++ (InAlertView *)showAlertWithMessage:(NSString *)message confirmHanler:(confirmHanler)confirmHanler cancleHanler:(confirmHanler)cancleHanler; {
+    InAlertView *alertView = [[InAlertView alloc] initWithMessage:message confirm:confirmHanler cancleHanler:cancleHanler];
+    [alertView show];
+    return alertView;
 }
 
 - (instancetype)init {

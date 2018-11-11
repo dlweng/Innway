@@ -24,11 +24,21 @@
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     navigationBar.tintColor = [UIColor whiteColor];
     // 启动蓝牙功能
+    __block NSNumber *isShowAlterView = @NO;
+    __block InAlertView *alertView;
     [DLCentralManager startSDKCompletion:^(DLCentralManager *manager, CBCentralManagerState state) {
         if (state != CBCentralManagerStatePoweredOn) {
-            [InAlertView showAlertWithTitle:@"Tip" message:@"请打开蓝牙才能正常使用APP" confirmHanler:^{
-                
-            }];
+            if (!isShowAlterView.boolValue) {
+                isShowAlterView = @YES;
+                alertView = [InAlertView showAlertWithTitle:@"Tip" message:@"请打开蓝牙才能正常使用APP" confirmHanler:^{
+                    isShowAlterView = @NO;
+                }];
+            }
+        }
+        else {
+            if (alertView) {
+                [alertView removeFromSuperview];
+            }
         }
     }];
     
