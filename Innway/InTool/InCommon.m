@@ -40,7 +40,12 @@ static SystemSoundID soundID;
     if (self = [super init]) {
         [self getUserInfo];
         soundID = 1;
-        [self.locationManager requestAlwaysAuthorization];
+        if ([CLLocationManager locationServicesEnabled]) {
+            _locationManager = [[CLLocationManager alloc] init];
+            _locationManager.delegate = self;
+            [_locationManager requestAlwaysAuthorization];
+            [_locationManager startUpdatingLocation];//开始定位
+        }
         
         // 设置后台播放代码
         _audioSession = [AVAudioSession sharedInstance];
@@ -329,7 +334,6 @@ static SystemSoundID soundID;
 - (BOOL)isOpensLocation {
     if (([CLLocationManager locationServicesEnabled]) &&
         ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse ||
-//        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined ||
         [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
         return YES;
     }
@@ -400,15 +404,6 @@ static SystemSoundID soundID;
         return YES;
     }
     return NO;
-}
-
-- (CLLocationManager *)locationManager
-{
-    if (_locationManager == nil) {
-        _locationManager = [[CLLocationManager alloc] init];
-        _locationManager.delegate = self;
-    }
-    return _locationManager;
 }
 
 - (NSString *)getImageName:(NSNumber *)rssi {

@@ -165,7 +165,7 @@ static DLCentralManager *instance = nil;
     if (serverUUID) {
         arr = [NSArray arrayWithObject:serverUUID];
     }
-    [self.manager scanForPeripheralsWithServices:arr options:nil];;
+    [self.manager scanForPeripheralsWithServices:arr options:@{CBConnectPeripheralOptionNotifyOnDisconnectionKey: @YES}];
 }
 
 #pragma mark - CBCentralManagerDelegate
