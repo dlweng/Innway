@@ -181,9 +181,22 @@ static DLCloudDeviceManager *instance = nil;
                 // 获取本地保存的离线信息和设备名称
                 [common getDeviceName:device];
                 [common getDeviceOfflineInfo:device completion:^(NSString *offlineTime, NSString *gps) {
-                    if (offlineTime && gps) {
+                    if (offlineTime) {
                         device.offlineTime = offlineTime;
+                    }
+                    else {
+                        // 没有掉线信息，将当前时间当成掉线时间
+                        device.offlineTime = [common getCurrentTime];
+                    }
+                    if (gps) {
                         device.coordinate = gps;
+                    }
+                    else {
+                        device.coordinate = [common getCurrentGps];
+                    }
+                    if (!offlineTime || !gps) {
+                        // 如果没有掉线信息，存一份掉线信息
+                        [common saveDeviceOfflineInfo:device];
                     }
                 }];
                 [newList setValue:device forKey:mac];

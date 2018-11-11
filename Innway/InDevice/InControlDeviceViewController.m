@@ -644,6 +644,10 @@
             [self.deviceAnnotation setObject:annotation forKey:mac];
             [self.mapView addAnnotation:annotation];
         }
+        else if(!device.online && annotation) {
+            annotation.title = [NSString stringWithFormat:@"%@", device.deviceName];
+            annotation.coordinate = device.coordinate;
+        }
     }
 }
 
@@ -962,6 +966,10 @@
         [common stopSoundAlertMusic];
         [self stopBtnAnimation];
     }
+}
+
+- (void)homeBtnDidClick {
+    NSLog(@"home键被按");
 }
 
 - (void)searchDeviceAlert:(NSNotification *)noti {
