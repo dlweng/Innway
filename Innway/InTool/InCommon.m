@@ -213,7 +213,6 @@ static SystemSoundID soundID;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
     self.audioPlayer.delegate = self;
     self.audioPlayer.numberOfLoops = 1000;
-    [self.audioPlayer prepareToPlay];
     [self.audioPlayer play];
     [self startSharkAnimation];
 }

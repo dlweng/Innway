@@ -118,7 +118,7 @@
     [[NSRunLoop currentRunLoop] addTimer:self.animationTimer forMode:NSRunLoopCommonModes];
     [self stopBtnAnimation];
     if (![common isOpensLocation]) {
-        [InAlertView showAlertWithMessage:@"跳转打开定位功能" confirmHanler:^{
+        [InAlertView showAlertWithMessage:@"跳转到设置界面打开定位功能" confirmHanler:^{
             [common goToAPPSetupView];
         } cancleHanler:nil];
     }
