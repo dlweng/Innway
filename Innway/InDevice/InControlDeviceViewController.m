@@ -162,6 +162,7 @@
 
 - (void)updateUI {
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        // 在后台不用去更新，因为每次界面显示都会更新一次UI
         return;
     }
     [self setupControlDeviceBtnText];
