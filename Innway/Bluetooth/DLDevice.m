@@ -118,6 +118,11 @@
         if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
             self.isDiscoverServer = YES;
             self.online = YES;  //设置在线
+//            // 测试声音
+//            if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+//                    [common sendLocalNotification:[NSString stringWithFormat:@"%@ 设备上线", self.deviceName]];
+//                    [common playSound];
+//            }
             NSLog(@"去激活设备: %@", _mac);
             [self activeDevice];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -623,8 +628,7 @@
 }
 
 - (void)readRSSI {
-    if (self.connected) {
-//        NSLog(@"定时读取设备的RSSI值: %@", self.mac);
+    if (self.online) {
         [self.peripheral readRSSI];
     }
 }
@@ -643,6 +647,10 @@
             // 关闭的断开连接通知，则不通知
             [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
             [common playSound];
+        }
+        else {
+            // 测试
+            NSLog(@"去发送断连通知和声音");
         }
     }
     // 做完离线处理再做离线通知

@@ -37,7 +37,10 @@
         }
         else {
             if (alertView) {
+                // 移除并重置状态
                 [alertView removeFromSuperview];
+                alertView = nil;
+                isShowAlterView = @NO;
             }
         }
     }];

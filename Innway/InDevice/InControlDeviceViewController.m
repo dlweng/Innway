@@ -316,6 +316,12 @@
         }
         [self.device searchDevice];
     }
+    else {
+        if (self.device.isSearchDevice) { // 离线状态，如果手机在查找设备，要去关闭按钮动画
+            self.device.isSearchDevice = NO;
+            [self stopBtnAnimation];
+        }
+    }
 }
 
 //进入设备设置界面

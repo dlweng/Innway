@@ -172,7 +172,6 @@ static DLCloudDeviceManager *instance = nil;
                     device = [DLDevice device:peripheral];
 #warning  从云端获取设备的类型 云端还没做，默认是card类型
                     device.type = InDeviceCard;
-                    device.rssi = knowDevice.rssi;
                 }
                 device.mac = mac;
                 device.cloudID = [cloudDevice integerValueForKey:@"id" defaultValue:-1];
@@ -218,7 +217,7 @@ static DLCloudDeviceManager *instance = nil;
 //            NSLog(@"设置peripheral--更新设备mac, peripheral = %@", peripheral);
 //        }
         device.peripheral = peripheral;
-        device.rssi = knowDevice.rssi;
+//        device.rssi = knowDevice.rssi;
     }
     [self autoConnectCloudDevice];
 }
