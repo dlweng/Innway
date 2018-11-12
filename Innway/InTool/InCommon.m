@@ -20,7 +20,6 @@ static SystemSoundID soundID;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
 // 音频播放
-@property (nonatomic, strong) AVAudioSession *audioSession;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier oldPlayMusicBackTaskID;
 @end
@@ -46,13 +45,6 @@ static SystemSoundID soundID;
             [_locationManager requestAlwaysAuthorization];
             [_locationManager startUpdatingLocation];//开始定位
         }
-        
-        // 设置后台播放代码
-        _audioSession = [AVAudioSession sharedInstance];
-        NSError *error = nil;
-        [_audioSession setCategory:AVAudioSessionCategoryPlayback error:&error];
-        [_audioSession setActive:YES error:nil];
-        NSLog(@"设置会话分类： %@", error);
         
         // 设置闪光灯定时器
         _sharkTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(setupSharkLight) userInfo:nil repeats:YES];
@@ -213,6 +205,13 @@ static SystemSoundID soundID;
     NSString *musicPath = [[NSBundle mainBundle] pathForResource:alertMusic ofType:nil];
     NSURL *fileURL = [NSURL fileURLWithPath:musicPath];
     NSLog(@"fileURL = %@", fileURL.absoluteString);
+    // 设置后台播放代码
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    // 这个进入后台10秒钟后播放没声音
+//    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+    // 这个可以在后台播放
+    [audioSession setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
+    [audioSession setActive:YES error:nil];
     NSError *error = nil;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
     self.audioPlayer.delegate = self;
@@ -422,51 +421,51 @@ static SystemSoundID soundID;
 - (NSString *)getImageName:(NSNumber *)rssi {
     NSInteger rSSI = rssi.integerValue;
     NSString *imageName = @"RSSI_11";
-    if(rSSI>=-60)
+    if(rSSI>=-70)
     {
         imageName = @"RSSI_12";
     }
-    else if(rSSI>-64)//>90%
+    else if(rSSI>-73)//>90%
     {
         imageName = @"RSSI_11";
     }
-    else if(rSSI>-68)//>80%
+    else if(rSSI>-76)//>80%
     {
         imageName = @"RSSI_10";
     }
-    else if(rSSI>-72)//>70%
+    else if(rSSI>-79)//>70%
     {
         imageName = @"RSSI_9";
     }
-    else if(rSSI>-76)//>60%
+    else if(rSSI>-82)//>60%
     {
         imageName = @"RSSI_8";
     }
-    else if(rSSI>-80)//>50%
+    else if(rSSI>-85)//>50%
     {
         imageName = @"RSSI_7";
     }
-    else if(rSSI>-83)//>40%
+    else if(rSSI>-88)//>40%
     {
         imageName = @"RSSI_6";
     }
-    else if(rSSI>-86)//>30%
+    else if(rSSI>-91)//>30%
     {
         imageName = @"RSSI_5";
     }
-    else if(rSSI>-89)//>20%
+    else if(rSSI>-94)//>20%
     {
         imageName = @"RSSI_4";
     }
-    else if(rSSI>-92)//>10%
+    else if(rSSI>-97)//>10%
     {
         imageName = @"RSSI_3";
     }
-    else if(rSSI>-96)//>10%
+    else if(rSSI>-100)//>10%
     {
         imageName = @"RSSI_2";
     }
-    else if(rSSI>-100)//>10%
+    else if(rSSI>-103)//>10%
     {
         imageName = @"RSSI_1";
     }
