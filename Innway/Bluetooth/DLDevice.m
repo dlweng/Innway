@@ -116,6 +116,7 @@
     NSArray *characteristics = [service characteristics];
     for (CBCharacteristic *characteristic in characteristics) {
         if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
+            [self.peripheral readRSSI]; // 先读一次信号值
             self.isDiscoverServer = YES;
             self.online = YES;  //设置在线
 //            // 测试声音
@@ -612,17 +613,6 @@
 
 - (void)setRssi:(NSNumber *)rssi {
     _rssi = rssi;
-    
-    if (rssi.integerValue > -100 && !self.connected) {
-        // 设备信号高了，要去重连设备
-        NSLog(@"设备:%@ 信号变强，去重新连接设备", _mac);
-        [self disConnectAndReconnectDevice:nil];
-        [self connectToDevice:nil];
-    }
-    if (rssi.intValue == offlineRSSI.intValue && self.online) {
-        // 设置设备离线
-        [self changeStatusToDisconnect];
-    }
     // RSSI改变要发出通知
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceRSSIChangeNotification object:self];
 }
