@@ -80,5 +80,4 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 - (void)selecteDiconnectAlertMusic:(NSInteger)alertMusic;
 
 - (void)startSearchDeviceTimer;
-- (void)stopSearchTimer;
 @end

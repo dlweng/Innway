@@ -30,6 +30,7 @@
 @property (nonatomic, assign) BOOL isDiscoverServer; //是否获取到服务
 @property (nonatomic, assign) NSInteger alertMusic;
 @property (nonatomic, strong) NSMutableDictionary *data;
+@property (nonatomic, strong) NSMutableArray *rssiValues;
 @end
 
 @implementation DLDevice
@@ -612,15 +613,38 @@
 }
 
 - (void)setRssi:(NSNumber *)rssi {
-    _rssi = rssi;
-    // RSSI改变要发出通知
-    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceRSSIChangeNotification object:self];
+    if (_rssi.intValue == offlineRSSI.intValue && rssi.intValue != offlineRSSI.intValue) { // 从离线变为在线的第一次马上发出通知
+        _rssi = rssi;
+        // RSSI改变要发出通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceRSSIChangeNotification object:self];
+    }
+    else {
+        [self.rssiValues addObject:rssi]; //加入新值
+        // 找出最大值
+        if (self.rssiValues.count == 3) {
+            _rssi = [self getMaxRssi]; // 赋值最大值
+            // RSSI改变要发出通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:DeviceRSSIChangeNotification object:self];
+            // 清除RSSI数组
+            [self.rssiValues removeAllObjects];
+        }
+    }
 }
 
 - (void)readRSSI {
     if (self.online) {
         [self.peripheral readRSSI];
     }
+}
+
+- (NSNumber *)getMaxRssi {
+    NSNumber *maxRssi = offlineRSSI;
+    for (NSNumber *rssi in self.rssiValues) {
+        if (rssi.intValue > maxRssi.intValue) {
+            maxRssi = rssi;
+        }
+    }
+    return maxRssi;
 }
 
 - (void)changeStatusToDisconnect{
@@ -742,6 +766,13 @@
     NSLog(@"结束查找设备定时器");
     dispatch_source_cancel(_ackDelayTimer);
     _ackDelayTimer = nil;
+}
+
+- (NSMutableArray *)rssiValues {
+    if (!_rssiValues) {
+        _rssiValues = [NSMutableArray array];
+    }
+    return _rssiValues;
 }
 
 @end

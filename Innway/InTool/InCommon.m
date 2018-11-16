@@ -420,52 +420,36 @@ static SystemSoundID soundID;
 
 - (NSString *)getImageName:(NSNumber *)rssi {
     NSInteger rSSI = rssi.integerValue;
-    NSString *imageName = @"RSSI_11";
-    if(rSSI>=-70)
-    {
-        imageName = @"RSSI_12";
-    }
-    else if(rSSI>-73)//>90%
-    {
-        imageName = @"RSSI_11";
-    }
-    else if(rSSI>-76)//>80%
-    {
-        imageName = @"RSSI_10";
-    }
-    else if(rSSI>-79)//>70%
-    {
-        imageName = @"RSSI_9";
-    }
-    else if(rSSI>-82)//>60%
+    NSString *imageName = @"RSSI_8";
+    if(rSSI>-70)
     {
         imageName = @"RSSI_8";
     }
-    else if(rSSI>-85)//>50%
+    else if(rSSI>-76)
     {
         imageName = @"RSSI_7";
     }
-    else if(rSSI>-88)//>40%
+    else if(rSSI>-82)
     {
         imageName = @"RSSI_6";
     }
-    else if(rSSI>-91)//>30%
+    else if(rSSI>-88)
     {
         imageName = @"RSSI_5";
     }
-    else if(rSSI>-94)//>20%
+    else if(rSSI>-94)
     {
         imageName = @"RSSI_4";
     }
-    else if(rSSI>-97)//>10%
+    else if(rSSI>-100)
     {
         imageName = @"RSSI_3";
     }
-    else if(rSSI>-100)//>10%
+    else if(rSSI>-105)
     {
         imageName = @"RSSI_2";
     }
-    else if(rSSI>-103)//>10%
+    else if(rSSI>-109)
     {
         imageName = @"RSSI_1";
     }

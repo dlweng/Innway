@@ -57,6 +57,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong,nonatomic)UIImagePickerController * imagePikerViewController;
 @property (nonatomic, strong) UIImagePickerController *libraryPikerViewController;
+@property (nonatomic,retain)AVCaptureSession *captureSession;
 
 // 按钮闪烁动画
 @property (nonatomic, strong) NSTimer *animationTimer;
@@ -856,6 +857,52 @@
     [common setupSharkLight];
 }
 
+- (IBAction)changeCameraDirection {
+    NSLog(@"改变相机的方向");
+    [self swapFrontAndBackCameras];
+}
+
+// 切换前后置摄像头
+- (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition)position
+{
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices )
+        if ( device.position == position )
+            return device;
+    return nil;
+}
+
+- (void)swapFrontAndBackCameras {
+    // Assume the session is already running
+    
+    NSArray *inputs =self.captureSession.inputs;
+    for (AVCaptureDeviceInput *input in inputs ) {
+        AVCaptureDevice *device = input.device;
+        if ( [device hasMediaType:AVMediaTypeVideo] ) {
+            AVCaptureDevicePosition position = device.position;
+            AVCaptureDevice *newCamera =nil;
+            AVCaptureDeviceInput *newInput =nil;
+            
+            if (position ==AVCaptureDevicePositionFront)
+                newCamera = [self cameraWithPosition:AVCaptureDevicePositionBack];
+            else
+                newCamera = [self cameraWithPosition:AVCaptureDevicePositionFront];
+            newInput = [AVCaptureDeviceInput deviceInputWithDevice:newCamera error:nil];
+            
+            // beginConfiguration ensures that pending changes are not applied immediately
+            [self.captureSession beginConfiguration];
+            
+            [self.captureSession removeInput:input];
+            [self.captureSession addInput:newInput];
+            
+            // Changes take effect once the outermost commitConfiguration is invoked.
+            [self.captureSession commitConfiguration];
+            break;
+        }
+    }
+}
+
+
 - (IBAction)goPhotoLibrary {
     NSLog(@"进入相册");
     // 解决iPhone5S上导航栏会消失的Bug
@@ -997,6 +1044,33 @@
         _deviceAnnotation = [NSMutableDictionary dictionary];
     }
     return _deviceAnnotation;
+}
+
+- (AVCaptureSession *)captureSession
+{
+    if(_captureSession == nil)
+    {
+        _captureSession = [[AVCaptureSession alloc] init];
+        //设置分辨率
+        if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset1280x720]) {
+            _captureSession.sessionPreset=AVCaptureSessionPreset1280x720;
+        }
+        
+        //添加后置摄像头的输入
+        AVCaptureDevice *frontdevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        AVCaptureDeviceInput *deviceFrontInput = [AVCaptureDeviceInput deviceInputWithDevice:frontdevice error:nil];
+        if ([_captureSession canAddInput:deviceFrontInput]){
+            [_captureSession addInput:deviceFrontInput];
+        }
+        
+        // 添加后置摄像头
+        AVCaptureDevice *backdevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        AVCaptureDeviceInput *deviceBackInput = [AVCaptureDeviceInput deviceInputWithDevice:backdevice error:nil];
+        if ([_captureSession canAddInput:deviceBackInput]){
+            [_captureSession addInput:deviceBackInput];
+        }
+    }
+    return _captureSession;
 }
 
 @end
