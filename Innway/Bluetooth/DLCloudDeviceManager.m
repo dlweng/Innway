@@ -254,9 +254,7 @@ static DLCloudDeviceManager *instance = nil;
 - (void)autoGetDeviceInfo {
     for (NSString *mac in self.cloudDeviceList.allKeys) {
         DLDevice *device = self.cloudDeviceList[mac];
-        if (device.connected) {
-            [device getDeviceInfo];
-        }
+        [device getDeviceInfo];
     }
 }
 

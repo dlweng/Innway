@@ -132,7 +132,7 @@ static DLCentralManager *instance = nil;
 
 - (void)repeatScanNewDevice {
 //    NSLog(@"2分钟扫描一次设备");
-    // 每2分钟扫描20秒钟设备
+    // 每30秒钟扫描10秒钟设备
     [self startScanDeviceWithTimeout:10 discoverEvent:nil didEndDiscoverDeviceEvent:nil];
 }
 
@@ -165,7 +165,7 @@ static DLCentralManager *instance = nil;
     if (serverUUID) {
         arr = [NSArray arrayWithObject:serverUUID];
     }
-    [self.manager scanForPeripheralsWithServices:arr options:@{CBCentralManagerScanOptionAllowDuplicatesKey: @YES}];
+    [self.manager scanForPeripheralsWithServices:arr options:nil];
 }
 
 #pragma mark - CBCentralManagerDelegate
@@ -254,7 +254,7 @@ static DLCentralManager *instance = nil;
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
-//    NSLog(@"连接设备成功: %@", peripheral);
+    NSLog(@"连接设备成功: %@", peripheral);
     //    if (self.connectDeviceCompletion) {
     //        self.connectDeviceCompletion(self, peripheral, nil);
     //    }
@@ -266,7 +266,7 @@ static DLCentralManager *instance = nil;
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(nullable NSError *)error {
-//    NSLog(@"连接设备失败: %@, error = %@", peripheral, error);
+    NSLog(@"连接设备失败: %@, error = %@", peripheral, error);
 //    if (self.connectDeviceCompletion) {
 //        self.connectDeviceCompletion(self, peripheral, error);
 //    }

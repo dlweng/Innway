@@ -126,14 +126,24 @@
     }
 }
 
+//- (void)setBeSelected:(BOOL)beSelected {
+//    _beSelected = beSelected;
+//    UIColor *color = [UIColor whiteColor];
+//    if (beSelected) {
+//        color = [UIColor colorWithRed:80.0/255.0f green:179.0/255.0f blue:122/255.0f alpha:1];
+//    }
+//    self.timeLabel.textColor = color;
+//    self.titleLabel.textColor = color;
+//}
+
 - (void)setBeSelected:(BOOL)beSelected {
     _beSelected = beSelected;
-    UIColor *color = [UIColor whiteColor];
     if (beSelected) {
-        color = [UIColor colorWithRed:80.0/255.0f green:179.0/255.0f blue:122/255.0f alpha:1];
+        self.contentView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.7];
     }
-    self.timeLabel.textColor = color;
-    self.titleLabel.textColor = color;
+    else {
+        self.contentView.backgroundColor = [UIColor clearColor];
+    }
 }
 
 @end

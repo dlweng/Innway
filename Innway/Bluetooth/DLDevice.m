@@ -71,7 +71,7 @@
     if ([peripheral.identifier.UUIDString isEqualToString:self. peripheral.identifier.UUIDString]) {
         // 做掉线处理
         [self changeStatusToDisconnect];
-        if (!_disConnect) { //被动的掉线，做重连
+        if (!_disConnect && [DLCentralManager sharedInstance].state == CBCentralManagerStatePoweredOn) { //被动的掉线，做重连
             NSLog(@"设备连接被断开，去重连设备, mac = %@", self.mac);
             [self connectToDevice:^(DLDevice *device, NSError *error) {
                 if (error) {
@@ -152,6 +152,9 @@
 }
 
 - (void)getDeviceInfo {
+    if (!self.online) {
+        return;
+    }
     char getDeviceInfo[4] = {0xEE, 0x01, 0x00, 0x00};
     NSLog(@"mac = %@, 去获取设备硬件数据， %@", self.mac, [NSData dataWithBytes:getDeviceInfo length:4]);
     [self write:[NSData dataWithBytes:getDeviceInfo length:strlen(getDeviceInfo)]];
@@ -648,6 +651,7 @@
 }
 
 - (void)changeStatusToDisconnect{
+    BOOL oldOnline = self.online; // 保存旧的在线状态
     self.online = NO;
     _rssi = offlineRSSI;  // 1.设置rssi掉线
     // 2.获取最新位置,保存设备离线位置和时间
@@ -658,9 +662,11 @@
     [[InCommon sharedInstance] uploadDeviceLocation:self];
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         if ([self.lastData boolValueForKey:DisconnectAlertKey defaultValue:NO]) {
-            // 关闭的断开连接通知，则不通知
-            [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
-            [common playSound];
+            if (oldOnline) { // 如果原来是在线状态，再去发送离线通知和声音，提高用户体验, 因为只有获取到服务才认为在线，连接与在线状态不等同
+                // 关闭的断开连接通知，则不通知
+                [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+                [common playSound];
+            }
         }
         else {
             // 测试
