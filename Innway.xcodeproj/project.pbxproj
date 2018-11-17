@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		194AEF0521A04BAA00B0B76D /* narBarBackgroudImageXR.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 194AEF0021A04BAA00B0B76D /* narBarBackgroudImageXR.jpg */; };
+		194AEF0621A04BAA00B0B76D /* narBarBackgroudImage7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 194AEF0121A04BAA00B0B76D /* narBarBackgroudImage7.jpg */; };
+		194AEF0721A04BAA00B0B76D /* narBarBackgroudImage8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 194AEF0221A04BAA00B0B76D /* narBarBackgroudImage8.jpg */; };
+		194AEF0821A04BAA00B0B76D /* narBarBackgroudImage5s.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 194AEF0321A04BAA00B0B76D /* narBarBackgroudImage5s.jpg */; };
+		194AEF0921A04BAA00B0B76D /* narBarBackgroudImageX.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 194AEF0421A04BAA00B0B76D /* narBarBackgroudImageX.jpg */; };
 		33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C22211EDE1C0003C5D9 /* InCommon.m */; };
 		330FB8D321636F6E0032E657 /* annotation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8D121636F6D0032E657 /* annotation@2x.png */; };
 		330FB8D421636F6E0032E657 /* annotation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8D221636F6D0032E657 /* annotation@3x.png */; };
@@ -150,8 +155,6 @@
 		3385C6D721574BCC005FAB04 /* whiteLongButton@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6D321574BCB005FAB04 /* whiteLongButton@3x.png */; };
 		3385C6DA21575E5E005FAB04 /* InTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 3385C6D921575E5E005FAB04 /* InTextField.m */; };
 		3385C6DD21578D2B005FAB04 /* InBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3385C6DC21578D2B005FAB04 /* InBaseViewController.m */; };
-		3385C6E021579759005FAB04 /* narBarBackgroudImage@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6DE21579758005FAB04 /* narBarBackgroudImage@3x.png */; };
-		3385C6E121579759005FAB04 /* narBarBackgroudImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3385C6DF21579758005FAB04 /* narBarBackgroudImage@2x.png */; };
 		338CDF7C21297F6000A018EA /* DLUUIDTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7521297F5F00A018EA /* DLUUIDTool.m */; };
 		338CDF7D21297F6000A018EA /* DLCloudDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7721297F5F00A018EA /* DLCloudDeviceManager.m */; };
 		338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7921297F5F00A018EA /* DLCentralManager.m */; };
@@ -251,6 +254,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		194AEF0021A04BAA00B0B76D /* narBarBackgroudImageXR.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = narBarBackgroudImageXR.jpg; sourceTree = "<group>"; };
+		194AEF0121A04BAA00B0B76D /* narBarBackgroudImage7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = narBarBackgroudImage7.jpg; sourceTree = "<group>"; };
+		194AEF0221A04BAA00B0B76D /* narBarBackgroudImage8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = narBarBackgroudImage8.jpg; sourceTree = "<group>"; };
+		194AEF0321A04BAA00B0B76D /* narBarBackgroudImage5s.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = narBarBackgroudImage5s.jpg; sourceTree = "<group>"; };
+		194AEF0421A04BAA00B0B76D /* narBarBackgroudImageX.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = narBarBackgroudImageX.jpg; sourceTree = "<group>"; };
 		19F61050A82BF0B9B29DC8FF /* Pods-Innway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Innway.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Innway/Pods-Innway.debug.xcconfig"; sourceTree = "<group>"; };
 		33027C21211EDE1C0003C5D9 /* InCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InCommon.h; sourceTree = "<group>"; };
 		33027C22211EDE1C0003C5D9 /* InCommon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InCommon.m; sourceTree = "<group>"; };
@@ -423,8 +431,6 @@
 		3385C6D921575E5E005FAB04 /* InTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InTextField.m; sourceTree = "<group>"; };
 		3385C6DB21578D2B005FAB04 /* InBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InBaseViewController.h; sourceTree = "<group>"; };
 		3385C6DC21578D2B005FAB04 /* InBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InBaseViewController.m; sourceTree = "<group>"; };
-		3385C6DE21579758005FAB04 /* narBarBackgroudImage@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "narBarBackgroudImage@3x.png"; sourceTree = "<group>"; };
-		3385C6DF21579758005FAB04 /* narBarBackgroudImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "narBarBackgroudImage@2x.png"; sourceTree = "<group>"; };
 		338CDF7421297F5E00A018EA /* DLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLDevice.h; sourceTree = "<group>"; };
 		338CDF7521297F5F00A018EA /* DLUUIDTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLUUIDTool.m; sourceTree = "<group>"; };
 		338CDF7621297F5F00A018EA /* DLCentralManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLCentralManager.h; sourceTree = "<group>"; };
@@ -697,8 +703,6 @@
 				3379A2CE21561E72008D1AA2 /* background@3x.png */,
 				3379A2D221561E73008D1AA2 /* sWhiteBtn@2x.png */,
 				3379A2CF21561E72008D1AA2 /* sWhiteBtn@3x.png */,
-				3385C6DF21579758005FAB04 /* narBarBackgroudImage@2x.png */,
-				3385C6DE21579758005FAB04 /* narBarBackgroudImage@3x.png */,
 				3328800E2115A00C00C4893B /* ic_launcher.png */,
 				33E9B81A215BC83300BA3EBE /* innwayLOGO@2x.png */,
 				33E9B819215BC83300BA3EBE /* innwayLOGO@3x.png */,
@@ -744,6 +748,11 @@
 		3379A2CC21561CDB008D1AA2 /* New */ = {
 			isa = PBXGroup;
 			children = (
+				194AEF0321A04BAA00B0B76D /* narBarBackgroudImage5s.jpg */,
+				194AEF0121A04BAA00B0B76D /* narBarBackgroudImage7.jpg */,
+				194AEF0221A04BAA00B0B76D /* narBarBackgroudImage8.jpg */,
+				194AEF0421A04BAA00B0B76D /* narBarBackgroudImageX.jpg */,
+				194AEF0021A04BAA00B0B76D /* narBarBackgroudImageXR.jpg */,
 				33639510217B6180006719EA /* check@2x.png */,
 				3363950E217B6180006719EA /* check@3x.png */,
 				3363950F217B6180006719EA /* uncheck@2x.png */,
@@ -1053,9 +1062,9 @@
 				3385C6D521574BCC005FAB04 /* greenLongButton@3x.png in Resources */,
 				337E503C2162030D00CB6313 /* chip@2x.png in Resources */,
 				33FFB9A821733E2E00E6A8C6 /* InCustomTablePhotoVuew.xib in Resources */,
-				3385C6E021579759005FAB04 /* narBarBackgroudImage@3x.png in Resources */,
 				33E4FB42219E3E7400A2F101 /* changeCamera@3x.png in Resources */,
 				33FFB9302171A4CD00E6A8C6 /* userIcon@3x.png in Resources */,
+				194AEF0821A04BAA00B0B76D /* narBarBackgroudImage5s.jpg in Resources */,
 				33FB629C215D453900C6419C /* 90@3x.png in Resources */,
 				33E4FB5C219E487700A2F101 /* RSSI_8@3x.png in Resources */,
 				337E505321620E1B00CB6313 /* searchCard@3x.png in Resources */,
@@ -1069,6 +1078,7 @@
 				33FFB9352171D6E700E6A8C6 /* icon_add_device@3x.png in Resources */,
 				3374C7AD2112077C00F83101 /* icon_charging.png in Resources */,
 				330FB8ED2163C6DA0032E657 /* greentag@2x.png in Resources */,
+				194AEF0521A04BAA00B0B76D /* narBarBackgroudImageXR.jpg in Resources */,
 				33E4FB56219E487700A2F101 /* RSSI_0@3x.png in Resources */,
 				337E505C21623C8500CB6313 /* successCard@3x.png in Resources */,
 				3374C7A72112077C00F83101 /* icon_location.png in Resources */,
@@ -1084,6 +1094,7 @@
 				33FB62A0215D453900C6419C /* 30@2x.png in Resources */,
 				33639514217B6181006719EA /* check@2x.png in Resources */,
 				330FB8E4216370790032E657 /* loginBackground@3x.png in Resources */,
+				194AEF0921A04BAA00B0B76D /* narBarBackgroudImageX.jpg in Resources */,
 				337E50382162030D00CB6313 /* chip@3x.png in Resources */,
 				33E4FB5B219E487700A2F101 /* RSSI_3@2x.png in Resources */,
 				33FB62AB215D453900C6419C /* 50@3x.png in Resources */,
@@ -1099,6 +1110,7 @@
 				337E505221620E1B00CB6313 /* searchLine@3x.png in Resources */,
 				3379A2D421561E73008D1AA2 /* background@3x.png in Resources */,
 				33E4FB5D219E487700A2F101 /* RSSI_2@2x.png in Resources */,
+				194AEF0721A04BAA00B0B76D /* narBarBackgroudImage8.jpg in Resources */,
 				337E50212161F42600CB6313 /* InAddDevice.storyboard in Resources */,
 				337E50292161F60F00CB6313 /* addButton@2x.png in Resources */,
 				33FFB98F2172EF8900E6A8C6 /* InUserSettingViewController.xib in Resources */,
@@ -1155,6 +1167,7 @@
 				3379A2D321561E73008D1AA2 /* background@2x.png in Resources */,
 				337E50372162030D00CB6313 /* Card@2x.png in Resources */,
 				33FFB9AB21733E9200E6A8C6 /* photoBackground@2x.png in Resources */,
+				194AEF0621A04BAA00B0B76D /* narBarBackgroudImage7.jpg in Resources */,
 				33E4FB62219E487700A2F101 /* RSSI_3@3x.png in Resources */,
 				33A410302198759B008E7360 /* voice1.mp3 in Resources */,
 				33FB62A1215D453900C6419C /* 40@2x.png in Resources */,
@@ -1165,7 +1178,6 @@
 				33FB62A3215D453900C6419C /* 30@3x.png in Resources */,
 				33E4FB67219E487700A2F101 /* RSSI_5@3x.png in Resources */,
 				33FFB92F2171A4CD00E6A8C6 /* userBodyBG@2x.png in Resources */,
-				3385C6E121579759005FAB04 /* narBarBackgroudImage@2x.png in Resources */,
 				33FB62A5215D453900C6419C /* 80@3x.png in Resources */,
 				33ADF2CF217B36430037769C /* InAlertView.xib in Resources */,
 				3328800F2115A00C00C4893B /* ic_launcher.png in Resources */,

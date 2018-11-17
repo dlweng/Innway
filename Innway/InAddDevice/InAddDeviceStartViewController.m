@@ -45,7 +45,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.navigationController.navigationBar setHidden:NO];
-    [InCommon setNavgationBar:self.navigationController.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
+    [InCommon setNavgationBar:self.navigationController.navigationBar];
 }
 
 - (void)goBack {
@@ -53,7 +53,7 @@
 }
 
 - (void)pushToControlDeviceController:(BOOL)animation {
-    [InCommon setNavgationBar:self.navigationController.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
+    [InCommon setNavgationBar:self.navigationController.navigationBar];
     InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
     [self.navigationController pushViewController:controlDeviceVC animated:animation];
     [self.navigationController.navigationBar setHidden:NO];

@@ -387,7 +387,7 @@
     }];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:selectionViewController];
     [self presentViewController:nav animated:YES completion:nil];
-    [InCommon setNavgationBar:nav.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
+    [InCommon setNavgationBar:nav.navigationBar];
     // 设置导航栏标题颜色
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
     attrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
@@ -847,7 +847,7 @@
     [self.libraryPikerViewController.navigationBar setBarTintColor:[UIColor clearColor]];
     [self.libraryPikerViewController.navigationBar setTranslucent:NO];
     [self.libraryPikerViewController.navigationBar setTintColor:[UIColor whiteColor]];
-    [InCommon setNavgationBar:self.libraryPikerViewController.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
+    [InCommon setNavgationBar:self.libraryPikerViewController.navigationBar];
     // 设置标题颜色
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
     attrs[NSForegroundColorAttributeName] = [UIColor whiteColor];

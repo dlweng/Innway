@@ -98,7 +98,7 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 + (void)sendHttpMethod:(NSString *)method URLString:(NSString *)URLString body:(NSDictionary *)body completionHandler:(nullable void (^)(NSURLResponse *response, NSDictionary *responseObject,  NSError * _Nullable error))completionHandler;
 
 + (BOOL)isIPhoneX;
-+ (void)setNavgationBar:(UINavigationBar *)bar backgroundImage:(UIImage *)backgroundImage;
++ (void)setNavgationBar:(UINavigationBar *)bar;
 
 #pragma mark - date
 //获取当前的时间 1980-01-01 00:00:01

@@ -35,7 +35,7 @@
                  @{@"image": @"Card", @"title": @"Innway Card"}];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     [self.navigationController.navigationBar setHidden:NO];
-    [InCommon setNavgationBar:self.navigationController.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
+    [InCommon setNavgationBar:self.navigationController.navigationBar];
     self.navigationItem.title = @"Add a new Innway";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
 }

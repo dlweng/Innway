@@ -512,7 +512,26 @@ static SystemSoundID soundID;
     return NO;
 }
 
-+ (void)setNavgationBar:(UINavigationBar *)bar backgroundImage:(UIImage *)backgroundImage {
++ (void)setNavgationBar:(UINavigationBar *)bar {
+    NSString *imageName = @"narBarBackgroudImage5s.jpg";
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    if (screenSize.width == 375 && screenSize.height == 667) {
+        // Iphone6/7/8
+        imageName = @"narBarBackgroudImage7.jpg";
+    }
+    else if (screenSize.width == 414 && screenSize.height == 736) {
+        //Iphone6p/7p/8p
+        imageName = @"narBarBackgroudImage8.jpg";
+    }
+    else if (screenSize.width == 375 && screenSize.height == 812) {
+        // IphoneX
+        imageName = @"narBarBackgroudImageX.jpg";
+    }
+    else if (screenSize.width == 414 && screenSize.height == 896) {
+        // IphoneXR
+        imageName = @"narBarBackgroudImageXR.jpg";
+    }
+    UIImage *backgroundImage = [UIImage imageNamed:imageName];
     backgroundImage = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
     
     [bar setBackgroundImage:backgroundImage forBarMetrics:UIBarMetricsDefault];

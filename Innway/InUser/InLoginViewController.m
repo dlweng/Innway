@@ -106,7 +106,7 @@
 }
 
 - (void)pushToControlDeviceController {
-    [InCommon setNavgationBar:self.navigationController.navigationBar backgroundImage:[UIImage imageNamed:@"narBarBackgroudImage"]];
+    [InCommon setNavgationBar:self.navigationController.navigationBar];
     InControlDeviceViewController *controlDeviceVC = [[InControlDeviceViewController alloc] init];
     [self.navigationController pushViewController:controlDeviceVC animated:YES];
     [self.navigationController.navigationBar setHidden:NO];
