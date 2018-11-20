@@ -296,7 +296,7 @@ static SystemSoundID soundID;
     }
     //    创建一个系统声音的服务
     AudioServicesCreateSystemSoundID((__bridge CFURLRef _Nonnull)([[NSBundle mainBundle]URLForResource:alertMusic withExtension:nil]), &soundID);
-    //    播放系统声音
+    //    播放系统声音 
     AudioServicesPlayAlertSound(soundID);
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 }
