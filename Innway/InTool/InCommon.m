@@ -12,16 +12,13 @@
 #import <objc/runtime.h>
 #import <AVFoundation/AVFoundation.h>
 
-static SystemSoundID soundID;
+static SystemSoundID soundID; // 离线提示音
 @interface InCommon ()<CLLocationManagerDelegate, AVAudioPlayerDelegate, AVAudioPlayerDelegate> {
     NSTimer *_sharkTimer; // 闪光灯计时器
-    NSTimer *_shakeTimer; // 震动计时器
 }
 @property (nonatomic, strong) CLLocationManager *locationManager;
-
 // 音频播放
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
-@property (nonatomic, assign) UIBackgroundTaskIdentifier oldPlayMusicBackTaskID;
 @end
 
 @implementation InCommon
@@ -38,7 +35,7 @@ static SystemSoundID soundID;
 - (instancetype)init {
     if (self = [super init]) {
         [self getUserInfo];
-        soundID = 1;
+        soundID = -1;
         if ([CLLocationManager locationServicesEnabled]) {
             _locationManager = [[CLLocationManager alloc] init];
             _locationManager.delegate = self;
@@ -59,6 +56,7 @@ static SystemSoundID soundID;
     _sharkTimer = nil;
 }
 
+#pragma mark - 用户信息的存取
 - (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd {
     self.ID = ID;
     self.email = email;
@@ -98,6 +96,62 @@ static SystemSoundID soundID;
     self.pwd = nil;
 }
 
+// 保存设备的离线信息
+// 保存离线信息的字典格式：{device.cloudID: {"offlineTime": 离线时间, "gps":离线位置, "name": 设备名称}}
+- (void)saveDeviceOfflineInfo:(DLDevice *)device {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    if (!oldDeviceInfo) {
+        oldDeviceInfo = [NSMutableDictionary dictionary];
+    }
+    NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
+    [newDeviceInfo setValue:[device offlineTime] forKey:@"offlineTime"];
+    [newDeviceInfo setValue:[device getGps] forKey:@"gps"];
+    [defaults setValue:newDeviceInfo forKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    [defaults synchronize];
+}
+
+- (void)getDeviceOfflineInfo:(DLDevice *)device completion:(void (^)(NSString * offlineTime, NSString * gps))completion {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    if (oldDeviceInfo) {
+        NSString *offlineTime = [oldDeviceInfo valueForKey:@"offlineTime"];
+        //        23.226792,113.304648
+        NSString *gps = [oldDeviceInfo valueForKey:@"gps"];
+        if (completion) {
+            completion(offlineTime, gps);
+        }
+    }
+    else {
+        if (completion) {
+            completion(nil, nil);
+        }
+    }
+}
+
+#pragma mark - 保存设备名称
+- (void)saveDeviceName:(DLDevice *)device {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    if (!oldDeviceInfo) {
+        oldDeviceInfo = [NSMutableDictionary dictionary];
+    }
+    NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
+    [newDeviceInfo setValue:device.deviceName forKey:@"name"];
+    [defaults setValue:newDeviceInfo forKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    [defaults synchronize];
+}
+
+- (void)getDeviceName:(DLDevice *)device {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
+    if (oldDeviceInfo) {
+        NSString *name = [oldDeviceInfo valueForKey:@"name"];
+        device.deviceName = name;
+    }
+}
+
+#pragma mark - 云端列表存取
 - (void)saveCloudList:(NSArray *)cloudList {
     if (cloudList == nil || self.ID <= 0) {
         return;
@@ -142,23 +196,6 @@ static SystemSoundID soundID;
     }
 }
 
-- (void)saveUserLocationIsShow:(BOOL)showUserLocation {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:showUserLocation forKey:@"showUserLocation"];
-    [defaults synchronize];
-}
-
-- (BOOL)getIsShowUserLocation {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *isExit = [defaults objectForKey:@"showUserLocation"];
-    if (!isExit) {
-        // 默认显示用户位置
-        [defaults setBool:YES forKey:@"showUserLocation"];
-        return YES;
-    }
-    return [defaults boolForKey:@"showUserLocation"];
-}
-
 - (void)removeDeviceByCloudList:(DLDevice *)device {
     if (device) {
         NSMutableArray *cloudList = [NSMutableArray arrayWithArray:[self getCloudList]];
@@ -185,6 +222,24 @@ static SystemSoundID soundID;
     NSDictionary *usersCloudListDic = [defaults objectForKey:@"usersCloudListDic"];
     NSArray *cloudList = [usersCloudListDic arrayValueForKey:[NSString stringWithFormat:@"%zd", self.ID] defaultValue:@[]];
     return cloudList;
+}
+
+#pragma mark - 保存地图是否需要显示用户位置的状态
+- (void)saveUserLocationIsShow:(BOOL)showUserLocation {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:showUserLocation forKey:@"showUserLocation"];
+    [defaults synchronize];
+}
+
+- (BOOL)getIsShowUserLocation {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *isExit = [defaults objectForKey:@"showUserLocation"];
+    if (!isExit) {
+        // 默认显示用户位置
+        [defaults setBool:YES forKey:@"showUserLocation"];
+        return YES;
+    }
+    return [defaults boolForKey:@"showUserLocation"];
 }
 
 #pragma mark - 手机报警
@@ -279,6 +334,7 @@ static SystemSoundID soundID;
     [camera unlockForConfiguration];
 }
 
+#pragma mark - 离线提示音
 - (void)playSound {
     AudioServicesDisposeSystemSoundID(soundID);
     NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
@@ -301,21 +357,15 @@ static SystemSoundID soundID;
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 }
 
-//- (void)playShake {
-//    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-//}
-
-//void soundCompleteCallback(SystemSoundID sound,void * clientData) {
-//    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);  //震动
-//    AudioServicesPlaySystemSound(sound);
-//}
-//
-//- (void)stopSound {
-//    [_shakeTimer timeInterval];
-//    _shakeTimer = nil;
-//    AudioServicesDisposeSystemSoundID(kSystemSoundID_Vibrate);
-//    AudioServicesRemoveSystemSoundCompletion(kSystemSoundID_Vibrate);
-//}
+- (void)stopSound {
+    if (soundID != -1) {
+        AudioServicesDisposeSystemSoundID(soundID);
+        AudioServicesRemoveSystemSoundCompletion(soundID);
+        AudioServicesDisposeSystemSoundID(kSystemSoundID_Vibrate);
+        AudioServicesRemoveSystemSoundCompletion(kSystemSoundID_Vibrate);
+        soundID = -1;
+    }
+}
 
 #pragma mark - 定位
 - (void)uploadDeviceLocation:(DLDevice *)device {
@@ -351,15 +401,6 @@ static SystemSoundID soundID;
     }
     else {
         return NO;
-    }
-}
-
-- (void)goToAPPSetupView {
-    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-    if([[UIApplication sharedApplication] canOpenURL:url]) {
-        NSURL*url =[NSURL URLWithString:UIApplicationOpenSettingsURLString];
-        //此处可以做一下版本适配，至于为何要做版本适配，大家应该很清楚
-        [[UIApplication sharedApplication] openURL:url];
     }
 }
 
@@ -418,6 +459,16 @@ static SystemSoundID soundID;
     return NO;
 }
 
+#pragma mark - 去到系统的APP设置界面
+- (void)goToAPPSetupView {
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if([[UIApplication sharedApplication] canOpenURL:url]) {
+        NSURL*url =[NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        [[UIApplication sharedApplication] openURL:url];
+    }
+}
+
+#pragma mark - 获取RSSI对应的图片名称
 - (NSString *)getImageName:(NSNumber *)rssi {
     NSInteger rSSI = rssi.integerValue;
     NSString *imageName = @"RSSI_8";
@@ -459,6 +510,7 @@ static SystemSoundID soundID;
     return imageName;
 }
 
+#pragma mark - 获取设备所属类型
 - (InDeviceType)getDeviceType:(CBPeripheral *)peripheral {
     if (!peripheral) {
         InDeviceNone;
@@ -475,6 +527,7 @@ static SystemSoundID soundID;
     return deviceType;
 }
 
+// 发送通知消息
 - (void)sendLocalNotification:(NSString *)message {
     // 1.创建通知
     UILocalNotification *localNotification = [[UILocalNotification alloc] init];
@@ -504,6 +557,7 @@ static SystemSoundID soundID;
     [dataTask resume];
 }
 
+#pragma mark - 判断是否刘海屏
 + (BOOL)isIPhoneX {
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
     if (screenHeight >= 812) {
@@ -512,6 +566,7 @@ static SystemSoundID soundID;
     return NO;
 }
 
+#pragma mark - 设置导航栏图片
 + (void)setNavgationBar:(UINavigationBar *)bar {
     NSString *imageName = @"narBarBackgroudImage5s.jpg";
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
@@ -642,58 +697,7 @@ static SystemSoundID soundID;
     return dateCom;
 }
 
-- (void)saveDeviceOfflineInfo:(DLDevice *)device {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    if (!oldDeviceInfo) {
-        oldDeviceInfo = [NSMutableDictionary dictionary];
-    }
-    NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
-    [newDeviceInfo setValue:[self getCurrentTime] forKey:@"offlineTime"];
-    [newDeviceInfo setValue:[device getGps] forKey:@"gps"];
-    [defaults setValue:newDeviceInfo forKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    [defaults synchronize];
-}
-
-- (void)getDeviceOfflineInfo:(DLDevice *)device completion:(void (^)(NSString * offlineTime, NSString * gps))completion {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    if (oldDeviceInfo) {
-        NSString *offlineTime = [oldDeviceInfo valueForKey:@"offlineTime"];
-//        23.226792,113.304648
-        NSString *gps = [oldDeviceInfo valueForKey:@"gps"];
-        if (completion) {
-            completion(offlineTime, gps);
-        }
-    }
-    else {
-        if (completion) {
-            completion(nil, nil);
-        }
-    }
-}
-
-- (void)saveDeviceName:(DLDevice *)device {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    if (!oldDeviceInfo) {
-        oldDeviceInfo = [NSMutableDictionary dictionary];
-    }
-    NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
-    [newDeviceInfo setValue:device.deviceName forKey:@"name"];
-    [defaults setValue:newDeviceInfo forKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    [defaults synchronize];
-}
-
-- (void)getDeviceName:(DLDevice *)device {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    if (oldDeviceInfo) {
-        NSString *name = [oldDeviceInfo valueForKey:@"name"];
-        device.deviceName = name;
-    }
-}
-
+// 从16进制字符串获取10进制数值
 - (NSInteger)getIntValueByHex:(NSString *)getStr
 {
     NSScanner *tempScaner=[[NSScanner alloc] initWithString:getStr];
@@ -751,97 +755,7 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
 
 @end
 
-
-@implementation UIAlertController (InAlertTool)
-
-@dynamic alertWindow;
-
-- (void)setAlertWindow:(UIWindow *)alertWindow {
-    objc_setAssociatedObject(self, @selector(alertWindow), alertWindow, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (UIWindow *)alertWindow {
-    return objc_getAssociatedObject(self, @selector(alertWindow));
-}
-
-- (void)show {
-    self.alertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.alertWindow.rootViewController = [[UIViewController alloc] init];
-    self.alertWindow.windowLevel = [UIApplication sharedApplication].windows.lastObject.windowLevel+1;
-    [self.alertWindow makeKeyAndVisible];
-    [self.alertWindow.rootViewController presentViewController:self animated:YES completion:nil];
-}
-
-- (void)viewDidDisappear:(BOOL)animated { //弹框消失的事件处理
-    [super viewDidDisappear:animated];
-    self.alertWindow.hidden = YES;
-    self.alertWindow = nil;
-}
-
-- (void)allLabels:(UIView *)view labels:(NSMutableArray *)labels { //获取弹框中所有的标签，用于修改对齐方式，或者其他
-    for (UILabel *label in view.subviews) {
-        if ([label isKindOfClass:[UILabel class]]) {
-            [labels addObject:label];
-        }
-        [self allLabels:label labels:labels];
-    }
-}
-
-- (UILabel *)detailTextLabel { //获取详细信息的标签
-    NSMutableArray *labels = [NSMutableArray array];
-    [self allLabels:self.view labels:labels];
-    if (labels.count == 2) {
-        return labels[1];
-    }
-    return nil;
-}
-
-@end
-
 @implementation InAlertTool
-
-+ (UIAlertController *)showAlertWithTip:(NSString *)message { //默认title为tip的情况
-    NSString *title = @"提示";
-    NSString *confirm = @"确定";
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleCancel handler:nil]];
-    [alertController show];
-    return alertController;
-}
-
-+ (UIAlertController *)showAlert:(NSString *)title message:(NSString *)message {
-    NSString *confirm = @"确定";
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleCancel handler:nil]];
-    [alertController show];
-    return alertController;
-}
-
-+ (UIAlertController *)showAlert:(NSString *)title message:(NSString *)message confirmHanler:(void (^)(void))confirmHanler{
-    NSString *confirm = @"确定";
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        if (confirmHanler) {
-            confirmHanler();
-        }
-    }]];
-    [alertController show];
-    return alertController;
-}
-
-+ (void)showAlertAutoDisappear:(NSString *)message { //默认2.0s后自动隐藏弹框
-    [self showAlertAutoDisappear:message completion:nil];
-}
-
-+ (void)showAlertAutoDisappear:(NSString *)message completion:(void (^)(void))completion { //自动隐藏弹框后可选有完成事件
-    __block UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alertController show];
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [alertController dismissViewControllerAnimated:YES completion:completion];
-        alertController = nil;
-    });
-}
 
 + (void)showHUDAddedTo:(UIView *)view animated:(BOOL)animated {
     if (view) {
@@ -903,18 +817,6 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
 
 @implementation InAlertView
 
-+ (InAlertView *)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmHanler:(confirmHanler)confirmHanler {
-    InAlertView *alertView = [[InAlertView alloc] initWithTitle:title message:message confirm:confirmHanler];
-    [alertView show];
-    return alertView;
-}
-
-+ (InAlertView *)showAlertWithMessage:(NSString *)message confirmHanler:(confirmHanler)confirmHanler cancleHanler:(confirmHanler)cancleHanler; {
-    InAlertView *alertView = [[InAlertView alloc] initWithMessage:message confirm:confirmHanler cancleHanler:cancleHanler];
-    [alertView show];
-    return alertView;
-}
-
 - (instancetype)init {
     if (self = [super init]) {
         self = [[[NSBundle mainBundle] loadNibNamed:@"InAlertView" owner:self options:nil] lastObject];
@@ -930,7 +832,7 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
         self.titleLabel.text = title;
         self.confirmMessageLabel.text = message;
         self.confirmHanler = confirmHanler;
-//        [self.confirmBtn setTitle:confirm forState:UIControlStateNormal];
+        //        [self.confirmBtn setTitle:confirm forState:UIControlStateNormal];
     }
     return self;
 }
@@ -940,7 +842,7 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
         self.confirmAlertView.hidden = YES;
         self.confirmCancelAlertView.backgroundColor = [UIColor whiteColor];
         self.confirmCancelAlertView.layer.cornerRadius = 5.0;
-//        self.titleLabel.text = title;
+        //        self.titleLabel.text = title;
         self.confirmCancelMessageLabel.text = message;
         self.confirmHanler = confirmHanler;
         self.cancleHanler = cancleHanler;
@@ -953,12 +855,23 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
     return self;
 }
 
++ (InAlertView *)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmHanler:(confirmHanler)confirmHanler {
+    InAlertView *alertView = [[InAlertView alloc] initWithTitle:title message:message confirm:confirmHanler];
+    [alertView show];
+    return alertView;
+}
+
++ (InAlertView *)showAlertWithMessage:(NSString *)message confirmHanler:(confirmHanler)confirmHanler cancleHanler:(confirmHanler)cancleHanler; {
+    InAlertView *alertView = [[InAlertView alloc] initWithMessage:message confirm:confirmHanler cancleHanler:cancleHanler];
+    [alertView show];
+    return alertView;
+}
+
 - (void)show {
     UIWindow *rootWindow = [UIApplication sharedApplication].keyWindow;
     [rootWindow addSubview:self];
     self.frame = [UIScreen mainScreen].bounds;
 }
-
 
 - (IBAction)confirmDidClick {
     [self removeFromSuperview];
@@ -973,8 +886,5 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
         self.cancleHanler();
     }
 }
-
-
-
 
 @end

@@ -26,8 +26,11 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 @property (weak, nonatomic) IBOutlet UIImageView *waiting1;
 @property (weak, nonatomic) IBOutlet UIImageView *waiting2;
 @property (weak, nonatomic) IBOutlet UIImageView *waiting3;
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *confirmBtnTopConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topOptionViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *phoneOptionViewHeightConstraint;
+
 @property (weak, nonatomic) IBOutlet UIView *searchBodyView;
 @property (weak, nonatomic) IBOutlet UIView *successBodyView;
 @property (weak, nonatomic) IBOutlet UIView *failedBodyView;
@@ -39,7 +42,6 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 @property (nonatomic, assign) InSearchViewType type;
 @property (weak, nonatomic) IBOutlet UILabel *tryAagainLabel;
 @property (weak, nonatomic) IBOutlet UIView *phoneBodyView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *phoneOptionViewHeightConstraint;
 
 @property (nonatomic, strong) NSTimer *searchAnimationTimer;
 @property (nonatomic, copy) NSString *findDeviceMac;
@@ -49,8 +51,8 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
  动画的显示标识
  0：隐藏所有搜索图标
  1：显示第一个搜索图标
- 2：显示第二个搜索图标
- 3：显示第三个搜索图标
+ 2：显示前两个个搜索图标
+ 3：显示全部搜索图标
  */
 @property (nonatomic, assign) NSInteger showWating;
 
@@ -83,8 +85,6 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
     }
     self.type = InSearch;
     [self updateView];
-//    [self stopAnimation];
-//    [self hideAllWating];
     [self confirm];
     self.findDeviceMac = nil;
 }

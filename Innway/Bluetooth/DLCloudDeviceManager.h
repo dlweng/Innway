@@ -30,7 +30,6 @@ typedef void (^DidGetCloudListEvent)(DLCloudDeviceManager *manager, NSDictionary
 - (void)updateCloudList;
 // 自动连接设备
 - (void)autoConnectCloudDevice;
-
 // 注销账户时，需要断开所有连接的设备，以及删除本地保存的云端列表
 - (void)deleteCloudList;
 

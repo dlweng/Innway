@@ -13,6 +13,7 @@
 static DLCloudDeviceManager *instance = nil;
 @interface DLCloudDeviceManager() {
     NSTimer *_getDeviceInfoTimer;
+    NSTimer *_readRSSITimer; //所有设备要统一读RSSI值，所以，放到这里来做
 }
 
 @property (nonatomic, weak) DLCentralManager *centralManager;
@@ -39,6 +40,11 @@ static DLCloudDeviceManager *instance = nil;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [weakTimer setFireDate:[NSDate distantPast]];
         });
+        
+        // 初始化1秒扫描一次RSSI的定时器
+        _readRSSITimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(getDevicesRSSI) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_readRSSITimer forMode:NSRunLoopCommonModes];
+        [_readRSSITimer setFireDate:[NSDate distantPast]];
     }
     return self;
 }
@@ -213,11 +219,7 @@ static DLCloudDeviceManager *instance = nil;
         DLDevice *device = self.cloudDeviceList[mac];
         DLKnowDevice *knowDevice = [self.centralManager.knownPeripherals objectForKey:mac];
         CBPeripheral *peripheral = knowDevice.peripheral;
-//        if (peripheral) {
-//            NSLog(@"设置peripheral--更新设备mac, peripheral = %@", peripheral);
-//        }
         device.peripheral = peripheral;
-//        device.rssi = knowDevice.rssi;
     }
     [self autoConnectCloudDevice];
 }
@@ -244,13 +246,6 @@ static DLCloudDeviceManager *instance = nil;
     [self.cloudDeviceList removeAllObjects];
 }
 
-- (NSMutableDictionary<NSString *,DLDevice *> *)cloudDeviceList {
-    if (!_cloudDeviceList) {
-        _cloudDeviceList = [NSMutableDictionary dictionary];
-    }
-    return _cloudDeviceList;
-}
-
 - (void)autoGetDeviceInfo {
     for (NSString *mac in self.cloudDeviceList.allKeys) {
         DLDevice *device = self.cloudDeviceList[mac];
@@ -258,138 +253,28 @@ static DLCloudDeviceManager *instance = nil;
     }
 }
 
-//- (void)addDevice:(NSString *)mac completion:(DidAddDeviceEvent)completion {
-//    if (self.cloudDeviceList.count >= 8) {
-//        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:300 userInfo:@{NSLocalizedDescriptionKey:@"添加的设备不能大于8个"}];
-//        completion(self, nil, error);
-//        return;
-//    }
-//    DLDevice *device = [self.cloudDeviceList objectForKey:mac];
-//    if (device) {
-//        // 已经添加到云端
-//        if (device.connected && device.online) {
-//            // 已经连接，直接跳转
-//            NSLog(@"设备已经存在云端，也已连接，直接跳转");
-//            [device discoverServices];
-//            if (completion) {
-//                completion(self, device, nil);
-//            }
-//            return;
-//        }
-//        else {
-//            //未连接，去连接
-//            NSLog(@"设备已添加到云端，但是未连接，下一步做连接");
-//            [self connectDevice:device mac:mac completion:completion];
-//        }
-//    }
-//    else {
-//        NSLog(@"未添加到云端，需做请求添加");
-//        // 未添加到云端, 添加到云端
-//        DLKnowDevice *knowDevice = [[DLCentralManager sharedInstance].knownPeripherals objectForKey:mac];
-//        CBPeripheral *peripheral = knowDevice.peripheral;
-//        NSString *peripheralName = peripheral.name;
-//        if (peripheralName.length == 0) {
-//            peripheralName = @"Lily";
-//        }
-//        NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"name":peripheralName, @"mac":mac, @"action":@"addDevice", @"gps":[common getCurrentGps]};
-//        [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
-//            if (error) {
-//                NSLog(@"添加设备http网络异常, %@",error);
-//                completion(self, nil, error);
-//                return ;
-//            }
-//            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
-//            if (code == 200) {
-//                NSInteger data = [responseObject integerValueForKey:@"data" defaultValue:-1];
-//                if (data > -1) {
-//                    NSLog(@"添加设备http请求成功");
-//                    // 创建对象
-//                    DLDevice *newDevice = [DLDevice device:peripheral];
-//                    newDevice.cloudID = data;
-//                    newDevice.mac = mac;
-//                    // 添加到云端列表
-//                    [self.cloudDeviceList setValue:newDevice forKey:mac];
-//                    //去连接设备
-//                    [self connectDevice:newDevice mac:mac completion:completion];
-//                    return ;
-//                }
-//            }
-//
-//            NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"添加设备http网络异常"];
-//            NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:@{NSLocalizedDescriptionKey: message}];
-//            NSLog(@"添加设备http请求失败, %@",message);
-//            completion(self, nil, myError);
-//        }];
-//    }
-//}
+- (void)getDevicesRSSI {
+    for (NSString *mac in self.cloudDeviceList.allKeys) {
+        DLDevice *device = self.cloudDeviceList[mac];
+        [device readRSSI];
+    }
+}
 
-//- (void)connectDevice:(DLDevice *)device mac:(NSString *)mac  completion:(DidAddDeviceEvent)completion {
-//    __block BOOL find = NO;
-//    [self.centralManager startScanDeviceWithTimeout:5 discoverEvent:^(DLCentralManager *manager, CBPeripheral *peripheral, NSString *newMac) {
-//        if (find) {
-//            return ;
-//        }
-//        if ([newMac isEqualToString:mac]) {
-//            find = YES;
-//            NSLog(@"查找到设备, peripheral = %@",  peripheral);
-//            //2.再连接设备
-//            if (peripheral.state == CBPeripheralStateConnecting || peripheral.state == CBPeripheralStateConnected) {
-//                // 不清楚新查找的设备，为何有存在连接状态的，导致去连接没有回调，这里处理这种情况的
-//                NSLog(@"查找到的新设备处于连接状态");
-//                [device discoverServices];
-//                completion(self, device, nil);
-//                return;
-//            }
-//            [self.centralManager connectToDevice:peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
-//                if (error) {
-//                    // 连接失败
-//                    completion(self, nil, error);
-//                    return ;
-//                }
-//                //连接成功,发现服务
-//                NSLog(@"添加设备-扫描发现了设备:%@", mac);
-//                [device discoverServices];
-//                completion(self, device, nil);
-//            }];
-//        }
-//    } didEndDiscoverDeviceEvent:^(DLCentralManager *manager, NSMutableDictionary<NSString *,DLKnowDevice *> *knownPeripherals) {
-//        if (find) {
-//            return ;
-//        }
-//        DLKnowDevice *knowDevice = [knownPeripherals objectForKey:mac];
-//        if (knowDevice) {
-//            find = YES;
-//            CBPeripheral *peripheral = knowDevice.peripheral;
-//            NSLog(@"查找到设备, peripheral = %@",  peripheral);
-//            //2.再连接设备
-//            if (peripheral.state == CBPeripheralStateConnecting || peripheral.state == CBPeripheralStateConnected) {
-//                // 不清楚新查找的设备，为何有存在连接状态的，导致去连接没有回调，这里处理这种情况的
-//                NSLog(@"查找到的新设备处于连接状态");
-//                [device discoverServices];
-//                completion(self, device, nil);
-//                return;
-//            }
-//            [self.centralManager connectToDevice:peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
-//                if (error) {
-//                    // 连接失败
-//                    completion(self, nil, error);
-//                    return ;
-//                }
-//                //连接成功,发现服务
-//                NSLog(@"添加设备-扫描发现了设备:%@", mac);
-//                [device discoverServices];
-//                completion(self, device, nil);
-//            }];
-//            return;
-//        }
-//        // 扫描不到设备
-//        NSError *error = [NSError errorWithDomain:NSStringFromClass([manager class]) code:-3 userInfo:@{NSLocalizedDescriptionKey:@"查找不到设备"}];
-//        NSLog(@"添加设备-扫描不到设备:%@", mac);
-//        if (completion) {
-//            completion(self, nil, error);
-//        }
-//        return;
-//    }];
-//}
+- (void)dealloc {
+    //移除扫描RSSI定时器
+    [_readRSSITimer invalidate];
+    _readRSSITimer = nil;
+    
+    [_getDeviceInfoTimer invalidate];
+    _getDeviceInfoTimer = nil;
+}
+
+
+- (NSMutableDictionary<NSString *,DLDevice *> *)cloudDeviceList {
+    if (!_cloudDeviceList) {
+        _cloudDeviceList = [NSMutableDictionary dictionary];
+    }
+    return _cloudDeviceList;
+}
 
 @end

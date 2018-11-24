@@ -11,6 +11,7 @@
 #import <MapKit/MapKit.h>
 #import "InCommon.h"
 
+// 设备硬件信息对应的key值
 #define ElectricKey @"Electric"
 #define ChargingStateKey @"ChargingState"
 #define DisconnectAlertKey @"DisconnectAlert"
@@ -19,6 +20,7 @@
 #define AlertStatusKey @"AlertStatusKey"
 #define PhoneAlertMusicKey @"PhoneAlertMusic"
 
+// 设备各种动作变化通知
 #define DeviceOnlineChangeNotification @"DeviceOnlineChangeNotification"
 #define DeviceSearchPhoneNotification @"DeviceSearchPhoneNotification"
 #define DeviceSearchDeviceAlertNotification @"DeviceSearchDeviceAlertNotification"
@@ -26,9 +28,8 @@
 #define DeviceGetAckFailedNotification @"DeviceGetAckFailedNotification"
 
 @class DLDevice;
-typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *error);
-
 @protocol DLDeviceDelegate
+// 设备信息变化通知
 - (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data;
 @end
 
@@ -39,45 +40,51 @@ typedef void (^DidUpdateValue)(DLDevice *device, NSDictionary *value, NSError *e
 @property (nonatomic, assign) NSInteger cloudID;
 @property (nonatomic, copy) NSString *mac;
 @property (nonatomic, copy) NSString *deviceName;
+@property (nonatomic, strong) NSNumber *rssi;
 // 最新的设备数据
 @property (nonatomic, strong, readonly) NSDictionary *lastData;
-@property (nonatomic, assign) BOOL online;
-@property (nonatomic, assign, readonly) BOOL connected;
-@property (nonatomic, strong) NSNumber *rssi;
-@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
-// 标识设备是哪种设备
+@property (nonatomic, assign) BOOL online; // 在线状态
+@property (nonatomic, assign, readonly) BOOL connected; // 连接状态
+// 标识设备是哪种类型的设备
 @property (nonatomic, assign) InDeviceType type;
-
+// 保存离线时间信息：eg：离线30秒 offlineTimeInfo = Last seen 30 second ago
 @property (nonatomic, strong) NSString *offlineTimeInfo;
+// 保存设备离线的准确时间：eg: 1980-01-01 00:00:01
 @property (nonatomic, strong) NSString *offlineTime;
 
+// 标志设备是否正在查找手机
 @property (nonatomic, assign) BOOL isSearchPhone;
+// 标志手机是否正在查找设备
 @property (nonatomic, assign) BOOL isSearchDevice;
 
 + (instancetype)device:(CBPeripheral *)peripheral;
+
+// 保存设备离线时的经纬度值
+@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
+// 设置设备的经纬度值
 - (void)setCoordinate:(NSString *)gps;
 // 在线设备获取的是当前手机的经纬度； 离线设备获取的是保存的经纬度
 - (NSString *)getGps;
 
 // 连接方法
 - (void)connectToDevice:(void (^)(DLDevice *device, NSError *error))completion;
+// 断连方法
 - (void)disConnectToDevice:(void (^)(DLDevice *device, NSError *error))completion;
-
-
-
 
 #pragma mark - 控制方法
 - (void)write:(NSData *)data;
+//激活设备
+- (void)activeDevice;
 // 获取硬件信息
 - (void)getDeviceInfo;
 // 通过手机查找防丢设备
 - (void)searchDevice;
 // 设置断开连接通知和重连通知
 - (void)setDisconnectAlert:(BOOL)disconnectAlert reconnectAlert:(BOOL)reconnectAlert;
-//激活设备
-- (void)activeDevice;
 //警报音编码，可选 01，02，03
 - (void)selecteDiconnectAlertMusic:(NSInteger)alertMusic;
 
+// 开始查找设备定时器: 查找设备定时没接收到回复的情况下，关闭查找设备状态
 - (void)startSearchDeviceTimer;
+- (void)readRSSI;
 @end

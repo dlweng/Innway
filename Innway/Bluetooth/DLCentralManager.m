@@ -21,8 +21,8 @@ static DLCentralManager *instance = nil;
     NSMutableDictionary *_knownPeripherals;
     // 计算发现时间的延时器
     NSTimer *_scanTimer;
-    int _time;
-    int _timeout;
+    int _time;   // 计算此次扫描设备已经进行了多长时间
+    int _timeout;  // 一次扫描设备的时间
     
     // 定时去调用一次发现新设备的定时器
     NSTimer *_repeatScanTimer;
@@ -32,9 +32,9 @@ static DLCentralManager *instance = nil;
 @property (nonatomic, strong) CentralManagerEvent startCompletion;
 @property (nonatomic, strong) DidDiscoverDeviceEvent discoverEvent;
 @property (nonatomic, strong) DidEndDiscoverDeviceEvent endDiscoverEvent;
-//@property (nonatomic, strong) DidConnectToDeviceEvent connectDeviceCompletion;
-//@property (nonatomic, strong) DidDisConnectToDeviceEvent disConnectDeviceCompletion;
+// 保存各个设备对象的连接回调格式 @{peripheral.identifier.UUIDString : DidConnectToDeviceEvent};  这样才不会出现设备连接回调分配到错误的设备对象中
 @property (nonatomic, strong) NSMutableDictionary *connectDeviceEventDict;
+// 保存各个设备对象的断开连接回调格式 @{peripheral.identifier.UUIDString : DidDisConnectToDeviceEvent};
 @property (nonatomic, strong) NSMutableDictionary *disConnectDeviceEventDict;
 
 @end
@@ -53,11 +53,15 @@ static DLCentralManager *instance = nil;
     if (self = [super init]) {
         // 创建定时器，初始化发现列表
         _knownPeripherals = [NSMutableDictionary dictionary];
+        // 一次扫描延时器
         _scanTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(run) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_scanTimer forMode:NSRunLoopCommonModes];
+        
+        // 30秒钟扫描一次设备定时器
         _repeatScanTimer = [NSTimer timerWithTimeInterval:30 target:self selector:@selector(repeatScanNewDevice) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_repeatScanTimer forMode:NSRunLoopCommonModes];
         
+        // 初始化配置
         _connectDeviceEventDict = [NSMutableDictionary dictionary];
         _disConnectDeviceEventDict = [NSMutableDictionary dictionary];
     }
@@ -77,7 +81,7 @@ static DLCentralManager *instance = nil;
     if (!instance) {
         NSLog(@"启动蓝牙SDK");
         instance = [self sharedInstance];
-        instance.manager = [[CBCentralManager alloc] initWithDelegate:instance queue:dispatch_get_main_queue()];
+        instance.manager = [[CBCentralManager alloc] initWithDelegate:instance queue:dispatch_get_main_queue() options:@{CBPeripheralManagerOptionShowPowerAlertKey:@YES}];
         instance.startCompletion = completion;
     }
 }
@@ -103,6 +107,7 @@ static DLCentralManager *instance = nil;
     
     // 开始扫描
     [self startScaning];
+    
     // 开始扫描计时
     _time = 0;
     [_scanTimer setFireDate:[NSDate distantPast]];
@@ -111,7 +116,6 @@ static DLCentralManager *instance = nil;
 }
 
 - (void)stopScanning {
-    NSLog(@"关闭设备发现功能, endDiscoverEvent = %@", self.endDiscoverEvent);
     [self.manager stopScan];
     // 更新一下云端列表
     if (self.endDiscoverEvent) {
@@ -119,28 +123,12 @@ static DLCentralManager *instance = nil;
     }
 }
 
-
-- (void)run {
-//    NSLog(@"定时器计时:_time = %d", _time);
-    _time++;
-    if (_time >= _timeout) {
-        // 关闭定时器，停止扫描
-        [_scanTimer setFireDate:[NSDate distantFuture]];
-        [self stopScanning];
-    }
-}
-
-- (void)repeatScanNewDevice {
-//    NSLog(@"2分钟扫描一次设备");
-    // 每30秒钟扫描10秒钟设备
-    [self startScanDeviceWithTimeout:10 discoverEvent:nil didEndDiscoverDeviceEvent:nil];
-}
-
 - (void)connectToDevice: (CBPeripheral *)peripheral completion:(DidConnectToDeviceEvent)completion {
     NSDictionary *options = @{CBConnectPeripheralOptionNotifyOnDisconnectionKey: @NO, CBConnectPeripheralOptionNotifyOnConnectionKey: @NO,CBConnectPeripheralOptionNotifyOnNotificationKey: @NO};
     [self.manager connectPeripheral:peripheral options:options];
     
     if (completion) {
+        // 保存连接的回调，字典格式{peripheral.identifier.UUIDString, DidConnectToDeviceEvent};
         [self.connectDeviceEventDict setValue:completion forKey:peripheral.identifier.UUIDString];
     }
 }
@@ -154,6 +142,7 @@ static DLCentralManager *instance = nil;
         return;
     }
     if (completion) {
+        // 保存断开连接的回调，字典格式{peripheral.identifier.UUIDString, DidDisConnectToDeviceEvent};
         [self.disConnectDeviceEventDict setValue:completion forKey:peripheral.identifier.UUIDString];
     }
 }
@@ -166,6 +155,21 @@ static DLCentralManager *instance = nil;
         arr = [NSArray arrayWithObject:serverUUID];
     }
     [self.manager scanForPeripheralsWithServices:arr options:nil];
+}
+
+- (void)run {
+    //    NSLog(@"定时器计时:_time = %d", _time);
+    _time++;
+    if (_time >= _timeout) {
+        // 关闭定时器，停止扫描
+        [_scanTimer setFireDate:[NSDate distantFuture]];
+        [self stopScanning];
+    }
+}
+
+- (void)repeatScanNewDevice {
+    // 每30秒钟扫描10秒钟设备
+    [self startScanDeviceWithTimeout:10 discoverEvent:nil didEndDiscoverDeviceEvent:nil];
 }
 
 #pragma mark - CBCentralManagerDelegate
@@ -207,7 +211,7 @@ static DLCentralManager *instance = nil;
 }
 
 - (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
-//    NSLog(@"发现新设备： %@, advertisementData = %@", peripheral, advertisementData);
+    NSLog(@"发现新设备： %@, advertisementData = %@", peripheral, advertisementData);
 // 有效代码
 // 广播数据案例
 //    advertisementData = {
@@ -255,11 +259,8 @@ static DLCentralManager *instance = nil;
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
     NSLog(@"连接设备成功: %@", peripheral);
-    //    if (self.connectDeviceCompletion) {
-    //        self.connectDeviceCompletion(self, peripheral, nil);
-    //    }
-    
     DidConnectToDeviceEvent event = [self.connectDeviceEventDict objectForKey:peripheral.identifier.UUIDString];
+    //将回调分发到对应的设备对象上
     if (event) {
         event(self, peripheral, nil);
     }
@@ -267,9 +268,7 @@ static DLCentralManager *instance = nil;
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(nullable NSError *)error {
     NSLog(@"连接设备失败: %@, error = %@", peripheral, error);
-//    if (self.connectDeviceCompletion) {
-//        self.connectDeviceCompletion(self, peripheral, error);
-//    }
+    // 将回调分发到对应的设备对象上
     DidConnectToDeviceEvent event = [self.connectDeviceEventDict objectForKey:peripheral.identifier.UUIDString];
     if (event) {
         event(self, peripheral, nil);
@@ -281,10 +280,7 @@ static DLCentralManager *instance = nil;
     // 被动断开连接时，error才不为Nil，此时才需要去做重连
     // 发出断开连接通知
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceDisconnectNotification object:peripheral];
-//    if (self.disConnectDeviceCompletion) {
-//        self.disConnectDeviceCompletion(self, peripheral, error);
-//    }
-    
+    // 将断开连接的通知分发到对应的设备对象上
     DidDisConnectToDeviceEvent event = [self.disConnectDeviceEventDict objectForKey:peripheral.identifier.UUIDString];
     if (event) {
         event(self, peripheral, error);
@@ -342,47 +338,6 @@ static DLCentralManager *instance = nil;
 - (NSMutableDictionary<NSString *, DLKnowDevice*> *)knownPeripherals {
     return [_knownPeripherals copy];
 }
-
-//#pragma mark - List
-//- (BOOL)containPeripheral:(CBPeripheral *)peripheral inDeviceList:(NSArray <DLDevice *>*)deviceList {
-//    __block BOOL exist = NO;
-//    [deviceList enumerateObjectsUsingBlock:^(DLDevice * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        if ([obj isKindOfClass:[DLDevice class]]) {
-//            if (obj.peripheral && [obj.peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
-//                exist = YES;
-//                *stop = YES;
-//            }
-//        }
-//    }];
-//    return exist;
-//}
-//
-//- (DLDevice *)getDeviceFromDeviceList:(NSArray<DLDevice *> *)deviceList peripheral:(CBPeripheral *)peripheral {
-//    __block DLDevice *device = nil;
-//    [deviceList enumerateObjectsUsingBlock:^(DLDevice * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        if ([obj isKindOfClass:[DLDevice class]]) {
-//            if (obj.peripheral && [obj.peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
-//                device = obj;
-//                *stop = YES;
-//            }
-//        }
-//    }];
-//    return device;
-//}
-
-//- (void)removeDeviceFromDeviceList:(NSMutableArray<DLDevice *> *)deviceList peripheral:(CBPeripheral *)peripheral {
-//    DLDevice *device = [self getDeviceFromDeviceList:deviceList peripheral:peripheral];
-//    if (device) {
-//        [deviceList removeObject:device];
-//    }
-//}
-
-//- (NSMutableDictionary<NSString *,CBPeripheral *> *)connectedPeripherals {
-//    if (!_connectedPeripherals) {
-//        _connectedPeripherals = [NSMutableDictionary dictionary];
-//    }
-//    return _connectedPeripherals;
-//}
 
 - (CBCentralManagerState)state {
     return self.manager.state;

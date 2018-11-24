@@ -58,7 +58,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     NSLog(@"APP被杀死");
-    // 杀死APP要报设备离线。
+    // 杀死APP要报设备离线。 杀死设备等同于关闭蓝牙来处理
     [[NSNotificationCenter defaultCenter] postNotificationName:BluetoothPoweredOffNotification object:nil];
 }
 
@@ -76,7 +76,7 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    
+    [common stopSound];
 }
 
 

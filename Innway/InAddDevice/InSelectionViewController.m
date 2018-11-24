@@ -14,7 +14,6 @@
 
 @property (nonatomic, strong) NSArray *arr;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-//(^DidDiscoverDeviceEvent)(DLCentralManager *manager, CBPeripheral *peripheral, NSString *mac)
 @property (nonatomic, strong) void(^comeback)(void);
 
 @end
@@ -101,8 +100,5 @@
     NSLog(@"跳转到购买设备链接");
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];  
 }
-
-
-
 
 @end
