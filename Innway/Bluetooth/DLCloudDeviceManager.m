@@ -197,6 +197,7 @@ static DLCloudDeviceManager *instance = nil;
                         device.coordinate = gps;
                     }
                     else {
+                        // 获取当前的位置
                         device.coordinate = [common getCurrentGps];
                     }
                     if (!offlineTime || !gps) {

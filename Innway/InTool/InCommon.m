@@ -96,61 +96,6 @@ static SystemSoundID soundID; // 离线提示音
     self.pwd = nil;
 }
 
-// 保存设备的离线信息
-// 保存离线信息的字典格式：{device.cloudID: {"offlineTime": 离线时间, "gps":离线位置, "name": 设备名称}}
-- (void)saveDeviceOfflineInfo:(DLDevice *)device {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    if (!oldDeviceInfo) {
-        oldDeviceInfo = [NSMutableDictionary dictionary];
-    }
-    NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
-    [newDeviceInfo setValue:[device offlineTime] forKey:@"offlineTime"];
-    [newDeviceInfo setValue:[device getGps] forKey:@"gps"];
-    [defaults setValue:newDeviceInfo forKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    [defaults synchronize];
-}
-
-- (void)getDeviceOfflineInfo:(DLDevice *)device completion:(void (^)(NSString * offlineTime, NSString * gps))completion {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    if (oldDeviceInfo) {
-        NSString *offlineTime = [oldDeviceInfo valueForKey:@"offlineTime"];
-        //        23.226792,113.304648
-        NSString *gps = [oldDeviceInfo valueForKey:@"gps"];
-        if (completion) {
-            completion(offlineTime, gps);
-        }
-    }
-    else {
-        if (completion) {
-            completion(nil, nil);
-        }
-    }
-}
-
-#pragma mark - 保存设备名称
-- (void)saveDeviceName:(DLDevice *)device {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    if (!oldDeviceInfo) {
-        oldDeviceInfo = [NSMutableDictionary dictionary];
-    }
-    NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
-    [newDeviceInfo setValue:device.deviceName forKey:@"name"];
-    [defaults setValue:newDeviceInfo forKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    [defaults synchronize];
-}
-
-- (void)getDeviceName:(DLDevice *)device {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *oldDeviceInfo = [defaults valueForKey:[NSString stringWithFormat:@"%zd", device.cloudID]];
-    if (oldDeviceInfo) {
-        NSString *name = [oldDeviceInfo valueForKey:@"name"];
-        device.deviceName = name;
-    }
-}
-
 #pragma mark - 云端列表存取
 - (void)saveCloudList:(NSArray *)cloudList {
     if (cloudList == nil || self.ID <= 0) {
@@ -222,6 +167,60 @@ static SystemSoundID soundID; // 离线提示音
     NSDictionary *usersCloudListDic = [defaults objectForKey:@"usersCloudListDic"];
     NSArray *cloudList = [usersCloudListDic arrayValueForKey:[NSString stringWithFormat:@"%zd", self.ID] defaultValue:@[]];
     return cloudList;
+}
+
+#pragma mark - 保存设备的离线信息
+// 保存离线信息的字典格式：{device.cloudID: {"offlineTime": 离线时间, "gps":离线位置， "name":离线名称}}
+- (void)saveDeviceOfflineInfo:(DLDevice *)device {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:device.mac];
+    if (!oldDeviceInfo) {
+        oldDeviceInfo = [NSMutableDictionary dictionary];
+    }
+    NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
+    [newDeviceInfo setValue:[device offlineTime] forKey:@"offlineTime"];
+    [newDeviceInfo setValue:[device getGps] forKey:@"gps"];
+    [defaults setValue:newDeviceInfo forKey:device.mac];
+    [defaults synchronize];
+}
+
+- (void)getDeviceOfflineInfo:(DLDevice *)device completion:(void (^)(NSString * offlineTime, NSString * gps))completion {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:device.mac];
+    if (oldDeviceInfo) {
+        NSString *offlineTime = [oldDeviceInfo valueForKey:@"offlineTime"];
+        //        23.226792,113.304648
+        NSString *gps = [oldDeviceInfo valueForKey:@"gps"];
+        if (completion) {
+            completion(offlineTime, gps);
+        }
+    }
+    else {
+        if (completion) {
+            completion(nil, nil);
+        }
+    }
+}
+
+- (void)saveDeviceName:(DLDevice *)device {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:device.mac];
+    if (!oldDeviceInfo) {
+        oldDeviceInfo = [NSMutableDictionary dictionary];
+    }
+    NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
+    [newDeviceInfo setValue:device.deviceName forKey:@"name"];
+    [defaults setValue:newDeviceInfo forKey:device.mac];
+    [defaults synchronize];
+}
+
+- (void)getDeviceName:(DLDevice *)device {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *oldDeviceInfo = [defaults valueForKey:device.mac];
+    if (oldDeviceInfo) {
+        NSString *name = [oldDeviceInfo valueForKey:@"name"];
+        device.deviceName = name;
+    }
 }
 
 #pragma mark - 保存地图是否需要显示用户位置的状态

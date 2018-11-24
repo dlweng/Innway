@@ -615,9 +615,9 @@
         }
     }
     
-    // 如果正在查找设备，关闭查找动画
-    //    _isSearchDevice = NO;
-    //    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchDeviceAlertNotification object:self userInfo:@{@"device":self}];
+//     如果正在查找设备，关闭查找动画
+//    _isSearchDevice = NO;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchDeviceAlertNotification object:self userInfo:@{@"device":self}];
     
     // 做完离线处理再做离线通知
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(self.online)];
