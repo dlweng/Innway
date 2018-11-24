@@ -115,6 +115,18 @@
     [self.device setDisconnectAlert:self.disconnectAlertBtn.isOn reconnectAlert:btn.isOn];
 }
 
+- (void)saveNewDeviceName:(NSString *)newDeviceName {
+    // 保存设备名称
+    self.device.deviceName = newDeviceName;
+    // 保存设备名称到本地
+    [common saveDeviceName:self.device];
+    // 上传新名称到云端
+    NSDictionary* body = @{@"id":@(common.ID), @"NickName":newDeviceName, @"action":@"updateTrackerNickName"};
+    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        NSLog(@"修改设备名称结果:responseObject = %@, error = %@", responseObject, error);
+    }];
+}
+
 - (void)goBack {
     if (self.navigationController.viewControllers.lastObject == self) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -291,9 +303,13 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         [InChangeDeviceNameView showChangeDeviceNameView:self.device.deviceName confirmHandle:^(NSString * _Nonnull newDeviceName) {
             NSLog(@"新设备名称: %@", newDeviceName);
-            self.device.deviceName = newDeviceName;
-            [common saveDeviceName:self.device];
-            [self.tableView reloadData];
+            if (newDeviceName.length > 0) {
+                [self saveNewDeviceName:newDeviceName];
+                [self.tableView reloadData];
+            }
+            else {
+                [InAlertView showAlertWithTitle:@"Information" message:@"请输入设备名称" confirmHanler:nil];
+            }
         }];
         return;
     }

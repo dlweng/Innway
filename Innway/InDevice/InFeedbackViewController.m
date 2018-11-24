@@ -40,8 +40,34 @@
 
 - (void)sendFeedback {
     [self.textView resignFirstResponder];
+    if (self.textView.text.length == 0) {
+        [InAlertView showAlertWithTitle:@"Information" message:@"请输入反馈信息" confirmHanler:nil];
+    }
+    else {
+        [InAlertTool showHUDAddedTo:self.view animated:YES];
+        NSDictionary* body = @{@"Uid":@(common.ID), @"Context":self.textView.text, @"action":@"ADDFeedback"};
+        [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+            NSLog(@"发送意见反馈结果:responseObject = %@, error = %@", responseObject, error);
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            if (error) {
+                [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
+            }
+            else {
+                NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+                if (code == 200) {
+                    NSLog(@"发送意见反馈成功");
+                    [InAlertView showAlertWithTitle:@"Information" message:@"发送意见反馈成功" confirmHanler:nil];
+                }
+                else {
+                    NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"发送意见反馈失败"];
+                    [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
+                }
+            }
+        }];
+    }
     NSLog(@"发送反馈邮件, textView = %@", self.textView.text);
 }
+
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.textView resignFirstResponder];

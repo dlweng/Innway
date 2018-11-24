@@ -29,14 +29,35 @@
 }
 
 - (IBAction)resetBtnDidClick:(UIButton *)sender {
-    if (self.emailTextField.text.length == 0) {
+    NSString *email = self.emailTextField.text;
+    if (email == 0) {
         [InAlertView showAlertWithTitle:@"Information" message:@"请输入邮箱" confirmHanler:nil];
         return;
     }
     [self.view endEditing:YES];
-    NSLog(@"重置密码, 邮箱:%@", self.emailTextField.text);
+    NSLog(@"发送重置密码邮件:%@", email);
     [InAlertView showAlertWithTitle:@"Information" message:@"An email has been sent to the provided email with further instructions." confirmHanler:^{
-        NSLog(@"发送重置密码邮件");
+        // 发送重置密码邮件
+        [InAlertTool showHUDAddedTo:self.view animated:YES];
+        NSDictionary* body = @{@"LoginName":email, @"action":@"sendResetEmailByLoginName"};
+        [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+            NSLog(@"发送重置密码邮件结果:responseObject = %@, error = %@", responseObject, error);
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            if (error) {
+                [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
+            }
+            else {
+                NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+                if (code == 200) {
+                    NSLog(@"发送重置密码邮件成功");
+                    [InAlertView showAlertWithTitle:@"Information" message:@"发送重置密码邮件成功" confirmHanler:nil];
+                }
+                else {
+                    NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"发送重置密码邮件失败"];
+                    [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
+                }
+            }
+        }];
     }];
 }
 

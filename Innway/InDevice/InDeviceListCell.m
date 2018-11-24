@@ -80,6 +80,7 @@
         NSInteger charge = [device.lastData integerValueForKey:ChargingStateKey defaultValue:0];
         if (!charge) {
             NSInteger battery = [device.lastData integerValueForKey:ElectricKey defaultValue:0];
+            NSLog(@"去设置设备的电量图片： %zd, %@", battery, device.mac);
             if (battery > 90) {
                 batteryImageName = @"100";
             }

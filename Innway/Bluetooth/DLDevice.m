@@ -486,12 +486,13 @@
             __weak typeof(_offlineReconnectTimer) weakTimer = _offlineReconnectTimer;
             dispatch_source_set_event_handler(_offlineReconnectTimer, ^{
                 dispatch_source_cancel(weakTimer);
-                if (!self.connected) {
+                if (!self.isDiscoverServer) {
                     // 到超时时间还没重连上，判断设备为离线
                     [weakSelf changeStatusToDisconnect];
                 }
             });
             // 去重连设备
+            self.isDiscoverServer = NO;
             NSLog(@"设备连接被断开，去重连设备, mac = %@", self.mac);
             dispatch_async(dispatch_queue_create(0, 0), ^{
                 [self connectToDevice:^(DLDevice *device, NSError *error) {

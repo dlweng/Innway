@@ -156,6 +156,9 @@ static SystemSoundID soundID; // 离线提示音
             [cloudList removeObject:removeDevice];
             [self saveCloudList:[cloudList copy]];
         }
+        
+        // 删除该设备的离线信息
+        [self removeDeviceOfflineInfo:device];
     }
 }
 
@@ -170,7 +173,7 @@ static SystemSoundID soundID; // 离线提示音
 }
 
 #pragma mark - 保存设备的离线信息
-// 保存离线信息的字典格式：{device.cloudID: {"offlineTime": 离线时间, "gps":离线位置， "name":离线名称}}
+// 保存离线信息的字典格式：{"mac": {"offlineTime": 离线时间, "gps":离线位置， "name":离线名称}}
 - (void)saveDeviceOfflineInfo:(DLDevice *)device {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *oldDeviceInfo = [defaults valueForKey:device.mac];
@@ -200,6 +203,12 @@ static SystemSoundID soundID; // 离线提示音
             completion(nil, nil);
         }
     }
+}
+
+- (void)removeDeviceOfflineInfo:(DLDevice *)device {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:device.mac];
+    [defaults synchronize];
 }
 
 - (void)saveDeviceName:(DLDevice *)device {
