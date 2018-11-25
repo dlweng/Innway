@@ -135,6 +135,9 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 - (void)getDeviceName:(DLDevice *)device;
 // 从16进制字符串获取到10进制数值
 - (NSInteger)getIntValueByHex:(NSString *)getStr;
+//后台任务
+- (BOOL)beginBackgroundTask;
+- (void)endBackgrondTask;
 @end
 
 @interface NSDictionary (GetValue)

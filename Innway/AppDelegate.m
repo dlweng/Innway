@@ -76,7 +76,6 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    [common stopSound];
 }
 
 

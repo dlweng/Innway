@@ -56,6 +56,7 @@
 @property (nonatomic, assign) BOOL isSearchPhone;
 // 标志手机是否正在查找设备
 @property (nonatomic, assign) BOOL isSearchDevice;
+@property (nonatomic, assign) BOOL isReconnectTimer;
 
 + (instancetype)device:(CBPeripheral *)peripheral;
 

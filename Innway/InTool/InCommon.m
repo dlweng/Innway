@@ -11,6 +11,7 @@
 #import <AFNetworking.h>
 #import <objc/runtime.h>
 #import <AVFoundation/AVFoundation.h>
+#import "DLCloudDeviceManager.h"
 
 static SystemSoundID soundID; // 离线提示音
 @interface InCommon ()<CLLocationManagerDelegate, AVAudioPlayerDelegate, AVAudioPlayerDelegate> {
@@ -19,6 +20,7 @@ static SystemSoundID soundID; // 离线提示音
 @property (nonatomic, strong) CLLocationManager *locationManager;
 // 音频播放
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskID;
 @end
 
 @implementation InCommon
@@ -598,6 +600,36 @@ static SystemSoundID soundID; // 离线提示音
     backgroundImage = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
     
     [bar setBackgroundImage:backgroundImage forBarMetrics:UIBarMetricsDefault];
+}
+
+#pragma mark - 后台任务
+- (BOOL)beginBackgroundTask {
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        if (0 != self.backgroundTaskID) {
+            return YES;
+        }
+        self.backgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+        return 0 != self.backgroundTaskID;
+    }
+    return NO;
+}
+
+- (void)endBackgrondTask {
+    NSDictionary *deviceList = [[DLCloudDeviceManager sharedInstance].cloudDeviceList copy];
+    for (NSString *mac in deviceList.allKeys) {
+        DLDevice *device = deviceList[mac];
+        if (device.isReconnectTimer) {
+            return; //只有一台设备在做重连就不去关闭后台任务;[DLCloudDeviceManager sharedInstance].cloudDeviceList
+        }
+    }
+    // 所有设备都重连计时完毕，去关闭后台任务
+    NSLog(@"所有设备都重连计时完毕，去关闭后台任务");
+    sleep(1);
+    if (0 != self.backgroundTaskID) {
+        NSInteger taskid = self.backgroundTaskID;
+        self.backgroundTaskID = 0;
+        [[UIApplication sharedApplication] endBackgroundTask:taskid];
+    }
 }
 
 #pragma mark - date

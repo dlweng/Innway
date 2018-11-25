@@ -116,14 +116,10 @@ static DLCloudDeviceManager *instance = nil;
                     [common removeDeviceByCloudList:device];
 //                    NSLog(@"http请求删除设备成功");
                     [self.cloudDeviceList removeObjectForKey:mac];
-                    [device disConnectToDevice:^(DLDevice *deletedDvice, NSError *error) {
-                        if (error) {
-                            NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:-4 userInfo:@{NSLocalizedDescriptionKey: @"断开设备连接失败"}];
-                            completion(self, myError);
-                            return ;
-                        }
+                    [device disConnectToDevice:nil]; // 默认断开连接都会成功
+                    if (completion) {
                         completion(self, nil);
-                    }];
+                    }
                 }
                 else {
                     NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"删除设备失败"];
@@ -219,8 +215,10 @@ static DLCloudDeviceManager *instance = nil;
     for (NSString *mac in self.cloudDeviceList.allKeys) {
         DLDevice *device = self.cloudDeviceList[mac];
         DLKnowDevice *knowDevice = [self.centralManager.knownPeripherals objectForKey:mac];
-        CBPeripheral *peripheral = knowDevice.peripheral;
-        device.peripheral = peripheral;
+        if (knowDevice) { //在更新列表的时候，只当存在发现列表才去更新
+            CBPeripheral *peripheral = knowDevice.peripheral;
+            device.peripheral = peripheral;
+        }
     }
     [self autoConnectCloudDevice];
 }

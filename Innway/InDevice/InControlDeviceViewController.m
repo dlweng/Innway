@@ -630,6 +630,9 @@
 }
 
 - (void)updateAnnotation{
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        return;
+    }
     NSMutableDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
     for (NSString *mac in cloudDeviceList.allKeys) {
         DLDevice *device = cloudDeviceList[mac];
