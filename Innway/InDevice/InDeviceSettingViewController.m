@@ -121,8 +121,8 @@
     // 保存设备名称到本地
     [common saveDeviceName:self.device];
     // 上传新名称到云端
-    NSDictionary* body = @{@"id":@(common.ID), @"NickName":newDeviceName, @"action":@"updateTrackerNickName"};
-    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+    NSDictionary* body = @{@"id":[NSString stringWithFormat:@"%zd", self.device.cloudID], @"NickName":newDeviceName, @"action":@"updateTrackerNickName"};
+    [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         NSLog(@"修改设备名称结果:responseObject = %@, error = %@", responseObject, error);
     }];
 }

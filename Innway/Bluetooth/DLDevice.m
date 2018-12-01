@@ -17,14 +17,20 @@
 
 // 设置离线的RSSI值
 #define offlineRSSI @(-120)
-// 设备默认位置:22.55694872036483,114.11126873029583
+
+// 设置重连超时  重连超时时间一定要为连接超时时间的倍数
+#define reconnectTimeOut 9  // 实际的超时时间是reconnectTimeOut - 1
+#define connectTimerOut 4 // 去连接设备5秒没连上认为超时
 
 @interface DLDevice() {
     NSNumber *_rssi;
     dispatch_source_t _searchDeviceackDelayTimer;// 查找设备ack回复计时器
     dispatch_source_t _disciverServerTimer;// 获取写数据特征值计时器
-    dispatch_source_t _offlineReconnectTimer; //断开重连计时器
     BOOL _disConnect; // 标识用户主动断开了设备连接，不做重连
+    dispatch_source_t _connectTimer;// 计算连接超时的计时器
+    
+    NSTimer *_offlineReconnectTimer; //断开重连计时器
+    int _offlineReconnectTime; //计算从断开到重连的时间
 }
 
 @property (nonatomic, assign) BOOL isGetSearchDeviceAck; // 标识下发查找设备命令得到ack否
@@ -53,10 +59,17 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-#warning 这里要去做网络请求去云端获取最新的位置,由于接口没有完成，暂时获取当前的位置来作为默认地址
-        _coordinate = common.currentLocation;
+
         _disConnect = NO;
         _isGetSearchDeviceAck = NO;
+        
+        // 初始化断开重连计时器数据
+        _offlineReconnectTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(offlineTiming) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_offlineReconnectTimer forMode:NSRunLoopCommonModes];
+        // 加到主循环的定时器会自动被触发，需要先关闭定时器
+        [_offlineReconnectTimer setFireDate:[NSDate distantFuture]];
+        _offlineReconnectTime = 0;
+        
     }
     return self;
 }
@@ -388,7 +401,9 @@
 
 #pragma mark - 连接与断开连接
 - (void)connectToDevice:(void (^)(DLDevice *device, NSError *error))completion {
+    static int connectHandler = 0;
     _disConnect = NO; // 重新设置断开连接的标识
+    __block NSNumber *isCallback; // 标识是否已经被回调
     if (!self.peripheral) {
         NSError *error = [NSError errorWithDomain:NSStringFromClass([DLCentralManager class]) code:-2 userInfo:@{NSLocalizedDescriptionKey: @"与设备建立连接失败"}];
         if (completion) {
@@ -397,22 +412,74 @@
         return;
     }
     if (self.peripheral.state == CBPeripheralStateDisconnected || self.peripheral.state == CBPeripheralStateDisconnecting) {
+        connectHandler++;
         NSLog(@"开始去连接设备:%@", self.mac);
         [[DLCentralManager sharedInstance] connectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
+            NSLog(@"设备连接结果： %@, 线程:%@", self.mac, [NSThread currentThread]);
             if (!error) {
                 NSLog(@"连接设备成功:%@", self.mac);
                 // 连接成功，去获取设备服务
                 peripheral.delegate = self;
                 [self discoverServices];
+                connectHandler--;
                 if (completion) {
                     completion(self, nil);
                 }
+                isCallback = @(YES);
+                return ;
             }
             else {
-                NSLog(@"连接失败，重新去连接: %@", self.mac);
-                [self connectToDevice:nil];
+                if (self->_offlineReconnectTime > 0 && self->_offlineReconnectTime <= reconnectTimeOut) {
+                    NSLog(@"连接失败，在重连超时时间内，重新去连接: %@", self.mac);
+                    // 在重连超时时间内，去做重连
+                    [self disConnectAndReconnectDevice:nil];
+                }
+                else {
+                    NSLog(@"连接失败: %@, error = %@", self.mac, error);
+                    connectHandler--;
+                    if (completion) {
+                        completion(self, error);
+                    }
+                    isCallback = @(YES);
+                }
             }
         }];
+        
+        // 开启连接计时器, 超时没连接上认为连接失败
+        _connectTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+        __weak typeof(_connectTimer) weakTimer = _connectTimer;
+        dispatch_source_set_event_handler(_connectTimer, ^{
+            dispatch_source_cancel(weakTimer);
+            if (!isCallback.boolValue) { //没被回调，才进入这里
+                connectHandler--;
+                NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:-1 userInfo:nil];
+                if (completion) {
+                    completion(self, error);
+                }
+                if (self->_offlineReconnectTime > 0 && self->_offlineReconnectTime <= reconnectTimeOut) {
+                    if (connectHandler == 0) {
+                        NSLog(@"连接设备超时，在重连超时时间内，去重连设备: %@", self.mac);
+                        // 在重连超时时间内，去做重连
+                        [self disConnectAndReconnectDevice:nil];
+                    }
+                }
+                else {
+                    if (connectHandler == 0) {
+                        NSLog(@"连接设备超时，不在重连超时时间内，去回调 %@, error = %@", self.mac, error);
+                        [self disConnectToDevice:nil];
+                    }
+                    if (completion) {
+                        completion(self, error);
+                    }
+                }
+            }
+            else {
+                NSLog(@"过了连接超时时间，已经连接上设备: %@", self.mac);
+            }
+        });
+        // 设置5秒超时
+        dispatch_source_set_timer(_connectTimer, dispatch_time(DISPATCH_TIME_NOW, connectTimerOut*NSEC_PER_SEC), 0, 0);
+        dispatch_resume(_connectTimer);
     }
     else {
         if (completion) {
@@ -479,41 +546,23 @@
 - (void)reconnectDevice:(NSNotification *)notification {
     CBPeripheral *peripheral = notification.object;
     if ([peripheral.identifier.UUIDString isEqualToString:self. peripheral.identifier.UUIDString]) {
-        // 只处理当前设备离线的情况
-        if (!_disConnect && [DLCentralManager sharedInstance].state == CBCentralManagerStatePoweredOn) {
-            //被动的掉线且蓝牙打开，去做重连
-            NSLog(@"设备连接被断开，去重连设备, mac = %@, 线程 = %@", self.mac, [NSThread currentThread]);
-            // 去重连设备
-            self.isDiscoverServer = NO;
-            
-            _offlineReconnectTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
-            __weak typeof(_offlineReconnectTimer) weakTimer = _offlineReconnectTimer;
-            dispatch_source_set_event_handler(_offlineReconnectTimer, ^{
-                NSLog(@"重连超时时间已到, 线程:%@", [NSThread currentThread]);
-                if (!self.isDiscoverServer) {
-                    // 到超时时间还没重连上，判断设备为离线
-                    NSLog(@"重连超时，还没连上设备, mac = %@", self.mac);
-                    [self changeStatusToDisconnect];
-                }
-                else {
-                    NSLog(@"重连超时，已经连上设备, mac = %@", self.mac);
-                }
-                dispatch_source_cancel(weakTimer);
-                self.isReconnectTimer = NO;
-                [common endBackgrondTask];
-            });
-            // 设置15秒超时
-            dispatch_source_set_timer(_offlineReconnectTimer, dispatch_time(DISPATCH_TIME_NOW, 15*NSEC_PER_SEC), 0, 0);
-            dispatch_resume(_offlineReconnectTimer);
-            // 激活后台线程
-            self.isReconnectTimer = YES; // 标志开始了重连计时
-            [common beginBackgroundTask];
-            
-            
-        
-            // 去连接设备
-            dispatch_async(dispatch_queue_create(0, 0), ^{
-                NSLog(@"去重连设备, mac = %@", self.mac);
+        if (!_disConnect)
+        {
+            // 只处理当前设备离线的情况
+            if ([DLCentralManager sharedInstance].state == CBCentralManagerStatePoweredOn) {
+                //被动的掉线且蓝牙打开，去做重连
+                NSLog(@"设备连接被断开，去重连设备, mac = %@, 线程 = %@", self.mac, [NSThread currentThread]);
+                // 去重连设备
+                self.isDiscoverServer = NO;
+                
+                // 开始重连计时
+                [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
+                
+//                // 激活后台线程 重连超时大于10秒，才需要这两行代码
+//                self.isReconnectTimer = YES; // 标志开始了重连计时
+//                [common beginBackgroundTask];
+                
+                // 去连接设备
                 [self connectToDevice:^(DLDevice *device, NSError *error) {
                     if (error) {
                         NSLog(@"mac: %@, 设备重连失败", self.mac);
@@ -522,12 +571,36 @@
                         NSLog(@"mac: %@, 设备重连成功", self.mac);
                     }
                 }];
-            });
+            }
+            else {
+                // 做离线处理
+                [self changeStatusToDisconnect];
+            }
         }
-        else {
-            // 做离线处理
+    }
+}
+
+// 计算重连时间
+- (void)offlineTiming {
+    _offlineReconnectTime++;
+    NSLog(@"重连时间: %d", _offlineReconnectTime);
+    if (_offlineReconnectTime >= reconnectTimeOut) {
+        // 重连超时结束
+        _offlineReconnectTime = 0;
+        // 停止计时器，去报设备离线
+        [_offlineReconnectTimer setFireDate:[NSDate distantFuture]];
+        NSLog(@"重连超时时间已到, 线程:%@", [NSThread currentThread]);
+        if (!self.isDiscoverServer) {
+            // 到超时时间还没重连上，判断设备为离线
+            NSLog(@"重连超时，还没连上设备, mac = %@", self.mac);
             [self changeStatusToDisconnect];
         }
+        else {
+            NSLog(@"重连超时，已经连上设备, mac = %@", self.mac);
+        }
+//        // 标志计时结束， 重连超时时间大于10秒，才需要这两行代码
+//        self.isReconnectTimer = NO;
+//        [common endBackgrondTask];
     }
 }
 
@@ -628,6 +701,17 @@
             [common playSound];
         }
     }
+    else {
+#warning 测试使用
+        if (oldOnline) { // 如果原来是在线状态，再去发送离线通知和声音，提高用户体验, 因为只有获取到服务才认为在线，连接与在线状态不等同
+            // 关闭的断开连接通知，则不通知
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+                NSLog(@"去做掉线通知: %@", self.mac);
+                [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+                [common playSound];
+            }
+        }
+    }
 
 //     如果正在查找设备，关闭查找动画
 //    _isSearchDevice = NO;
@@ -649,7 +733,7 @@
 }
 
 #pragma mark - 设备离线位置和时间的处理
-- (void)setCoordinate:(NSString *)gps {
+- (void)setupCoordinate:(NSString *)gps {
     if ([gps isKindOfClass:[NSString class]]) {
         NSArray *strs = [gps componentsSeparatedByString:@","];
         if (strs.count == 2) {

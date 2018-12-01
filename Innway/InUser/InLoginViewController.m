@@ -63,7 +63,7 @@
     [InAlertTool showHUDAddedTo:self.view animated:YES];
     
     NSDictionary* body = @{@"username":self.emailTextField.text, @"password":self.passwordTextField.text, @"action":@"login"};
-    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+    [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         NSLog(@"登陆结果:responseObject = %@, error = %@", responseObject, error);
         if (error) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];

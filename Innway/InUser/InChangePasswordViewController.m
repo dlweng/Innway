@@ -57,8 +57,8 @@
         }
         else {
             [InAlertTool showHUDAddedTo:self.view animated:YES];
-            NSDictionary *body = @{@"action":@"updatePassword", @"Uid":@([InCommon sharedInstance].ID), @"Oldpassword":self.oldPwd, @"Newpassword":self.pwdNew};
-            [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+            NSDictionary *body = @{@"action":@"updatePassword", @"Uid":[NSString stringWithFormat:@"%zd", [InCommon sharedInstance].ID], @"Oldpassword":self.oldPwd, @"Newpassword":self.pwdNew};
+            [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if (error) {
                     [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];

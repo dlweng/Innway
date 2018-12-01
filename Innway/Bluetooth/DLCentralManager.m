@@ -56,10 +56,12 @@ static DLCentralManager *instance = nil;
         // 一次扫描延时器
         _scanTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(run) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_scanTimer forMode:NSRunLoopCommonModes];
+        [_scanTimer setFireDate:[NSDate distantFuture]];
         
         // 30秒钟扫描一次设备定时器
         _repeatScanTimer = [NSTimer timerWithTimeInterval:30 target:self selector:@selector(repeatScanNewDevice) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_repeatScanTimer forMode:NSRunLoopCommonModes];
+        [_repeatScanTimer setFireDate:[NSDate distantFuture]];
         
         // 初始化配置
         _connectDeviceEventDict = [NSMutableDictionary dictionary];
@@ -169,7 +171,7 @@ static DLCentralManager *instance = nil;
 
 - (void)repeatScanNewDevice {
     // 每30秒钟扫描10秒钟设备
-    [self startScanDeviceWithTimeout:10 discoverEvent:nil didEndDiscoverDeviceEvent:nil];
+    [self startScaning];
 }
 
 #pragma mark - CBCentralManagerDelegate
@@ -263,6 +265,7 @@ static DLCentralManager *instance = nil;
     //将回调分发到对应的设备对象上
     if (event) {
         event(self, peripheral, nil);
+        [self.connectDeviceEventDict removeObjectForKey:peripheral.identifier.UUIDString];
     }
 }
 

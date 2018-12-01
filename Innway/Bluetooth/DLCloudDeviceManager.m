@@ -36,6 +36,8 @@ static DLCloudDeviceManager *instance = nil;
         // 在初始化云端管理对象30秒之后，每10分钟获取一次设备的状态
         _getDeviceInfoTimer = [NSTimer timerWithTimeInterval:600 target:self selector:@selector(autoGetDeviceInfo) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_getDeviceInfoTimer forMode:NSRunLoopCommonModes];
+        [_getDeviceInfoTimer setFireDate:[NSDate distantFuture]];
+        
         __weak typeof(NSTimer *) weakTimer = _getDeviceInfoTimer;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [weakTimer setFireDate:[NSDate distantPast]];
@@ -63,8 +65,11 @@ static DLCloudDeviceManager *instance = nil;
     if (peripheralName.length == 0 || [peripheralName isEqualToString:@"Lily"]) {
         peripheralName = @"Innway Card";
     }
-    NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"name":peripheralName, @"mac":mac, @"action":@"addDevice", @"gps":[common getCurrentGps]};
-    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+    // 添加设备时，将当前的时间和位置作为离线时间和位置上传
+    NSString *gps = [common getCurrentGps];
+    NSString *offlineTime = [common getCurrentTime];
+    NSDictionary *body = @{@"userid":[NSString stringWithFormat:@"%zd",[InCommon sharedInstance].ID], @"name":peripheralName, @"mac":mac, @"action":@"addDevice", @"gps":gps, @"NickName":peripheralName, @"OfflineTime":offlineTime};
+    [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         if (error) {
             NSLog(@"添加设备mac:%@, 网络异常, %@", mac, error);
             completion(self, nil, error);
@@ -80,9 +85,14 @@ static DLCloudDeviceManager *instance = nil;
                 newDevice.type = [common getDeviceType:peripheral];
                 newDevice.cloudID = data;
                 newDevice.mac = mac;
+                newDevice.offlineTime = offlineTime;
+                [newDevice setupCoordinate:gps];
                 // 添加到云端列表
                 [self.cloudDeviceList setValue:newDevice forKey:mac];
+                // 保存信息到本地
                 [common saveCloudListWithDevice:newDevice];
+                // 保存离线信息
+                [common saveDeviceOfflineInfo:newDevice];
                 [newDevice connectToDevice:nil]; // 自动建立与设备的连接
                 completion(self, newDevice, nil);
                 return ;
@@ -102,8 +112,8 @@ static DLCloudDeviceManager *instance = nil;
     // 2.断开连接
     DLDevice *device = [self.cloudDeviceList objectForKey:mac];
     if (device) {
-        NSDictionary *body = @{@"deviceid":@(device.cloudID), @"action":@"deleteDevice"};
-        [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        NSDictionary *body = @{@"deviceid":[NSString stringWithFormat:@"%zd", device.cloudID], @"action":@"deleteDevice"};
+        [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
             if (error) {
                 NSLog(@"做http请求删除失败, %@", error);
                 completion(self, error);
@@ -140,8 +150,8 @@ static DLCloudDeviceManager *instance = nil;
 // 获取云端的设备列表
 - (void)getHTTPCloudDeviceListCompletion:(DidGetCloudListEvent)completion {
     NSLog(@"做请求去获取云端的设备列表");
-    NSDictionary *body = @{@"userid":@([InCommon sharedInstance].ID), @"action":@"getDeviceList"};
-    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+    NSDictionary *body = @{@"userid":[NSString stringWithFormat:@"%zd", [InCommon sharedInstance].ID], @"action":@"getDeviceList"};
+    [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         NSArray *cloudDevices;
         if (error) {
             cloudDevices = [common getCloudList];
@@ -172,33 +182,52 @@ static DLCloudDeviceManager *instance = nil;
                     DLKnowDevice *knowDevice = [self.centralManager.knownPeripherals objectForKey:mac];
                     CBPeripheral *peripheral = knowDevice.peripheral;
                     device = [DLDevice device:peripheral];
-#warning  从云端获取设备的类型 云端还没做，默认是card类型
-                    device.type = InDeviceCard;
                 }
                 device.mac = mac;
                 device.cloudID = [cloudDevice integerValueForKey:@"id" defaultValue:-1];
-                device.deviceName = [cloudDevice stringValueForKey:@"name" defaultValue:@""];
-                device.coordinate = [cloudDevice stringValueForKey:@"gps" defaultValue:@""];
+                device.deviceName = [cloudDevice stringValueForKey:@"NickName" defaultValue:@""];
+                [device setupCoordinate:[cloudDevice stringValueForKey:@"gps" defaultValue:@""]];
+                // 设置设备的类型
+                NSString *name = [cloudDevice stringValueForKey:@"name" defaultValue:@""];
+                if ([name isEqualToString:@"Innway Card"]) {
+                    device.type = InDeviceCard;
+                }
+                else if ([name isEqualToString:@"Innway chip"]) {
+                    device.type = InDeviceChip;
+                }
+                else if ([name isEqualToString:@"Innway Tag"]) {
+                    device.type = InDeviceTag;
+                }
+                // 获取云端保存的设备离线时间
+                NSString *offlineTime = [cloudDevice stringValueForKey:@"OfflineTime" defaultValue:@""];
+                if (offlineTime.length > 0) {
+                    // 将"2018-09-14T16:45:51" 改为 "2018-09-14 16:45:51"
+                   device.offlineTime = [offlineTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+                    NSLog(@"device.offlineTime = %@", device.offlineTime);
+                }
                 // 获取本地保存的离线信息和设备名称
                 [common getDeviceName:device];
                 [common getDeviceOfflineInfo:device completion:^(NSString *offlineTime, NSString *gps) {
-                    if (offlineTime) {
-                        device.offlineTime = offlineTime;
+                    if (offlineTime.length > 0 && gps.length > 0) {
+                        if (device.offlineTime.length == 0) {
+                            // 如果获取不到云端离线时间，那本地的离线时间和信息
+                            device.offlineTime = offlineTime;
+                            [device setupCoordinate:gps];
+                            return ;
+                        }
+                        else {
+                            if ([common compareOneDateStr:offlineTime withAnotherDateStr:device.offlineTime]) {
+                                // 如果本地的离线时间比较新新，用本地的离线时间
+                                device.offlineTime = offlineTime;
+                                [device setupCoordinate:gps];
+                                return ;
+                            }
+                        }
                     }
-                    else {
-                        // 没有掉线信息，将当前时间当成掉线时间
+                    // 云端与本地的离线信息都已处理完，设备仍然没有离线信息，则为设备设置初始离线信息
+                    if (device.offlineTime.length == 0) {
                         device.offlineTime = [common getCurrentTime];
-                    }
-                    if (gps) {
-                        device.coordinate = gps;
-                    }
-                    else {
-                        // 获取当前的位置
-                        device.coordinate = [common getCurrentGps];
-                    }
-                    if (!offlineTime || !gps) {
-                        // 如果没有掉线信息，存一份掉线信息
-                        [common saveDeviceOfflineInfo:device];
+                        device.coordinate = common.currentLocation;
                     }
                 }];
                 [newList setValue:device forKey:mac];

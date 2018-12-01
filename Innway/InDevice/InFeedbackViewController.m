@@ -45,8 +45,8 @@
     }
     else {
         [InAlertTool showHUDAddedTo:self.view animated:YES];
-        NSDictionary* body = @{@"Uid":@(common.ID), @"Context":self.textView.text, @"action":@"ADDFeedback"};
-        [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        NSDictionary* body = @{@"Uid":[NSString stringWithFormat:@"%zd", common.ID], @"Context":self.textView.text, @"action":@"ADDFeedback"};
+        [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
             NSLog(@"发送意见反馈结果:responseObject = %@, error = %@", responseObject, error);
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             if (error) {

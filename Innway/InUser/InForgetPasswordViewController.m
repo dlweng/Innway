@@ -40,7 +40,7 @@
         // 发送重置密码邮件
         [InAlertTool showHUDAddedTo:self.view animated:YES];
         NSDictionary* body = @{@"LoginName":email, @"action":@"sendResetEmailByLoginName"};
-        [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
             NSLog(@"发送重置密码邮件结果:responseObject = %@, error = %@", responseObject, error);
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             if (error) {

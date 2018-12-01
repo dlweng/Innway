@@ -21,6 +21,8 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 
 #define common [InCommon sharedInstance]
+#define httpDomain @"http://3.16.195.135/GetData.ashx"
+#define ApplicationWillEnterForeground @"ApplicationWillEnterForeground"
 
 /**
  界面显示类型
@@ -80,7 +82,9 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 - (void)saveCloudList:(NSArray *)cloudList;
 - (void)saveCloudListWithDevice:(DLDevice *)device;
 - (void)removeDeviceByCloudList:(DLDevice *)device;
-- (NSArray *)getCloudList; // 获取云端列表
+// 获取本地保存的云端列表，只在每次进入APP时无网络时调用
+// 在每次获取云端列表。增加删除设备时更新；最新离线，gps，设备信息另外保存
+- (NSArray *)getCloudList;
 
 // 查找手机的提示音
 - (void)playSoundAlertMusic;
@@ -123,7 +127,7 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 - (NSString *)dateStrFromDate:(NSDate *)date;
 //  入参是NSDate类型
 - (int)compareOneDate:(NSDate *)oneDate withAnotherDate:(NSDate *)anotherDate;
-//  入参是NSString类型
+//  入参是NSString类型  oneDateStr距离现在比anotherDateStr距离现在近，返回-1
 - (int)compareOneDateStr:(NSString *)oneDateStr withAnotherDateStr:(NSString *)anotherDateStr;
 - (NSDateComponents *)differentWithDate:(NSString *)expireDateStr;
 

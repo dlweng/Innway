@@ -56,6 +56,8 @@
 @property (nonatomic, assign) BOOL isSearchPhone;
 // 标志手机是否正在查找设备
 @property (nonatomic, assign) BOOL isSearchDevice;
+// 标记是否正处于重连设备的状态， 设备离线倒计时重连的时候使用， 用这个来标记是否关闭后台任务
+// 由于设备处于后台，蓝牙报断连之后，如果10秒内没其他操作，进程会被挂起，重连超时的时间如果超过15秒，需要在重连开始时开启后台任务，保证定时器可以被执行。这个属性用于判断是否当前所有设备都已经重连完毕，重连完毕，就可以关闭后台任务
 @property (nonatomic, assign) BOOL isReconnectTimer;
 
 + (instancetype)device:(CBPeripheral *)peripheral;
@@ -63,7 +65,7 @@
 // 保存设备离线时的经纬度值
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 // 设置设备的经纬度值
-- (void)setCoordinate:(NSString *)gps;
+- (void)setupCoordinate:(NSString *)gps;
 // 在线设备获取的是当前手机的经纬度； 离线设备获取的是保存的经纬度
 - (NSString *)getGps;
 

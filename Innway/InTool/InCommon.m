@@ -118,6 +118,7 @@ static SystemSoundID soundID; // 离线提示音
         NSInteger ID = [dic integerValueForKey:@"id" defaultValue:-1];
         if (ID > 0) {
             [newDic setValue:[dic stringValueForKey:@"name" defaultValue:@""] forKey:@"name"];
+            [newDic setValue:[dic stringValueForKey:@"NickName" defaultValue:@""] forKey:@"NickName"];
             [newDic setValue:[dic stringValueForKey:@"mac" defaultValue:@""] forKey:@"mac"];
             [newDic setValue:@(ID) forKey:@"id"];
             [newDic setValue:[dic stringValueForKey:@"gps" defaultValue:@""] forKey:@"gps"];
@@ -135,9 +136,22 @@ static SystemSoundID soundID; // 离线提示音
         NSMutableArray *cloudList = [NSMutableArray arrayWithArray:[self getCloudList]];
         NSMutableDictionary *newDeviceDic = [NSMutableDictionary dictionary];
         [newDeviceDic setValue:@(device.cloudID) forKey:@"id"];
-        [newDeviceDic setValue:device.deviceName forKey:@"name"];
+        [newDeviceDic setValue:device.deviceName forKey:@"NickName"];
         [newDeviceDic setValue:device.getGps forKey:@"gps"];
         [newDeviceDic setValue:device.mac forKey:@"mac"];
+        NSString *name = @"";
+        switch (device.type) {
+            case InDeviceTag:
+                name = @"Innway Tag";
+                break;
+            case InDeviceChip:
+                name = @"Innway chip";
+                break;
+            default:
+                name = @"Innway Card";
+                break;
+        }
+        [newDeviceDic setValue:name forKey:@"name"];
         [cloudList addObject:[newDeviceDic copy]];
         [self saveCloudList:[cloudList copy]];
     }
@@ -175,7 +189,7 @@ static SystemSoundID soundID; // 离线提示音
 }
 
 #pragma mark - 保存设备的离线信息
-// 保存离线信息的字典格式：{"mac": {"offlineTime": 离线时间, "gps":离线位置， "name":离线名称}}
+// 保存离线信息的字典格式：{"mac": {"offlineTime": 离线时间, "gps":离线位置， "NickName":设备名称}}
 - (void)saveDeviceOfflineInfo:(DLDevice *)device {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *oldDeviceInfo = [defaults valueForKey:device.mac];
@@ -220,7 +234,7 @@ static SystemSoundID soundID; // 离线提示音
         oldDeviceInfo = [NSMutableDictionary dictionary];
     }
     NSMutableDictionary *newDeviceInfo = [NSMutableDictionary dictionaryWithDictionary:oldDeviceInfo];
-    [newDeviceInfo setValue:device.deviceName forKey:@"name"];
+    [newDeviceInfo setValue:device.deviceName forKey:@"NickName"];
     [defaults setValue:newDeviceInfo forKey:device.mac];
     [defaults synchronize];
 }
@@ -229,8 +243,10 @@ static SystemSoundID soundID; // 离线提示音
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *oldDeviceInfo = [defaults valueForKey:device.mac];
     if (oldDeviceInfo) {
-        NSString *name = [oldDeviceInfo valueForKey:@"name"];
-        device.deviceName = name;
+        NSString *name = [oldDeviceInfo valueForKey:@"NickName"];
+        if (name.length > 0) {
+            device.deviceName = name; //本地存在设备名称，以本地的名称为准
+        }
     }
 }
 
@@ -346,7 +362,6 @@ static SystemSoundID soundID; // 离线提示音
 
 #pragma mark - 离线提示音
 - (void)playSound {
-    AudioServicesDisposeSystemSoundID(soundID);
     NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
     NSString *alertMusic;
     switch (phoneAlertMusic.integerValue) {
@@ -360,32 +375,35 @@ static SystemSoundID soundID; // 离线提示音
             alertMusic = @"voice1.mp3";
             break;
     }
-    //    创建一个系统声音的服务
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef _Nonnull)([[NSBundle mainBundle]URLForResource:alertMusic withExtension:nil]), &soundID);
-    //    播放系统声音 
-    AudioServicesPlayAlertSound(soundID);
+    NSString *musicPath = [[NSBundle mainBundle] pathForResource:alertMusic ofType:nil];
+    NSURL *fileURL = [NSURL fileURLWithPath:musicPath];
+    NSLog(@"fileURL = %@", fileURL.absoluteString);
+    // 设置后台播放代码
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    // 这个可以在后台播放
+    [audioSession setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
+    [audioSession setActive:YES error:nil];
+    NSError *error = nil;
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
+    self.audioPlayer.delegate = self;
+    self.audioPlayer.numberOfLoops = 1;
+    self.audioPlayer.volume = 1.0;
+    [self.audioPlayer play];
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 }
 
 - (void)stopSound {
-    if (soundID != -1) {
-        AudioServicesDisposeSystemSoundID(soundID);
-        AudioServicesRemoveSystemSoundCompletion(soundID);
-        AudioServicesDisposeSystemSoundID(kSystemSoundID_Vibrate);
-        AudioServicesRemoveSystemSoundCompletion(kSystemSoundID_Vibrate);
-        soundID = -1;
-    }
 }
 
 #pragma mark - 定位
 - (void)uploadDeviceLocation:(DLDevice *)device {
     NSString *gps = [device getGps];
-    if (gps.length == 0) {
+    if (gps.length == 0 || device.offlineTime.length == 0) {
         return;
     }
     NSLog(@"开始上传设备%@的位置, gps = %@", device.mac, gps);
-    NSDictionary *body = @{@"deviceid":@(device.cloudID), @"gps":gps, @"action":@"updateDeviceGPS"};
-    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+    NSDictionary *body = @{@"deviceid":[NSString stringWithFormat:@"%zd", device.cloudID], @"gps":gps, @"action":@"updateDeviceGPS", @"OfflineTime":device.offlineTime};
+    [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         if (error) {
             NSLog(@"上传设备位置失败: %@", error);
         }
@@ -550,9 +568,12 @@ static SystemSoundID soundID; // 离线提示音
 #pragma mark - HTTP
 + (void)sendHttpMethod:(NSString *)method URLString:(NSString *)URLString body:(NSDictionary *)body completionHandler:(nullable void (^)(NSURLResponse *response, NSDictionary *responseObject,  NSError * _Nullable error))completionHandler {
     if (URLString.length == 0) {
-        URLString = @"http://121.12.125.214:1050/GetData.ashx";
+        URLString = httpDomain;
     }
+    
     NSMutableURLRequest* formRequest = [[AFHTTPRequestSerializer serializer] requestWithMethod:method URLString:URLString parameters:body error:nil];
+    NSLog(@"URL = %@", URLString);
+    NSLog(@"body = %@", body);
     [formRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8"forHTTPHeaderField:@"Content-Type"];
     AFHTTPSessionManager*manager = [AFHTTPSessionManager manager];
     AFJSONResponseSerializer* responseSerializer = [AFJSONResponseSerializer serializer];
@@ -695,9 +716,9 @@ static SystemSoundID soundID; // 离线提示音
     
     [df setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
-    NSDate *dateA = [[NSDate alloc]init];
+    NSDate *dateA = [[NSDate alloc] init];
     
-    NSDate *dateB = [[NSDate alloc]init];
+    NSDate *dateB = [[NSDate alloc] init];
     
     dateA = [df dateFromString:oneDateStr];
     

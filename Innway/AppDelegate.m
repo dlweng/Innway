@@ -76,10 +76,12 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+   
 }
 
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+     [[NSNotificationCenter defaultCenter] postNotificationName:ApplicationWillEnterForeground object:nil];
     // 清楚所有的通知
     [UIApplication sharedApplication].applicationIconBadgeNumber = 1;
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;

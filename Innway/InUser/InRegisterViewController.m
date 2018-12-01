@@ -45,7 +45,7 @@
     [InAlertTool showHUDAddedTo:self.view animated:YES];
     NSLog(@"开始注册，邮箱: %@, 密码: %@", self.emailTextField.text, self.passwordTextField.text);
     NSDictionary* body = @{@"username":self.emailTextField.text, @"password":self.passwordTextField.text, @"action":@"register"};
-    [InCommon sendHttpMethod:@"POST" URLString:@"http://121.12.125.214:1050/GetData.ashx" body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+    [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         NSLog(@"注册结果:responseObject = %@, error = %@", responseObject, error);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (error) {
