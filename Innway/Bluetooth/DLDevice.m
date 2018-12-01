@@ -31,6 +31,7 @@
     
     NSTimer *_offlineReconnectTimer; //断开重连计时器
     int _offlineReconnectTime; //计算从断开到重连的时间
+    int _connectHandler; //连接计数
 }
 
 @property (nonatomic, assign) BOOL isGetSearchDeviceAck; // 标识下发查找设备命令得到ack否
@@ -401,7 +402,6 @@
 
 #pragma mark - 连接与断开连接
 - (void)connectToDevice:(void (^)(DLDevice *device, NSError *error))completion {
-    static int connectHandler = 0;
     _disConnect = NO; // 重新设置断开连接的标识
     __block NSNumber *isCallback; // 标识是否已经被回调
     if (!self.peripheral) {
@@ -411,17 +411,22 @@
         }
         return;
     }
+    if (self.peripheral.state == CBPeripheralStateConnecting) {
+        [self disConnectToDevice:^(DLDevice *device, NSError *error) {
+            
+        }];
+    }
     if (self.peripheral.state == CBPeripheralStateDisconnected || self.peripheral.state == CBPeripheralStateDisconnecting) {
-        connectHandler++;
-        NSLog(@"开始去连接设备:%@", self.mac);
+        _connectHandler++;
+        NSLog(@"开始去连接设备:%@, 连接计数:%d", self.mac, _connectHandler);
         [[DLCentralManager sharedInstance] connectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
             NSLog(@"设备连接结果： %@, 线程:%@", self.mac, [NSThread currentThread]);
+            self->_connectHandler--;
             if (!error) {
-                NSLog(@"连接设备成功:%@", self.mac);
+                NSLog(@"连接设备成功:%@, 连接计数:%d", self.mac, self->_connectHandler);
                 // 连接成功，去获取设备服务
                 peripheral.delegate = self;
                 [self discoverServices];
-                connectHandler--;
                 if (completion) {
                     completion(self, nil);
                 }
@@ -429,14 +434,13 @@
                 return ;
             }
             else {
-                if (self->_offlineReconnectTime > 0 && self->_offlineReconnectTime <= reconnectTimeOut) {
+                if (self->_offlineReconnectTime > 0 && self->_offlineReconnectTime <= reconnectTimeOut && self->_connectHandler == 0) {
                     NSLog(@"连接失败，在重连超时时间内，重新去连接: %@", self.mac);
                     // 在重连超时时间内，去做重连
                     [self disConnectAndReconnectDevice:nil];
                 }
                 else {
-                    NSLog(@"连接失败: %@, error = %@", self.mac, error);
-                    connectHandler--;
+                    NSLog(@"连接失败: %@, error = %@, 连接计数:%d", self.mac, error, self->_connectHandler);
                     if (completion) {
                         completion(self, error);
                     }
@@ -451,21 +455,19 @@
         dispatch_source_set_event_handler(_connectTimer, ^{
             dispatch_source_cancel(weakTimer);
             if (!isCallback.boolValue) { //没被回调，才进入这里
-                connectHandler--;
+                self->_connectHandler--;
                 NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:-1 userInfo:nil];
                 if (completion) {
                     completion(self, error);
                 }
-                if (self->_offlineReconnectTime > 0 && self->_offlineReconnectTime <= reconnectTimeOut) {
-                    if (connectHandler == 0) {
-                        NSLog(@"连接设备超时，在重连超时时间内，去重连设备: %@", self.mac);
-                        // 在重连超时时间内，去做重连
-                        [self disConnectAndReconnectDevice:nil];
-                    }
+                if (self->_offlineReconnectTime > 0 && self->_offlineReconnectTime <= reconnectTimeOut && self->_connectHandler == 0) {
+                    NSLog(@"连接设备超时，在重连超时时间内，去重连设备: %@", self.mac);
+                    // 在重连超时时间内，去做重连
+                    [self disConnectAndReconnectDevice:nil];
                 }
                 else {
-                    if (connectHandler == 0) {
-                        NSLog(@"连接设备超时，不在重连超时时间内，去回调 %@, error = %@", self.mac, error);
+                    NSLog(@"连接设备超时，不在重连超时时间内，去回调 %@, error = %@, 连接计数: %d", self.mac, error, self->_connectHandler);
+                    if (self->_connectHandler == 0) {
                         [self disConnectToDevice:nil];
                     }
                     if (completion) {
