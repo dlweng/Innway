@@ -216,7 +216,7 @@ static DLCloudDeviceManager *instance = nil;
                             return ;
                         }
                         else {
-                            if ([common compareOneDateStr:offlineTime withAnotherDateStr:device.offlineTime]) {
+                            if ([common compareOneDateStr:offlineTime withAnotherDateStr:device.offlineTime] == -1) {
                                 // 如果本地的离线时间比较新新，用本地的离线时间
                                 device.offlineTime = offlineTime;
                                 [device setupCoordinate:gps];
