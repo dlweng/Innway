@@ -268,7 +268,7 @@ static DLCloudDeviceManager *instance = nil;
         if (device.connected) {
             //断开所有已经连接的设备
             NSLog(@"断开设备的连接: %@", device.peripheral);
-            [self.centralManager disConnectToDevice:device.peripheral completion:nil];
+            [device disConnectToDevice:nil];
         }
     }
     [self.cloudDeviceList removeAllObjects];

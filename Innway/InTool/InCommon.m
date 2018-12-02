@@ -386,7 +386,7 @@ static SystemSoundID soundID; // 离线提示音
     NSError *error = nil;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
     self.audioPlayer.delegate = self;
-    self.audioPlayer.numberOfLoops = 1;
+    self.audioPlayer.numberOfLoops = 0;
     self.audioPlayer.volume = 1.0;
     [self.audioPlayer play];
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
@@ -541,7 +541,7 @@ static SystemSoundID soundID; // 离线提示音
 #pragma mark - 获取设备所属类型
 - (InDeviceType)getDeviceType:(CBPeripheral *)peripheral {
     if (!peripheral) {
-        InDeviceNone;
+        return InDeviceNone;
     }
     InDeviceType deviceType = InDeviceNone;
     if ([peripheral.name isEqualToString:@"Innway Card"] || [peripheral.name isEqualToString:@"Lily"]) {
