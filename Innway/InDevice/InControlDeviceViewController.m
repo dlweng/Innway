@@ -75,13 +75,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // 设置云列表的第一台设备未当前选中的设备
-    DLCloudDeviceManager *cloudManager = [DLCloudDeviceManager sharedInstance];
-    if (cloudManager.cloudDeviceList.count > 0) {
-        NSString *mac = cloudManager.cloudDeviceList.allKeys[0];
-        DLDevice *device = cloudManager.cloudDeviceList[mac];
-        self.device = device;
-    }
     
     // 界面调整
     self.topBodyViewTopConstraint.constant += 64;
@@ -136,6 +129,20 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    // 设置云列表的第一台设备未当前选中的设备
+    DLCloudDeviceManager *cloudManager = [DLCloudDeviceManager sharedInstance];
+    if (cloudManager.cloudDeviceList.count > 0) {
+        if (self.deviceListVC.selectDevice && [cloudManager.cloudDeviceList objectForKey:self.deviceListVC.selectDevice.mac]) {
+            // 当设备列表已有选中设备，且存在云端列表中，不需要重新设置
+        }
+        else {
+            NSString *mac = cloudManager.cloudDeviceList.allKeys[0];
+            DLDevice *device = cloudManager.cloudDeviceList[mac];
+            self.device = device;
+            self.deviceListVC.selectDevice = self.device;
+        }
+    }
+    
     [self.deviceListVC reloadView];
     [self.device getDeviceInfo];
     [self updateUI];
