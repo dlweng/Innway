@@ -556,13 +556,20 @@ static SystemSoundID soundID; // 离线提示音
 }
 
 // 发送通知消息
-- (void)sendLocalNotification:(NSString *)message {
++ (void)sendLocalNotification:(NSString *)message {
     // 1.创建通知
     UILocalNotification *localNotification = [[UILocalNotification alloc] init];
     // 2.设置通知的必选参数
     // 设置通知显示的内容
     localNotification.alertBody = message;
     [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+}
+
++ (BOOL)isOpenNotification { // 判断用户是否允许接收通知
+    BOOL isEnable = NO;
+    UIUserNotificationSettings *setting = [[UIApplication sharedApplication] currentUserNotificationSettings];
+    isEnable = (UIUserNotificationTypeNone == setting.types) ? NO : YES;
+    return isEnable;
 }
 
 #pragma mark - HTTP

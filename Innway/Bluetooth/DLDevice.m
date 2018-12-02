@@ -579,6 +579,10 @@
                 [self changeStatusToDisconnect];
             }
         }
+        else {
+            // 只有删除设备，或者重连设备错误或者超时会去做主动断开设备；被动断开才会去做重连，这种情况已在重连前用定时器去判断离线，这里不需要再做一次
+            self.online = NO;
+        }
     }
 }
 
@@ -698,7 +702,7 @@
             // 关闭的断开连接通知，则不通知
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
                 NSLog(@"去做掉线通知: %@", self.mac);
-                [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+                [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
             }
             [common playSound];
         }
@@ -709,7 +713,7 @@
             // 关闭的断开连接通知，则不通知
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
                 NSLog(@"去做掉线通知: %@", self.mac);
-                [common sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+                [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
                 [common playSound];
             }
         }

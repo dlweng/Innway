@@ -126,6 +126,11 @@
             [common goToAPPSetupView];
         } cancleHanler:nil];
     }
+    if (![InCommon isOpenNotification]) {
+        [InAlertView showAlertWithMessage:@"进入设置界面打开通知功能来接收查找手机和断连通知" confirmHanler:^{
+            [common goToAPPSetupView];
+        } cancleHanler:nil];
+    }
     self.searchPhoneDevices = [NSMutableDictionary dictionary];
 }
 
@@ -1012,7 +1017,7 @@
         
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
             // 发送本地通知
-            [common sendLocalNotification:[NSString stringWithFormat:@"%@ is finding iPhone now!", device.deviceName]];
+            [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ is finding iPhone now!", device.deviceName]];
         }
     }
 }
