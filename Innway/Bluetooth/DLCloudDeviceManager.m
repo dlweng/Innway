@@ -126,7 +126,7 @@ static DLCloudDeviceManager *instance = nil;
                     [common removeDeviceByCloudList:device];
 //                    NSLog(@"http请求删除设备成功");
                     [self.cloudDeviceList removeObjectForKey:mac];
-                    [device disConnectToDevice:nil]; // 默认断开连接都会成功
+                    [device disConnectToDevice:nil];
                     if (completion) {
                         completion(self, nil);
                     }

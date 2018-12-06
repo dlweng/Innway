@@ -11,6 +11,7 @@
 #import "DLCloudDeviceManager.h"
 #import "DLCentralManager.h"
 #import "InCommon.h"
+#import "NSTimer+InTimer.h"
 
 
 /**
@@ -71,7 +72,10 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
     [super viewDidLoad];
     self.navigationItem.title = @"Add a new Innway";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
-    self.searchAnimationTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(animation) userInfo:nil repeats:YES];
+    __weak typeof(self) weakSelf = self;
+    self.searchAnimationTimer = [NSTimer newTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        [weakSelf animation];
+    }];
     [[NSRunLoop currentRunLoop] addTimer:self.searchAnimationTimer forMode:NSRunLoopCommonModes];
 }
 

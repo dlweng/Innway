@@ -9,6 +9,7 @@
 #import "InHelpCenterSelectionController.h"
 #import "InCommon.h"
 #import "InHelpCenterInfoController.h"
+#import "NSTimer+InTimer.h"
 
 @interface InHelpCenterSelectionController ()<UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -92,6 +93,10 @@
     if (self.navigationController.viewControllers.lastObject == self) {
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+- (void)dealloc {
+    
 }
 
 @end

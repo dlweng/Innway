@@ -12,6 +12,7 @@
 		194AEF0721A04BAA00B0B76D /* narBarBackgroudImage8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 194AEF0221A04BAA00B0B76D /* narBarBackgroudImage8.jpg */; };
 		194AEF0821A04BAA00B0B76D /* narBarBackgroudImage5s.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 194AEF0321A04BAA00B0B76D /* narBarBackgroudImage5s.jpg */; };
 		194AEF0921A04BAA00B0B76D /* narBarBackgroudImageX.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 194AEF0421A04BAA00B0B76D /* narBarBackgroudImageX.jpg */; };
+		1952C97A21B9894200988409 /* NSTimer+InTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1952C97921B9894200988409 /* NSTimer+InTimer.m */; };
 		19E1A35B21A97E8400D9FBBD /* 100@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19E1A35921A97E8400D9FBBD /* 100@2x.png */; };
 		19E1A35C21A97E8400D9FBBD /* 100@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19E1A35A21A97E8400D9FBBD /* 100@3x.png */; };
 		33027C23211EDE1C0003C5D9 /* InCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 33027C22211EDE1C0003C5D9 /* InCommon.m */; };
@@ -259,6 +260,8 @@
 		194AEF0221A04BAA00B0B76D /* narBarBackgroudImage8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = narBarBackgroudImage8.jpg; sourceTree = "<group>"; };
 		194AEF0321A04BAA00B0B76D /* narBarBackgroudImage5s.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = narBarBackgroudImage5s.jpg; sourceTree = "<group>"; };
 		194AEF0421A04BAA00B0B76D /* narBarBackgroudImageX.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = narBarBackgroudImageX.jpg; sourceTree = "<group>"; };
+		1952C97821B9894200988409 /* NSTimer+InTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTimer+InTimer.h"; sourceTree = "<group>"; };
+		1952C97921B9894200988409 /* NSTimer+InTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+InTimer.m"; sourceTree = "<group>"; };
 		19E1A35921A97E8400D9FBBD /* 100@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100@2x.png"; sourceTree = "<group>"; };
 		19E1A35A21A97E8400D9FBBD /* 100@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100@3x.png"; sourceTree = "<group>"; };
 		19F61050A82BF0B9B29DC8FF /* Pods-Innway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Innway.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Innway/Pods-Innway.debug.xcconfig"; sourceTree = "<group>"; };
@@ -560,6 +563,8 @@
 				3379A2DD21562500008D1AA2 /* InButton.m */,
 				331797EE213AF282000B8DD6 /* InAnnotationView.h */,
 				331797EF213AF282000B8DD6 /* InAnnotationView.m */,
+				1952C97821B9894200988409 /* NSTimer+InTimer.h */,
+				1952C97921B9894200988409 /* NSTimer+InTimer.m */,
 			);
 			path = InTool;
 			sourceTree = "<group>";
@@ -1296,6 +1301,7 @@
 				337E504321620ABD00CB6313 /* InSearchDeviceViewController.m in Sources */,
 				3328801B2115AA4900C4893B /* InControlDeviceViewController.m in Sources */,
 				3385C6C6215743E5005FAB04 /* InInputView.m in Sources */,
+				1952C97A21B9894200988409 /* NSTimer+InTimer.m in Sources */,
 				3368B8422184ADCA00AC943F /* InFeedbackViewController.m in Sources */,
 				33179837213BEDEB000B8DD6 /* InDeviceListAddDeviceCell.m in Sources */,
 				338CDF7F21297F6000A018EA /* DLDevice.m in Sources */,

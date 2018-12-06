@@ -21,6 +21,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "InFeedbackViewController.h"
 #import "InHelpCenterSelectionController.h"
+#import "NSTimer+InTimer.h"
 #define coverViewAlpha 0.85  // 覆盖层的透明度
 
 @interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceListViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -111,7 +112,10 @@
     [[DLCloudDeviceManager sharedInstance] addObserver:self forKeyPath:@"cloudDeviceList" options:NSKeyValueObservingOptionNew context:nil];
     
     // 设置定时器
-    self.animationTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(showBtnAnimation) userInfo:nil repeats:YES];
+    __weak typeof(self) weakSelf = self;
+    self.animationTimer = [NSTimer newTimerWithTimeInterval:0.4 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        [weakSelf showBtnAnimation];
+    }];
     [[NSRunLoop currentRunLoop] addTimer:self.animationTimer forMode:NSRunLoopCommonModes];
     [self stopBtnAnimation];
     if (![common isOpensLocation]) {
@@ -148,13 +152,10 @@
     [self updateUI];
     // 在viewDidLoad设置没有效果
     self.mapView.showsUserLocation = YES;
+    __weak typeof(self) weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.mapView.showsUserLocation = [common getIsShowUserLocation];
+        weakSelf.mapView.showsUserLocation = [common getIsShowUserLocation];
     });
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
 }
 
 - (void)dealloc {
@@ -163,6 +164,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceSearchPhoneNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceSearchDeviceAlertNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceGetAckFailedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationWillEnterForeground object:nil];
     [[DLCloudDeviceManager sharedInstance] removeObserver:self forKeyPath:@"cloudDeviceList"];
     [self.animationTimer invalidate];
     self.animationTimer = nil;
@@ -286,10 +288,11 @@
     settingVC.delegate = self;
     self.settingVC = settingVC;
     self.settingView.hidden = YES;
+    __weak typeof(self) weakSelf = self;
     settingVC.logoutUser = ^{
-        UIViewController *loginVC = self.navigationController.viewControllers[1];
+        UIViewController *loginVC = weakSelf.navigationController.viewControllers[1];
         NSLog(@"退出账户");
-        [self safePopViewController:loginVC];
+        [weakSelf safePopViewController:loginVC];
     };
 }
 
@@ -431,8 +434,9 @@
         // 往上
         heightConstant = 0;
     }
+    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:0.25 animations:^{
-        self.deviceListBodyHeightConstraint.constant = heightConstant;
+        weakSelf.deviceListBodyHeightConstraint.constant = heightConstant;
     }];
   
 }
@@ -517,9 +521,10 @@
         frame.origin.x = x;
     }
     CGFloat alpha = (width + frame.origin.x) / width * coverViewAlpha;
+    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:0.05 animations:^{
         settingVC.view.frame = frame;
-        self.coverView.alpha = alpha;
+        weakSelf.coverView.alpha = alpha;
     }];
 }
 
@@ -537,11 +542,12 @@
         hideNaviBar = NO;
     }
     CGFloat alpha = (width + frame.origin.x) / width * coverViewAlpha;
+    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:0.25 animations:^{
         settingVC.view.frame = frame;
-        self.coverView.alpha = alpha;
-        self.settingView.hidden = !hideNaviBar;
-        self.navigationController.navigationBar.hidden = hideNaviBar;
+        weakSelf.coverView.alpha = alpha;
+        weakSelf.settingView.hidden = !hideNaviBar;
+        weakSelf.navigationController.navigationBar.hidden = hideNaviBar;
     }];
 }
 
@@ -659,10 +665,11 @@
             annotation = [[InAnnotation alloc] init];
             annotation.title = [NSString stringWithFormat:@"%@", device.deviceName];
             annotation.coordinate = device.coordinate;
+            __weak typeof(self) weakSelf = self;
             [self reversGeocode:annotation.coordinate completion:^(NSString *str) {
                 annotation.subtitle = str;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.75 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self.mapView selectAnnotation:annotation animated:YES];
+                    [weakSelf.mapView selectAnnotation:annotation animated:YES];
                 });
             }];
             annotation.device = device;

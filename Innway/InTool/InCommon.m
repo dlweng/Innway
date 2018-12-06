@@ -410,7 +410,7 @@ static SystemSoundID soundID; // 离线提示音
         else {
             NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
             NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"gps更新失败"];
-            NSLog(@"上传设备位置code = %zd, message = %@", code, message);
+//            NSLog(@"上传设备位置code = %zd, message = %@", code, message);
         }
     }];
 }
