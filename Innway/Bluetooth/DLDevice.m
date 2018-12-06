@@ -31,11 +31,10 @@
     
     NSTimer *_offlineReconnectTimer; //断开重连计时器
     int _offlineReconnectTime; //计算从断开到重连的时间
-    int _connectHandler; //连接计数
 }
 
 @property (nonatomic, assign) BOOL isGetSearchDeviceAck; // 标识下发查找设备命令得到ack否
-@property (nonatomic, assign) BOOL isDiscoverServer; //标志是否获取到写数据特征值
+@property (nonatomic, assign) NSInteger isDiscoverAllCharacter; //标志是否获取到写数据特征值
 
 // 保存设置的值，等ack回来之后更新本地数据
 @property (nonatomic, assign) BOOL disconnectAlert;
@@ -86,7 +85,7 @@
         NSLog(@"去获取设备服务:%@", self.mac);
         CBUUID *serviceUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
         [_peripheral discoverServices:@[serviceUUID]];
-        self.isDiscoverServer = NO;
+        self.isDiscoverAllCharacter = 0;
         [self startDiscoverServerTimer];
     }
     else {
@@ -99,7 +98,7 @@
     __weak typeof(_disciverServerTimer) weakTimer = _disciverServerTimer;
     dispatch_source_set_event_handler(_disciverServerTimer, ^{
         dispatch_source_cancel(weakTimer);
-        if (!self.isDiscoverServer) {
+        if (self.isDiscoverAllCharacter == 0) {
             // 如果连接上设备去获取特征值超过5秒没查找到，断开重新连接设备
             [self disConnectAndReconnectDevice:nil];
         }
@@ -129,19 +128,23 @@
     NSArray *characteristics = [service characteristics];
     for (CBCharacteristic *characteristic in characteristics) {
         if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
-            [self.peripheral readRSSI]; // 先读一次信号值，显示到UI，优化用户体验
-            self.isDiscoverServer = YES;
-            self.online = YES;  //设置在线
-            NSLog(@"去激活设备: %@", _mac);
-            [self activeDevice];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self getDeviceInfo]; //防止两次发生时间太接近，导致下发失败
-            });
-            
+            self.isDiscoverAllCharacter++;
         }
         if ([characteristic.UUID.UUIDString isEqualToString:ntfUUID.UUIDString]) {
-//            NSLog(@"发现E003, 打开监听来自设备通知的功能");
+            self.isDiscoverAllCharacter++;
             [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral on:YES];
+        }
+        if (self.isDiscoverAllCharacter == 2) {
+            __weak typeof(self) weakSelf = self;
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                [NSThread sleepForTimeInterval:0.2];
+                NSLog(@"去激活设备: %@", weakSelf.mac);
+                [weakSelf activeDevice];
+                [NSThread sleepForTimeInterval:0.2];
+                weakSelf.online = YES;  //设置在线
+                [weakSelf readRSSI];
+                [weakSelf getDeviceInfo]; //防止两次发生时间太接近，导致下发失败
+            });
         }
     }
 }
@@ -174,7 +177,7 @@
 }
 
 - (void)readRSSI {
-    if (self.online) {
+    if (self.online && self.connected) {
         [self.peripheral readRSSI];
     }
 }
@@ -202,7 +205,7 @@
 }
 
 - (void)getDeviceInfo {
-    if (!self.isDiscoverServer) {
+    if (!self.connected) {
         return;
     }
     char getDeviceInfo[4] = {0xEE, 0x01, 0x00, 0x00};
@@ -411,19 +414,12 @@
         }
         return;
     }
-    if (self.peripheral.state == CBPeripheralStateConnecting) {
-        [self disConnectToDevice:^(DLDevice *device, NSError *error) {
-            
-        }];
-    }
     if (self.peripheral.state == CBPeripheralStateDisconnected || self.peripheral.state == CBPeripheralStateDisconnecting) {
-        _connectHandler++;
-        NSLog(@"开始去连接设备:%@, 连接计数:%d", self.mac, _connectHandler);
+        NSLog(@"开始去连接设备:%@", self.mac);
         [[DLCentralManager sharedInstance] connectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
             NSLog(@"设备连接结果： %@, 线程:%@", self.mac, [NSThread currentThread]);
-            self->_connectHandler--;
             if (!error) {
-                NSLog(@"连接设备成功:%@, 连接计数:%d", self.mac, self->_connectHandler);
+                NSLog(@"连接设备成功:%@", self.mac);
                 // 连接成功，去获取设备服务
                 peripheral.delegate = self;
                 [self discoverServices];
@@ -434,13 +430,13 @@
                 return ;
             }
             else {
-                if (self->_offlineReconnectTime > 0 && self->_offlineReconnectTime <= reconnectTimeOut && self->_connectHandler == 0) {
+                if (self->_offlineReconnectTime > 0 && self->_offlineReconnectTime <= reconnectTimeOut) {
                     NSLog(@"连接失败，在重连超时时间内，重新去连接: %@", self.mac);
                     // 在重连超时时间内，去做重连
                     [self disConnectAndReconnectDevice:nil];
                 }
                 else {
-                    NSLog(@"连接失败: %@, error = %@, 连接计数:%d", self.mac, error, self->_connectHandler);
+                    NSLog(@"连接失败: %@, error = %@", self.mac, error);
                     if (completion) {
                         completion(self, error);
                     }
@@ -455,21 +451,18 @@
         dispatch_source_set_event_handler(_connectTimer, ^{
             dispatch_source_cancel(weakTimer);
             if (!isCallback.boolValue) { //没被回调，才进入这里
-                self->_connectHandler--;
                 NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:-1 userInfo:nil];
                 if (completion) {
                     completion(self, error);
                 }
-                if (self->_offlineReconnectTime > 0 && self->_offlineReconnectTime <= reconnectTimeOut && self->_connectHandler == 0) {
+                if (self->_offlineReconnectTime > 0 && self->_offlineReconnectTime <= reconnectTimeOut) {
                     NSLog(@"连接设备超时，在重连超时时间内，去重连设备: %@", self.mac);
                     // 在重连超时时间内，去做重连
                     [self disConnectAndReconnectDevice:nil];
                 }
                 else {
-                    NSLog(@"连接设备超时，不在重连超时时间内，去回调 %@, error = %@, 连接计数: %d", self.mac, error, self->_connectHandler);
-                    if (self->_connectHandler == 0) {
+                    NSLog(@"连接设备超时，不在重连超时时间内，去回调 %@, error = %@", self.mac, error);
                         [self disConnectToDevice:nil];
-                    }
                     if (completion) {
                         completion(self, error);
                     }
@@ -512,7 +505,7 @@
     _disConnect = YES;
     if (self.peripheral) {
         NSLog(@"开始去断开设备连接:%@", self.mac);
-        if (self.connected) {
+        if (self.connecting) {
             [[DLCentralManager sharedInstance] disConnectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
                 dispatch_async(dispatch_queue_create(0, 0), ^{
                     [self connectToDevice:^(DLDevice *device, NSError *error) {
@@ -555,7 +548,7 @@
                 //被动的掉线且蓝牙打开，去做重连
                 NSLog(@"设备连接被断开，去重连设备, mac = %@, 线程 = %@", self.mac, [NSThread currentThread]);
                 // 去重连设备
-                self.isDiscoverServer = NO;
+                self.isDiscoverAllCharacter = 0;
                 
                 // 开始重连计时
                 [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
@@ -596,7 +589,7 @@
         // 停止计时器，去报设备离线
         [_offlineReconnectTimer setFireDate:[NSDate distantFuture]];
         NSLog(@"重连超时时间已到, 线程:%@", [NSThread currentThread]);
-        if (!self.isDiscoverServer) {
+        if (self.isDiscoverAllCharacter == 0) {
             // 到超时时间还没重连上，判断设备为离线
             NSLog(@"重连超时，还没连上设备, mac = %@", self.mac);
             [self changeStatusToDisconnect];
@@ -880,11 +873,22 @@
     }
 }
 
-- (BOOL)connected {
+
+- (BOOL)connecting {
     if ([DLCentralManager sharedInstance].state != CBCentralManagerStatePoweredOn) {
         return NO;
     }
     if (_peripheral && (_peripheral.state == CBPeripheralStateConnected || _peripheral.state == CBPeripheralStateConnecting)) {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)connected {
+    if ([DLCentralManager sharedInstance].state != CBCentralManagerStatePoweredOn) {
+        return NO;
+    }
+    if (_peripheral && (_peripheral.state == CBPeripheralStateConnected)) {
         return YES;
     }
     return NO;

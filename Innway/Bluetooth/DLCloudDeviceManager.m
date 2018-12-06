@@ -256,7 +256,7 @@ static DLCloudDeviceManager *instance = nil;
 - (void)autoConnectCloudDevice {
     for (NSString *mac in self.cloudDeviceList.allKeys) {
         DLDevice *device = self.cloudDeviceList[mac];
-        if (device.peripheral && !device.connected) {
+        if (device.peripheral && !device.connecting) {
             [device connectToDevice:nil];
         }
     }
@@ -265,7 +265,7 @@ static DLCloudDeviceManager *instance = nil;
 - (void)deleteCloudList {
     for (NSString *mac in self.cloudDeviceList) {
         DLDevice *device = [self.cloudDeviceList objectForKey:mac];
-        if (device.connected) {
+        if (device.connecting) {
             //断开所有已经连接的设备
             NSLog(@"断开设备的连接: %@", device.peripheral);
             [device disConnectToDevice:nil];

@@ -44,7 +44,8 @@
 // 最新的设备数据
 @property (nonatomic, strong, readonly) NSDictionary *lastData;
 @property (nonatomic, assign) BOOL online; // 在线状态
-@property (nonatomic, assign, readonly) BOOL connected; // 连接状态
+@property (nonatomic, assign, readonly) BOOL connecting;
+@property (nonatomic, assign, readonly) BOOL connected; 
 // 标识设备是哪种类型的设备
 @property (nonatomic, assign) InDeviceType type;
 // 保存离线时间信息：eg：离线30秒 offlineTimeInfo = Last seen 30 second ago
