@@ -11,8 +11,15 @@
 #import "DLUUIDTool.h"
 #import <UIKit/UIKit.h>
 #import "DLCloudDeviceManager.h"
+#import <pthread/pthread.h>
+
+#define connectCallbackKey @"callback"
+#define connectStartTimeKey @"startTime"
+#define connectPeripheralKey @"peripheral"
+#define connectTimeout 5 //连接超时时间
 
 static DLCentralManager *instance = nil;
+static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
 
 @implementation DLKnowDevice
 @end
@@ -66,6 +73,8 @@ static DLCentralManager *instance = nil;
         // 初始化配置
         _connectDeviceEventDict = [NSMutableDictionary dictionary];
         _disConnectDeviceEventDict = [NSMutableDictionary dictionary];
+        
+        [self detectionConnectTimeoutLoop];
     }
     return self;
 }
@@ -130,8 +139,16 @@ static DLCentralManager *instance = nil;
     [self.manager connectPeripheral:peripheral options:options];
     
     if (completion) {
-        // 保存连接的回调，字典格式{peripheral.identifier.UUIDString, DidConnectToDeviceEvent};
-        [self.connectDeviceEventDict setValue:completion forKey:peripheral.identifier.UUIDString];
+        // @{peripheral.identifier.UUIDString : @{@"callback": DidConnectToDeviceEvent, @"startTime": 开始发起连接的时间}};
+        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        NSNumber *startTime = @(time(NULL));
+        [dic setValue:completion forKey:connectCallbackKey];
+        [dic setValue:startTime forKey:connectStartTimeKey];
+        [dic setValue:peripheral forKey:connectPeripheralKey];
+        NSLog(@"DLCentralManager: 去连接设备: ********************************** %@", peripheral);
+        pthread_rwlock_wrlock(&_connectDeviceEventHandler);
+        [self.connectDeviceEventDict setValue:[dic copy] forKey:peripheral.identifier.UUIDString];
+        pthread_rwlock_unlock(&_connectDeviceEventHandler);
     }
 }
 
@@ -260,22 +277,35 @@ static DLCentralManager *instance = nil;
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
-    NSLog(@"连接设备成功: %@", peripheral);
-    DidConnectToDeviceEvent event = [self.connectDeviceEventDict objectForKey:peripheral.identifier.UUIDString];
+    NSLog(@"DLCentralManager: 连接设备成功: %@", peripheral);
+    NSDictionary *eventDic = [self.connectDeviceEventDict objectForKey:peripheral.identifier.UUIDString];
     //将回调分发到对应的设备对象上
-    if (event) {
-        event(self, peripheral, nil);
+    if (eventDic) {
+        DidConnectToDeviceEvent event = [eventDic objectForKey:connectCallbackKey];
+        if (event) {
+            event(self, peripheral, nil);
+        }
+        // 一回调马上移除掉该数据，因为一次连接只会对应一次回调
+        pthread_rwlock_wrlock(&_connectDeviceEventHandler);
         [self.connectDeviceEventDict removeObjectForKey:peripheral.identifier.UUIDString];
+        pthread_rwlock_unlock(&_connectDeviceEventHandler);
     }
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(nullable NSError *)error {
-    NSLog(@"连接设备失败: %@, error = %@", peripheral, error);
+    NSLog(@"DLCentralManager: 连接设备失败: %@, error = %@", peripheral, error);
     // 将回调分发到对应的设备对象上
-    DidConnectToDeviceEvent event = [self.connectDeviceEventDict objectForKey:peripheral.identifier.UUIDString];
-    if (event) {
-        event(self, peripheral, nil);
+    NSDictionary *eventDic = [self.connectDeviceEventDict objectForKey:peripheral.identifier.UUIDString];
+    //将回调分发到对应的设备对象上
+    if (eventDic) {
+        DidConnectToDeviceEvent event = [eventDic objectForKey:connectCallbackKey];
+        if (event) {
+            event(self, peripheral, error);
+        }
+        // 一回调马上移除掉该数据，因为一次连接只会对应一次回调
+        pthread_rwlock_wrlock(&_connectDeviceEventHandler);
         [self.connectDeviceEventDict removeObjectForKey:peripheral.identifier.UUIDString];
+        pthread_rwlock_unlock(&_connectDeviceEventHandler);
     }
 }
 
@@ -335,6 +365,41 @@ static DLCentralManager *instance = nil;
         }
     }
     return NO;
+}
+
+- (void)detectionConnectTimeoutLoop {
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        while (1) {
+            // 不需要太频繁的检测, 1秒一次即可
+            [NSThread sleepForTimeInterval:1];
+            pthread_rwlock_wrlock(&_connectDeviceEventHandler);
+            NSMutableArray *removeCallback = [NSMutableArray array];
+            for (NSString *periperalUUID in weakSelf.connectDeviceEventDict.allKeys) {
+                NSDictionary *eventDic = weakSelf.connectDeviceEventDict[periperalUUID];
+                time_t startTime = [eventDic integerValueForKey:connectStartTimeKey defaultValue:time(NULL)];
+                time_t exeTime = time(NULL) - startTime;
+                if (exeTime >= 5) {
+                    // 到了超时时间，还没有回调，回调连接超时
+                    DidConnectToDeviceEvent event = eventDic[connectCallbackKey];
+                    CBPeripheral *peripheral = eventDic[connectPeripheralKey];
+                    NSError *error = [NSError errorWithDomain:NSStringFromClass([CBPeripheral class]) code:-2 userInfo:nil];
+                    NSLog(@"运行环检测到设备连接超时: %@", peripheral);
+                    [removeCallback addObject:periperalUUID];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (event) {
+                            [weakSelf.manager cancelPeripheralConnection:peripheral];
+                            event(weakSelf, peripheral, error);
+                        }
+                    });
+                }
+            }
+            for (NSString *periperalUUID in removeCallback) {
+                [self.connectDeviceEventDict removeObjectForKey:periperalUUID];
+            }
+            pthread_rwlock_unlock(&_connectDeviceEventHandler);
+        }
+    });
 }
 
 #pragma mark - Properity

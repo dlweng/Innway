@@ -579,8 +579,8 @@ static SystemSoundID soundID; // 离线提示音
     }
     
     NSMutableURLRequest* formRequest = [[AFHTTPRequestSerializer serializer] requestWithMethod:method URLString:URLString parameters:body error:nil];
-    NSLog(@"URL = %@", URLString);
-    NSLog(@"body = %@", body);
+//    NSLog(@"URL = %@", URLString);
+//    NSLog(@"body = %@", body);
     [formRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8"forHTTPHeaderField:@"Content-Type"];
     AFHTTPSessionManager*manager = [AFHTTPSessionManager manager];
     AFJSONResponseSerializer* responseSerializer = [AFJSONResponseSerializer serializer];
