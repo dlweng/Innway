@@ -60,8 +60,6 @@
 @property (nonatomic, strong) UIImagePickerController *libraryPikerViewController;
 //@property (nonatomic,strong)AVCaptureSession *captureSession;
 
-
-
 // 按钮闪烁动画
 @property (nonatomic, strong) NSTimer *animationTimer;
 @property (nonatomic, assign) BOOL isBtnAnimation; // 标识按钮动画是否开启
@@ -90,11 +88,11 @@
     self.controlDeviceBtn.layer.masksToBounds = YES;
     self.controlDeviceBtn.layer.cornerRadius = 5;
     
+    // 设置界面
     [self setupNarBar];
     [self addDeviceListView];
     [self addSettingView];
     [self setUpImagePiker];
-    [[DLCloudDeviceManager sharedInstance] autoConnectCloudDevice];
     
     //地图设置
     self.mapView.delegate = self;
@@ -108,9 +106,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopBtnAnimation) name:DeviceGetAckFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUI) name:ApplicationWillEnterForeground object:nil];
     
-    // 添加云端列表的监视
-    [[DLCloudDeviceManager sharedInstance] addObserver:self forKeyPath:@"cloudDeviceList" options:NSKeyValueObservingOptionNew context:nil];
-    
     // 设置定时器
     __weak typeof(self) weakSelf = self;
     self.animationTimer = [NSTimer newTimerWithTimeInterval:0.4 repeats:YES block:^(NSTimer * _Nonnull timer) {
@@ -118,6 +113,8 @@
     }];
     [[NSRunLoop currentRunLoop] addTimer:self.animationTimer forMode:NSRunLoopCommonModes];
     [self stopBtnAnimation];
+    
+    // 隐私信息弹框提示
     if (![common isOpensLocation]) {
         [InAlertView showAlertWithMessage:@"跳转到设置界面打开定位功能" confirmHanler:^{
             [common goToAPPSetupView];
@@ -129,11 +126,14 @@
         } cancleHanler:nil];
     }
     self.searchPhoneDevices = [NSMutableDictionary dictionary];
+    
+    // 自动连接设备
+    [[DLCloudDeviceManager sharedInstance] autoConnectCloudDevice];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    // 设置云列表的第一台设备未当前选中的设备
+    // 设置设备列表选中设备
     DLCloudDeviceManager *cloudManager = [DLCloudDeviceManager sharedInstance];
     if (cloudManager.cloudDeviceList.count > 0) {
         if (self.deviceListVC.selectDevice && [cloudManager.cloudDeviceList objectForKey:self.deviceListVC.selectDevice.mac]) {
@@ -150,6 +150,8 @@
     [self.deviceListVC reloadView];
     [self.device getDeviceInfo];
     [self updateUI];
+    
+    // 设置是否显示用户位置
     // 在viewDidLoad设置没有效果
     self.mapView.showsUserLocation = YES;
     __weak typeof(self) weakSelf = self;
@@ -165,7 +167,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceSearchDeviceAlertNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceGetAckFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationWillEnterForeground object:nil];
-    [[DLCloudDeviceManager sharedInstance] removeObserver:self forKeyPath:@"cloudDeviceList"];
     [self.animationTimer invalidate];
     self.animationTimer = nil;
 }
@@ -203,10 +204,6 @@
     [self deviceListViewController:self.deviceListVC moveDown:YES];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    NSLog(@"keyPath = %@发生改变, change = %@, object = %@",keyPath, change, object);
-}
-
 #pragma mark - SettingView
 - (void)addCoverView {
     if (self.coverView) {
@@ -221,35 +218,6 @@
     view.alpha = 0;
     self.coverView = view;
 }
-
-//- (void)addSettingView {
-//    if (self.settingVC) {
-//        return;
-//    }
-//    [self addCoverView];
-//    // 添加用户设置界面
-//    InUserSettingViewController *settingVC = [[InUserSettingViewController alloc] init];
-//    [self addChildViewController:settingVC];
-//    [self.view addSubview:settingVC.view];
-//    self.settingView = settingVC.view;
-//    UIView *settingView = settingVC.view;
-//    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.settingView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
-//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.settingView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
-//    self.settingViewLeftConstraint = [NSLayoutConstraint constraintWithItem:self.settingView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:0];
-//    [self.view addConstraint:self.settingViewLeftConstraint];
-//    self.settingViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.settingView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:screenWidth * 0.85];
-//    [self.view addConstraint:self.settingViewHeightConstraint];
-//
-//    settingVC.delegate = self;
-//    self.settingVC = settingVC;
-//    self.settingView.hidden = YES;
-//    settingVC.logoutUser = ^{
-//        UIViewController *loginVC = self.navigationController.viewControllers[1];
-//        NSLog(@"退出账户");
-//        [self safePopViewController:loginVC];
-//    };
-//}
 
 - (void)addSettingView {
     if (self.settingVC) {
@@ -408,14 +376,6 @@
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
     attrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
     [nav.navigationBar setTitleTextAttributes:attrs];
-//    NSArray *subViewController = self.navigationController.viewControllers;
-//    if (subViewController.count > 3) {
-//        InAddDeviceStartViewController *addDeviceStartVC = subViewController[2];
-//        addDeviceStartVC.canBack = YES;
-//        if ([addDeviceStartVC isKindOfClass:[InAddDeviceStartViewController class]]) {
-//            [self safePopViewController:addDeviceStartVC];
-//        }
-//    }
 }
 
 // 设备列表-上下滑动的处理
@@ -424,9 +384,6 @@
     if (down) {
         //往下
         CGFloat minHeight = 196;
-        //        if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 1) {
-        //            minHeight = 146;
-        //        }
         CGFloat maxMenuHeight = [UIScreen mainScreen].bounds.size.height * 0.5;
         heightConstant = minHeight - maxMenuHeight;
     }
@@ -440,72 +397,8 @@
     }];
   
 }
-//- (void)deviceListViewController:(InDeviceListViewController *)menuVC moveDown:(CGFloat)down {
-//    if (down > 0) {
-//        //往下
-//        CGFloat minHeight = 196;
-////        if ([DLCloudDeviceManager sharedInstance].cloudDeviceList.count > 1) {
-////            minHeight = 146;
-////        }
-//        CGFloat maxMenuHeight = [UIScreen mainScreen].bounds.size.height * 0.5;
-//        if (maxMenuHeight + self.deviceListBodyHeightConstraint.constant - down < minHeight) {
-//            down = maxMenuHeight + self.deviceListBodyHeightConstraint.constant - minHeight;
-//            menuVC.down = NO;
-//        }
-//    }
-//    else {
-//        // 往上
-//        if (self.deviceListBodyHeightConstraint.constant - down > 0) {
-//            down = self.deviceListBodyHeightConstraint.constant;
-//            menuVC.down = YES;
-//        }
-//    }
-//    self.deviceListBodyHeightConstraint.constant -= down;
-//}
 
 #pragma mark - settingVCDelegate
-//- (void)settingViewController:(InUserSettingViewController *)settingVC touchMove:(CGPoint)move {
-//    CGFloat width = self.settingViewHeightConstraint.constant;
-//    CGFloat cureentLeft = self.settingViewLeftConstraint.constant;
-//    CGFloat x = cureentLeft - move.x;
-//    if (x >= 0) {
-//        x = 0;
-//    }
-//    else if (x <= -width){
-//        x = -width;
-//    }
-//    else {
-//        x = x;
-//    }
-//    CGFloat alpha = (width + x) / width * coverViewAlpha;
-//    [UIView animateWithDuration:0.05 animations:^{
-//        self.settingViewLeftConstraint.constant = x;
-//        self.coverView.alpha = alpha;
-//    }];
-//}
-//
-//- (void)settingViewController:(InUserSettingViewController *)settingVC touchEnd:(CGPoint)move {
-//    bool hideNaviBar = NO;
-//    CGFloat width = self.settingViewHeightConstraint.constant;
-//    CGFloat cureentLeft = self.settingViewLeftConstraint.constant;
-//    CGFloat x = cureentLeft - move.x;
-//    if (x >= -0.5 * width) {
-//        x = 0;
-//        hideNaviBar = YES;
-//    }
-//    else if (x <= -0.5 * width){
-//        x = -width;
-//        hideNaviBar = NO;
-//    }
-//    CGFloat alpha = (width + x) / width * coverViewAlpha;
-//    [UIView animateWithDuration:0.25 animations:^{
-//        self.settingViewLeftConstraint.constant = x;
-//        self.coverView.alpha = alpha;
-//        self.settingView.hidden = !hideNaviBar;
-//        self.navigationController.navigationBar.hidden = hideNaviBar;
-//    }];
-//}
-
 // 用户设置界面-左右滑动的处理
 - (void)settingViewController:(InUserSettingViewController *)settingVC touchMove:(CGPoint)move {
     CGFloat width = settingVC.view.bounds.size.width;
@@ -727,41 +620,17 @@
 }
 
 - (void)goThereWithAddress:(NSString *)address andLat:(NSString *)lat andLon:(NSString *)lon {
+    //跳转系统地图
+    CLLocationCoordinate2D loc = CLLocationCoordinate2DMake([lat doubleValue], [lon doubleValue]);
+    MKMapItem *currentLocation = [MKMapItem mapItemForCurrentLocation];
+    MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:loc addressDictionary:nil]];
+    [MKMapItem openMapsWithItems:@[currentLocation, toLocation]
+     
+                   launchOptions:@{MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+                                   
+                                   MKLaunchOptionsShowsTrafficKey: [NSNumber numberWithBool:YES]}];
     
-    if ([self canOpenUrl:@"baidumap://"]) {///跳转百度地图
-        
-        NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin={{我的位置}}&destination=latlng:%@,%@|name=%@&mode=driving&coord_type=bd09ll",lat, lon,address] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
-        
-        return;
-        
-    }else if ([self canOpenUrl:@"iosamap://"]) {///跳转高德地图
-        
-        NSString *urlString = [[NSString stringWithFormat:@"iosamap://navi?sourceApplication=%@&backScheme=%@&lat=%@&lon=%@&dev=0&style=2",@"神骑出行",@"TrunkHelper",lat, lon] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
-        
-        return;
-        
-    }else{////跳转系统地图
-        
-        CLLocationCoordinate2D loc = CLLocationCoordinate2DMake([lat doubleValue], [lon doubleValue]);
-        
-        MKMapItem *currentLocation = [MKMapItem mapItemForCurrentLocation];
-        
-        MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:loc addressDictionary:nil]];
-        
-        [MKMapItem openMapsWithItems:@[currentLocation, toLocation]
-         
-                       launchOptions:@{MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
-                                       
-                                       MKLaunchOptionsShowsTrafficKey: [NSNumber numberWithBool:YES]}];
-        
-        return;
-        
-    }
-    
+    return;
 }
 
 - (void)deviceRSSIChange:(NSNotification *)noti {
@@ -770,59 +639,6 @@
         [self updateUI];
     }
 }
-
-
-///**
-// 将设备列表排序：若当前有指定设备，第一台设备显示指定设备，其余设备按连接到未连接的顺序排序
-// 若当前没有指定设备，所有设备按连接到未连接的顺序排序
-// */
-//- (void)sortDeviceList {
-//    NSDictionary *cloudList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
-//    if (cloudList.count == 0) {
-//        [self.deviceListVC reloadView:@[]];
-//    }
-//    if (self.device) {
-//        if (![cloudList objectForKey:self.device.mac]) {
-//            // 如果云端不存在该设备，将当前设备设置为空
-//            // 当删除设备，重回控制界面的情况
-//            self.device = nil;
-//        }
-//    }
-//    if (!self.device) {
-//        for (NSString *mac in cloudList.allKeys) {
-//            //第一个连接的设备是赋值为self.device
-//            DLDevice *device = cloudList[mac];
-//            if (device.connected) {
-//                self.device = device;
-//                break;
-//            }
-//        }
-//
-//    }
-//    if (!self.device) {
-//        //全部设备都没有连接，将第一个设备设置为self.device
-//        self.device = cloudList[cloudList.allKeys[0]];
-//    }
-//    NSMutableArray *connectList = [NSMutableArray array];
-//    [connectList addObject:self.device];
-//    NSMutableArray *disConnectList = [NSMutableArray array];
-//    // 先将已经连接的筛选出来
-//    for (NSString *mac in cloudList.allKeys) {
-//        DLDevice *device = cloudList[mac];
-//        if (device != self.device) {
-//            if (device.connected) {
-//                [connectList addObject:device];
-//            }
-//            else {
-//                [disConnectList addObject:device];
-//            }
-//        }
-//    }
-//    [connectList addObjectsFromArray:disConnectList];
-//    NSLog(@"cloudList = %@, connectList = %@", cloudList, connectList);
-//    self.deviceListVC.selectDevice = self.device;
-//    [self.deviceListVC reloadView:[connectList copy]];
-//}
 
 #pragma mark - 安全跳转界面
 - (void)safePopViewController: (UIViewController *)viewController {

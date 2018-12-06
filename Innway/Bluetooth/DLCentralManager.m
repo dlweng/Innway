@@ -385,6 +385,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
                     CBPeripheral *peripheral = eventDic[connectPeripheralKey];
                     NSError *error = [NSError errorWithDomain:NSStringFromClass([CBPeripheral class]) code:-2 userInfo:nil];
                     NSLog(@"运行环检测到设备连接超时: %@", peripheral);
+                    [removeCallback addObject:periperalUUID];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (event) {
                             [weakSelf.manager cancelPeripheralConnection:peripheral];

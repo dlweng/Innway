@@ -26,7 +26,7 @@
     NSNumber *_rssi;
     dispatch_source_t _searchDeviceackDelayTimer;// 查找设备ack回复计时器
     dispatch_source_t _disciverServerTimer;// 获取写数据特征值计时器
-    BOOL _disConnect; // 标识用户主动断开了设备连接，不做重连
+    BOOL _disConnect; // 只有删除设备或者注销账户该值会被值为YES
     
     NSTimer *_offlineReconnectTimer; //断开重连计时器
     int _offlineReconnectTime; //计算从断开到重连的时间
@@ -104,7 +104,6 @@
                  [[DLCentralManager sharedInstance] disConnectToDevice:weakSelf.peripheral completion:nil];
             }
         }
-//        NSLog(@"发现服务定时器超时被执行");
     });
     // 设置5秒超时
     dispatch_source_set_timer(_disciverServerTimer, dispatch_time(DISPATCH_TIME_NOW, 5*NSEC_PER_SEC), 0, 0);
@@ -116,7 +115,6 @@
     CBUUID *serverUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
     for (CBService *service in services) {
         if ([service.UUID.UUIDString isEqualToString:serverUUID.UUIDString]) {
-//            NSLog(@"发现服务0xE001");
             CBUUID *ntfUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
             CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
             [self.peripheral discoverCharacteristics:@[ntfUUID, writeUUID] forService:service];
@@ -271,9 +269,6 @@
     NSString *cmd = [dataStr substringWithRange:NSMakeRange(3, 2)];
     NSString *length = [dataStr substringWithRange:NSMakeRange(5, 2)];
     NSString *payload = [dataStr substringWithRange:NSMakeRange(7, length.integerValue * 2)];
-    //校验和
-//    NSString *cs = [dataStr substringWithRange:NSMakeRange(7+length.integerValue*2, 2)];
-//    NSLog(@"cmd = %@, length = %@, payload = %@, cs = %@", cmd, length, payload, cs);
     if ([cmd isEqualToString:@"02"]) {
         if (payload.length != 10) {
             return;
@@ -353,33 +348,7 @@
 
 - (void) peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     NSLog(@"mac:%@, 写入的响应值: %@,  %@", self.mac, characteristic, error);
-//    [self readData];
 }
-
-//- (void)readData {
-//    if (self.peripheral) {
-//        [self readValue:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral];
-//    }
-//    else {
-//        NSLog(@"mac:%@, 查找不到外设，无法读数据", self.mac);
-//    }
-//}
-
-//-(void) readValue: (int)serviceUUID characteristicUUID:(int)characteristicUUID p:(CBPeripheral *)p {
-//    CBUUID *su = [DLUUIDTool CBUUIDFromInt:serviceUUID];
-//    CBUUID *cu = [DLUUIDTool CBUUIDFromInt:characteristicUUID];
-//    CBService *service = [self findServiceFromUUID:su p:p];
-//    if (!service) {
-//        NSLog(@"mac:%@, 读数据查找不到服务: %s", self.mac, [self CBUUIDToString:su]);
-//        return;
-//    }
-//    CBCharacteristic *characteristic = [self findCharacteristicFromUUID:cu service:service];
-//    if (!characteristic) {
-//        NSLog(@"mac:%@, 读数据查找不到角色: %s", self.mac, [self CBUUIDToString:cu]);
-//        return;
-//    }
-//    [p readValueForCharacteristic:characteristic];
-//}
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if ([peripheral.identifier.UUIDString isEqualToString:self.peripheral.identifier.UUIDString]) {
@@ -425,7 +394,7 @@
         NSLog(@"开始去连接设备:%@", self.mac);
         __weak typeof(self) weakSelf = self;
         [[DLCentralManager sharedInstance] connectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
-            NSLog(@"设备连接结果： %@, 线程:%@", weakSelf.mac, [NSThread currentThread]);
+//            NSLog(@"设备连接结果： %@, 线程:%@", weakSelf.mac, [NSThread currentThread]);
             if (!error) {
                 NSLog(@"连接设备成功:%@", weakSelf.mac);
                 // 连接成功，去获取设备服务
@@ -469,36 +438,6 @@
         }
     }];
 }
-
-//// 获取不到服务的情况下，必须断开重连
-//- (void)disConnectAndReconnectDevice:(void (^)(DLDevice *device, NSError *error))completion {
-//    if (self.peripheral) {
-//        NSLog(@"开始去断开设备连接:%@", self.mac);
-//        if (self.connecting) {
-//            [[DLCentralManager sharedInstance] disConnectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
-//                [self connectToDevice:^(DLDevice *device, NSError *error) {
-//                    if (completion) {
-//                        completion(device, error);
-//                    }
-//                }];
-//            }];
-//        }
-//        else {
-//            [self connectToDevice:^(DLDevice *device, NSError *error) {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    if (completion) {
-//                        completion(device, error);
-//                    }
-//                });
-//            }];
-//        }
-//    }
-//    else {
-//        if (completion) {
-//            completion(self, nil); //不存在外设的情况不处理
-//        }
-//    }
-//}
 
 - (void)reconnectDevice:(NSNotification *)notification {
     CBPeripheral *peripheral = notification.object;
