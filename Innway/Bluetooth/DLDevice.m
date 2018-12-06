@@ -436,7 +436,7 @@
             else {
                 NSLog(@"连接设备失败:%@", weakSelf.mac);
                 if (completion) {
-                    completion(weakSelf, nil);
+                        completion(weakSelf, error);
                 }
             }
         }];
@@ -505,16 +505,16 @@
             if ([DLCentralManager sharedInstance].state == CBCentralManagerStatePoweredOn) {
                 //被动的掉线且蓝牙打开，去做重连
                 NSLog(@"设备连接被断开，去重连设备, mac = %@, 线程 = %@", self.mac, [NSThread currentThread]);
+                if (self.online) { //当前是在线，需要计时设置为离线
+                    // 开始重连计时
+                    [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
+                    
+//                    // 激活后台线程 重连超时大于10秒，才需要这两行代码
+//                    self.isReconnectTimer = YES; // 标志开始了重连计时
+//                    [common beginBackgroundTask];
+                }
                 // 去重连设备
                 self.isDiscoverAllCharacter = 0;
-                
-                // 开始重连计时
-                [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
-                
-//                // 激活后台线程 重连超时大于10秒，才需要这两行代码
-//                self.isReconnectTimer = YES; // 标志开始了重连计时
-//                [common beginBackgroundTask];
-                
                 // 去连接设备
                 [self connectToDevice:^(DLDevice *device, NSError *error) {
                     if (error) {
