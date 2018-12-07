@@ -201,6 +201,7 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
     if (peripheral == self.peripheral && !error) {
+        NSLog(@"接收到设备信号值: %@, mac:%@", RSSI, self.mac);
         self.rssi = RSSI;
     }
 }
@@ -597,15 +598,15 @@
                 }
                 [common playSound];
             }
-            else {
-#warning 测试使用
-                // 关闭的断开连接通知，则不通知
-                if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-                    NSLog(@"去做掉线通知: %@", self.mac);
-                    [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
-                    [common playSound];
-                }
-            }
+//            else {
+//#warning 测试使用
+//                // 关闭的断开连接通知，则不通知
+//                if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+//                    NSLog(@"去做掉线通知: %@", self.mac);
+//                    [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+//                    [common playSound];
+//                }
+//            }
         }
     }
     
