@@ -53,7 +53,7 @@ static DLCloudDeviceManager *instance = nil;
 
 - (void)addDevice:(NSString *)mac completion:(DidAddDeviceEvent)completion {
     if (self.cloudDeviceList.count >= 8) {
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:300 userInfo:@{NSLocalizedDescriptionKey:@"添加的设备不能大于8个"}];
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:300 userInfo:@{NSLocalizedDescriptionKey:@"You can only add up to 8 devices"}];
         completion(self, nil, error);
         return;
     }
@@ -70,11 +70,6 @@ static DLCloudDeviceManager *instance = nil;
     NSString *offlineTime = [common getCurrentTime];
     NSDictionary *body = @{@"userid":[NSString stringWithFormat:@"%zd",[InCommon sharedInstance].ID], @"name":peripheralName, @"mac":mac, @"action":@"addDevice", @"gps":gps, @"NickName":peripheralName, @"OfflineTime":offlineTime};
     [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"添加设备mac:%@, 网络异常, %@", mac, error);
-            completion(self, nil, error);
-            return ;
-        }
         NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
         if (code == 200) {
             NSInteger data = [responseObject integerValueForKey:@"data" defaultValue:-1];
@@ -99,7 +94,21 @@ static DLCloudDeviceManager *instance = nil;
             }
         }
         
-        NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"添加设备http网络异常"];
+        NSString *message ;
+        if (code == 300) {
+            message = @"You can only add up to 8 devices";
+        }
+        else if (code == 400) {
+            message = @"Device has already been added";
+        }
+        else {
+            if (error && error.code == -1) {
+                message = @"Network connection lost";
+            }
+            else {
+                message = @"Failed to add new device";
+            }
+        }
         NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:@{NSLocalizedDescriptionKey: message}];
         NSLog(@"添加设备http请求失败, %@",message);
         completion(self, nil, myError);
@@ -114,29 +123,34 @@ static DLCloudDeviceManager *instance = nil;
     if (device) {
         NSDictionary *body = @{@"deviceid":[NSString stringWithFormat:@"%zd", device.cloudID], @"action":@"deleteDevice"};
         [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
-            if (error) {
-                NSLog(@"做http请求删除失败, %@", error);
-                completion(self, error);
+            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+            if (code == 200) {
+                device.cloudID = -1; // 标识设备已经被删除
+                // 更新本地保存的设备列表
+                [common removeDeviceByCloudList:device];
+                [self.cloudDeviceList removeObjectForKey:mac];
+                [device disConnectToDevice:nil];
+                if (completion) {
+                    completion(self, nil);
+                }
             }
             else {
-                NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
-                if (code == 200) {
-                    device.cloudID = -1; // 标识设备已经被删除
-                    // 更新本地保存的设备列表
-                    [common removeDeviceByCloudList:device];
-//                    NSLog(@"http请求删除设备成功");
-                    [self.cloudDeviceList removeObjectForKey:mac];
-                    [device disConnectToDevice:nil];
-                    if (completion) {
-                        completion(self, nil);
-                    }
+                NSString *message;
+                if (code == 300) {
+                    message = @"Device not found";
                 }
                 else {
-                    NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"删除设备失败"];
-                    NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:@{NSLocalizedDescriptionKey: message}];
-                    NSLog(@"http请求删除设备失败， %@", message);
-                    completion(self, myError);
+                    if (error && error.code == -1) {
+                        message = @"Network connection lost";
+                    }
+                    else {
+                        message = @"Failed to delete device";
+                    }
                 }
+                
+                NSError *myError = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:@{NSLocalizedDescriptionKey: message}];
+                NSLog(@"http请求删除设备失败， %@", message);
+                completion(self, myError);
             }
         }];
     }

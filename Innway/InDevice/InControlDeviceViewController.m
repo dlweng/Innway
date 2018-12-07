@@ -116,12 +116,12 @@
     
     // 隐私信息弹框提示
     if (![common isOpensLocation]) {
-        [InAlertView showAlertWithMessage:@"跳转到设置界面打开定位功能" confirmHanler:^{
+        [InAlertView showAlertWithMessage:@"Go to Location Services and allow the app to use your current location." confirmHanler:^{
             [common goToAPPSetupView];
         } cancleHanler:nil];
     }
     if (![InCommon isOpenNotification]) {
-        [InAlertView showAlertWithMessage:@"进入设置界面打开通知功能来接收查找手机和断连通知" confirmHanler:^{
+        [InAlertView showAlertWithMessage:@"Go to Settings and enable Notifications to receive Find Your Phone and Separation alerts." confirmHanler:^{
             [common goToAPPSetupView];
         } cancleHanler:nil];
     }
@@ -350,10 +350,6 @@
 }
 
 - (void)deviceSettingBtnDidClick:(DLDevice *)device {
-    //    if (!device.online) {
-    //        return;
-    //    }
-    [self deviceListViewController:nil didSelectedDevice:device];
     [self goToDeviceSettingVC:device];
 }
 

@@ -33,11 +33,11 @@
 
 - (IBAction)registerBtnDidClick:(UIButton *)sender {
     if (self.emailTextField.text.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"请输入邮箱" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmHanler:nil];
         return;
     }
     else if (self.passwordTextField.text.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"请输入密码" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Password required" confirmHanler:nil];
         return;
     }
     
@@ -48,14 +48,24 @@
     [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         NSLog(@"注册结果:responseObject = %@, error = %@", responseObject, error);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        if (error) {
-            [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
+        NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+        NSString *messgae;
+        
+        if (code == 200) {
+            messgae = @"Registration success";
+        }
+        else if (code == 300) {
+            messgae = @"Username exists. Please try again";
         }
         else {
-//            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
-            NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"注册失败"];
-            [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
+            if (error && error.code == -1) {
+                messgae = @"Network connection lost";
+            }
+            else {
+                messgae = @"Registration failed";
+            }
         }
+        [InAlertView showAlertWithTitle:@"Information" message:messgae confirmHanler:nil];
     }];
 }
 

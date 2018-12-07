@@ -43,35 +43,41 @@
     NSLog(@"修改密码");
     NSLog(@"旧密码：%@， 新密码：%@， 确认密码：%@", self.oldPwd, self.pwdNew, self.confirmPwd);
     if (self.oldPwd.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"旧密码不能为空" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Old password cannot be blank" confirmHanler:nil];
     }
     else if (self.pwdNew.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"新密码不能为空" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"New password cannot be blank" confirmHanler:nil];
     }
     else if (self.confirmPwd.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"确认密码不能为空" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Password confirmation cannot be blank" confirmHanler:nil];
     }
     else {
         if (![self.pwdNew isEqualToString:self.confirmPwd]) {
-            [InAlertView showAlertWithTitle:@"Information" message:@"新密码和确认密码不相同" confirmHanler:nil];
+            [InAlertView showAlertWithTitle:@"Information" message:@"New password and password confirmation do not match" confirmHanler:nil];
         }
         else {
             [InAlertTool showHUDAddedTo:self.view animated:YES];
             NSDictionary *body = @{@"action":@"updatePassword", @"Uid":[NSString stringWithFormat:@"%zd", [InCommon sharedInstance].ID], @"Oldpassword":self.oldPwd, @"Newpassword":self.pwdNew};
             [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-                if (error) {
-                    [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
+                NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+                if (code == 200) {
+                    [InAlertView showAlertWithTitle:@"Information" message:@"Password changed" confirmHanler:nil];
                 }
                 else {
-                    NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
-                    if (code == 200) {
-                        [InAlertView showAlertWithTitle:@"Information" message:@"修改密码成功" confirmHanler:nil];
+                    NSString *message;
+                    if (code == 300) {
+                        message = @"Device not found";
                     }
                     else {
-                        NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"修改密码失败"];
-                        [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
+                        if (error && error.code == -1) {
+                            message = @"Network connection lost";
+                        }
+                        else {
+                             message = @"Password change failure";
+                        }
                     }
+                    [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
                 }
             }];
         }

@@ -76,11 +76,7 @@
     [[DLCloudDeviceManager sharedInstance] deleteDevice:self.device.mac completion:^(DLCloudDeviceManager *manager, NSError *error) {
         [InAlertTool hideHUDForView:self.view tag:1];
         if (error) {
-            if (error.code == -1) {
-                [InAlertView showAlertWithTitle:@"Information" message:@"网络连接异常" confirmHanler:nil];
-                return ;
-            }
-            [InAlertView showAlertWithTitle:@"Information" message:@"设备删除失败" confirmHanler:nil];
+            [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
         }
         else {
             if (manager.cloudDeviceList.count > 0) {
@@ -99,7 +95,6 @@
                         }
                     }
                 }
-                
             }
         }
     }];
@@ -308,7 +303,7 @@
                 [self.tableView reloadData];
             }
             else {
-                [InAlertView showAlertWithTitle:@"Information" message:@"请输入设备名称" confirmHanler:nil];
+                [InAlertView showAlertWithTitle:@"Information" message:@"Please enter device name" confirmHanler:nil];
             }
         }];
         return;

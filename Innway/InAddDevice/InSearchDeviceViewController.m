@@ -205,7 +205,7 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
     [[DLCloudDeviceManager sharedInstance] addDevice:self.findDeviceMac completion:^(DLCloudDeviceManager *manager, DLDevice *device, NSError *error) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (error) {
-            [InAlertView showAlertWithTitle:@"Information" message:@"添加设备失败" confirmHanler:nil];
+            [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
         }
         else {
             // 添加设备成功， 去建立连接

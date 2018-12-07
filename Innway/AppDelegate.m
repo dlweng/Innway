@@ -30,7 +30,7 @@
         if (state != CBCentralManagerStatePoweredOn) {
             if (!isShowAlterView.boolValue) {
                 isShowAlterView = @YES;
-                alertView = [InAlertView showAlertWithTitle:@"Information" message:@"打开蓝牙来允许innway连接到配件" confirmHanler:^{
+                alertView = [InAlertView showAlertWithTitle:@"Information" message:@"Enable Bluetooth to pair with the device." confirmHanler:^{
                     isShowAlterView = @NO;
                 }];
             }

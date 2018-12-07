@@ -51,11 +51,11 @@
 
 - (IBAction)userLogin:(UIButton *)sender {
     if (self.emailTextField.text.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"请输入邮箱" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmHanler:nil];
         return;
     }
     else if (self.passwordTextField.text.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"请输入密码" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Password required" confirmHanler:nil];
         return;
     }
     
@@ -65,29 +65,32 @@
     NSDictionary* body = @{@"username":self.emailTextField.text, @"password":self.passwordTextField.text, @"action":@"login"};
     [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
         NSLog(@"登陆结果:responseObject = %@, error = %@", responseObject, error);
-        if (error) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
+        NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+        if (code == 200) {
+            NSDictionary *data = [responseObject dictValueForKey:@"data" defaultValue:nil];
+            if (data) {
+                NSInteger ID = [data integerValueForKey:@"ID" defaultValue:-1];
+                NSString *userName = [data stringValueForKey:@"LoginName" defaultValue:@""];
+                NSString *password = [data stringValueForKey:@"PassWord" defaultValue:@""];
+                [common saveUserInfoWithID:ID email:userName pwd:password];
+            }
+            [self pushToNewCotroller];
         }
         else {
-            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
-            if (code == 200) {
-                NSDictionary *data = [responseObject dictValueForKey:@"data" defaultValue:nil];
-                if (data) {
-                    NSInteger ID = [data integerValueForKey:@"ID" defaultValue:-1];
-                    NSString *userName = [data stringValueForKey:@"LoginName" defaultValue:@""];
-                    NSString *password = [data stringValueForKey:@"PassWord" defaultValue:@""];
-                    [common saveUserInfoWithID:ID email:userName pwd:password];
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            NSString *message;
+            if (code == 300) {
+                message = @"Wrong username or password";
+            }
+            else  {
+                if (error && error.code == -1) {
+                    message = @"Network connection lost";
                 }
-                [self pushToNewCotroller];
+                else {
+                    message = @"Login failed";
+                }
             }
-            else {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                
-                NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"登陆失败"];
-                [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
-            }
-            
+            [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
         }
     }];
 }

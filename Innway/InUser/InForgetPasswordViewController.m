@@ -31,7 +31,7 @@
 - (IBAction)resetBtnDidClick:(UIButton *)sender {
     NSString *email = self.emailTextField.text;
     if (email == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"请输入邮箱" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmHanler:nil];
         return;
     }
     [self.view endEditing:YES];
@@ -43,19 +43,25 @@
         [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
             NSLog(@"发送重置密码邮件结果:responseObject = %@, error = %@", responseObject, error);
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if (error) {
-                [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
+            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+            if (code == 200) {
+                NSLog(@"发送重置密码邮件成功");
+                [InAlertView showAlertWithTitle:@"Information" message:@"Reset password email sent" confirmHanler:nil];
             }
             else {
-                NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
-                if (code == 200) {
-                    NSLog(@"发送重置密码邮件成功");
-                    [InAlertView showAlertWithTitle:@"Information" message:@"发送重置密码邮件成功" confirmHanler:nil];
+                NSString *message;
+                if (code == 300) {
+                    message = @"No such email address";
                 }
                 else {
-                    NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"发送重置密码邮件失败"];
-                    [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
+                    if (error && error.code == -1) {
+                        message = @"Network connection lost";
+                    }
+                    else {
+                        message = @"Reset password email failed to send";
+                    }
                 }
+                [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
             }
         }];
     }];
