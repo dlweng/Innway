@@ -318,6 +318,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
+    NSLog(@"CBCentralManager: 接收到系统的断开通知: %@, error = %@", peripheral, error);
     // 被动断开连接时，error才不为Nil，此时才需要去做重连
     // 发出断开连接通知
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceDisconnectNotification object:peripheral];
