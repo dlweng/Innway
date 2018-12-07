@@ -65,8 +65,8 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
         [[NSRunLoop currentRunLoop] addTimer:_scanTimer forMode:NSRunLoopCommonModes];
         [_scanTimer setFireDate:[NSDate distantFuture]];
         
-        // 3秒钟扫描一次设备定时器
-        _repeatScanTimer = [NSTimer timerWithTimeInterval:3 target:self selector:@selector(repeatScanNewDevice) userInfo:nil repeats:YES];
+        // 8秒钟扫描一次设备定时器
+        _repeatScanTimer = [NSTimer timerWithTimeInterval:8 target:self selector:@selector(repeatScanNewDevice) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_repeatScanTimer forMode:NSRunLoopCommonModes];
         [_repeatScanTimer setFireDate:[NSDate distantFuture]];
         
@@ -189,10 +189,12 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
 - (void)repeatScanNewDevice {
     // 每3秒钟扫描2秒钟设备
     [self startScaning];
+    
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_queue_create(0, 0), ^{
-        [NSThread sleepForTimeInterval:2];
+        [NSThread sleepForTimeInterval:6];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.manager stopScan];
+            [weakSelf.manager stopScan];
         });
     });
 }

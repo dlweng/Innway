@@ -39,9 +39,11 @@ static DLCloudDeviceManager *instance = nil;
         [_getDeviceInfoTimer setFireDate:[NSDate distantFuture]];
         
         __weak typeof(NSTimer *) weakTimer = _getDeviceInfoTimer;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_queue_create(0, 0), ^{
+            [NSThread sleepForTimeInterval:30];
             [weakTimer setFireDate:[NSDate distantPast]];
         });
+        
         
         // 初始化1秒扫描一次RSSI的定时器
         _readRSSITimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(getDevicesRSSI) userInfo:nil repeats:YES];

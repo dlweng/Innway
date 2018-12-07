@@ -394,25 +394,30 @@
     if (!self.connecting) {
         NSLog(@"开始去连接设备:%@", self.mac);
         __weak typeof(self) weakSelf = self;
-        [[DLCentralManager sharedInstance] connectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
-//            NSLog(@"设备连接结果： %@, 线程:%@", weakSelf.mac, [NSThread currentThread]);
-            if (!error) {
-                NSLog(@"连接设备成功:%@", weakSelf.mac);
-                // 连接成功，去获取设备服务
-                peripheral.delegate = weakSelf;
-                [weakSelf discoverServices];
-                if (completion) {
-                    completion(weakSelf, nil);
+        dispatch_async(dispatch_queue_create(0, 0), ^{
+            [[DLCentralManager sharedInstance] connectToDevice:weakSelf.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
+                if (!error) {
+                    NSLog(@"连接设备成功:%@", weakSelf.mac);
+                    // 连接成功，去获取设备服务
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        peripheral.delegate = weakSelf;
+                        [weakSelf discoverServices];
+                        if (completion) {
+                            completion(weakSelf, nil);
+                        }
+                    });
+                    return ;
                 }
-                return ;
-            }
-            else {
-                NSLog(@"连接设备失败:%@", weakSelf.mac);
-                if (completion) {
-                        completion(weakSelf, error);
+                else {
+                    NSLog(@"连接设备失败:%@", weakSelf.mac);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (completion) {
+                            completion(weakSelf, error);
+                        }
+                    });
                 }
-            }
-        }];
+            }];
+        });
     }
     else {
         if (completion) {
