@@ -493,7 +493,7 @@
         // 重连超时结束, 停止计时器，去报设备离线
         _offlineReconnectTime = -1;
         [_offlineReconnectTimer setFireDate:[NSDate distantFuture]];
-        if (self.isDiscoverAllCharacter == 0) {
+        if (!self.connected) { // 判断重连的条件降低
             NSLog(@"重连超时，还没连上设备, 保存设备离线信息 mac = %@", self.mac);
             [self changeStatusToDisconnect:YES];
         }
