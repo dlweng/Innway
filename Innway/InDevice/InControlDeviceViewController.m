@@ -22,9 +22,11 @@
 #import "InFeedbackViewController.h"
 #import "InHelpCenterSelectionController.h"
 #import "NSTimer+InTimer.h"
+#import "InCameraViewController.h"
 #define coverViewAlpha 0.85  // 覆盖层的透明度
 
-@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceListViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceListViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, InCameraViewControllerDelegate>
+
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBodyViewTopConstraint;
 @property (weak, nonatomic) IBOutlet UIView *topBodyView;
@@ -52,14 +54,6 @@
 // 显示设置界面的透明覆盖层
 @property (nonatomic, weak) UIView *coverView;
 
-// 拍照
-@property (strong, nonatomic) IBOutlet UIView *customTakePhotoView;
-@property (weak, nonatomic) IBOutlet UIView *imageBodyView;
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (strong,nonatomic)UIImagePickerController * imagePikerViewController;
-@property (nonatomic, strong) UIImagePickerController *libraryPikerViewController;
-//@property (nonatomic,strong)AVCaptureSession *captureSession;
-
 // 按钮闪烁动画
 @property (nonatomic, strong) NSTimer *animationTimer;
 @property (nonatomic, assign) BOOL isBtnAnimation; // 标识按钮动画是否开启
@@ -68,6 +62,7 @@
 @property (nonatomic, assign) BOOL inTakePhoto;
 // 标识当前正在查找手机的设备
 @property (nonatomic, strong) NSMutableDictionary *searchPhoneDevices;
+@property (nonatomic, strong) InCameraViewController *cameraVC;
 @end
 
 @implementation InControlDeviceViewController
@@ -92,7 +87,6 @@
     [self setupNarBar];
     [self addDeviceListView];
     [self addSettingView];
-    [self setUpImagePiker];
     
     //地图设置
     self.mapView.delegate = self;
@@ -655,138 +649,20 @@
 
 #pragma mark - Take photo
 - (void)goToGetPhoto {
-//    NSLog(@"去获取图片");
-    self.imagePikerViewController.sourceType = UIImagePickerControllerSourceTypeCamera;
-    self.imagePikerViewController.showsCameraControls = NO;
-    [[NSBundle mainBundle] loadNibNamed:@"InCustomTablePhotoVuew" owner:self options:nil];
-    self.customTakePhotoView.frame = self.imagePikerViewController.cameraOverlayView.frame;
-    self.customTakePhotoView.backgroundColor = [UIColor clearColor];
-    self.imagePikerViewController.cameraOverlayView = self.customTakePhotoView;
-    self.customTakePhotoView = nil;
-    [self presentViewController:self.imagePikerViewController animated:YES completion:NULL];
-    self.imageBodyView.hidden = YES;
+    self.cameraVC = [[InCameraViewController alloc] init];
+    self.cameraVC.delegate = self;
+    [self presentViewController:self.cameraVC animated:YES completion:nil];
     self.inTakePhoto = YES;
 }
 
-- (void)setUpImagePiker {
-    // 设置相机的
-    self.imagePikerViewController = [[UIImagePickerController alloc] init];
-    self.imagePikerViewController.delegate = self;
-    self.imagePikerViewController.allowsEditing = YES;
-    // 设置相册的
-    self.libraryPikerViewController = [[UIImagePickerController alloc] init];
-    self.libraryPikerViewController.delegate = self;
-    self.libraryPikerViewController.allowsEditing = YES;
-    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    // 设置相册的导航栏
-    [self.libraryPikerViewController.navigationBar setBarTintColor:[UIColor clearColor]];
-    [self.libraryPikerViewController.navigationBar setTranslucent:NO];
-    [self.libraryPikerViewController.navigationBar setTintColor:[UIColor whiteColor]];
-    [InCommon setNavgationBar:self.libraryPikerViewController.navigationBar];
-    // 设置标题颜色
-    NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
-    attrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
-    [self.libraryPikerViewController.navigationBar setTitleTextAttributes:attrs];
-}
-- (IBAction)setPhotoSharkLight {
-    NSLog(@"设置闪光灯");
-    [common setupSharkLight];
+- (void)cameraViewControllerDidChangeToLibrary:(BOOL)isLibrary {
+    NSLog(@"相机与相册界面在切换: %d",  isLibrary);
+    self.inTakePhoto = !isLibrary;
 }
 
-- (IBAction)changeCameraDirection {
-    NSLog(@"改变相机的方向");
-//    [self swapFrontAndBackCameras];
-}
-
-//// 切换前后置摄像头
-//- (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition)position
-//{
-//    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-//    for (AVCaptureDevice *device in devices )
-//        if ( device.position == position )
-//            return device;
-//    return nil;
-//}
-//
-//- (void)swapFrontAndBackCameras {
-//    NSArray *inputs =self.captureSession.inputs;
-//    for (AVCaptureDeviceInput *input in inputs) {
-//        AVCaptureDevice *device = input.device;
-//        if ([device hasMediaType:AVMediaTypeVideo]) {
-//            AVCaptureDevicePosition position = device.position;
-//            AVCaptureDevice *newCamera =nil;
-//            AVCaptureDeviceInput *newInput =nil;
-//            if (position ==AVCaptureDevicePositionFront)
-//            {
-//                NSLog(@"当前是前置摄像头，要切换到后置摄像头");
-//                newCamera = [self cameraWithPosition:AVCaptureDevicePositionBack];
-//            }
-//            else
-//            {
-//                NSLog(@"当前是后置摄像头，要切换到前置摄像头");
-//                newCamera = [self cameraWithPosition:AVCaptureDevicePositionFront];
-//            }
-//            newInput = [AVCaptureDeviceInput deviceInputWithDevice:newCamera error:nil];
-//            [self.captureSession beginConfiguration];
-//            [self.captureSession removeInput:input];
-//            [self.captureSession addInput:newInput];
-//            [self.captureSession commitConfiguration];
-//            break;
-//        }
-//    }
-//}
-
-- (IBAction)goPhotoLibrary {
-    NSLog(@"进入相册");
-    // 解决iPhone5S上导航栏会消失的Bug
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    self.libraryPikerViewController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-    [self.imagePikerViewController presentViewController:self.libraryPikerViewController animated:YES completion:NULL];
+- (void)cameraViewControllerDidClickGoBack:(InCameraViewController *)vc {
     self.inTakePhoto = NO;
-}
-
-- (IBAction)takePhoto {
-    NSLog(@"拍照保存");
-    [self.imagePikerViewController takePicture];
-}
-
-- (IBAction)takePhotoBack {
-    NSLog(@"拍完照返回");
-    [self dismissViewControllerAnimated:YES completion:NULL];
-    self.inTakePhoto = NO;
-}
-
-- (void)goBackTakePhotoView {
-    [self.imagePikerViewController dismissViewControllerAnimated:YES completion:nil];
-    self.inTakePhoto = YES;
-}
-
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    if (picker == self.libraryPikerViewController) {
-//        self.imageBodyView.hidden = NO;
-        // 相册界面点击图片显示
-//        UIImage * image = info[UIImagePickerControllerOriginalImage];
-//        self.imageView.image = image;
-        [self goBackTakePhotoView];
-        return;
-    }
-    else if (picker == self.imagePikerViewController) {
-        // 相机拍完照进入保存
-        UIImage * image = info[UIImagePickerControllerEditedImage];
-        if (!image) {
-            image = info[UIImagePickerControllerOriginalImage];
-        }
-//        self.imageView.image = image;
-        UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSaveImageWithError:contextInfo:), (__bridge void *)self);
-    }
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [self goBackTakePhotoView];
-}
-
-- (void)image:(UIImage *)image didFinishSaveImageWithError:(NSError *)error contextInfo:(void *)contextInfo {
-    NSLog(@"保存图片结果: image = %@, error = %@, contextInfo = %@", image, error, contextInfo);
+    [self.cameraVC dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - 按钮动画
@@ -822,7 +698,7 @@
 
 - (void)searchPhone:(NSNotification *)noti {
     if (self.inTakePhoto) {
-        [self takePhoto];
+        [self.cameraVC takeAPhoto];
         return;
     }
     DLDevice *device = noti.userInfo[@"Device"];

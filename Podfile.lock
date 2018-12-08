@@ -15,18 +15,36 @@ PODS:
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
   - MBProgressHUD (1.1.0)
+  - SDWebImage (4.4.3):
+    - SDWebImage/Core (= 4.4.3)
+  - SDWebImage/Core (4.4.3)
   - SSPullToRefresh (1.3.0)
+  - YYImage (1.0.4):
+    - YYImage/Core (= 1.0.4)
+  - YYImage/Core (1.0.4)
 
 DEPENDENCIES:
   - AFNetworking (~> 3.2.0)
   - MBProgressHUD (~> 1.1.0)
+  - SDWebImage
   - SSPullToRefresh (~> 1.3.0)
+  - YYImage
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - MBProgressHUD
+    - SDWebImage
+    - SSPullToRefresh
+    - YYImage
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  SDWebImage: c5594f1a19c48d526d321e548902b56b479cd508
   SSPullToRefresh: 3a47e116692b60e7da5a8c60418488133bcc9550
+  YYImage: 1e1b62a9997399593e4b9c4ecfbbabbf1d3f3b54
 
-PODFILE CHECKSUM: 77225351e4fd968906e64bcafba28c0739e36c57
+PODFILE CHECKSUM: 61cdd0910111b3f43d87d8ff121f182d7a4eb046
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3
