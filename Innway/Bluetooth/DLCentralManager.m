@@ -238,7 +238,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
 }
 
 - (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
-    NSLog(@"发现新设备： %@, advertisementData = %@", peripheral, advertisementData);
+    NSLog(@"发现新设备： %@, advertisementData = %@, RSSI = %@", peripheral, advertisementData, RSSI);
 // 有效代码
 // 广播数据案例
 //    advertisementData = {
@@ -257,7 +257,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
             DLKnowDevice *knowDevice = [_knownPeripherals objectForKey:mac];
             if (!knowDevice) {
                 // 发现列表不存在该设备，需要添加
-                NSLog(@"发现新设备: %@, advertisementData = %@", mac, advertisementData);
+//                NSLog(@"发现新设备: %@, advertisementData = %@", mac, advertisementData);
                 knowDevice = [[DLKnowDevice alloc] init];
                 knowDevice.peripheral = peripheral;
                 [_knownPeripherals setValue:knowDevice forKey:mac];
@@ -318,6 +318,28 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
+//#warning 测试代码
+//    if (error) {
+//        NSDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+//        DLDevice *tapDevice;
+//        for (NSString *mac in cloudDeviceList.allKeys) {
+//            DLDevice *device = cloudDeviceList[mac];
+//            if ([device.peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
+//                tapDevice = device;
+//                break;
+//            }
+//        }
+//        
+//        NSString *messgae;
+//        if (tapDevice) {
+//            messgae = [NSString stringWithFormat:@"%@\n设备:%@ 连接被断开了\n错误:%@",[common getCurrentTime], tapDevice.mac, error.localizedDescription];
+//        }
+//        else {
+//            messgae = [NSString stringWithFormat:@"%@\n未知设备连接被断开了\n错误:%@",[common getCurrentTime],error.localizedDescription];
+//        }
+//        [InAlertView showAlertWithTitle:@"Information" message:messgae confirmHanler:nil];
+//    }
+    
     NSLog(@"CBCentralManager: 接收到系统的断开通知: %@, error = %@", peripheral, error);
     // 被动断开连接时，error才不为Nil，此时才需要去做重连
     // 发出断开连接通知

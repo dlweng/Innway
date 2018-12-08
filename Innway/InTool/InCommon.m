@@ -304,8 +304,8 @@ static SystemSoundID soundID; // 离线提示音
 
 - (void)stopSoundAlertMusic {
     NSLog(@"停止查找手机的报警声音");
-    [self.audioPlayer stop];
     [self stopSharkAnimation];
+    [self.audioPlayer stop];
 }
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
@@ -362,6 +362,9 @@ static SystemSoundID soundID; // 离线提示音
 
 #pragma mark - 离线提示音
 - (void)playSound {
+    if (self.audioPlayer.isPlaying) {
+        return;
+    }
     NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
     NSString *alertMusic;
     switch (phoneAlertMusic.integerValue) {
@@ -386,13 +389,23 @@ static SystemSoundID soundID; // 离线提示音
     NSError *error = nil;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
     self.audioPlayer.delegate = self;
-    self.audioPlayer.numberOfLoops = 0;
+    self.audioPlayer.numberOfLoops = 1;
     self.audioPlayer.volume = 1.0;
     [self.audioPlayer play];
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 }
 
 - (void)stopSound {
+    NSDictionary *cloundDeviceList = [[DLCloudDeviceManager sharedInstance].cloudDeviceList copy];
+    for (NSString *mac in cloundDeviceList.allKeys) {
+        DLDevice *device = cloundDeviceList[mac];
+        if (device.isSearchPhone || !device.online) {
+            // 有设备在查找手机，或者有设备处于掉线情况，不要去断开音乐
+            return;
+        }
+    }
+    // 没有设备在查找手机，所有设备都在线了，去关闭音乐
+    [self.audioPlayer stop];
 }
 
 #pragma mark - 定位

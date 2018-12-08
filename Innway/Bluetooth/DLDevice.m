@@ -21,6 +21,7 @@
 
 // 设置重连超时  重连超时时间一定要为连接超时时间的倍数
 #define reconnectTimeOut 8
+#define reconnectMaxCount 6
 
 @interface DLDevice() {
     NSNumber *_rssi;
@@ -36,6 +37,7 @@
 @property (nonatomic, assign) NSInteger isDiscoverAllCharacter; //标志是否获取到写数据特征值
 
 // 保存设置的值，等ack回来之后更新本地数据
+@property (nonatomic, assign) int reconnectNum;
 @property (nonatomic, assign) BOOL disconnectAlert;
 @property (nonatomic, assign) BOOL reconnectAlert;
 @property (nonatomic, assign) NSInteger alertMusic;
@@ -48,15 +50,16 @@
 + (instancetype)device:(CBPeripheral *)peripheral {
     DLDevice *device = [[DLDevice alloc] init];
     device.peripheral = peripheral;
-    // 增加断开连接监听
-    [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(reconnectDevice:) name:DeviceDisconnectNotification object:nil];
-    // 蓝牙关闭监听
-    [[NSNotificationCenter defaultCenter] addObserver:device selector:@selector(bluetoothPoweredOff) name:BluetoothPoweredOffNotification object:nil];
     return device;
 }
 
 - (instancetype)init {
     if (self = [super init]) {
+        // 增加断开连接监听
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reconnectDevice:) name:DeviceDisconnectNotification object:nil];
+        // 蓝牙关闭监听
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bluetoothPoweredOff) name:BluetoothPoweredOffNotification object:nil];
+        
         _disConnect = NO;
         _isGetSearchDeviceAck = NO;
         // 初始化断开重连计时器数据
@@ -147,6 +150,9 @@
                 // 获取设备信息
                 dispatch_async(dispatch_get_main_queue(), ^{
                     weakSelf.online = YES;  //设置在线
+                    weakSelf.reconnectNum = 0;
+                    // 关闭断连音乐
+                    [common stopSound];
                     NSLog(@"设置设备在线");
                     [weakSelf readRSSI];
                     [weakSelf getDeviceInfo]; //防止两次发生时间太接近，导致下发失败
@@ -453,7 +459,7 @@
             // 只处理当前设备离线的情况
             if ([DLCentralManager sharedInstance].state == CBCentralManagerStatePoweredOn) {
                 //被动的掉线且蓝牙打开，去做重连
-                NSLog(@"设备连接被断开，去重连设备, mac = %@, 线程 = %@", self.mac, [NSThread currentThread]);
+                
                 if (self.online) { //当前是在线，需要计时设置为离线
                     // 开始重连计时
                     [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
@@ -461,17 +467,24 @@
 //                    self.isReconnectTimer = YES; // 标志开始了重连计时
 //                    [common beginBackgroundTask];
                 }
-                // 去重连设备
-                self.isDiscoverAllCharacter = 0;
-                // 去连接设备
-                [self connectToDevice:^(DLDevice *device, NSError *error) {
-                    if (error) {
-                        NSLog(@"mac: %@, 设备重连失败", self.mac);
-                    }
-                    else {
-                        NSLog(@"mac: %@, 设备重连成功", self.mac);
-                    }
-                }];
+                if (self.reconnectNum < reconnectMaxCount) {
+                    self.reconnectNum++;
+                    NSLog(@"设备连接被断开，去重连设备, mac = %@, 重连计数: %d", self.mac, self.reconnectNum);
+                    // 去重连设备
+                    self.isDiscoverAllCharacter = 0;
+                    [self connectToDevice:^(DLDevice *device, NSError *error) {
+                        if (error) {
+                            NSLog(@"mac: %@, 设备重连失败", self.mac);
+                        }
+                        else {
+                            NSLog(@"mac: %@, 设备重连成功", self.mac);
+                        }
+                    }];
+                }
+                else {
+                    NSLog(@"已经重连%d次, 不再去重连:%@", self.reconnectNum, self.mac);
+                    
+                }
             }
             else {
                 // 蓝牙关闭，直接设置离线
@@ -728,7 +741,9 @@
 #pragma mark - Properity
 - (void)setPeripheral:(CBPeripheral *)peripheral {
     if ([_peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
-        // 已经赋值过的设备不需要重新设置
+        [_peripheral setDelegate:nil];
+        _peripheral = peripheral;
+        [peripheral setDelegate:self];
         return;
     }
     self.online = NO;
