@@ -59,6 +59,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reconnectDevice:) name:DeviceDisconnectNotification object:nil];
         // 蓝牙关闭监听
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bluetoothPoweredOff) name:BluetoothPoweredOffNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWasKilled) name:APPBeKilledNotification object:nil];
         
         _disConnect = NO;
         _isGetSearchDeviceAck = NO;
@@ -80,6 +81,7 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceDisconnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:BluetoothPoweredOffNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:APPBeKilledNotification object:nil];
 }
 
 #pragma mark - 获取特征值的处理
@@ -646,6 +648,12 @@
         if (!_isGetSearchDeviceAck) { // 关闭蓝牙的时候，肯定接受不到设备的回复，如果按钮有正在查找设备的动画，需要关闭
             [[NSNotificationCenter defaultCenter] postNotificationName:DeviceGetAckFailedNotification object:nil];
         }
+    }
+}
+
+- (void)appWasKilled {
+    if (self.online) {
+        [self changeStatusToDisconnect:NO];
     }
 }
 

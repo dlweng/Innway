@@ -143,6 +143,11 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 //后台任务
 - (BOOL)beginBackgroundTask;
 - (void)endBackgrondTask;
+
+// iBeacon
+- (void)startiBeaconListen;
+- (void)stopIbeaconListen;
+- (void)stopiBeaconBackgroundTask;
 @end
 
 @interface NSDictionary (GetValue)

@@ -70,6 +70,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // 有iBeacon激活进入的控制界面需要结束后台任务
+    [common stopiBeaconBackgroundTask];
+    
     // 界面调整
     self.topBodyViewTopConstraint.constant += 64;
     if ([InCommon isIPhoneX]) { //iphonex

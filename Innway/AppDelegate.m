@@ -52,15 +52,11 @@
     UIUserNotificationType type = UIUserNotificationTypeAlert | UIUserNotificationTypeSound;
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    
-    [[InCommon sharedInstance] getCurrentTime];
     return YES;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    NSLog(@"APP被杀死");
-    // 杀死APP要报设备离线。 杀死设备等同于关闭蓝牙来处理
-    [[NSNotificationCenter defaultCenter] postNotificationName:BluetoothPoweredOffNotification object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:APPBeKilledNotification object:nil];
 }
 
 
@@ -71,13 +67,14 @@
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+//    NSLog(@"进入后台，监听iBeacon");
+//    [common startiBeaconListen];
 }
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-   
+//    NSLog(@"进入前台，关闭iBeacon监听");
+//    [common stopIbeaconListen];
 }
 
 
@@ -88,6 +85,8 @@
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 
-
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+    
+}
 
 @end

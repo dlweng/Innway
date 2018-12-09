@@ -21,6 +21,8 @@ static SystemSoundID soundID; // 离线提示音
 // 音频播放
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskID;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier iBeaconBackgroundTaskID;
+@property (nonatomic, strong) CLBeaconRegion *iBeaconRegion;
 @end
 
 @implementation InCommon
@@ -457,9 +459,12 @@ static SystemSoundID soundID; // 离线提示音
     if (status == kCLAuthorizationStatusAuthorizedAlways) {
         NSLog(@"授权在前台后台都可进行定位");
         [self setupLocationData];
+        [self startiBeaconListen];
+       
     } else if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
         NSLog(@"授权只允许在使用期间定位");
         [self setupLocationData];
+        [self startiBeaconListen];
     }
     else{
         NSLog(@"用户拒绝授权");
@@ -498,6 +503,82 @@ static SystemSoundID soundID; // 离线提示音
         return YES;
     }
     return NO;
+}
+
+#pragma mark - IBeacon 激活APP
+- (BOOL)isMonitoriBeacon {
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        if ([CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+- (void)startiBeaconListen {
+    if (![self isMonitoriBeacon]) {
+        NSLog(@"设备不可以使用iBeacon，去监听");
+        return;
+    }
+    NSLog(@"设备可以使用iBeacon，去监听");
+    [_locationManager startMonitoringForRegion:self.iBeaconRegion];
+}
+
+- (void)stopIbeaconListen {
+    if (![self isMonitoriBeacon]) {
+        return;
+    }
+    [_locationManager stopMonitoringForRegion:self.iBeaconRegion];
+}
+
+- (CLBeaconRegion *)iBeaconRegion {
+    if (!_iBeaconRegion) {
+        NSUUID *proximityUUID = [[NSUUID alloc] initWithUUIDString:@"704F6FEE-A8A0-475B-91C2-7A2ECC1CE8A2"];
+        _iBeaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID major:10 minor:11 identifier:@"com.innwaytech.innway"];
+        _iBeaconRegion.notifyOnEntry = YES;
+        _iBeaconRegion.notifyOnExit = YES;
+    }
+    return _iBeaconRegion;
+}
+
+- (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region {
+    NSLog(@"开始监听ibeacon范围");
+    [InCommon sendLocalNotification:@"开始监听ibeacon范围"];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
+{
+    if(state == CLRegionStateInside)
+    {
+        NSLog(@"进入了iBeacon的范围");
+        [self beginiBeaconBackgroundTask];
+        [InCommon sendLocalNotification:[NSString stringWithFormat:@"进入了iBeacon的范围"]];
+        
+    }
+    else if(state == CLRegionStateOutside)
+    {
+        NSLog(@"退出了iBeacon的范围");
+        [self beginiBeaconBackgroundTask];
+        [InCommon sendLocalNotification:[NSString stringWithFormat:@"退出了iBeacon的范围"]];
+    }
+}
+
+- (void)beginiBeaconBackgroundTask {
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        if (0 != self.iBeaconBackgroundTaskID) {
+            return;
+        }
+        self.iBeaconBackgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+    }
+}
+
+- (void)stopiBeaconBackgroundTask {
+    if (self.iBeaconBackgroundTaskID != 0) {
+//        [InCommon sendLocalNotification:@"后台任务存在，去结束后台任务"];
+        NSInteger taskid = self.iBeaconBackgroundTaskID;
+        self.iBeaconBackgroundTaskID = 0;
+        [[UIApplication sharedApplication] endBackgroundTask:taskid];
+    }
 }
 
 #pragma mark - 去到系统的APP设置界面
