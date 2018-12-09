@@ -32,7 +32,7 @@
     self.navigationController.navigationBar.hidden = NO;
     self.navigationItem.title = @"Help Center";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
-    if ([UIDevice currentDevice].systemVersion.integerValue < 10 && [UIScreen mainScreen].bounds.size.width == 320) {
+    if ([UIDevice currentDevice].systemVersion.integerValue < 11) {
         self.tableViewHeightConstraint.constant = 280;
     }
 }

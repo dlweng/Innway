@@ -53,6 +53,7 @@
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     
+    [[InCommon sharedInstance] getCurrentTime];
     return YES;
 }
 
