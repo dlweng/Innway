@@ -28,8 +28,10 @@
     self.camera = [[LLSimpleCamera alloc] initWithQuality:AVCaptureSessionPresetHigh
                                                  position:LLCameraPositionRear
                                              videoEnabled:NO];
-     [self.camera attachToViewController:self view:self.cameraBodyView withFrame:self.cameraBodyView.bounds];
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+     [self.camera attachToViewController:self view:self.cameraBodyView withFrame:CGRectMake(0, 0, screenSize.width, screenSize.height-93)];
     self.camera.fixOrientationAfterCapture = NO;
+    self.camera.tapToFocus = NO;
     __weak typeof(self) weakSelf = self;
     [self.camera setOnDeviceChange:^(LLSimpleCamera *camera, AVCaptureDevice * device) {
         //进入拍照界面的时候，会先回调这里

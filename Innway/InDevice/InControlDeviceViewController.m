@@ -103,7 +103,7 @@
     // 设置定时器
     __weak typeof(self) weakSelf = self;
     self.animationTimer = [NSTimer newTimerWithTimeInterval:0.4 repeats:YES block:^(NSTimer * _Nonnull timer) {
-        NSLog(@"按钮动画");
+//        NSLog(@"按钮动画");
         [weakSelf showBtnAnimation];
     }];
     [[NSRunLoop currentRunLoop] addTimer:self.animationTimer forMode:NSRunLoopCommonModes];

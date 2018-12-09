@@ -26,10 +26,6 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     self.tableView.scrollEnabled = NO;
-    
-    if ([UIScreen mainScreen].bounds.size.width > 320) {
-        self.tableViewHeightConstraint.constant = 210;
-    }
 }
 
 - (void)setupNarBar {

@@ -27,7 +27,10 @@
                     <rect key="frame" x="0.0" y="573" width="375" height="94"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photoBackground.png" translatesAutoresizingMaskIntoConstraints="NO" id="kco-QY-0wc">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="94"/>
+                            <rect key="frame" x="0.0" y="1" width="375" height="93"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="93" id="Ftr-QM-LhO"/>
+                            </constraints>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aW3-49-ycy" userLabel="libraryBtn">
                             <rect key="frame" x="20" y="34" width="35" height="26"/>
@@ -54,7 +57,6 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="kco-QY-0wc" firstAttribute="leading" secondItem="Qhp-PS-bd4" secondAttribute="leading" id="2HY-9e-Yjc"/>
-                        <constraint firstItem="kco-QY-0wc" firstAttribute="top" secondItem="Qhp-PS-bd4" secondAttribute="top" id="3Up-tq-eK3"/>
                         <constraint firstItem="aW3-49-ycy" firstAttribute="leading" secondItem="Qhp-PS-bd4" secondAttribute="leading" constant="20" id="8Dq-i8-2PP"/>
                         <constraint firstItem="8g5-or-lxg" firstAttribute="centerX" secondItem="Qhp-PS-bd4" secondAttribute="centerX" id="Er8-3I-69r"/>
                         <constraint firstAttribute="bottom" secondItem="kco-QY-0wc" secondAttribute="bottom" id="HGU-BF-nxT"/>

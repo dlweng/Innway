@@ -27,10 +27,6 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"InChangePasswordCell" bundle:nil] forCellReuseIdentifier:@"InChangePasswordCell"];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyBoard)]];
     self.tableView.bounces = YES;
-    
-    if ([UIScreen mainScreen].bounds.size.width != 320) {
-        self.lineTopConstraint.constant = 25;
-    }
 }
 
 - (void)setupNarBar {
