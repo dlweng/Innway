@@ -341,7 +341,7 @@
     self.device = device;
     [self.device getDeviceInfo];
     [self updateUI];
-    [self toLocation];
+//    [self toLocation];
 }
 
 - (void)deviceSettingBtnDidClick:(DLDevice *)device {

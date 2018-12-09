@@ -23,14 +23,15 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qhp-PS-bd4">
+                <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qhp-PS-bd4">
                     <rect key="frame" x="0.0" y="573" width="375" height="94"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photoBackground.png" translatesAutoresizingMaskIntoConstraints="NO" id="kco-QY-0wc">
-                            <rect key="frame" x="0.0" y="1" width="375" height="93"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="photoBackground.png" translatesAutoresizingMaskIntoConstraints="NO" id="kco-QY-0wc">
+                            <rect key="frame" x="0.0" y="-23" width="375" height="117"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="93" id="Ftr-QM-LhO"/>
+                                <constraint firstAttribute="height" constant="117" id="Ftr-QM-LhO"/>
                             </constraints>
+                            <viewLayoutGuide key="safeArea" id="MG7-lC-vGt"/>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aW3-49-ycy" userLabel="libraryBtn">
                             <rect key="frame" x="20" y="34" width="35" height="26"/>
@@ -54,7 +55,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="kco-QY-0wc" firstAttribute="leading" secondItem="Qhp-PS-bd4" secondAttribute="leading" id="2HY-9e-Yjc"/>
                         <constraint firstItem="aW3-49-ycy" firstAttribute="leading" secondItem="Qhp-PS-bd4" secondAttribute="leading" constant="20" id="8Dq-i8-2PP"/>
@@ -67,6 +68,7 @@
                         <constraint firstItem="8g5-or-lxg" firstAttribute="centerY" secondItem="Qhp-PS-bd4" secondAttribute="centerY" id="r9k-Dz-Rti"/>
                         <constraint firstAttribute="trailing" secondItem="9nQ-nR-bOl" secondAttribute="trailing" constant="20" id="xTq-Ib-o5w"/>
                     </constraints>
+                    <viewLayoutGuide key="safeArea" id="r2P-Co-LAC"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FyY-OP-Inc" userLabel="CameraBodyView">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="573"/>
@@ -97,13 +99,14 @@
                 <constraint firstItem="FyY-OP-Inc" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Ba0-8q-c1J"/>
                 <constraint firstItem="Qhp-PS-bd4" firstAttribute="top" secondItem="FyY-OP-Inc" secondAttribute="bottom" id="CBV-dq-cxV"/>
                 <constraint firstItem="LNK-wp-AoS" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="23" id="O8r-Qb-oUw"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Qhp-PS-bd4" secondAttribute="bottom" id="Q0m-F7-Utr"/>
+                <constraint firstAttribute="bottom" secondItem="Qhp-PS-bd4" secondAttribute="bottom" id="Q0m-F7-Utr"/>
                 <constraint firstItem="LNK-wp-AoS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="24" id="U1e-Au-Gnw"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Qhp-PS-bd4" secondAttribute="trailing" id="XyG-Or-a8R"/>
                 <constraint firstItem="FyY-OP-Inc" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="YyD-if-K4C"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="FyY-OP-Inc" secondAttribute="trailing" id="azH-zw-krQ"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="ZGm-Fa-BFV" secondAttribute="trailing" constant="23" id="cRe-U5-Cjd"/>
                 <constraint firstItem="Qhp-PS-bd4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="m7E-Y5-tGj"/>
+                <constraint firstItem="Qhp-PS-bd4" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="xWI-gu-Fh7"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
         </view>
