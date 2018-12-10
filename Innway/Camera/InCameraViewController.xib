@@ -77,6 +77,7 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LNK-wp-AoS" userLabel="flashBtn">
                     <rect key="frame" x="23" y="24" width="29" height="29"/>
                     <state key="normal" image="photoShark.png"/>
+                    <state key="selected" image="photoCloseShark"/>
                     <connections>
                         <action selector="flashBtnDidClick" destination="-1" eventType="touchUpInside" id="0iI-ta-eKU"/>
                     </connections>
@@ -115,6 +116,7 @@
         <image name="changeCamera.png" width="29" height="29"/>
         <image name="photoBack.png" width="35" height="26"/>
         <image name="photoBackground.png" width="360" height="93"/>
+        <image name="photoCloseShark" width="16" height="16"/>
         <image name="photoGreenCamera.png" width="67" height="67"/>
         <image name="photoLibrary.png" width="35" height="26"/>
         <image name="photoShark.png" width="29" height="29"/>

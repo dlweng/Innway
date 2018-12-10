@@ -615,7 +615,7 @@
                 // 关闭的断开连接通知，则不通知
                 if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
                     NSLog(@"去做掉线通知: %@", self.mac);
-                    [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
+                    [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ disconnects from iPhone.", self.deviceName]];
                 }
                 [common playSound];
             }

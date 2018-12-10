@@ -15,6 +15,8 @@
 		1952C97A21B9894200988409 /* NSTimer+InTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1952C97921B9894200988409 /* NSTimer+InTimer.m */; };
 		19E1A35B21A97E8400D9FBBD /* 100@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19E1A35921A97E8400D9FBBD /* 100@2x.png */; };
 		19E1A35C21A97E8400D9FBBD /* 100@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19E1A35A21A97E8400D9FBBD /* 100@3x.png */; };
+		19F4A43221BEACF200B82900 /* photoCloseShark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19F4A43021BEACF200B82900 /* photoCloseShark@3x.png */; };
+		19F4A43321BEACF200B82900 /* photoCloseShark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19F4A43121BEACF200B82900 /* photoCloseShark@2x.png */; };
 		19FEDE4821BC1B9E0064F7B7 /* LibraryImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FEDE0721BC1B9D0064F7B7 /* LibraryImageCell.m */; };
 		19FEDE4921BC1B9E0064F7B7 /* LibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FEDE0821BC1B9D0064F7B7 /* LibraryViewController.m */; };
 		19FEDE4A21BC1B9E0064F7B7 /* LibraryImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19FEDE0921BC1B9D0064F7B7 /* LibraryImageCell.xib */; };
@@ -294,6 +296,8 @@
 		1952C97921B9894200988409 /* NSTimer+InTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+InTimer.m"; sourceTree = "<group>"; };
 		19E1A35921A97E8400D9FBBD /* 100@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100@2x.png"; sourceTree = "<group>"; };
 		19E1A35A21A97E8400D9FBBD /* 100@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100@3x.png"; sourceTree = "<group>"; };
+		19F4A43021BEACF200B82900 /* photoCloseShark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoCloseShark@3x.png"; sourceTree = "<group>"; };
+		19F4A43121BEACF200B82900 /* photoCloseShark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoCloseShark@2x.png"; sourceTree = "<group>"; };
 		19F61050A82BF0B9B29DC8FF /* Pods-Innway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Innway.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Innway/Pods-Innway.debug.xcconfig"; sourceTree = "<group>"; };
 		19FEDE0621BC1B9D0064F7B7 /* LibraryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryViewController.h; sourceTree = "<group>"; };
 		19FEDE0721BC1B9D0064F7B7 /* LibraryImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryImageCell.m; sourceTree = "<group>"; };
@@ -665,11 +669,11 @@
 		19FEDE0521BC1B9D0064F7B7 /* PhotoLibrary */ = {
 			isa = PBXGroup;
 			children = (
-				19FEDE0621BC1B9D0064F7B7 /* LibraryViewController.h */,
-				19FEDE0721BC1B9D0064F7B7 /* LibraryImageCell.m */,
-				19FEDE0821BC1B9D0064F7B7 /* LibraryViewController.m */,
-				19FEDE0921BC1B9D0064F7B7 /* LibraryImageCell.xib */,
 				19FEDE0A21BC1B9D0064F7B7 /* LibraryImageCell.h */,
+				19FEDE0721BC1B9D0064F7B7 /* LibraryImageCell.m */,
+				19FEDE0921BC1B9D0064F7B7 /* LibraryImageCell.xib */,
+				19FEDE0621BC1B9D0064F7B7 /* LibraryViewController.h */,
+				19FEDE0821BC1B9D0064F7B7 /* LibraryViewController.m */,
 				19FEDE0B21BC1B9D0064F7B7 /* YBImageBrowser */,
 			);
 			path = PhotoLibrary;
@@ -787,12 +791,12 @@
 		19FEDEBF21BC1BC20064F7B7 /* LLSimpleCamera */ = {
 			isa = PBXGroup;
 			children = (
-				19FEDEC021BC1BC20064F7B7 /* LLSimpleCamera+Helper.m */,
 				19FEDEC121BC1BC20064F7B7 /* LLSimpleCamera.h */,
-				19FEDEC221BC1BC20064F7B7 /* UIImage+FixOrientation.h */,
-				19FEDEC321BC1BC20064F7B7 /* LLSimpleCamera+Helper.h */,
 				19FEDEC421BC1BC20064F7B7 /* LLSimpleCamera.m */,
+				19FEDEC221BC1BC20064F7B7 /* UIImage+FixOrientation.h */,
 				19FEDEC521BC1BC20064F7B7 /* UIImage+FixOrientation.m */,
+				19FEDEC321BC1BC20064F7B7 /* LLSimpleCamera+Helper.h */,
+				19FEDEC021BC1BC20064F7B7 /* LLSimpleCamera+Helper.m */,
 			);
 			path = LLSimpleCamera;
 			sourceTree = "<group>";
@@ -1018,6 +1022,8 @@
 				33E4FB40219E3E7300A2F101 /* changeCamera@3x.png */,
 				33FFB99D2173392200E6A8C6 /* photoShark@2x.png */,
 				33FFB99E2173392300E6A8C6 /* photoShark@3x.png */,
+				19F4A43121BEACF200B82900 /* photoCloseShark@2x.png */,
+				19F4A43021BEACF200B82900 /* photoCloseShark@3x.png */,
 				33FFB9342171D6E700E6A8C6 /* icon_add_device@2x.png */,
 				33FFB9332171D6E700E6A8C6 /* icon_add_device@3x.png */,
 				3368B8382184152300AC943F /* user@2x.png */,
@@ -1361,6 +1367,7 @@
 				194AEF0721A04BAA00B0B76D /* narBarBackgroudImage8.jpg in Resources */,
 				337E50212161F42600CB6313 /* InAddDevice.storyboard in Resources */,
 				337E50292161F60F00CB6313 /* addButton@2x.png in Resources */,
+				19F4A43221BEACF200B82900 /* photoCloseShark@3x.png in Resources */,
 				33FFB98F2172EF8900E6A8C6 /* InUserSettingViewController.xib in Resources */,
 				3379A2D521561E73008D1AA2 /* sWhiteBtn@3x.png in Resources */,
 				33FB62AF215D45BC00C6419C /* 5@2x.png in Resources */,
@@ -1449,6 +1456,7 @@
 				33FB62A2215D453900C6419C /* 80@2x.png in Resources */,
 				337E505021620E1B00CB6313 /* searchLine@2x.png in Resources */,
 				337E503D2162030D00CB6313 /* buyButton@2x.png in Resources */,
+				19F4A43321BEACF200B82900 /* photoCloseShark@2x.png in Resources */,
 				33FFB9A12173392400E6A8C6 /* photoGreenCamera@3x.png in Resources */,
 				3374C7A32112077C00F83101 /* icon_scan_line.png in Resources */,
 				337E505D21623C8500CB6313 /* successCheck@3x.png in Resources */,

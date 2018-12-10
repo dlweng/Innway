@@ -38,7 +38,6 @@
         NSLog(@"前后摄像头切换");
         if([camera isFlashAvailable]) {
             weakSelf.flashBtn.hidden = NO;
-            
             if(camera.flash == LLCameraFlashOff) {
                 weakSelf.flashBtn.selected = NO;
             }
