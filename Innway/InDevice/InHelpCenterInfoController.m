@@ -45,7 +45,6 @@
             break;
     }
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
-    
 }
 
 #pragma mark - Table view data source

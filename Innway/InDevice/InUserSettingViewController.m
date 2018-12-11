@@ -53,7 +53,7 @@
     }
     
     if ([UIScreen mainScreen].bounds.size.height == 568) {
-        self.btnTopConstraint.constant = 7;
+        self.btnTopConstraint.constant = 15;
     }
 }
 
@@ -92,7 +92,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 7;
+    return 6;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -116,10 +116,10 @@
             cell.textLabel.text = @"Help Center";
             break;
         case 3:
-            cell.textLabel.text = @"FAQs";
+            cell.textLabel.text = @"Contact Us";
             break;
         case 4:
-            cell.textLabel.text = @"Contact Us";
+            cell.textLabel.text = @"Privacy Policy";
             break;
         case 5:{
             cell.textLabel.text = @"Display User Location";
@@ -127,15 +127,6 @@
             cell.accessoryView = self.locationBtn;
             break;
         }
-        case 6:
-        {
-            cell.textLabel.text = @"App Version";
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 40, 44)];
-            label.text = @"1.0";
-            label.textColor = [UIColor lightGrayColor];
-            cell.accessoryView = label;
-        }
-            break;
         default:
             break;
     }

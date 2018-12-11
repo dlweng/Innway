@@ -20,7 +20,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *deleteDeviceBtn;
 @property (nonatomic, strong) UISwitch *disconnectAlertBtn;
-@property (nonatomic, strong) UISwitch *reconnectTipBtn;
+//@property (nonatomic, strong) UISwitch *reconnectTipBtn;
 
 @property (nonatomic, assign) NSNumber *phoneAlertMusic;
 
@@ -41,8 +41,8 @@
     
     self.disconnectAlertBtn = [[UISwitch alloc] init];
     [self.disconnectAlertBtn addTarget:self action:@selector(disconnectAlertBtnDidClick:) forControlEvents:UIControlEventValueChanged];
-    self.reconnectTipBtn = [[UISwitch alloc] init];
-    [self.reconnectTipBtn addTarget:self action:@selector(reconnectTipBtnDidClick:) forControlEvents:UIControlEventValueChanged];
+//    self.reconnectTipBtn = [[UISwitch alloc] init];
+//    [self.reconnectTipBtn addTarget:self action:@selector(reconnectTipBtnDidClick:) forControlEvents:UIControlEventValueChanged];
     
     self.deleteDeviceBtn.layer.masksToBounds = YES;
     self.deleteDeviceBtn.layer.cornerRadius = 10;
@@ -102,13 +102,13 @@
 
 - (void)disconnectAlertBtnDidClick: (UISwitch *)btn {
 //    NSLog(@"断开警告被点击: %d", btn.isOn);
-    [self.device setDisconnectAlert:btn.isOn reconnectAlert:self.reconnectTipBtn.isOn];
+    [self.device setDisconnectAlert:btn.isOn reconnectAlert:NO];
 }
 
-- (void)reconnectTipBtnDidClick:(UISwitch *)btn {
-//    NSLog(@"重连提示被点击: %d", btn.isOn);
-    [self.device setDisconnectAlert:self.disconnectAlertBtn.isOn reconnectAlert:btn.isOn];
-}
+//- (void)reconnectTipBtnDidClick:(UISwitch *)btn {
+////    NSLog(@"重连提示被点击: %d", btn.isOn);
+//    [self.device setDisconnectAlert:self.disconnectAlertBtn.isOn reconnectAlert:btn.isOn];
+//}
 
 - (void)saveNewDeviceName:(NSString *)newDeviceName {
     // 保存设备名称
@@ -135,8 +135,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0:
-            return 1;
         case 1:
+            return 1;
         case 2:
         case 3:
             return 2;
@@ -215,14 +215,14 @@
                     self.disconnectAlertBtn.on = disconnectAlert.boolValue;
                     break;
                 }
-                case 1:
-                {
-                    cell.textLabel.text = @"Reconnect prompt";
-                    cell.accessoryView = self.reconnectTipBtn;
-                    NSNumber *reconnectAlert = self.device.lastData[ReconnectAlertKey];
-                    self.reconnectTipBtn.on = reconnectAlert.boolValue;
-                    break;
-                }
+//                case 1:
+//                {
+//                    cell.textLabel.text = @"Reconnect prompt";
+//                    cell.accessoryView = self.reconnectTipBtn;
+//                    NSNumber *reconnectAlert = self.device.lastData[ReconnectAlertKey];
+//                    self.reconnectTipBtn.on = reconnectAlert.boolValue;
+//                    break;
+//                }
                 default:
                     break;
             }

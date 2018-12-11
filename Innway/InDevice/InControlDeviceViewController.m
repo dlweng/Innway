@@ -23,6 +23,7 @@
 #import "InHelpCenterSelectionController.h"
 #import "NSTimer+InTimer.h"
 #import "InCameraViewController.h"
+#import "InWebViewController.h"
 #define coverViewAlpha 0.85  // 覆盖层的透明度
 
 @interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceListViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, InCameraViewControllerDelegate>
@@ -450,28 +451,32 @@
         case 1:
         {
             NSLog(@"跳转到购买中心");
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];
+            InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Buy More Innway" UrlString:@"http://www.innwaytech.com"];
+            [self safePushViewController:webVC];
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.innwaytech.com"]];
             break;
         }
         case 2:
         {
             NSLog(@"跳转到帮助中心");
-            InHelpCenterSelectionController *helpCenterSelectionVC = [[InHelpCenterSelectionController alloc] init];
-            [self safePushViewController:helpCenterSelectionVC];
+            InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Help Center" UrlString:@"http://3.16.195.135/FAQs/help.html"];
+            [self safePushViewController:webVC];
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://3.16.195.135/FAQs/help.html"]];
             break;
         }
         case 3:
         {
-            // FAQs
-            NSLog(@"跳转到FAQs");
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];
+            NSLog(@"跳转到反馈中心");
+            InFeedbackViewController *feedbackVC = [[InFeedbackViewController alloc] init];
+            [self safePushViewController:feedbackVC];
             break;
         }
         case 4:
         {
-            NSLog(@"跳转到反馈中心");
-            InFeedbackViewController *feedbackVC = [[InFeedbackViewController alloc] init];
-            [self safePushViewController:feedbackVC];
+            NSLog(@"跳转隐私协议");
+            InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Privacy Policy" UrlString:@"http://www.baidu.com"];
+            [self safePushViewController:webVC];
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];
             break;
         }
         default:

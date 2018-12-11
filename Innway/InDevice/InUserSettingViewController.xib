@@ -26,10 +26,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="4Zx-z8-Alq">
-                    <rect key="frame" x="0.0" y="160" width="375" height="350"/>
+                    <rect key="frame" x="0.0" y="160" width="375" height="300"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="350" id="HKV-c2-Kov"/>
+                        <constraint firstAttribute="height" constant="300" id="HKV-c2-Kov"/>
                     </constraints>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="F6C-Of-Ivx"/>
@@ -85,7 +85,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2p5-7g-hzI">
-                    <rect key="frame" x="69" y="554" width="237" height="45"/>
+                    <rect key="frame" x="69" y="504" width="237" height="45"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <state key="normal" title="Exit account" backgroundImage="buyButton.png">
                         <color key="titleColor" red="0.31372549020000001" green="0.70196078429999997" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -94,6 +94,12 @@
                         <action selector="logout" destination="-1" eventType="touchUpInside" id="AtC-Pt-B4Z"/>
                     </connections>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="App Version 1.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ltf-dz-qBQ">
+                    <rect key="frame" x="134.5" y="564" width="106" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
@@ -101,7 +107,9 @@
                 <constraint firstItem="4Zx-z8-Alq" firstAttribute="top" secondItem="aUX-EV-fgk" secondAttribute="bottom" id="CNw-LK-io2"/>
                 <constraint firstAttribute="trailing" secondItem="4Zx-z8-Alq" secondAttribute="trailing" id="Gik-an-rt4"/>
                 <constraint firstItem="aUX-EV-fgk" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="O9G-RB-i9X"/>
+                <constraint firstItem="Ltf-dz-qBQ" firstAttribute="top" secondItem="2p5-7g-hzI" secondAttribute="bottom" constant="15" id="Rps-rI-KsV"/>
                 <constraint firstAttribute="trailing" secondItem="aUX-EV-fgk" secondAttribute="trailing" id="Sas-dV-WfV"/>
+                <constraint firstItem="Ltf-dz-qBQ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="dhy-9P-fY2"/>
                 <constraint firstItem="aUX-EV-fgk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="gRA-s9-zXZ"/>
                 <constraint firstItem="2p5-7g-hzI" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="nXq-AB-7b9"/>
                 <constraint firstItem="4Zx-z8-Alq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="qUK-Le-mKP"/>
