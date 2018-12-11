@@ -34,6 +34,16 @@
 - (void)setupNarBar {
     self.navigationController.navigationBar.hidden = NO;
     self.navigationItem.title = @"Help Center";
+    switch (self.deviceType) {
+        case InDeviceCard:
+            self.navigationItem.title = @"Innway Card";
+            break;
+        case InDeviceChip:
+            self.navigationItem.title = @"Innway Chip";
+            break;
+        default:
+            break;
+    }
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
     
 }
@@ -57,9 +67,9 @@
     
     NSString *deviceName = @"card";
     switch (self.deviceType) {
-        case InDeviceTag:
-            deviceName = @"tag";
-            break;
+//        case InDeviceTag:
+//            deviceName = @"tag";
+//            break;
         case InDeviceChip:
             deviceName = @"chip";
             break;
@@ -69,7 +79,7 @@
     switch (indexPath.row) {
         case 0:
         {
-            info = [NSString stringWithFormat:@"Attach:\nAttach Innway %@ to anything you don’t want to lose. Connect it to the Innway app.", deviceName];
+            info = [NSString stringWithFormat:@"Attach:\nAttach Innway %@ to anything you don’t want to lose. \nConnect it to the Innway app.", deviceName];
             break;
         }
         case 1:
@@ -89,7 +99,17 @@
         }
         case 4:
         {
-            info = @"Rechargeble battary:\nBattery lifetime up to 2-3 months and could be chargeable, the battery capacity percentage displays on APP. ";
+            switch (self.deviceType) {
+                case InDeviceCard:
+                    info = @"Rechargeble battary:\nBattery lifetime up 3 to 5 months and could be chargeable, the battery capacity percentage displays on APP. ";
+                    break;
+                case InDeviceChip:
+                    info = @"Rechargeble battary:\nBattery lifetime up 1 to 2 months and could be chargeable, the battery capacity percentage displays on APP. ";
+                    break;
+                default:
+                    break;
+            }
+            
             break;
         }
         default:

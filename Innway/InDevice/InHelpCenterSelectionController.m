@@ -38,7 +38,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return 2;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -48,10 +48,10 @@
         case 0:
             deviceType = InDeviceCard;
             break;
+//        case 1:
+//            deviceType = InDeviceTag;
+//            break;
         case 1:
-            deviceType = InDeviceTag;
-            break;
-        case 2:
             deviceType = InDeviceChip;
             break;
         default:
@@ -71,10 +71,10 @@
         case 0:
             cell.textLabel.text = @"Innway Card Instructions";
             break;
+//        case 1:
+//            cell.textLabel.text = @"Innway Tag Instructions";
+//            break;
         case 1:
-            cell.textLabel.text = @"Innway Tag Instructions";
-            break;
-        case 2:
             cell.textLabel.text = @"Innway Chip Instructions";
             break;
         default:

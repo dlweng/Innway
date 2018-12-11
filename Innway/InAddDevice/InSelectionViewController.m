@@ -29,7 +29,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.arr = @[@{@"image": @"tag", @"title": @"Innway Tag"},
+    self.arr = @[
+//  @{@"image": @"tag", @"title": @"Innway Tag"},
                  @{@"image": @"chip", @"title": @"Innway chip"},
                  @{@"image": @"Card", @"title": @"Innway Card"}];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
@@ -78,13 +79,13 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     common.deviceType = indexPath.row;
     switch (indexPath.row) {
+//        case 0:
+//            common.deviceType = InDeviceTag;
+//            break;
         case 0:
-            common.deviceType = InDeviceTag;
-            break;
-        case 1:
             common.deviceType = InDeviceChip;
             break;
-        case 2:
+        case 1:
             common.deviceType = InDeviceCard;
             break;
         default:

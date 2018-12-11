@@ -31,18 +31,24 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *confirmBtnTopConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topOptionViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *phoneOptionViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *messageBodyViewHeightConstraing;
 
+@property (nonatomic, assign) InSearchViewType type;
+@property (weak, nonatomic) IBOutlet UIButton *confirmBtn;
 @property (weak, nonatomic) IBOutlet UIView *searchBodyView;
 @property (weak, nonatomic) IBOutlet UIView *successBodyView;
 @property (weak, nonatomic) IBOutlet UIView *failedBodyView;
-@property (weak, nonatomic) IBOutlet UILabel *titleTipLabel;
-@property (weak, nonatomic) IBOutlet UILabel *firstTipLabel;
-@property (weak, nonatomic) IBOutlet UILabel *secondTipLabel;
-@property (weak, nonatomic) IBOutlet UILabel *thirdTipLabel;
-@property (weak, nonatomic) IBOutlet UIButton *confirmBtn;
-@property (nonatomic, assign) InSearchViewType type;
 @property (weak, nonatomic) IBOutlet UILabel *tryAagainLabel;
 @property (weak, nonatomic) IBOutlet UIView *phoneBodyView;
+@property (weak, nonatomic) IBOutlet UIImageView *successCardImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *failedCardImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *searchCardImageView;
+@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *sucessCardWidthConstrain;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *failedCardWidthConstrain;
+@property (weak, nonatomic) IBOutlet UILabel *successMessageLabel;
+
 
 @property (nonatomic, strong) NSTimer *searchAnimationTimer;
 @property (nonatomic, copy) NSString *findDeviceMac;
@@ -77,20 +83,27 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
         [weakSelf animation];
     }];
     [[NSRunLoop currentRunLoop] addTimer:self.searchAnimationTimer forMode:NSRunLoopCommonModes];
+    
+    if (common.deviceType == InDeviceChip) {
+        self.sucessCardWidthConstrain.constant = 60;
+        self.failedCardWidthConstrain.constant = 60;
+        self.successMessageLabel.text = @"Found Innway Chip";
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-    self.topOptionViewHeightConstraint.constant = screenHeight / 3.8;
+    self.topOptionViewHeightConstraint.constant = screenHeight / 4;
     if (screenHeight == 568) {
         // iphone 5, 4s
-        self.topOptionViewHeightConstraint.constant = screenHeight / 4.3;
+        self.topOptionViewHeightConstraint.constant = screenHeight / 5;
     }
     self.type = InSearch;
     [self updateView];
     [self confirm];
     self.findDeviceMac = nil;
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -100,22 +113,51 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 
 - (void)updateView {
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+    NSString *message = @"";
+    switch (common.deviceType) {
+        case InDeviceChip:
+        {
+            self.successCardImageView.image = [UIImage imageNamed:@"successChip"];
+            self.failedCardImageView.image = [UIImage imageNamed:@"successChip"];
+            self.searchCardImageView.image = [UIImage imageNamed:@"searchChip"];
+            break;
+        }
+        case InDeviceCard:
+        {
+            self.successCardImageView.image = [UIImage imageNamed:@"successCard"];
+            self.failedCardImageView.image = [UIImage imageNamed:@"successCard"];
+            self.searchCardImageView.image = [UIImage imageNamed:@"searchCard"];
+            break;
+        }
+        default:
+            break;
+    }
+    
     if (self.type == InSearch) {
         self.searchBodyView.hidden = NO;
         self.successBodyView.hidden = YES;
         self.failedBodyView.hidden = YES;
         self.tryAagainLabel.hidden = YES;
         self.phoneBodyView.hidden = NO;
+        self.messageBodyViewHeightConstraing.constant = 166;
         self.phoneOptionViewHeightConstraint.constant = 151;
-        self.confirmBtnTopConstraint.constant = screenHeight / 14.0;
+        self.confirmBtnTopConstraint.constant = screenHeight / 18.0;
         if (screenHeight == 568) {
-            self.confirmBtnTopConstraint.constant = screenHeight / 26.0;
+            self.confirmBtnTopConstraint.constant = screenHeight / 35.0;
+            self.phoneOptionViewHeightConstraint.constant = 140;
         }
         [self.confirmBtn setTitle:@"Confirm" forState:UIControlStateNormal];
-        self.titleTipLabel.text = @"Successive instructions";
-        self.firstTipLabel.text = @"1. Make sure to turn on your phone's Bluetooth.";
-        self.secondTipLabel.text = @"2. Hold the button on the innway card 3 sec until your hear a beep and the led starts flashing.";
-        self.thirdTipLabel.text = @"3. Hold the innway card close to your phone.";
+        self.titleLabel.text = @"Instructions:";
+        switch (common.deviceType) {
+            case InDeviceCard:
+                message = @"1.Ensure that you have enabled Bluetooth on your phone.\n2.Launch the Innway app and ensure that you complete the registration process.\n3.Place the Innway Card next to your phone.\n4.Press and hold the button on the Innway Card for at least 5 seconds until you hear a beep and a blue light lights up.\n5.Launch the Innway app and tap on Add a new innway. Select Innway Card and the app will automatically pair with your card.";
+                break;
+            case InDeviceChip:
+                message = @"1.Ensure that you have enabled Bluetooth on your phone.\n2.Launch the Innway app and ensure that you complete the registration process.\n3.Place the Innway Chip next to your phone.\n4.Press and hold the button on the Innway Chip for at least 5 seconds until you hear a beep and a blue light lights up.\n5.Launch the Innway app and tap on Add a new innway. Select Innway Chip and the app will automatically pair with your chip.";
+                break;
+            default:
+                break;
+        }
     }
     else if (self.type == InSuccess) {
         self.searchBodyView.hidden = YES;
@@ -124,15 +166,24 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
         self.tryAagainLabel.hidden = YES;
         self.phoneBodyView.hidden = NO;
         [self.confirmBtn setTitle:@"Confirm" forState:UIControlStateNormal];
+        self.messageBodyViewHeightConstraing.constant = 166;
         self.phoneOptionViewHeightConstraint.constant = 151;
-        self.confirmBtnTopConstraint.constant = screenHeight / 14.0;
+        self.confirmBtnTopConstraint.constant = screenHeight / 18.0;
         if (screenHeight == 568) {
-            self.confirmBtnTopConstraint.constant = screenHeight / 26.0;
+            self.confirmBtnTopConstraint.constant = screenHeight / 35.0;
+            self.phoneOptionViewHeightConstraint.constant = 140;
         }
-        self.titleTipLabel.text = @"Successive instructions";
-        self.firstTipLabel.text = @"1. Make sure to turn on your phone's Bluetooth.";
-        self.secondTipLabel.text = @"2. Hold the button on the innway card until your hear a beep and the led starts flashing.";
-        self.thirdTipLabel.text = @"3. Hold the innway card close to your phone.";
+        self.titleLabel.text = @"Successive instructions:";
+        switch (common.deviceType) {
+            case InDeviceCard:
+                message  = @"1.Ensure that you have enabled Bluetooth on your phone.\n2.Launch the Innway app and ensure that you complete the registration process.\n3.Place the Innway Card next to your phone.\n4.Press and hold the button on the Innway Card for at least 5 seconds until you hear a beep and a blue light lights up.\n5.Launch the Innway app and tap on Add a new innway. Select Innway Card and the app will automatically pair with your card.";
+                break;
+            case InDeviceChip:
+                message = @"1.Ensure that you have enabled Bluetooth on your phone.\n2.Launch the Innway app and ensure that you complete the registration process.\n3.Place the Innway Chip next to your phone.\n4.Press and hold the button on the Innway Chip for at least 5 seconds until you hear a beep and a blue light lights up.\n5.Launch the Innway app and tap on Add a new innway. Select Innway Chip and the app will automatically pair with your chip.";
+                break;
+            default:
+                break;
+        }
     }
     else if (self.type == InFailed) {
         self.searchBodyView.hidden = YES;
@@ -141,13 +192,28 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
         self.tryAagainLabel.hidden = NO;
         self.phoneBodyView.hidden = YES;
         [self.confirmBtn setTitle:@"return" forState:UIControlStateNormal];
+        self.messageBodyViewHeightConstraing.constant = 120;
         self.phoneOptionViewHeightConstraint.constant = 70;
         self.confirmBtnTopConstraint.constant = 0;
-        self.titleTipLabel.text = @"you can";
-        self.firstTipLabel.text = @"1. Turn off and then turn on Bluetooth.";
-        self.secondTipLabel.text = @"2. Hold the button on the innway card and check if can hear a beep sound.";
-        self.thirdTipLabel.text = @"3. Near the innway card to your phone";
+        self.titleLabel.text = @"you can:";
+        switch (common.deviceType) {
+            case InDeviceCard:
+                message = @"·Turn off and then turn on Bluetooth.\n·Hold the button on the innway card and check if the blue light can lights up.\n·Near the innway card to your phone";
+                break;
+            case InDeviceChip:
+                message = @"·Turn off and then turn on Bluetooth.\n·Hold the button on the innway chip and check if the blue light can lights up.\n·Near the innway chip to your phone";
+                break;
+            default:
+                break;
+        }
     }
+
+    NSMutableParagraphStyle  *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle  setLineSpacing:5];
+    NSMutableAttributedString  *infoString = [[NSMutableAttributedString alloc] initWithString:message];
+    [infoString  addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [message length])];
+    // 设置Label要显示的text
+    [self.messageLabel  setAttributedText:infoString];
 }
 
 - (IBAction)confirm {

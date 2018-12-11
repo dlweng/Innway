@@ -449,22 +449,30 @@
         }
         case 1:
         {
-            NSLog(@"跳转到反馈中心");
-            InFeedbackViewController *feedbackVC = [[InFeedbackViewController alloc] init];
-            [self safePushViewController:feedbackVC];
-            break;
-        }
-        case 2:
-        {
             NSLog(@"跳转到购买中心");
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];
             break;
         }
-        case 3:
+        case 2:
         {
             NSLog(@"跳转到帮助中心");
             InHelpCenterSelectionController *helpCenterSelectionVC = [[InHelpCenterSelectionController alloc] init];
             [self safePushViewController:helpCenterSelectionVC];
+            break;
+        }
+        case 3:
+        {
+            // FAQs
+            NSLog(@"跳转到FAQs");
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];
+            break;
+        }
+        case 4:
+        {
+            NSLog(@"跳转到反馈中心");
+            InFeedbackViewController *feedbackVC = [[InFeedbackViewController alloc] init];
+            [self safePushViewController:feedbackVC];
+            break;
         }
         default:
             break;
