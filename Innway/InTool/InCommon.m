@@ -534,7 +534,7 @@ static SystemSoundID soundID; // 离线提示音
 - (CLBeaconRegion *)iBeaconRegion {
     if (!_iBeaconRegion) {
         NSUUID *proximityUUID = [[NSUUID alloc] initWithUUIDString:@"704F6FEE-A8A0-475B-91C2-7A2ECC1CE8A2"];
-        _iBeaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID major:10 minor:11 identifier:@"com.innwaytech.innway"];
+        _iBeaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID major:16 minor:17 identifier:@"com.innwaytech.innway"];
         _iBeaconRegion.notifyOnEntry = YES;
         _iBeaconRegion.notifyOnExit = YES;
     }
@@ -568,13 +568,15 @@ static SystemSoundID soundID; // 离线提示音
         if (0 != self.iBeaconBackgroundTaskID) {
             return;
         }
-        self.iBeaconBackgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+        __weak typeof(self) weakSelf = self;
+        self.iBeaconBackgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            [weakSelf stopiBeaconBackgroundTask];
+        }];
     }
 }
 
 - (void)stopiBeaconBackgroundTask {
     if (self.iBeaconBackgroundTaskID != 0) {
-//        [InCommon sendLocalNotification:@"后台任务存在，去结束后台任务"];
         NSInteger taskid = self.iBeaconBackgroundTaskID;
         self.iBeaconBackgroundTaskID = 0;
         [[UIApplication sharedApplication] endBackgroundTask:taskid];
@@ -673,6 +675,8 @@ static SystemSoundID soundID; // 离线提示音
     }
     
     NSMutableURLRequest* formRequest = [[AFHTTPRequestSerializer serializer] requestWithMethod:method URLString:URLString parameters:body error:nil];
+    // 修改超时时间
+    formRequest.timeoutInterval = 20;
 //    NSLog(@"URL = %@", URLString);
 //    NSLog(@"body = %@", body);
     [formRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8"forHTTPHeaderField:@"Content-Type"];
@@ -730,7 +734,13 @@ static SystemSoundID soundID; // 离线提示音
         if (0 != self.backgroundTaskID) {
             return YES;
         }
-        self.backgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+        self.backgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            if (0 != self.backgroundTaskID) {
+                NSInteger taskid = self.backgroundTaskID;
+                self.backgroundTaskID = 0;
+                [[UIApplication sharedApplication] endBackgroundTask:taskid];
+            }
+        }];
         return 0 != self.backgroundTaskID;
     }
     return NO;

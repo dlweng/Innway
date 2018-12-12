@@ -78,6 +78,13 @@
         }
         else {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
+            // 如果实在后台，只有是通过iBeacon激活的才有可能，直接跳过
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+                if (common.email.length > 0 && common.pwd.length > 0) {
+                    [self pushToNewCotroller];
+                    return ;
+                }
+            }
             NSString *message;
             if (code == 300) {
                 message = @"Wrong username or password";

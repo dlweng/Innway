@@ -31,7 +31,7 @@
     [super viewDidLoad];
     self.arr = @[
 //  @{@"image": @"tag", @"title": @"Innway Tag"},
-                 @{@"image": @"chip", @"title": @"Innway chip"},
+                 @{@"image": @"chip", @"title": @"Innway Chip"},
                  @{@"image": @"Card", @"title": @"Innway Card"}];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     [self.navigationController.navigationBar setHidden:NO];

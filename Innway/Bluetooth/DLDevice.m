@@ -20,8 +20,8 @@
 #define offlineRSSI @(-120)
 
 // 设置重连超时  重连超时时间一定要为连接超时时间的倍数
-#define reconnectTimeOut 8
-#define reconnectMaxCount 6
+#define reconnectTimeOut 13
+#define reconnectMaxCount 10
 
 @interface DLDevice() {
     NSNumber *_rssi;
@@ -466,8 +466,8 @@
                     // 开始重连计时
                     [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
 //                    // 激活后台线程 重连超时大于10秒，才需要这两行代码
-//                    self.isReconnectTimer = YES; // 标志开始了重连计时
-//                    [common beginBackgroundTask];
+                    self.isReconnectTimer = YES; // 标志开始了重连计时
+                    [common beginBackgroundTask];
                 }
                 if (self.reconnectNum < reconnectMaxCount) {
                     self.reconnectNum++;
@@ -515,9 +515,9 @@
         else {
             NSLog(@"重连超时，已经连上设备, mac = %@", self.mac);
         }
-//        // 标志计时结束， 重连超时时间大于10秒，才需要这两行代码
-//        self.isReconnectTimer = NO;
-//        [common endBackgrondTask];
+        // 标志计时结束， 重连超时时间大于10秒，才需要这两行代码
+        self.isReconnectTimer = NO;
+        [common endBackgrondTask];
     }
 }
 

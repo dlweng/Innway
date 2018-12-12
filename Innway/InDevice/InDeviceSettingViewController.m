@@ -72,9 +72,9 @@
 }
 
 - (void)deleteDevice {
-    [InAlertTool showHUDAddedTo:self.view tips:@"正在删除设备，请稍候！" tag:1 animated:YES];
+    [InAlertTool showHUDAddedTo:self.view animated:YES];
     [[DLCloudDeviceManager sharedInstance] deleteDevice:self.device.mac completion:^(DLCloudDeviceManager *manager, NSError *error) {
-        [InAlertTool hideHUDForView:self.view tag:1];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (error) {
             [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
         }
