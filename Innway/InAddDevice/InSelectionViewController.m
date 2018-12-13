@@ -9,6 +9,7 @@
 #import "InSelectionViewController.h"
 #import "InSearchDeviceViewController.h"
 #import "inCommon.h"
+#import "InWebViewController.h"
 
 @interface InSelectionViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -99,7 +100,11 @@
 
 - (IBAction)buyNewInnway {
     NSLog(@"跳转到购买设备链接");
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];  
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];
+    InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Buy More Innway" UrlString:@"http://www.innwaytech.com"];
+    if (self.navigationController.viewControllers.lastObject == self) {
+        [self.navigationController pushViewController:webVC animated:YES];
+    }
 }
 
 @end

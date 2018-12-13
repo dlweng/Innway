@@ -461,7 +461,6 @@
             // 只处理当前设备离线的情况
             if ([DLCentralManager sharedInstance].state == CBCentralManagerStatePoweredOn) {
                 //被动的掉线且蓝牙打开，去做重连
-                
                 if (self.online && !self.isReconnectTimer) { //当前是在线，需要计时设置为离线
                     // 开始重连计时
                     [_offlineReconnectTimer setFireDate:[NSDate distantPast]];

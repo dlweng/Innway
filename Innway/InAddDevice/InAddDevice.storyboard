@@ -491,6 +491,7 @@
                         <outlet property="confirmBtn" destination="F0i-NI-iuH" id="caJ-SS-Ibd"/>
                         <outlet property="confirmBtnTopConstraint" destination="ugK-I7-6ye" id="bmR-ag-1Ih"/>
                         <outlet property="failedBodyView" destination="agn-Nw-neF" id="qZa-jG-paM"/>
+                        <outlet property="failedBodyViewHeightConstraint" destination="Zz9-ZR-t8e" id="kga-xe-gHo"/>
                         <outlet property="failedCardImageView" destination="45b-ea-PUg" id="1rT-bG-QRp"/>
                         <outlet property="failedCardWidthConstrain" destination="rYr-mw-2Th" id="6fP-YC-uVQ"/>
                         <outlet property="messageBodyViewHeightConstraing" destination="AuE-1t-Ufl" id="rPs-KF-LEZ"/>
@@ -502,6 +503,7 @@
                         <outlet property="successBodyView" destination="uMd-fn-Qr3" id="TJH-Sw-5gV"/>
                         <outlet property="successCardImageView" destination="1r9-5Z-lot" id="4kY-8E-xM6"/>
                         <outlet property="successMessageLabel" destination="O5d-f5-C8l" id="Pv1-uc-bi5"/>
+                        <outlet property="successbodyViewHeightConstraint" destination="erA-Z0-wO3" id="3M8-fT-tFa"/>
                         <outlet property="sucessCardWidthConstrain" destination="Vjv-Wi-UjD" id="g3e-P1-dZK"/>
                         <outlet property="titleLabel" destination="v3P-VH-WyQ" id="eAo-yc-j0Y"/>
                         <outlet property="topOptionViewHeightConstraint" destination="oQ8-6m-oAR" id="Pfv-bW-VWg"/>

@@ -419,6 +419,8 @@ static SystemSoundID soundID; // 离线提示音
     }
     NSLog(@"开始上传设备%@的位置, gps = %@", device.mac, gps);
     NSDictionary *body = @{@"deviceid":[NSString stringWithFormat:@"%zd", device.cloudID], @"gps":gps, @"action":@"updateDeviceGPS", @"OfflineTime":device.offlineTime};
+    
+    //开启一个后台任务
     __block UIBackgroundTaskIdentifier taskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         [[UIApplication sharedApplication] endBackgroundTask:taskID];
         taskID = 0;
@@ -434,6 +436,7 @@ static SystemSoundID soundID; // 离线提示音
 ////            NSLog(@"上传设备位置code = %zd, message = %@", code, message);
 //        }
         if (taskID != 0) {
+            NSLog(@"离线后台任务存在，去关闭");
             [[UIApplication sharedApplication] endBackgroundTask:taskID];
             taskID = 0;
         }
@@ -553,7 +556,7 @@ static SystemSoundID soundID; // 离线提示音
 
 - (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region {
     NSLog(@"开始监听ibeacon范围");
-    [InCommon sendLocalNotification:@"开始监听ibeacon范围"];
+//    [InCommon sendLocalNotification:@"开始监听ibeacon范围"];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
@@ -563,7 +566,6 @@ static SystemSoundID soundID; // 离线提示音
         NSLog(@"进入了iBeacon的范围");
         [self beginiBeaconBackgroundTask];
         [InCommon sendLocalNotification:[NSString stringWithFormat:@"进入了iBeacon的范围"]];
-        
     }
     else if(state == CLRegionStateOutside)
     {

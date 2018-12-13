@@ -48,6 +48,8 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *sucessCardWidthConstrain;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *failedCardWidthConstrain;
 @property (weak, nonatomic) IBOutlet UILabel *successMessageLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *successbodyViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *failedBodyViewHeightConstraint;
 
 
 @property (nonatomic, strong) NSTimer *searchAnimationTimer;
@@ -98,6 +100,8 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
     if (screenHeight == 568) {
         // iphone 5, 4s
         self.topOptionViewHeightConstraint.constant = screenHeight / 5;
+        self.successbodyViewHeightConstraint.constant = self.topOptionViewHeightConstraint.constant * 0.8;
+        self.failedBodyViewHeightConstraint.constant = self.topOptionViewHeightConstraint.constant * 0.8;
     }
     self.type = InSearch;
     [self updateView];
