@@ -22,6 +22,7 @@ static SystemSoundID soundID; // 离线提示音
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskID;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier iBeaconBackgroundTaskID;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier uploadDeviceLocationtTaskID;
 @property (nonatomic, strong) CLBeaconRegion *iBeaconRegion;
 @end
 
@@ -418,14 +419,23 @@ static SystemSoundID soundID; // 离线提示音
     }
     NSLog(@"开始上传设备%@的位置, gps = %@", device.mac, gps);
     NSDictionary *body = @{@"deviceid":[NSString stringWithFormat:@"%zd", device.cloudID], @"gps":gps, @"action":@"updateDeviceGPS", @"OfflineTime":device.offlineTime};
+    __block UIBackgroundTaskIdentifier taskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:taskID];
+        taskID = 0;
+    }];
     [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"上传设备位置失败: %@", error);
-        }
-        else {
-            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
-            NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"gps更新失败"];
-//            NSLog(@"上传设备位置code = %zd, message = %@", code, message);
+        NSLog(@"上传位置结束，剩余系统时间： %f", [UIApplication sharedApplication].backgroundTimeRemaining);
+//        if (error) {
+//            NSLog(@"上传设备位置失败: %@", error);
+//        }
+//        else {
+//            NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+//            NSString *message = [responseObject stringValueForKey:@"message" defaultValue:@"gps更新失败"];
+////            NSLog(@"上传设备位置code = %zd, message = %@", code, message);
+//        }
+        if (taskID != 0) {
+            [[UIApplication sharedApplication] endBackgroundTask:taskID];
+            taskID = 0;
         }
     }];
 }
@@ -734,10 +744,11 @@ static SystemSoundID soundID; // 离线提示音
         if (0 != self.backgroundTaskID) {
             return YES;
         }
+        __weak typeof(self) weakSelf = self;
         self.backgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            if (0 != self.backgroundTaskID) {
-                NSInteger taskid = self.backgroundTaskID;
-                self.backgroundTaskID = 0;
+            if (0 != weakSelf.backgroundTaskID) {
+                NSInteger taskid = weakSelf.backgroundTaskID;
+                weakSelf.backgroundTaskID = 0;
                 [[UIApplication sharedApplication] endBackgroundTask:taskid];
             }
         }];

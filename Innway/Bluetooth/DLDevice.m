@@ -20,7 +20,7 @@
 #define offlineRSSI @(-120)
 
 // 设置重连超时  重连超时时间一定要为连接超时时间的倍数
-#define reconnectTimeOut 13
+#define reconnectTimeOut 10
 #define reconnectMaxCount 10
 
 @interface DLDevice() {
@@ -462,7 +462,7 @@
             if ([DLCentralManager sharedInstance].state == CBCentralManagerStatePoweredOn) {
                 //被动的掉线且蓝牙打开，去做重连
                 
-                if (self.online) { //当前是在线，需要计时设置为离线
+                if (self.online && !self.isReconnectTimer) { //当前是在线，需要计时设置为离线
                     // 开始重连计时
                     [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
 //                    // 激活后台线程 重连超时大于10秒，才需要这两行代码
@@ -618,6 +618,7 @@
                     [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ disconnects from iPhone.", self.deviceName]];
                 }
                 [common playSound];
+                NSLog(@"播放离线音乐");
             }
 //            else {
 //#warning 测试使用
