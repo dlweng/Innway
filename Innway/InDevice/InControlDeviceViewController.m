@@ -40,6 +40,8 @@
 @property (nonatomic, weak) UIViewController *settingVC;
 @property (nonatomic, strong) NSLayoutConstraint *settingViewLeftConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *settingViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapTopConstraint;
+
 
 // 设备列表
 @property (weak, nonatomic) IBOutlet UIView *deviceListBodyView;
@@ -81,6 +83,14 @@
         self.topBodyViewTopConstraint.constant += 20;
         self.bottomBtnViewHeightConstaint.constant += 20;
         self.controlBtnBottomConstraint.constant += 20;
+    }
+    
+    if ([UIScreen mainScreen].bounds.size.width >= 768) {
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) {
+            //解决iPad竖屏上方会有空白的问题
+            self.mapTopConstraint.constant -= 18;
+        }
     }
     
     // 设置按钮圆弧
@@ -779,7 +789,6 @@
 #pragma mark - 旋转屏幕
 - (void)didChangeOrientation
 {
-
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
         //解决横屏设备列表显示不全的问题

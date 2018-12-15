@@ -466,44 +466,41 @@
     if ([peripheral.identifier.UUIDString isEqualToString:self. peripheral.identifier.UUIDString]) {
         if (!_disConnect) // 非用户主动断开的情况
         {
-            // 只处理当前设备离线的情况
-            if ([DLCentralManager sharedInstance].state == CBCentralManagerStatePoweredOn) {
-                //被动的掉线且蓝牙打开，去做重连
-                if (self.online && !self.isReconnectTimer) { //当前是在线，需要计时设置为离线
-                    // 开始重连计时
-                    [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
-//                    // 激活后台线程 重连超时大于10秒，才需要这两行代码
-                    self.isReconnectTimer = YES; // 标志开始了重连计时
-                    [common beginBackgroundTask];
-                }
-                if (self.reconnectNum < reconnectMaxCount) {
-                    self.reconnectNum++;
-                    NSLog(@"设备连接被断开，去重连设备, mac = %@, 重连计数: %d", self.mac, self.reconnectNum);
-                    // 去重连设备
-                    self.isDiscoverAllCharacter = 0;
-                    [self connectToDevice:^(DLDevice *device, NSError *error) {
-                        if (error) {
-                            NSLog(@"mac: %@, 设备重连失败", self.mac);
-                        }
-                        else {
-                            NSLog(@"mac: %@, 设备重连成功", self.mac);
-                        }
-                    }];
-                }
-                else {
-                    NSLog(@"已经重连%d次, 不再去重连:%@", self.reconnectNum, self.mac);
-                    
-                }
-            }
-            else {
-                // 蓝牙关闭，直接设置离线
-                [self changeStatusToDisconnect:YES];
-            }
+            [self reconnectOprate];
         }
         else {
             // 用户断连的，直接设置离线
             [self changeStatusToDisconnect:NO];
         }
+    }
+}
+
+- (void)reconnectOprate {
+    //被动的掉线且蓝牙打开，去做重连
+    if (self.online && !self.isReconnectTimer) { //当前是在线，需要计时设置为离线
+        // 开始重连计时
+        [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
+        //                    // 激活后台线程 重连超时大于10秒，才需要这两行代码
+        self.isReconnectTimer = YES; // 标志开始了重连计时
+        [common beginBackgroundTask];
+    }
+    if (self.reconnectNum < reconnectMaxCount) {
+        self.reconnectNum++;
+        NSLog(@"设备连接被断开，去重连设备, mac = %@, 重连计数: %d", self.mac, self.reconnectNum);
+        // 去重连设备
+        self.isDiscoverAllCharacter = 0;
+        [self connectToDevice:^(DLDevice *device, NSError *error) {
+            if (error) {
+                NSLog(@"mac: %@, 设备重连失败", self.mac);
+            }
+            else {
+                NSLog(@"mac: %@, 设备重连成功", self.mac);
+            }
+        }];
+    }
+    else {
+        NSLog(@"已经重连%d次, 不再去重连:%@", self.reconnectNum, self.mac);
+        
     }
 }
 
@@ -652,11 +649,12 @@
 // 关闭蓝牙做离线处理
 - (void)bluetoothPoweredOff {
     if (self.online) {
-        [self changeStatusToDisconnect:YES];
         if (!_isGetSearchDeviceAck) { // 关闭蓝牙的时候，肯定接受不到设备的回复，如果按钮有正在查找设备的动画，需要关闭
             [[NSNotificationCenter defaultCenter] postNotificationName:DeviceGetAckFailedNotification object:nil];
         }
     }
+    // 去做超时重连
+    [self reconnectOprate];
 }
 
 - (void)appWasKilled {
