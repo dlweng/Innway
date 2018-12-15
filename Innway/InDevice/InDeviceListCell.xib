@@ -18,6 +18,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zdh-MC-FwE" userLabel="backgroundView">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RSSI_0.png" translatesAutoresizingMaskIntoConstraints="NO" id="7or-9c-kQW" userLabel="rssiView.png">
                         <rect key="frame" x="16" y="5" width="50" height="50"/>
                         <constraints>
@@ -94,24 +98,29 @@
                     <constraint firstItem="7or-9c-kQW" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="43z-Nr-JWg"/>
                     <constraint firstItem="gxp-sG-PFy" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="5gv-KH-3fZ"/>
                     <constraint firstItem="eec-Tj-d5Q" firstAttribute="leading" secondItem="7or-9c-kQW" secondAttribute="trailing" constant="8" id="9g3-CT-bQA"/>
+                    <constraint firstAttribute="trailing" secondItem="Zdh-MC-FwE" secondAttribute="trailing" id="FXg-yc-Obw"/>
                     <constraint firstItem="UCe-5T-RAX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="L7o-va-Evp"/>
                     <constraint firstItem="Yzj-qe-W8F" firstAttribute="centerY" secondItem="7or-9c-kQW" secondAttribute="centerY" id="Luj-g2-I01"/>
                     <constraint firstItem="eec-Tj-d5Q" firstAttribute="centerY" secondItem="7or-9c-kQW" secondAttribute="centerY" constant="-10" id="Mju-4D-Xgq"/>
+                    <constraint firstItem="Zdh-MC-FwE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="USs-DI-N6f"/>
                     <constraint firstAttribute="bottom" secondItem="UCe-5T-RAX" secondAttribute="bottom" id="VXK-AV-bIT"/>
                     <constraint firstItem="Yzj-qe-W8F" firstAttribute="centerX" secondItem="7or-9c-kQW" secondAttribute="centerX" id="Xaf-9s-mWQ"/>
                     <constraint firstItem="zfY-9c-UiS" firstAttribute="top" secondItem="eec-Tj-d5Q" secondAttribute="bottom" constant="2" id="asH-Vw-1EZ"/>
                     <constraint firstAttribute="trailing" secondItem="gxp-sG-PFy" secondAttribute="trailing" constant="2" id="diS-gJ-8tZ"/>
                     <constraint firstItem="zfY-9c-UiS" firstAttribute="leading" secondItem="7or-9c-kQW" secondAttribute="trailing" constant="8" id="gMi-EH-myi"/>
+                    <constraint firstAttribute="bottom" secondItem="Zdh-MC-FwE" secondAttribute="bottom" id="ghp-5O-nUK"/>
                     <constraint firstItem="7or-9c-kQW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="i8W-13-M5Y"/>
                     <constraint firstItem="gxp-sG-PFy" firstAttribute="leading" secondItem="UCe-5T-RAX" secondAttribute="trailing" constant="2" id="qE0-c4-qNI"/>
                     <constraint firstItem="gxp-sG-PFy" firstAttribute="leading" secondItem="zfY-9c-UiS" secondAttribute="trailing" constant="2" id="qEz-tV-Phk"/>
                     <constraint firstItem="d5C-HA-8cS" firstAttribute="centerX" secondItem="7or-9c-kQW" secondAttribute="centerX" id="uDL-U3-yUb"/>
+                    <constraint firstItem="Zdh-MC-FwE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="xSE-VG-ncx"/>
                     <constraint firstItem="d5C-HA-8cS" firstAttribute="centerY" secondItem="7or-9c-kQW" secondAttribute="centerY" id="xm1-c0-Tc3"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="alertImageView" destination="VR3-KF-34Z" id="5dL-JR-qkG"/>
                 <outlet property="batteryImageView" destination="u4K-zm-cHb" id="hrI-bW-LTS"/>
+                <outlet property="bgView" destination="Zdh-MC-FwE" id="8PQ-Kx-3rl"/>
                 <outlet property="cardView" destination="Yzj-qe-W8F" id="SWY-Go-R6A"/>
                 <outlet property="chipView" destination="d5C-HA-8cS" id="TU1-Ym-Jvu"/>
                 <outlet property="deviceSettingBtn" destination="gxp-sG-PFy" id="30O-hd-xv5"/>

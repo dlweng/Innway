@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *rssiView;
 @property (weak, nonatomic) IBOutlet UIImageView *chipView;
 @property (weak, nonatomic) IBOutlet UIImageView *cardView;
+@property (weak, nonatomic) IBOutlet UIView *bgView;
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
@@ -29,7 +30,6 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
 }
 
 - (IBAction)deviceSettingDidClick:(id)sender {
@@ -129,12 +129,21 @@
 
 - (void)setBeSelected:(BOOL)beSelected {
     _beSelected = beSelected;
-    UIColor *color = [UIColor whiteColor];
+    UIColor *color = [UIColor clearColor];
     if (beSelected) {
-        color = [UIColor colorWithRed:80.0/255.0f green:179.0/255.0f blue:122/255.0f alpha:1];
+        color = [UIColor colorWithRed:164.0/255.0 green:164.0/255.0 blue:164.0/255.0 alpha:0.5];
     }
-    self.timeLabel.textColor = color;
-    self.titleLabel.textColor = color;
+    self.bgView.backgroundColor = color;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    UIColor *color = [UIColor clearColor];
+    if (_beSelected) {
+        color = [UIColor colorWithRed:164.0/255.0 green:164.0/255.0 blue:164.0/255.0 alpha:0.5];
+    }
+    self.backgroundView.backgroundColor = color;
+    
 }
 
 //- (void)setBeSelected:(BOOL)beSelected {

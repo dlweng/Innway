@@ -105,6 +105,7 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
     }
     self.type = InSearch;
     [self updateView];
+    [self.searchAnimationTimer setFireDate:[NSDate distantFuture]];
     [self confirm];
     self.findDeviceMac = nil;
     
@@ -224,6 +225,10 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
     switch (self.type) {
         case InSearch:
         {
+            if ([DLCentralManager sharedInstance].state != CBCentralManagerStatePoweredOn) {
+                [InAlertView showAlertWithTitle:@"Information" message:@"Enable Bluetooth to pair with the device." confirmHanler:nil];
+                return;
+            }
             NSLog(@"开始搜索新设备");
             [self startAnimation];
             [self searchNewDevice];
