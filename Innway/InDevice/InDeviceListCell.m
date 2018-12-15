@@ -146,14 +146,4 @@
     
 }
 
-//- (void)setBeSelected:(BOOL)beSelected {
-//    _beSelected = beSelected;
-//    if (beSelected) {
-//        self.contentView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.7];
-//    }
-//    else {
-//        self.contentView.backgroundColor = [UIColor clearColor];
-//    }
-//}
-
 @end

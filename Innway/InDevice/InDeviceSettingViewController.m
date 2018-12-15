@@ -325,7 +325,12 @@
             case InPhoneAlert:
             {
                 NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
-                currentAlarmVoice = phoneAlertMusic.integerValue - 1;
+                if (phoneAlertMusic) {
+                    currentAlarmVoice = phoneAlertMusic.integerValue - 1;
+                }
+                else {
+                    currentAlarmVoice = 0;
+                }
                 break;
             }
             case InDeviceAlert:

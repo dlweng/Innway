@@ -148,6 +148,14 @@
                     NSLog(@"去激活设备: %@", weakSelf.mac);
                     [weakSelf activeDevice];
                 });
+                if (self.firstAdd) { 
+                    self.firstAdd = NO;
+                    [NSThread sleepForTimeInterval:0.2];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSLog(@"第一次添加，去发关闭断连通知的命令");
+                        [weakSelf setDisconnectAlert:NO reconnectAlert:NO];
+                    });
+                }
                 [NSThread sleepForTimeInterval:0.2];
                 // 获取设备信息
                 dispatch_async(dispatch_get_main_queue(), ^{

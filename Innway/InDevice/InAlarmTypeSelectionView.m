@@ -66,7 +66,6 @@
     
     if (self.alarmType == InDeviceAlert) {
         switch (indexPath.row) {
-
             case 1:
                 cell.textLabel.text = @"Equipment alarm 2";
                 break;
