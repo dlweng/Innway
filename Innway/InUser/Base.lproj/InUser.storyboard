@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="new-Y5-bIv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="new-Y5-bIv">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -49,7 +49,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bG2-94-N5R">
-                                <rect key="frame" x="33" y="542" width="127" height="45"/>
+                                <rect key="frame" x="44" y="542" width="127" height="45"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="Sign up" backgroundImage="greenBtn.png">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -62,7 +62,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wC0-Te-HMl">
-                                <rect key="frame" x="215" y="542" width="127" height="45"/>
+                                <rect key="frame" x="204" y="542" width="127" height="45"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="Log in" backgroundImage="whiteBtn.png">
                                     <color key="titleColor" red="0.23529411764705882" green="0.52941176470588236" blue="0.36862745098039218" alpha="1" colorSpace="calibratedRGB"/>
@@ -77,14 +77,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="CE3-jV-RmI" firstAttribute="top" secondItem="bG2-94-N5R" secondAttribute="bottom" constant="80" id="64y-b4-was"/>
+                            <constraint firstItem="bG2-94-N5R" firstAttribute="centerX" secondItem="RfC-jp-Qpf" secondAttribute="centerX" constant="-80" id="5qr-dq-esj"/>
                             <constraint firstItem="ZEl-qK-oRI" firstAttribute="leading" secondItem="RfC-jp-Qpf" secondAttribute="leading" id="EsW-Wa-aqg"/>
+                            <constraint firstItem="CE3-jV-RmI" firstAttribute="top" secondItem="wC0-Te-HMl" secondAttribute="bottom" constant="80" id="M0f-Pe-mDO"/>
                             <constraint firstAttribute="trailing" secondItem="ZEl-qK-oRI" secondAttribute="trailing" id="NY7-Fu-Y3c"/>
                             <constraint firstAttribute="bottom" secondItem="ZEl-qK-oRI" secondAttribute="bottom" id="OHG-TH-vaR"/>
-                            <constraint firstItem="CE3-jV-RmI" firstAttribute="top" secondItem="wC0-Te-HMl" secondAttribute="bottom" constant="80" id="ZE7-Gt-1ep"/>
+                            <constraint firstItem="wC0-Te-HMl" firstAttribute="centerX" secondItem="RfC-jp-Qpf" secondAttribute="centerX" constant="80" id="ade-JP-dCI"/>
                             <constraint firstAttribute="bottom" secondItem="ZEl-qK-oRI" secondAttribute="bottom" id="cMh-As-Kk2"/>
-                            <constraint firstAttribute="trailing" secondItem="wC0-Te-HMl" secondAttribute="trailing" constant="33" id="fh2-kn-Uyf"/>
-                            <constraint firstItem="bG2-94-N5R" firstAttribute="leading" secondItem="RfC-jp-Qpf" secondAttribute="leading" constant="33" id="oKB-K6-TkA"/>
+                            <constraint firstItem="CE3-jV-RmI" firstAttribute="top" secondItem="bG2-94-N5R" secondAttribute="bottom" constant="80" id="iJK-pF-eaj"/>
                             <constraint firstItem="ZEl-qK-oRI" firstAttribute="top" secondItem="RfC-jp-Qpf" secondAttribute="top" id="uRv-Wu-EPI"/>
                         </constraints>
                     </view>

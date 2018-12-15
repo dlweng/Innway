@@ -103,7 +103,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchDeviceAlert:) name:DeviceSearchDeviceAlertNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopBtnAnimation) name:DeviceGetAckFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUI) name:ApplicationWillEnterForeground object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeOrientation) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     // 设置定时器
     __weak typeof(self) weakSelf = self;
     self.animationTimer = [NSTimer newTimerWithTimeInterval:0.4 repeats:YES block:^(NSTimer * _Nonnull timer) {
@@ -166,6 +166,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceSearchDeviceAlertNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DeviceGetAckFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationWillEnterForeground object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [self.animationTimer invalidate];
     self.animationTimer = nil;
 }
@@ -211,7 +212,9 @@
     // 添加覆盖层
     UIView *view = [[UIView alloc] init];
     [self.view addSubview:view];
-    view.frame = [UIScreen mainScreen].bounds;
+//    view.frame = [UIScreen mainScreen].bounds;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    view.frame = CGRectMake(0, 0, height * 2, height * 2);
     view.backgroundColor = [UIColor blackColor];
     [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideSettingView)]];
     view.alpha = 0;
@@ -249,6 +252,15 @@
         scale = 1.7;
         height += 50;
     }
+    else if (screenWidth == 768 || screenWidth == 1024 || screenWidth == 834){ //iPad
+        scale = 0.4;
+    }
+    else if (screenWidth == 1366 || screenWidth == 1194 || screenWidth == 1112) {
+        scale = 0.3;
+    }
+//    else if (screenWidth == 834)
+    
+    
     CGFloat width = [UIScreen mainScreen].bounds.size.width * scale;
     CGFloat x = -width;
     settingVC.view.frame = CGRectMake(x, y, width, height);
@@ -762,6 +774,22 @@
             [self stopBtnAnimation];
         }
     }
+}
+
+#pragma mark - 旋转屏幕
+- (void)didChangeOrientation
+{
+
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        //解决横屏设备列表显示不全的问题
+        CGFloat maxMenuHeight = [UIScreen mainScreen].bounds.size.height * 0.5;
+        CGFloat minMenuHeigth = 196;
+        if (maxMenuHeight + self.deviceListBodyHeightConstraint.constant < minMenuHeigth) {
+            self.deviceListBodyHeightConstraint.constant = minMenuHeigth - maxMenuHeight;
+        }
+    }
+ 
 }
 
 #pragma mark - Properity
