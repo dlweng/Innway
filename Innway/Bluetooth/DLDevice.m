@@ -15,6 +15,7 @@
 #import "DLCentralManager.h"
 #import "InCommon.h"
 #import "NSTimer+InTimer.h"
+#import <AVFoundation/AVFoundation.h>
 
 // 设置离线的RSSI值
 #define offlineRSSI @(-120)
@@ -23,7 +24,7 @@
 #define reconnectTimeOut 17
 #define reconnectMaxCount 10
 
-@interface DLDevice() {
+@interface DLDevice()<AVAudioPlayerDelegate> {
     NSNumber *_rssi;
     dispatch_source_t _searchDeviceackDelayTimer;// 查找设备ack回复计时器
     dispatch_source_t _disciverServerTimer;// 获取写数据特征值计时器
@@ -43,6 +44,8 @@
 @property (nonatomic, assign) NSInteger alertMusic;
 @property (nonatomic, strong) NSMutableDictionary *data;
 @property (nonatomic, strong) NSMutableArray *rssiValues; // 更新RSSI逻辑，1秒获取一次RSSI，3秒更新一次UI，将3秒钟获取到的3次RSSI的最大值通知到界面
+@property (nonatomic, strong) AVAudioPlayer *searchPhonePlayer;
+@property (nonatomic, strong) AVAudioPlayer *offlinePlayer;
 @end
 
 @implementation DLDevice
@@ -63,6 +66,8 @@
         
         _disConnect = NO;
         _isGetSearchDeviceAck = NO;
+        self.isOfflineSounding = NO;
+        self.isSearchPhone = NO;
         // 初始化断开重连计时器数据
         __block typeof(self) weakSelf = self;
         _offlineReconnectTimer = [NSTimer newTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
@@ -73,7 +78,7 @@
         // 加到主循环的定时器会自动被触发，需要先关闭定时器
         [_offlineReconnectTimer setFireDate:[NSDate distantFuture]];
         _offlineReconnectTime = -1;
-        
+    
     }
     return self;
 }
@@ -162,7 +167,7 @@
                     weakSelf.online = YES;  //设置在线
                     weakSelf.reconnectNum = 0;
                     // 关闭断连音乐
-                    [common stopSound];
+                    self.isOfflineSounding = NO;
                     NSLog(@"设置设备在线");
                     [weakSelf readRSSI];
                     [weakSelf getDeviceInfo]; //防止两次发生时间太接近，导致下发失败
@@ -466,6 +471,7 @@
     if ([peripheral.identifier.UUIDString isEqualToString:self. peripheral.identifier.UUIDString]) {
         if (!_disConnect) // 非用户主动断开的情况
         {
+            // 去做超时重连
             [self reconnectOprate];
         }
         else {
@@ -621,18 +627,10 @@
                     NSLog(@"去做掉线通知: %@", self.mac);
                     [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ disconnects from iPhone.", self.deviceName]];
                 }
-                [common playSound];
+                self.isOfflineSounding = YES;
+                self.isSearchPhone = NO;
                 NSLog(@"播放离线音乐");
             }
-//            else {
-//#warning 测试使用
-//                // 关闭的断开连接通知，则不通知
-//                if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-//                    NSLog(@"去做掉线通知: %@", self.mac);
-//                    [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ 已断开连接", self.deviceName]];
-//                    [common playSound];
-//                }
-//            }
         }
     }
     
@@ -752,6 +750,85 @@
     _searchDeviceackDelayTimer = nil;
 }
 
+#pragma mark - 手机报警
+- (void)playSearchPhoneSound {
+    NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
+    NSString *alertMusic;
+    switch (phoneAlertMusic.integerValue) {
+        case 2:
+            alertMusic = @"voice2.mp3";
+            break;
+        case 3:
+            alertMusic = @"voice3.mp3";
+            break;
+        default:
+            alertMusic = @"voice1.mp3";
+            break;
+    }
+    NSString *musicPath = [[NSBundle mainBundle] pathForResource:alertMusic ofType:nil];
+    NSURL *fileURL = [NSURL fileURLWithPath:musicPath];
+    // 设置后台播放代码
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    // 这个进入后台10秒钟后播放没声音
+    //    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+    // 这个可以在后台播放
+    [audioSession setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
+    [audioSession setActive:YES error:nil];
+    NSError *error = nil;
+    self.searchPhonePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
+    self.searchPhonePlayer.delegate = self;
+    self.searchPhonePlayer.numberOfLoops = 1000;
+    self.searchPhonePlayer.volume = 1.0;
+    [self.searchPhonePlayer play];
+    [common startSharkAnimation]; //关闭闪光灯
+}
+
+- (void)stopSearchPhoneSound {
+    [common stopSharkAnimation]; //打开闪光灯
+    if (self.searchPhonePlayer.isPlaying) {
+        [self.searchPhonePlayer stop];
+    }
+}
+
+#pragma mark - 离线提示音
+- (void)playOfflineSound {
+    if (self.offlinePlayer.isPlaying) {
+        return;
+    }
+    NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
+    NSString *alertMusic;
+    switch (phoneAlertMusic.integerValue) {
+        case 2:
+            alertMusic = @"voice2.mp3";
+            break;
+        case 3:
+            alertMusic = @"voice3.mp3";
+            break;
+        default:
+            alertMusic = @"voice1.mp3";
+            break;
+    }
+    NSString *musicPath = [[NSBundle mainBundle] pathForResource:alertMusic ofType:nil];
+    NSURL *fileURL = [NSURL fileURLWithPath:musicPath];
+    // 设置后台播放代码
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    // 这个可以在后台播放
+    [audioSession setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
+    [audioSession setActive:YES error:nil];
+    NSError *error = nil;
+    self.offlinePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
+    self.offlinePlayer.delegate = self;
+    self.offlinePlayer.numberOfLoops = 1;
+    self.offlinePlayer.volume = 1.0;
+    [self.offlinePlayer play];
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+}
+
+- (void)stopOfflineSound {
+    if (self.offlinePlayer.isPlaying) {
+        [self.offlinePlayer stop];
+    }
+}
 
 #pragma mark - Properity
 - (void)setPeripheral:(CBPeripheral *)peripheral {
@@ -833,6 +910,26 @@
         _rssiValues = [NSMutableArray array];
     }
     return _rssiValues;
+}
+
+- (void)setIsSearchPhone:(BOOL)isSearchPhone {
+    _isSearchPhone = isSearchPhone;
+    if (isSearchPhone) {
+        [self playSearchPhoneSound];
+    }
+    else {
+        [self stopSearchPhoneSound];
+    }
+}
+
+- (void)setIsOfflineSounding:(BOOL)isOfflineSounding {
+    _isOfflineSounding = isOfflineSounding;
+    if (isOfflineSounding) {
+        [self playOfflineSound];
+    }
+    else {
+        [self stopOfflineSound];
+    }
 }
 
 @end

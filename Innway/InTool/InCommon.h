@@ -66,6 +66,8 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 
 @property (nonatomic, assign) InDeviceType deviceType; //保存此次查找的设备类型
 
+@property (nonatomic, assign) BOOL isSharkAnimationing;
+
 + (instancetype)sharedInstance;
 
 - (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd;
@@ -95,6 +97,8 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 // 设备离线提示音
 - (void)playSound;
 - (void)stopSound;
+- (void)startSharkAnimation;
+- (void)stopSharkAnimation;
 
 // 返回false，说明当前APP没有开启定位功能
 - (NSString *)getCurrentGps;

@@ -298,14 +298,27 @@
 #pragma mark - Action
 //控制设备
 - (IBAction)controlDeviceBtnDidClick:(UIButton *)sender {
+    BOOL stopSound = NO;
     if (self.searchPhoneDevices.count > 0) {
-        // 清楚所有正在查找手机的设备信息
+        // 1.有设备正在查找手机，去关闭查找手机的声音
         for (NSString *mac in self.searchPhoneDevices.allKeys) {
             DLDevice *device = self.searchPhoneDevices[mac];
             device.isSearchPhone = NO;
         }
         [self.searchPhoneDevices removeAllObjects];
         [self stopSearchPhone];
+        stopSound = YES;
+    }
+    // 2.关闭离线警报
+    NSDictionary *cloudDeviceList = [[DLCloudDeviceManager sharedInstance].cloudDeviceList copy];
+    for (NSString *mac in cloudDeviceList) {
+        DLDevice *device = cloudDeviceList[mac];
+        if (device.isOfflineSounding) {
+            stopSound = YES;
+        }
+        device.isOfflineSounding = NO;
+    }
+    if (stopSound) {
         return;
     }
 //    NSLog(@"下发控制指令");
@@ -321,7 +334,7 @@
             [self startBtnAnimation];
             [self.device startSearchDeviceTimer]; // 开启查找需要监听，防止出现发送失败，一直在闪烁按钮的问题
         }
-        [self.device searchDevice];
+        [self.device searchDevice]; 
     }
     else {
         if (self.device.isSearchDevice) { // 离线状态，如果手机在查找设备，要去关闭按钮动画
@@ -748,14 +761,11 @@
     }
     else {
         if (self.searchPhoneDevices.count == 0) {
-            // 只有在当前没有声音和闪光动画的时候才需要去开启
-            [common playSoundAlertMusic];
+            // 只有当前没有设备在查找手机的时候才去开启动画
             [self startBtnAnimation];
-        }
-        
+        }   
         device.isSearchPhone = YES;
-        [self.searchPhoneDevices setValue:device forKey:device.mac];
-        
+        [self.searchPhoneDevices setValue:device forKey:device.mac];        
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
             // 发送本地通知
             [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ is finding iPhone now!", device.deviceName]];
@@ -765,7 +775,6 @@
 
 - (void)stopSearchPhone {
     if (self.searchPhoneDevices.count == 0) {
-        [common stopSoundAlertMusic];
         [self stopBtnAnimation];
     }
 }

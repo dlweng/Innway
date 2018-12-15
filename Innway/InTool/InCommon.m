@@ -13,17 +13,15 @@
 #import <AVFoundation/AVFoundation.h>
 #import "DLCloudDeviceManager.h"
 
-static SystemSoundID soundID; // 离线提示音
-@interface InCommon ()<CLLocationManagerDelegate, AVAudioPlayerDelegate, AVAudioPlayerDelegate> {
+@interface InCommon ()<CLLocationManagerDelegate> {
     NSTimer *_sharkTimer; // 闪光灯计时器
 }
 @property (nonatomic, strong) CLLocationManager *locationManager;
-// 音频播放
-@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskID;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier iBeaconBackgroundTaskID;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier uploadDeviceLocationtTaskID;
 @property (nonatomic, strong) CLBeaconRegion *iBeaconRegion;
+
 @end
 
 @implementation InCommon
@@ -40,7 +38,6 @@ static SystemSoundID soundID; // 离线提示音
 - (instancetype)init {
     if (self = [super init]) {
         [self getUserInfo];
-        soundID = -1;
         if ([CLLocationManager locationServicesEnabled]) {
             _locationManager = [[CLLocationManager alloc] init];
             _locationManager.delegate = self;
@@ -51,7 +48,7 @@ static SystemSoundID soundID; // 离线提示音
         // 设置闪光灯定时器
         _sharkTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(setupSharkLight) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_sharkTimer forMode:NSRunLoopCommonModes];
-        [self stopSharkAnimation];
+        [_sharkTimer setFireDate:[NSDate distantFuture]];
     }
     return self;
 }
@@ -271,64 +268,27 @@ static SystemSoundID soundID; // 离线提示音
     return [defaults boolForKey:@"showUserLocation"];
 }
 
-#pragma mark - 手机报警
-- (void)playSoundAlertMusic {
-    NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
-    NSString *alertMusic;
-    switch (phoneAlertMusic.integerValue) {
-        case 2:
-            alertMusic = @"voice2.mp3";
-            break;
-        case 3:
-            alertMusic = @"voice3.mp3";
-            break;
-        default:
-            alertMusic = @"voice1.mp3";
-            break;
-    }
-    NSString *musicPath = [[NSBundle mainBundle] pathForResource:alertMusic ofType:nil];
-    NSURL *fileURL = [NSURL fileURLWithPath:musicPath];
-    NSLog(@"fileURL = %@", fileURL.absoluteString);
-    // 设置后台播放代码
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    // 这个进入后台10秒钟后播放没声音
-//    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
-    // 这个可以在后台播放
-    [audioSession setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
-    [audioSession setActive:YES error:nil];
-    NSError *error = nil;
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
-    self.audioPlayer.delegate = self;
-    self.audioPlayer.numberOfLoops = 1000;
-    self.audioPlayer.volume = 1.0;
-    [self.audioPlayer play];
-    [self startSharkAnimation];
-}
-
-- (void)stopSoundAlertMusic {
-    NSLog(@"停止查找手机的报警声音");
-    [self stopSharkAnimation];
-    [self.audioPlayer stop];
-}
-
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-    NSLog(@"监听到音乐结束");
-}
-
-- (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player {
-    NSLog(@"监听到音乐开始被中断");
-}
-
-- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player {
-    NSLog(@"监听到音乐中断结束");
-}
-
 #pragma mark - 闪光灯动画
 - (void)startSharkAnimation {
+    if (self.isSharkAnimationing) { //如果已经开始，断开
+        return;
+    }
+    self.isSharkAnimationing = YES; //标志已经打开了闪光灯动画
     [_sharkTimer setFireDate:[NSDate distantPast]];
 }
 
 - (void)stopSharkAnimation {
+    if (!self.isSharkAnimationing) {
+        return;
+    }
+    NSDictionary *deviceList = [[DLCloudDeviceManager sharedInstance].cloudDeviceList copy];
+    for (NSString *mac in deviceList.allKeys) {
+        DLDevice *device = deviceList[mac];
+        if (device.isSearchPhone) { //只要有一台设备正在查找手机，就不去关闭它
+            return;
+        }
+    }
+    self.isSharkAnimationing = NO;
     [_sharkTimer setFireDate:[NSDate distantFuture]];
     [self closeSharkLight];
 }
@@ -361,54 +321,6 @@ static SystemSoundID soundID; // 离线提示音
         camera.torchMode = AVCaptureTorchModeOff;
     }
     [camera unlockForConfiguration];
-}
-
-#pragma mark - 离线提示音
-- (void)playSound {
-    if (self.audioPlayer.isPlaying) {
-        return;
-    }
-    NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
-    NSString *alertMusic;
-    switch (phoneAlertMusic.integerValue) {
-        case 2:
-            alertMusic = @"voice2.mp3";
-            break;
-        case 3:
-            alertMusic = @"voice3.mp3";
-            break;
-        default:
-            alertMusic = @"voice1.mp3";
-            break;
-    }
-    NSString *musicPath = [[NSBundle mainBundle] pathForResource:alertMusic ofType:nil];
-    NSURL *fileURL = [NSURL fileURLWithPath:musicPath];
-    NSLog(@"fileURL = %@", fileURL.absoluteString);
-    // 设置后台播放代码
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    // 这个可以在后台播放
-    [audioSession setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
-    [audioSession setActive:YES error:nil];
-    NSError *error = nil;
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
-    self.audioPlayer.delegate = self;
-    self.audioPlayer.numberOfLoops = 1;
-    self.audioPlayer.volume = 1.0;
-    [self.audioPlayer play];
-    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-}
-
-- (void)stopSound {
-    NSDictionary *cloundDeviceList = [[DLCloudDeviceManager sharedInstance].cloudDeviceList copy];
-    for (NSString *mac in cloundDeviceList.allKeys) {
-        DLDevice *device = cloundDeviceList[mac];
-        if (device.isSearchPhone || !device.online) {
-            // 有设备在查找手机，或者有设备处于掉线情况，不要去断开音乐
-            return;
-        }
-    }
-    // 没有设备在查找手机，所有设备都在线了，去关闭音乐
-    [self.audioPlayer stop];
 }
 
 #pragma mark - 定位
