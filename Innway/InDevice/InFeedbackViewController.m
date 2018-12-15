@@ -33,7 +33,7 @@
 
 - (void)setupNarBar {
     self.navigationController.navigationBar.hidden = NO;
-    self.navigationItem.title = @"Feedback";
+    self.navigationItem.title = @"Contact us";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(sendFeedback)];
 }

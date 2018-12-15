@@ -565,13 +565,13 @@ static SystemSoundID soundID; // 离线提示音
     {
         NSLog(@"进入了iBeacon的范围");
         [self beginiBeaconBackgroundTask];
-        [InCommon sendLocalNotification:[NSString stringWithFormat:@"进入了iBeacon的范围"]];
+//        [InCommon sendLocalNotification:[NSString stringWithFormat:@"进入了iBeacon的范围"]];
     }
     else if(state == CLRegionStateOutside)
     {
         NSLog(@"退出了iBeacon的范围");
         [self beginiBeaconBackgroundTask];
-        [InCommon sendLocalNotification:[NSString stringWithFormat:@"退出了iBeacon的范围"]];
+//        [InCommon sendLocalNotification:[NSString stringWithFormat:@"退出了iBeacon的范围"]];
     }
 }
 
@@ -688,7 +688,7 @@ static SystemSoundID soundID; // 离线提示音
     
     NSMutableURLRequest* formRequest = [[AFHTTPRequestSerializer serializer] requestWithMethod:method URLString:URLString parameters:body error:nil];
     // 修改超时时间
-    formRequest.timeoutInterval = 20;
+    formRequest.timeoutInterval = 30;
 //    NSLog(@"URL = %@", URLString);
 //    NSLog(@"body = %@", body);
     [formRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8"forHTTPHeaderField:@"Content-Type"];
@@ -716,24 +716,24 @@ static SystemSoundID soundID; // 离线提示音
 
 #pragma mark - 设置导航栏图片
 + (void)setNavgationBar:(UINavigationBar *)bar {
-    NSString *imageName = @"narBarBackgroudImage5s.jpg";
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    if (screenSize.width == 375 && screenSize.height == 667) {
-        // Iphone6/7/8
-        imageName = @"narBarBackgroudImage7.jpg";
-    }
-    else if (screenSize.width == 414 && screenSize.height == 736) {
-        //Iphone6p/7p/8p
-        imageName = @"narBarBackgroudImage8.jpg";
-    }
-    else if (screenSize.width == 375 && screenSize.height == 812) {
-        // IphoneX
-        imageName = @"narBarBackgroudImageX.jpg";
-    }
-    else if (screenSize.width == 414 && screenSize.height == 896) {
-        // IphoneXR
-        imageName = @"narBarBackgroudImageXR.jpg";
-    }
+    NSString *imageName = @"narBarBackgroudImage.png";
+//    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+//    if (screenSize.width == 375 && screenSize.height == 667) {
+//        // Iphone6/7/8
+//        imageName = @"narBarBackgroudImage7.jpg";
+//    }
+//    else if (screenSize.width == 414 && screenSize.height == 736) {
+//        //Iphone6p/7p/8p
+//        imageName = @"narBarBackgroudImage8.jpg";
+//    }
+//    else if (screenSize.width == 375 && screenSize.height == 812) {
+//        // IphoneX
+//        imageName = @"narBarBackgroudImageX.jpg";
+//    }
+//    else if (screenSize.width == 414 && screenSize.height == 896) {
+//        // IphoneXR
+//        imageName = @"narBarBackgroudImageXR.jpg";
+//    }
     UIImage *backgroundImage = [UIImage imageNamed:imageName];
     backgroundImage = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
     

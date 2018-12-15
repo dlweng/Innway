@@ -20,7 +20,7 @@
 #define offlineRSSI @(-120)
 
 // 设置重连超时  重连超时时间一定要为连接超时时间的倍数
-#define reconnectTimeOut 10
+#define reconnectTimeOut 17
 #define reconnectMaxCount 10
 
 @interface DLDevice() {
@@ -702,7 +702,7 @@
     NSInteger minute = comp.minute;
     NSInteger second = comp.second;
     if (year == 0 && mouth == 0 && day == 0 && hour == 0 && minute == 0) {
-        _offlineTimeInfo = [NSString stringWithFormat:@"Last seen %zd second ago", second];
+        _offlineTimeInfo = [NSString stringWithFormat:@"Last seen %zd seconds ago", second];
         return;
     }
     if (year == 0 && mouth == 0 && day == 0 && hour == 0) {

@@ -68,8 +68,8 @@
                                 <constraint firstAttribute="height" constant="1" id="sfB-2x-0Po"/>
                             </constraints>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="support@innwaytech" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z02-MX-mEJ">
-                            <rect key="frame" x="36" y="14" width="162" height="21"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="support@innwaytech.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z02-MX-mEJ">
+                            <rect key="frame" x="36" y="14" width="199" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="Kq3-Ki-7ZQ"/>
                             </constraints>
@@ -83,8 +83,8 @@
                             <color key="textColor" red="0.6771912979704664" green="0.6771912979704664" blue="0.6771912979704664" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Innway APP Enquiry." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Ec-TV-h01">
-                            <rect key="frame" x="76" y="65" width="155" height="21"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Innway APP Eneuiy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Ec-TV-h01">
+                            <rect key="frame" x="76" y="65" width="145" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="0.20831310359999999" green="0.20831310359999999" blue="0.20831310359999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <nil key="highlightedColor"/>

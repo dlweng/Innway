@@ -21,7 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"Retrieve password";
+    self.navigationItem.title = @"Reset password";
     self.emailTextField.delegate = self;
 //    //设置按钮的圆弧
 //    self.resetBtn.layer.masksToBounds = YES;
