@@ -88,15 +88,9 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 // 在每次获取云端列表。增加删除设备时更新；最新离线，gps，设备信息另外保存
 - (NSArray *)getCloudList;
 
-// 查找手机的提示音
-- (void)playSoundAlertMusic;
-- (void)stopSoundAlertMusic;
 // 设置闪光灯 打开的时候关闭，关闭的时候打开
 - (void)setupSharkLight;
 
-// 设备离线提示音
-- (void)playSound;
-- (void)stopSound;
 - (void)startSharkAnimation;
 - (void)stopSharkAnimation;
 
