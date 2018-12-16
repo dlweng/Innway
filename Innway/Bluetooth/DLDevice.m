@@ -21,7 +21,7 @@
 #define offlineRSSI @(-120)
 
 // 设置重连超时  重连超时时间一定要为连接超时时间的倍数
-#define reconnectTimeOut 16
+#define reconnectTimeOut 17
 #define reconnectMaxCount 10
 
 @interface DLDevice()<AVAudioPlayerDelegate> {
@@ -148,6 +148,7 @@
         if ([characteristic.UUID.UUIDString isEqualToString:firmwareChaUUID.UUIDString]) {
             NSLog(@"characteristic = %@", characteristic);
             [self.peripheral readValueForCharacteristic:characteristic];
+            return; //获取硬件数据
         }
         if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
             self.isDiscoverAllCharacter++;
@@ -178,8 +179,6 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     weakSelf.online = YES;  //设置在线
                     weakSelf.reconnectNum = 0;
-                    // 关闭断连音乐
-                    self.isOfflineSounding = NO;
                     NSLog(@"设置设备在线");
                     [weakSelf readRSSI];
                     [weakSelf getDeviceInfo]; //防止两次发生时间太接近，导致下发失败
@@ -444,6 +443,7 @@
                     // 连接成功，去获取设备服务
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self stopReconnectTimer];
+                        self.isOfflineSounding = NO;
                         peripheral.delegate = weakSelf;
                         [weakSelf discoverServices];
                         if (completion) {
@@ -874,6 +874,7 @@
     if ([_peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
         [_peripheral setDelegate:nil];
         _peripheral = peripheral;
+        NSLog(@"为设备更换新的peripheral对象: %@", peripheral);
         [peripheral setDelegate:self];
         return;
     }

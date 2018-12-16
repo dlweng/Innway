@@ -206,7 +206,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
         case CBCentralManagerStatePoweredOff:
         case CBCentralManagerStateUnknown:
         {
-            NSLog(@"APP的蓝牙设置处于关闭状态,重置或者未知状态");
+            NSLog(@"APP的蓝牙设置处于关闭状态，重置或未知状态");
             [_repeatScanTimer setFireDate:[NSDate distantFuture]];
             [self stopScanning];
             [[NSNotificationCenter defaultCenter] postNotificationName:BluetoothPoweredOffNotification object:nil];
@@ -261,6 +261,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
             
             //更新rssi
             knowDevice.rssi = RSSI;
+            knowDevice.peripheral = peripheral;
             if(![DLCloudDeviceManager sharedInstance].cloudDeviceList[mac]) {
                 // 设备不存在云端列表，且设备类型与客户查找的类型相同，才回调
                 BOOL callback = NO;
