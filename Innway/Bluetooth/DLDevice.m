@@ -473,6 +473,7 @@
 - (void)disConnectToDevice:(void (^)(DLDevice *device, NSError *error))completion {
     // 只有删除设备和注销账户可以调用可以接口去断连
     _disConnect = YES;
+    self.reconnectNum = reconnectMaxCount; // 当前如果有正在重连的操作，需要去关闭
     if (!self.peripheral) {
         // 不存在外设，当成断开设备连接成功
         if (completion) {
