@@ -21,7 +21,7 @@
 #define offlineRSSI @(-120)
 
 // 设置重连超时  重连超时时间一定要为连接超时时间的倍数
-#define reconnectTimeOut 17
+#define reconnectTimeOut 16
 #define reconnectMaxCount 10
 
 @interface DLDevice()<AVAudioPlayerDelegate> {
@@ -676,11 +676,11 @@
 
 // 关闭蓝牙做离线处理
 - (void)bluetoothPoweredOff {
-    if (self.online) {
-        if (!_isGetSearchDeviceAck) { // 关闭蓝牙的时候，肯定接受不到设备的回复，如果按钮有正在查找设备的动画，需要关闭
-            [[NSNotificationCenter defaultCenter] postNotificationName:DeviceGetAckFailedNotification object:nil];
-        }
-    }
+//    if (self.online) {
+//        if (!_isGetSearchDeviceAck) { // 关闭蓝牙的时候，肯定接受不到设备的回复，如果按钮有正在查找设备的动画，需要关闭
+//            [[NSNotificationCenter defaultCenter] postNotificationName:DeviceGetAckFailedNotification object:nil];
+//        }
+//    }
     // 去做离线倒计时
     if (self.online && !self.isReconnectTimer) { //当前是在线，需要计时设置为离线
         // 开始重连计时
