@@ -202,9 +202,11 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
 #pragma mark - CBCentralManagerDelegate
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
     switch (self.manager.state) {
+        case CBCentralManagerStateResetting:
         case CBCentralManagerStatePoweredOff:
+        case CBCentralManagerStateUnknown:
         {
-            NSLog(@"APP的蓝牙设置处于关闭状态");
+            NSLog(@"APP的蓝牙设置处于关闭状态,重置或者未知状态");
             [_repeatScanTimer setFireDate:[NSDate distantFuture]];
             [self stopScanning];
             [[NSNotificationCenter defaultCenter] postNotificationName:BluetoothPoweredOffNotification object:nil];
@@ -216,14 +218,8 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
             NSLog(@"APP的蓝牙设置处于打开状态");
             break;
         }
-        case CBCentralManagerStateResetting:
-            NSLog(@"APP的蓝牙设置处于重置状态");
-            break;
         case CBCentralManagerStateUnauthorized:
             NSLog(@"APP的蓝牙设置处于未授权状态");
-            break;
-        case CBCentralManagerStateUnknown:
-            NSLog(@"APP的蓝牙设置处于未知状态");
             break;
         case CBCentralManagerStateUnsupported:
             NSLog(@"本设备不支持蓝牙功能");

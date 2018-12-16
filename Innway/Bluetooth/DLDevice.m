@@ -176,7 +176,6 @@
                 [NSThread sleepForTimeInterval:0.2];
                 // 获取设备信息
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self stopReconnectTimer];
                     weakSelf.online = YES;  //设置在线
                     weakSelf.reconnectNum = 0;
                     // 关闭断连音乐
@@ -242,7 +241,7 @@
 
 #pragma mark - 写数据快捷接口
 - (void)activeDevice {
-    char active[1] = {0x01};
+    uint8_t active[1] = {0x01};
     [self write:[NSData dataWithBytes:active length:1]];
 }
 
@@ -250,19 +249,19 @@
     if (!self.connected) {
         return;
     }
-    char getDeviceInfo[4] = {0xEE, 0x01, 0x00, 0x00};
+    uint8_t getDeviceInfo[4] = {0xEE, 0x01, 0x00, 0x00};
     NSLog(@"mac = %@, 去获取设备硬件数据， %@", self.mac, [NSData dataWithBytes:getDeviceInfo length:4]);
-    [self write:[NSData dataWithBytes:getDeviceInfo length:strlen(getDeviceInfo)]];
+    [self write:[NSData dataWithBytes:getDeviceInfo length:4]];
 }
 
 - (void)searchDevice {
-    char search[4] = {0xEE, 0x03, 0x00, 0x00};
+    uint8_t search[4] = {0xEE, 0x03, 0x00, 0x00};
     [self write:[NSData dataWithBytes:search length:4]];
 }
 
 - (void)searchPhoneACK {
     NSLog(@"回应设备:%@ 的查找数据", _mac);
-    char search[4] = {0xEE, 0x06, 0x00, 0x00};
+    uint8_t search[4] = {0xEE, 0x06, 0x00, 0x00};
     [self write:[NSData dataWithBytes:search length:4]];
 }
 
@@ -271,7 +270,7 @@
     self.reconnectAlert = reconnectAlert;
     int disconnect = disconnectAlert? 0x01 : 0x00;
     int reconnect = reconnectAlert? 0x01: 0x00;
-    char command[] = {0xEE, 0x07, 0x02, disconnect, reconnect, 0x00};
+    uint8_t command[6] = {0xEE, 0x07, 0x02, disconnect, reconnect, 0x00};
     NSLog(@"改变设备：%@, 断连通知：%d, 重连通知：%d， 写数据: %@", _mac, disconnectAlert, reconnectAlert, [NSData dataWithBytes:command length:6]);
     [self write:[NSData dataWithBytes:command length:6]];
 }
@@ -444,6 +443,7 @@
                     NSLog(@"连接设备成功:%@", weakSelf.mac);
                     // 连接成功，去获取设备服务
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        [self stopReconnectTimer];
                         peripheral.delegate = weakSelf;
                         [weakSelf discoverServices];
                         if (completion) {
@@ -473,7 +473,9 @@
 - (void)disConnectToDevice:(void (^)(DLDevice *device, NSError *error))completion {
     // 只有删除设备和注销账户可以调用可以接口去断连
     _disConnect = YES;
-    self.reconnectNum = reconnectMaxCount; // 当前如果有正在重连的操作，需要去关闭
+    // 当前如果有正在重连的操作，需要去关闭
+    [_offlineReconnectTimer setFireDate:[NSDate distantFuture]];
+    self.reconnectNum = reconnectMaxCount;
     if (!self.peripheral) {
         // 不存在外设，当成断开设备连接成功
         if (completion) {
