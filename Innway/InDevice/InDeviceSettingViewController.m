@@ -279,7 +279,7 @@
                     break;
                 case 1:
                     cell.textLabel.text = @"Firmware version";
-                    cell.detailTextLabel.text = @"V1.0";
+                    cell.detailTextLabel.text = self.device.firmware;
                     break;
                 default:
                     break;

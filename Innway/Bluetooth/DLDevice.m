@@ -94,7 +94,8 @@
     if (_peripheral) {
         NSLog(@"去获取设备服务:%@", self.mac);
         CBUUID *serviceUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
-        [_peripheral discoverServices:@[serviceUUID]];
+        CBUUID *firmwareServerUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareServerUUID];
+        [_peripheral discoverServices:@[serviceUUID, firmwareServerUUID]];
         self.isDiscoverAllCharacter = 0;
         [self startDiscoverServerTimer];
     }
@@ -123,11 +124,17 @@
 - (void)peripheral:(CBPeripheral *)_peripheral didDiscoverServices:(NSError *)error {
     NSArray *services = [_peripheral services];
     CBUUID *serverUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
+    CBUUID *firmwareServerUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareServerUUID];
     for (CBService *service in services) {
         if ([service.UUID.UUIDString isEqualToString:serverUUID.UUIDString]) {
             CBUUID *ntfUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
             CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
             [self.peripheral discoverCharacteristics:@[ntfUUID, writeUUID] forService:service];
+        }
+        else if ([service.UUID.UUIDString isEqualToString:firmwareServerUUID.UUIDString]) {
+            CBUUID *firmwareChaUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareCharacteristicUUID];
+            [self.peripheral discoverCharacteristics:@[firmwareChaUUID] forService:service];
+            NSLog(@"service = %@", service);
         }
     }
 }
@@ -135,8 +142,13 @@
 - (void) peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     CBUUID *ntfUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
     CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
+    CBUUID *firmwareChaUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareCharacteristicUUID];
     NSArray *characteristics = [service characteristics];
     for (CBCharacteristic *characteristic in characteristics) {
+        if ([characteristic.UUID.UUIDString isEqualToString:firmwareChaUUID.UUIDString]) {
+            NSLog(@"characteristic = %@", characteristic);
+            [self.peripheral readValueForCharacteristic:characteristic];
+        }
         if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
             self.isDiscoverAllCharacter++;
         }
@@ -164,6 +176,7 @@
                 [NSThread sleepForTimeInterval:0.2];
                 // 获取设备信息
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    [self stopReconnectTimer];
                     weakSelf.online = YES;  //设置在线
                     weakSelf.reconnectNum = 0;
                     // 关闭断连音乐
@@ -375,6 +388,15 @@
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if ([peripheral.identifier.UUIDString isEqualToString:self.peripheral.identifier.UUIDString]) {
         NSLog(@"mac:%@, 接收读响应数据, peripheral：%@,  characteristic = %@, error = %@", self.mac, self.peripheral, characteristic.value, error);
+        // 读硬件版本号
+        CBUUID *firmwareChaUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareCharacteristicUUID];
+        if ([characteristic.UUID.UUIDString isEqualToString:firmwareChaUUID.UUIDString]) {
+            NSString *value = [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
+            self.firmware = value;
+            return;
+        }
+        
+        // 读普通数据
         [self parseData:characteristic.value];
         if (self.delegate) {
             [self.delegate device:self didUpdateData:self.lastData];
@@ -400,6 +422,7 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error {
     NSLog(@"mac:%@, 接收来自设备的通知, characteristic = %@, error = %@", self.mac, characteristic, error);
+    
     [self parseData:characteristic.value];
 }
 
@@ -469,6 +492,7 @@
 - (void)reconnectDevice:(NSNotification *)notification {
     CBPeripheral *peripheral = notification.object;
     if ([peripheral.identifier.UUIDString isEqualToString:self. peripheral.identifier.UUIDString]) {
+        NSLog(@"断开连接的设备： %@", peripheral);
         if (!_disConnect) // 非用户主动断开的情况
         {
             // 去做超时重连
@@ -515,9 +539,6 @@
     _offlineReconnectTime++;
     NSLog(@"重连时间: %d，mac: %@", _offlineReconnectTime, self.mac);
     if (_offlineReconnectTime >= reconnectTimeOut) {
-        // 重连超时结束, 停止计时器，去报设备离线
-        _offlineReconnectTime = -1;
-        [_offlineReconnectTimer setFireDate:[NSDate distantFuture]];
         if (!self.connected) { // 判断重连的条件降低
             NSLog(@"重连超时，还没连上设备, 保存设备离线信息 mac = %@", self.mac);
             [self changeStatusToDisconnect:YES];
@@ -525,10 +546,19 @@
         else {
             NSLog(@"重连超时，已经连上设备, mac = %@", self.mac);
         }
-        // 标志计时结束， 重连超时时间大于10秒，才需要这两行代码
-        self.isReconnectTimer = NO;
-        [common endBackgrondTask];
+        [self stopReconnectTimer];
     }
+}
+
+- (void)stopReconnectTimer {
+    // 关闭计时器
+    _offlineReconnectTime = -1;
+    [_offlineReconnectTimer setFireDate:[NSDate distantFuture]];
+    // 初始化重连标志
+    self.isReconnectTimer = NO;
+    self.reconnectNum = 0;
+    // 关闭后台任务
+    [common endBackgrondTask];
 }
 
 #pragma mark - 查找服务和角色的作用
@@ -651,8 +681,14 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:DeviceGetAckFailedNotification object:nil];
         }
     }
-    // 去做超时重连
-    [self reconnectOprate];
+    // 去做离线倒计时
+    if (self.online && !self.isReconnectTimer) { //当前是在线，需要计时设置为离线
+        // 开始重连计时
+        [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
+        //                    // 激活后台线程 重连超时大于10秒，才需要这两行代码
+        self.isReconnectTimer = YES; // 标志开始了重连计时
+        [common beginBackgroundTask];
+    }
 }
 
 - (void)appWasKilled {

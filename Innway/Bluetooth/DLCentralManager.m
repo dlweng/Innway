@@ -238,7 +238,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
 }
 
 - (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
-//    NSLog(@"发现新设备： %@, advertisementData = %@, RSSI = %@", peripheral, advertisementData, RSSI);
+    NSLog(@"发现新设备： %@, advertisementData = %@, RSSI = %@", peripheral, advertisementData, RSSI);
 // 有效代码
 // 广播数据案例
 //    advertisementData = {
@@ -340,7 +340,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
 //        [InAlertView showAlertWithTitle:@"Information" message:messgae confirmHanler:nil];
 //    }
     
-    NSLog(@"CBCentralManager: 接收到系统的断开通知: %@, error = %@, 剩余系统时间： %f", peripheral, error, [UIApplication sharedApplication].backgroundTimeRemaining);
+    NSLog(@"CBCentralManager: 接收到系统的断开通知: %@, error = %@", peripheral, error);
     // 被动断开连接时，error才不为Nil，此时才需要去做重连
     // 发出断开连接通知
     [[NSNotificationCenter defaultCenter] postNotificationName:DeviceDisconnectNotification object:peripheral];

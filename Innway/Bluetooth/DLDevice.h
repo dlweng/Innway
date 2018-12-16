@@ -62,6 +62,7 @@
 // 由于设备处于后台，蓝牙报断连之后，如果10秒内没其他操作，进程会被挂起，重连超时的时间如果超过15秒，需要在重连开始时开启后台任务，保证定时器可以被执行。这个属性用于判断是否当前所有设备都已经重连完毕，重连完毕，就可以关闭后台任务
 @property (nonatomic, assign) BOOL isReconnectTimer;
 @property (nonatomic, assign) BOOL firstAdd; // 刚刚添加的设备，第一次连接要去发关闭断连通知
+@property (nonatomic, copy) NSString *firmware; //固件版本号
 
 + (instancetype)device:(CBPeripheral *)peripheral;
 
