@@ -102,7 +102,7 @@
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UZP-a1-XZA">
-                            <rect key="frame" x="24" y="128" width="127" height="45"/>
+                            <rect key="frame" x="20" y="128" width="127" height="45"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="45" id="GEX-4x-RZQ"/>
                                 <constraint firstAttribute="width" constant="127" id="Vde-nm-lRj"/>
@@ -116,7 +116,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYM-Di-dkM">
-                            <rect key="frame" x="184" y="128" width="127" height="45"/>
+                            <rect key="frame" x="188" y="128" width="127" height="45"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="45" id="PTs-Ku-Z9j"/>
                                 <constraint firstAttribute="width" constant="127" id="dXO-va-AQ0"/>
@@ -131,14 +131,14 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="fYM-Di-dkM" secondAttribute="trailing" constant="24" id="Cjh-d8-RWs"/>
+                        <constraint firstAttribute="trailing" secondItem="fYM-Di-dkM" secondAttribute="trailing" constant="20" id="Cjh-d8-RWs"/>
                         <constraint firstItem="YEM-bE-pd7" firstAttribute="leading" secondItem="Eed-Fa-yD3" secondAttribute="leading" constant="20" id="FtC-jE-DGP"/>
                         <constraint firstItem="fYM-Di-dkM" firstAttribute="top" secondItem="YEM-bE-pd7" secondAttribute="bottom" constant="8" id="Moy-I0-X45"/>
                         <constraint firstAttribute="trailing" secondItem="YEM-bE-pd7" secondAttribute="trailing" constant="20" id="PVg-fl-DqE"/>
                         <constraint firstItem="UZP-a1-XZA" firstAttribute="top" secondItem="YEM-bE-pd7" secondAttribute="bottom" constant="8" id="Phv-Up-gyg"/>
                         <constraint firstAttribute="height" constant="190" id="Z7M-5r-s5j"/>
                         <constraint firstItem="YEM-bE-pd7" firstAttribute="top" secondItem="Eed-Fa-yD3" secondAttribute="top" constant="20" id="bc2-2G-yck"/>
-                        <constraint firstItem="UZP-a1-XZA" firstAttribute="leading" secondItem="Eed-Fa-yD3" secondAttribute="leading" constant="24" id="fKW-IU-SSQ"/>
+                        <constraint firstItem="UZP-a1-XZA" firstAttribute="leading" secondItem="Eed-Fa-yD3" secondAttribute="leading" constant="20" id="fKW-IU-SSQ"/>
                     </constraints>
                 </view>
             </subviews>
@@ -156,8 +156,10 @@
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
+                <outlet property="cancelBtnWidthConstraint" destination="dXO-va-AQ0" id="UMf-aY-MXn"/>
                 <outlet property="confirmAlertView" destination="ca4-1m-YN4" id="WE0-cB-qEk"/>
                 <outlet property="confirmBtn" destination="UZP-a1-XZA" id="rTO-GS-h88"/>
+                <outlet property="confirmBtnWidthConstraint" destination="Vde-nm-lRj" id="Ogy-1z-u70"/>
                 <outlet property="confirmCancelAlertView" destination="Eed-Fa-yD3" id="kFK-68-w8T"/>
                 <outlet property="confirmCancelMessageLabel" destination="wkX-Xw-Y4u" id="gXi-tR-s9J"/>
                 <outlet property="confirmMessageLabel" destination="ERl-Qo-xhD" id="wff-Ws-dYo"/>
