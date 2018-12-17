@@ -311,9 +311,9 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
         pthread_rwlock_wrlock(&_connectDeviceEventHandler);
         [self.connectDeviceEventDict removeObjectForKey:peripheral.identifier.UUIDString];
         pthread_rwlock_unlock(&_connectDeviceEventHandler);
-        //连接失败也发出通知，让APP去重连
-        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceDisconnectNotification object:peripheral];
     }
+    //连接失败也发出通知，让APP去重连
+    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceDisconnectNotification object:peripheral];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {

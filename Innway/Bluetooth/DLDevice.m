@@ -518,6 +518,9 @@
         [common beginBackgroundTask];
     }
     if (self.reconnectNum < reconnectMaxCount) {
+        if (self.connecting) {
+            return; // 如果当前设备处于正在连接的状态，不去做重连
+        }
         self.reconnectNum++;
         NSLog(@"设备连接被断开，去重连设备, mac = %@, 重连计数: %d", self.mac, self.reconnectNum);
         // 去重连设备
