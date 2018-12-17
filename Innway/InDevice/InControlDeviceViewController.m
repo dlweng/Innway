@@ -354,7 +354,20 @@
 
 - (IBAction)toLocation {
     NSLog(@"开始定位");
-    [self.mapView setCenterCoordinate:self.mapView.userLocation.coordinate];
+    // 1.旧的方式
+    //    [self.mapView setCenterCoordinate:self.mapView.userLocation.coordinate];
+    // 2.新的方式，设置显示的范围
+    //设置地图中的的经度、纬度
+    CLLocationCoordinate2D center = self.mapView.userLocation.coordinate;
+    //设置地图显示的范围
+    MKCoordinateSpan span;
+    //地图显示范围越小，细节越清楚；
+    span.latitudeDelta = 0.01;
+    span.longitudeDelta = 0.01;
+    //创建MKCoordinateRegion对象，该对象代表地图的显示中心和显示范围
+    MKCoordinateRegion region = {center,span};
+    //设置当前地图的显示中心和显示范围
+    [self.mapView setRegion:region animated:YES];
 }
 
 - (IBAction)toSwitchMapMode {
