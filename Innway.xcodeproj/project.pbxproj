@@ -205,8 +205,8 @@
 		338CDF7E21297F6000A018EA /* DLCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7921297F5F00A018EA /* DLCentralManager.m */; };
 		338CDF7F21297F6000A018EA /* DLDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 338CDF7B21297F6000A018EA /* DLDevice.m */; };
 		33A4102E2198759B008E7360 /* voice2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 33A4102B2198759A008E7360 /* voice2.mp3 */; };
-		33A4102F2198759B008E7360 /* voice3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 33A4102C2198759A008E7360 /* voice3.mp3 */; };
-		33A410302198759B008E7360 /* voice1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 33A4102D2198759A008E7360 /* voice1.mp3 */; };
+		33A4102F2198759B008E7360 /* voice1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 33A4102C2198759A008E7360 /* voice1.mp3 */; };
+		33A410302198759B008E7360 /* voice3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 33A4102D2198759A008E7360 /* voice3.mp3 */; };
 		33ADF2CF217B36430037769C /* InAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33ADF2CD217B36420037769C /* InAlertView.xib */; };
 		33E36F2B217CCAEB00FA79B9 /* charge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E36F29217CCAEA00FA79B9 /* charge@2x.png */; };
 		33E36F2C217CCAEB00FA79B9 /* charge@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E36F2A217CCAEA00FA79B9 /* charge@3x.png */; };
@@ -564,8 +564,8 @@
 		338CDF7A21297F6000A018EA /* DLUUIDTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLUUIDTool.h; sourceTree = "<group>"; };
 		338CDF7B21297F6000A018EA /* DLDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLDevice.m; sourceTree = "<group>"; };
 		33A4102B2198759A008E7360 /* voice2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice2.mp3; sourceTree = "<group>"; };
-		33A4102C2198759A008E7360 /* voice3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice3.mp3; sourceTree = "<group>"; };
-		33A4102D2198759A008E7360 /* voice1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice1.mp3; sourceTree = "<group>"; };
+		33A4102C2198759A008E7360 /* voice1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice1.mp3; sourceTree = "<group>"; };
+		33A4102D2198759A008E7360 /* voice3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = voice3.mp3; sourceTree = "<group>"; };
 		33ADF2CD217B36420037769C /* InAlertView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InAlertView.xib; sourceTree = "<group>"; };
 		33E36F29217CCAEA00FA79B9 /* charge@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "charge@2x.png"; sourceTree = "<group>"; };
 		33E36F2A217CCAEA00FA79B9 /* charge@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "charge@3x.png"; sourceTree = "<group>"; };
@@ -930,9 +930,9 @@
 		3374C7492112013A00F83101 /* Innway */ = {
 			isa = PBXGroup;
 			children = (
-				33A4102D2198759A008E7360 /* voice1.mp3 */,
+				33A4102C2198759A008E7360 /* voice1.mp3 */,
 				33A4102B2198759A008E7360 /* voice2.mp3 */,
-				33A4102C2198759A008E7360 /* voice3.mp3 */,
+				33A4102D2198759A008E7360 /* voice3.mp3 */,
 				3385C6DB21578D2B005FAB04 /* InBaseViewController.h */,
 				3385C6DC21578D2B005FAB04 /* InBaseViewController.m */,
 				3374C76E2112077C00F83101 /* image */,
@@ -1413,7 +1413,7 @@
 				3368B83D2184157000AC943F /* icon_menu@2x.png in Resources */,
 				3374C7AE2112077C00F83101 /* icon_dot_up.png in Resources */,
 				33FFB9AC21733E9200E6A8C6 /* photoBackground@3x.png in Resources */,
-				33A4102F2198759B008E7360 /* voice3.mp3 in Resources */,
+				33A4102F2198759B008E7360 /* voice1.mp3 in Resources */,
 				3385C6CC2157467D005FAB04 /* Rectangle2copy@3x.png in Resources */,
 				33E4FB5E219E487700A2F101 /* RSSI_4@2x.png in Resources */,
 				330FB8D721636F790032E657 /* up@2x.png in Resources */,
@@ -1450,7 +1450,7 @@
 				33FFB9AB21733E9200E6A8C6 /* photoBackground@2x.png in Resources */,
 				194AEF0621A04BAA00B0B76D /* narBarBackgroudImage7.jpg in Resources */,
 				33E4FB62219E487700A2F101 /* RSSI_3@3x.png in Resources */,
-				33A410302198759B008E7360 /* voice1.mp3 in Resources */,
+				33A410302198759B008E7360 /* voice3.mp3 in Resources */,
 				33FB62A1215D453900C6419C /* 40@2x.png in Resources */,
 				3368B83A2184152300AC943F /* user@2x.png in Resources */,
 				33639506217B4036006719EA /* whiteBtn@3x.png in Resources */,

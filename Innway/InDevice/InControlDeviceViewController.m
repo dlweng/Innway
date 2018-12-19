@@ -522,7 +522,7 @@
         case 4:
         {
             NSLog(@"跳转隐私协议");
-            InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Privacy Policy" UrlString:@"http://www.baidu.com"];
+            InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Privacy Policy" UrlString:@"http://3.16.195.135/PrivacyPolicy/PrivacyPolicy.html"];
             [self safePushViewController:webVC];
 //            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];
             break;
