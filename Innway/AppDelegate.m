@@ -67,6 +67,7 @@
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    [[NSNotificationCenter defaultCenter] postNotificationName:ApplicationDidEnterBackground object:nil];
 //    NSLog(@"进入后台，监听iBeacon");
 //    [common startiBeaconListen];
 }

@@ -75,6 +75,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
         _disConnectDeviceEventDict = [NSMutableDictionary dictionary];
         
         [self detectionConnectTimeoutLoop];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startScaning) name:ApplicationDidEnterBackground object:nil];
     }
     return self;
 }
@@ -85,6 +86,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
     _scanTimer = nil;
     [_repeatScanTimer invalidate];
     _repeatScanTimer = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationDidEnterBackground object:nil];
 }
 
 #pragma mark - Interface
@@ -168,6 +170,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
 
 #pragma mark - 内部工具方法
 - (void)startScaning {
+    NSLog(@"开始扫描设备");
     CBUUID *serverUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
     NSArray *arr = nil;
     if (serverUUID) {
@@ -189,12 +192,14 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
 - (void)repeatScanNewDevice {
     // 每3秒钟扫描2秒钟设备
     [self startScaning];
-    
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_queue_create(0, 0), ^{
         [NSThread sleepForTimeInterval:6];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.manager stopScan];
+            if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) {
+                [weakSelf.manager stopScan];
+                NSLog(@"停止扫描设备");
+            }
         });
     });
 }

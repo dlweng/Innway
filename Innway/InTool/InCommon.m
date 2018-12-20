@@ -19,7 +19,7 @@
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskID;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier iBeaconBackgroundTaskID;
-@property (nonatomic, assign) UIBackgroundTaskIdentifier uploadDeviceLocationtTaskID;
+//@property (nonatomic, assign) UIBackgroundTaskIdentifier uploadDeviceLocationtTaskID;
 @property (nonatomic, strong) CLBeaconRegion *iBeaconRegion;
 
 @end

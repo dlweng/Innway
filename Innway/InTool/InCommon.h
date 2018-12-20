@@ -23,6 +23,7 @@
 #define common [InCommon sharedInstance]
 #define httpDomain @"http://3.16.195.135/GetData.ashx"
 #define ApplicationWillEnterForeground @"ApplicationWillEnterForeground"
+#define ApplicationDidEnterBackground @"ApplicationDidEnterBackground"
 
 /**
  界面显示类型
