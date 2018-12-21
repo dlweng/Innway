@@ -68,6 +68,7 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 @property (nonatomic, assign) InDeviceType deviceType; //保存此次查找的设备类型
 
 @property (nonatomic, assign) BOOL isSharkAnimationing;
+@property (nonatomic, assign) BOOL unFirstLogin;
 
 + (instancetype)sharedInstance;
 

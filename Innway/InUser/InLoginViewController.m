@@ -19,7 +19,6 @@
 
 @property (weak, nonatomic) IBOutlet InTextField *emailTextField;
 @property (weak, nonatomic) IBOutlet InTextField *passwordTextField;
-@property (nonatomic, assign) BOOL firstAppear;
 
 @end
 
@@ -28,20 +27,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"Log in";
-    self.firstAppear = YES;
     self.emailTextField.delegate = self;
     self.passwordTextField.delegate = self;
     //    //设置按钮的圆弧
     //    self.loginBtn.layer.masksToBounds = YES;
     //    self.loginBtn.layer.cornerRadius = 25;
+    if (common.ID != -1) {
+        self.emailTextField.text = common.email;
+        self.passwordTextField.text = common.pwd;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.firstAppear && common.ID != -1) {
-        self.firstAppear = NO;
-        self.emailTextField.text = common.email;
-        self.passwordTextField.text = common.pwd;
+    if (!common.unFirstLogin && common.ID != -1) {
+        common.unFirstLogin = YES;
         [self userLogin:nil]; // 自动登陆
     }
     [self.navigationController.navigationBar setHidden:NO];

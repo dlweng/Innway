@@ -8,6 +8,7 @@
 
 #import "InDeviceListCell.h"
 #import "InCommon.h"
+#import "DLCloudDeviceManager.h"
 
 @interface InDeviceListCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *alertImageView;
@@ -128,9 +129,10 @@
 }
 
 - (void)setBeSelected:(BOOL)beSelected {
+    NSArray *deviceList = [[DLCloudDeviceManager sharedInstance].cloudDeviceList copy];
     _beSelected = beSelected;
     UIColor *color = [UIColor clearColor];
-    if (beSelected) {
+    if (beSelected && deviceList.count > 1) {
         color = [UIColor colorWithRed:164.0/255.0 green:164.0/255.0 blue:164.0/255.0 alpha:0.5];
     }
     self.bgView.backgroundColor = color;
