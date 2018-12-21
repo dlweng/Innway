@@ -536,7 +536,7 @@
     }
     else {
         NSLog(@"已经重连%d次, 不再去重连:%@", self.reconnectNum, self.mac);
-        
+        self.reconnectNum = 0;
     }
 }
 
