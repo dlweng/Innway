@@ -819,7 +819,7 @@
     NSError *error = nil;
     self.searchPhonePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
     self.searchPhonePlayer.delegate = self;
-    self.searchPhonePlayer.numberOfLoops = 1000;
+    self.searchPhonePlayer.numberOfLoops = 300;
     self.searchPhonePlayer.volume = 1.0;
     [self.searchPhonePlayer play];
     [common startSharkAnimation]; //关闭闪光灯
