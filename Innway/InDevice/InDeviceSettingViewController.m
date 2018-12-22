@@ -76,7 +76,7 @@
     [[DLCloudDeviceManager sharedInstance] deleteDevice:self.device.mac completion:^(DLCloudDeviceManager *manager, NSError *error) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (error) {
-            [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmHanler:nil];
+            [InAlertView showAlertWithTitle:@"Information" message:error.localizedDescription confirmTitle:nil confirmHanler:nil];
         }
         else {
             if (manager.cloudDeviceList.count > 0) {
@@ -303,7 +303,7 @@
                 [self.tableView reloadData];
             }
             else {
-                [InAlertView showAlertWithTitle:@"Information" message:@"Please enter device name" confirmHanler:nil];
+                [InAlertView showAlertWithTitle:@"Information" message:@"Please enter device name" confirmTitle:nil confirmHanler:nil];
             }
         }];
         return;

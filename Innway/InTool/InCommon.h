@@ -172,6 +172,6 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 // 显示交互提示框
 typedef void (^confirmHanler)(void);
 @interface InAlertView : UIView
-+ (InAlertView *)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmHanler:(confirmHanler)confirmHanler;
++ (InAlertView *)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmTitle:(NSString *)confirmTitle confirmHanler:(confirmHanler)confirmHanler;
 + (InAlertView *)showAlertWithMessage:(NSString *)message confirmHanler:(confirmHanler)confirmHanler cancleHanler:(confirmHanler)cancleHanler;
 @end

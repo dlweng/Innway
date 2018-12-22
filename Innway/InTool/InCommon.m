@@ -908,6 +908,7 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
 @property (nonatomic, strong) confirmHanler cancleHanler;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *confirmBtnWidthConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *cancelBtnWidthConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *aConfirmBtn;
 
 
 @end
@@ -921,7 +922,7 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message confirm:(confirmHanler)confirmHanler {
+- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message confirmTitle:(NSString *)confirmTitle confirm:(confirmHanler)confirmHanler {
     if (self = [self init]) {
         self.confirmCancelAlertView.hidden = YES;
         self.confirmAlertView.backgroundColor = [UIColor whiteColor];
@@ -929,6 +930,9 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
         self.titleLabel.text = title;
         self.confirmMessageLabel.text = message;
         self.confirmHanler = confirmHanler;
+        if (confirmTitle.length > 0) {
+            [self.aConfirmBtn setTitle:confirmTitle forState:UIControlStateNormal];
+        }
         //        [self.confirmBtn setTitle:confirm forState:UIControlStateNormal];
     }
     return self;
@@ -952,8 +956,8 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
     return self;
 }
 
-+ (InAlertView *)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmHanler:(confirmHanler)confirmHanler {
-    InAlertView *alertView = [[InAlertView alloc] initWithTitle:title message:message confirm:confirmHanler];
++ (InAlertView *)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmTitle:(NSString *)confirmTitle confirmHanler:(confirmHanler)confirmHanler {
+    InAlertView *alertView = [[InAlertView alloc] initWithTitle:title message:message confirmTitle:nil confirm:nil];
     [alertView show];
     return alertView;
 }

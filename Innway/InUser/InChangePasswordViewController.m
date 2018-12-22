@@ -42,17 +42,17 @@
     NSLog(@"修改密码");
     NSLog(@"旧密码：%@， 新密码：%@， 确认密码：%@", self.oldPwd, self.pwdNew, self.confirmPwd);
     if (self.oldPwd.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"Old password cannot be blank" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Old password cannot be blank" confirmTitle:nil confirmHanler:nil];
     }
     else if (self.pwdNew.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"New password cannot be blank" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"New password cannot be blank" confirmTitle:nil confirmHanler:nil];
     }
     else if (self.confirmPwd.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"Password confirmation cannot be blank" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Password confirmation cannot be blank" confirmTitle:nil confirmHanler:nil];
     }
     else {
         if (![self.pwdNew isEqualToString:self.confirmPwd]) {
-            [InAlertView showAlertWithTitle:@"Information" message:@"New password and password confirmation do not match" confirmHanler:nil];
+            [InAlertView showAlertWithTitle:@"Information" message:@"New password and password confirmation do not match" confirmTitle:nil confirmHanler:nil];
         }
         else {
             [InAlertTool showHUDAddedTo:self.view animated:YES];
@@ -61,7 +61,7 @@
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
                 if (code == 200) {
-                    [InAlertView showAlertWithTitle:@"Information" message:@"Password changed" confirmHanler:nil];
+                    [InAlertView showAlertWithTitle:@"Information" message:@"Password changed" confirmTitle:nil confirmHanler:nil];
                 }
                 else {
                     NSString *message;
@@ -76,7 +76,7 @@
                              message = @"Password change failure";
                         }
                     }
-                    [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
+                    [InAlertView showAlertWithTitle:@"Information" message:message confirmTitle:nil confirmHanler:nil];
                 }
             }];
         }

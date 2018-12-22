@@ -30,7 +30,7 @@
         if (state != CBCentralManagerStatePoweredOn) {
             if (!isShowAlterView.boolValue) {
                 isShowAlterView = @YES;
-                alertView = [InAlertView showAlertWithTitle:@"Information" message:@"Enable Bluetooth to pair with the device." confirmHanler:^{
+                alertView = [InAlertView showAlertWithTitle:@"Information" message:@"Enable Bluetooth to pair with the device." confirmTitle:nil confirmHanler:^{
                     isShowAlterView = @NO;
                 }];
             }

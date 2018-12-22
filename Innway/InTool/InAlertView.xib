@@ -156,6 +156,7 @@
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
+                <outlet property="aConfirmBtn" destination="xMa-pI-7Ss" id="fc0-fp-Xo5"/>
                 <outlet property="cancelBtnWidthConstraint" destination="dXO-va-AQ0" id="UMf-aY-MXn"/>
                 <outlet property="confirmAlertView" destination="ca4-1m-YN4" id="WE0-cB-qEk"/>
                 <outlet property="confirmBtn" destination="UZP-a1-XZA" id="rTO-GS-h88"/>

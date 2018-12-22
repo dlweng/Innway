@@ -51,11 +51,11 @@
 
 - (IBAction)userLogin:(UIButton *)sender {
     if (self.emailTextField.text.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmTitle:nil confirmHanler:nil];
         return;
     }
     else if (self.passwordTextField.text.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"Password required" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Password required" confirmTitle:nil confirmHanler:nil];
         return;
     }
     
@@ -97,7 +97,7 @@
                     message = @"Login failed";
                 }
             }
-            [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
+            [InAlertView showAlertWithTitle:@"Information" message:message confirmTitle:nil confirmHanler:nil];
         }
     }];
 }

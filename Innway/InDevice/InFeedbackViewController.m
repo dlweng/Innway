@@ -41,7 +41,7 @@
 - (void)sendFeedback {
     [self.textView resignFirstResponder];
     if (self.textView.text.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"Please leave your feedback" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Please leave your feedback" confirmTitle:nil confirmHanler:nil];
     }
     else {
         [InAlertTool showHUDAddedTo:self.view animated:YES];
@@ -62,7 +62,7 @@
                     message = @"Feedback submission failure";
                 }
             }
-            [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
+            [InAlertView showAlertWithTitle:@"Information" message:message confirmTitle:nil confirmHanler:nil];
         }];
     }
     NSLog(@"发送反馈邮件, textView = %@", self.textView.text);

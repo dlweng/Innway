@@ -8,7 +8,7 @@
 
 #import "InSelectionViewController.h"
 #import "InSearchDeviceViewController.h"
-#import "inCommon.h"
+#import "InCommon.h"
 #import "InWebViewController.h"
 
 @interface InSelectionViewController ()<UITableViewDelegate, UITableViewDataSource>
@@ -37,7 +37,7 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     [self.navigationController.navigationBar setHidden:NO];
     [InCommon setNavgationBar:self.navigationController.navigationBar];
-    self.navigationItem.title = @"Add a new Innway";
+    self.navigationItem.title = @"Add Innway device";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
 }
 
@@ -101,7 +101,7 @@
 - (IBAction)buyNewInnway {
     NSLog(@"跳转到购买设备链接");
 //    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];
-    InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Buy More Innway" UrlString:@"http://www.innwaytech.com"];
+    InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Buy a new Innway" UrlString:@"http://www.innwaytech.com"];
     if (self.navigationController.viewControllers.lastObject == self) {
         [self.navigationController pushViewController:webVC animated:YES];
     }

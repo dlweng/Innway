@@ -23,7 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"Sign up";
+    self.navigationItem.title = @"Registration";
     self.emailTextField.delegate = self;
     self.passwordTextField.delegate = self;
 //    //设置按钮的圆弧
@@ -33,11 +33,11 @@
 
 - (IBAction)registerBtnDidClick:(UIButton *)sender {
     if (self.emailTextField.text.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmTitle:nil confirmHanler:nil];
         return;
     }
     else if (self.passwordTextField.text.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"Password required" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Password required" confirmTitle:nil confirmHanler:nil];
         return;
     }
     
@@ -65,7 +65,7 @@
                 messgae = @"Registration failed";
             }
         }
-        [InAlertView showAlertWithTitle:@"Information" message:messgae confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:messgae confirmTitle:nil confirmHanler:nil];
     }];
 }
 

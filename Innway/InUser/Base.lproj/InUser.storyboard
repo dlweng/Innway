@@ -51,7 +51,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bG2-94-N5R">
                                 <rect key="frame" x="44" y="542" width="127" height="45"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Sign up" backgroundImage="greenBtn.png">
+                                <state key="normal" title="Register" backgroundImage="greenBtn.png">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <state key="highlighted" backgroundImage="greenBtn.png">
@@ -64,7 +64,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wC0-Te-HMl">
                                 <rect key="frame" x="204" y="542" width="127" height="45"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Log in" backgroundImage="whiteBtn.png">
+                                <state key="normal" title="Login" backgroundImage="whiteBtn.png">
                                     <color key="titleColor" red="0.23529411764705882" green="0.52941176470588236" blue="0.36862745098039218" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <state key="highlighted" backgroundImage="whiteBtn.png">
@@ -133,7 +133,7 @@
                                                     <constraint firstAttribute="width" constant="30" id="Yvd-BV-nmw"/>
                                                 </constraints>
                                             </imageView>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="E-mail address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="y0z-Y5-XC5" customClass="InTextField">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="y0z-Y5-XC5" customClass="InTextField">
                                                 <rect key="frame" x="65" y="14.5" width="220" height="21"/>
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -231,7 +231,7 @@
                                     <constraint firstAttribute="width" constant="180" id="gXR-wr-Ojn"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <state key="normal" title="Forgot password?">
+                                <state key="normal" title="Forgot password">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -299,7 +299,7 @@
                                             <constraint firstAttribute="height" constant="22" id="kjk-u1-K0M"/>
                                         </constraints>
                                     </imageView>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="E-mail address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dkw-WZ-BXU" customClass="InTextField">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dkw-WZ-BXU" customClass="InTextField">
                                         <rect key="frame" x="65" y="14.5" width="220" height="21"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -325,7 +325,7 @@
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K7d-xE-hic">
                                 <rect key="frame" x="60.5" y="199" width="254" height="45"/>
-                                <state key="normal" title="Confirm" backgroundImage="greenLongButton.png">
+                                <state key="normal" title="Reset password" backgroundImage="greenLongButton.png">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <state key="highlighted" backgroundImage="greenLongButton.png"/>
@@ -333,7 +333,7 @@
                                     <action selector="resetBtnDidClick:" destination="GNs-5a-VOU" eventType="touchUpInside" id="WCj-ED-HmA"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your email address and we'll send you a link to create a new password" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibJ-Iz-6o1">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter the email address you used to sign up to reset your password." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibJ-Iz-6o1">
                                 <rect key="frame" x="66" y="263" width="243" height="57.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -403,7 +403,7 @@
                                                     <constraint firstAttribute="height" constant="22" id="ZQR-3D-oii"/>
                                                 </constraints>
                                             </imageView>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="E-mail address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="afb-3O-XOa" customClass="InTextField">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="afb-3O-XOa" customClass="InTextField">
                                                 <rect key="frame" x="65" y="14.5" width="220" height="21"/>
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -484,7 +484,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a0m-cV-tmF">
                                 <rect key="frame" x="60.5" y="264" width="254" height="45"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Sign up" backgroundImage="greenLongButton.png">
+                                <state key="normal" title="Register" backgroundImage="greenLongButton.png">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <state key="highlighted" backgroundImage="greenLongButton.png">

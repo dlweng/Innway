@@ -601,6 +601,21 @@
         return;
     }
     NSMutableDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+    // 1.先删除已经不存在云端列表的设备大头针
+    NSMutableArray *removeArr = [NSMutableArray array];
+    for (NSString *mac in self.deviceAnnotation.allKeys) {
+        DLDevice *device = cloudDeviceList[mac];
+        if (!device) {
+            // 设备不存在，假如到删除列表
+            [removeArr addObject:mac];
+        }
+    }
+    for (NSString *mac in removeArr) {
+        InAnnotation *annotation = [self.deviceAnnotation objectForKey:mac];
+        [self.mapView removeAnnotation:annotation];
+        [self.deviceAnnotation removeObjectForKey:mac];
+    }
+    // 2.更新存在云端列表设备的大头针状态
     for (NSString *mac in cloudDeviceList.allKeys) {
         DLDevice *device = cloudDeviceList[mac];
         InAnnotation *annotation = [self.deviceAnnotation objectForKey:mac];

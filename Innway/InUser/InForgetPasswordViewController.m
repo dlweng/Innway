@@ -31,12 +31,12 @@
 - (IBAction)resetBtnDidClick:(UIButton *)sender {
     NSString *email = self.emailTextField.text;
     if (email == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmTitle:nil confirmHanler:nil];
         return;
     }
     [self.view endEditing:YES];
     NSLog(@"发送重置密码邮件:%@", email);
-    [InAlertView showAlertWithTitle:@"Information" message:@"An email has been sent to the provided email with further instructions." confirmHanler:^{
+    [InAlertView showAlertWithTitle:@"Information" message:@"Check your email for an email containing the link to reset your password." confirmTitle:@"OK" confirmHanler:^{
         // 发送重置密码邮件
         [InAlertTool showHUDAddedTo:self.view animated:YES];
         NSDictionary* body = @{@"LoginName":email, @"action":@"sendResetEmailByLoginName"};
@@ -46,7 +46,7 @@
             NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
             if (code == 200) {
                 NSLog(@"发送重置密码邮件成功");
-                [InAlertView showAlertWithTitle:@"Information" message:@"Reset password email sent" confirmHanler:nil];
+                [InAlertView showAlertWithTitle:@"Information" message:@"Reset password email sent" confirmTitle:nil confirmHanler:nil];
             }
             else {
                 NSString *message;
@@ -61,7 +61,7 @@
                         message = @"Reset password email failed to send";
                     }
                 }
-                [InAlertView showAlertWithTitle:@"Information" message:message confirmHanler:nil];
+                [InAlertView showAlertWithTitle:@"Information" message:message confirmTitle:nil confirmHanler:nil];
             }
         }];
     }];
