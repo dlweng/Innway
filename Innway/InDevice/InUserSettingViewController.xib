@@ -87,15 +87,15 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2p5-7g-hzI">
                     <rect key="frame" x="69" y="504" width="237" height="45"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <state key="normal" title="Exit account" backgroundImage="buyButton.png">
+                    <state key="normal" title="Log Out" backgroundImage="buyButton.png">
                         <color key="titleColor" red="0.31372549020000001" green="0.70196078429999997" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                     <connections>
                         <action selector="logout" destination="-1" eventType="touchUpInside" id="AtC-Pt-B4Z"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="App Version 1.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ltf-dz-qBQ">
-                    <rect key="frame" x="134.5" y="564" width="106" height="18"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Innway version 1.0.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ltf-dz-qBQ">
+                    <rect key="frame" x="119.5" y="564" width="136.5" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
@@ -114,6 +114,7 @@
                 <constraint firstItem="2p5-7g-hzI" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="nXq-AB-7b9"/>
                 <constraint firstItem="4Zx-z8-Alq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="qUK-Le-mKP"/>
             </constraints>
+            <point key="canvasLocation" x="138.40000000000001" y="120.98950524737631"/>
         </view>
     </objects>
     <resources>

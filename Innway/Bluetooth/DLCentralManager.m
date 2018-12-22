@@ -271,9 +271,6 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
                 // 设备不存在云端列表，且设备类型与客户查找的类型相同，才回调
                 BOOL callback = NO;
                 InDeviceType findDeviceType = [common getDeviceType:peripheral];
-#warning danlyTest
-                common.deviceType = InDeviceCard;
-                findDeviceType = InDeviceCard;
                 if (common.deviceType == findDeviceType || (common.deviceType == InDeviceAll && (findDeviceType == InDeviceTag || findDeviceType == InDeviceChip || findDeviceType == InDeviceCard))) {
                     callback = YES;
                 }

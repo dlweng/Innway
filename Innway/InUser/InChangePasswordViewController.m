@@ -34,7 +34,7 @@
 
 - (void)setupNarBar {
     self.navigationController.navigationBar.hidden = NO;
-    self.navigationItem.title = @"Change password";
+    self.navigationItem.title = @"Change Password";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
 }
 

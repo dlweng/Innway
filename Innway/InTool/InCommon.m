@@ -957,7 +957,7 @@ static inline id gizGetObjectFromDict(NSDictionary *dict, Class class, NSString 
 }
 
 + (InAlertView *)showAlertWithTitle:(NSString *)title message:(NSString *)message confirmTitle:(NSString *)confirmTitle confirmHanler:(confirmHanler)confirmHanler {
-    InAlertView *alertView = [[InAlertView alloc] initWithTitle:title message:message confirmTitle:nil confirm:nil];
+    InAlertView *alertView = [[InAlertView alloc] initWithTitle:title message:message confirmTitle:confirmTitle confirm:nil];
     [alertView show];
     return alertView;
 }

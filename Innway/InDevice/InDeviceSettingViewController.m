@@ -36,7 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"Device details";
+    self.navigationItem.title = @"Device settings";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
     
     self.disconnectAlertBtn = [[UISwitch alloc] init];
@@ -66,7 +66,7 @@
 }
 
 - (IBAction)deleteDeviceBtnDidClick {
-    [InAlertView showAlertWithMessage:@"Confirm delete device？" confirmHanler:^{
+    [InAlertView showAlertWithMessage:@"Unpair and delete device?" confirmHanler:^{
         [self deleteDevice];
     } cancleHanler:nil];
 }
@@ -149,13 +149,13 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
         case 0:
-            return @"Device name";
+            return @"Device Name";
         case 1:
-            return @"Device alert";
+            return @"Device Alert";
         case 2:
-            return @"Device alarm sound";
+            return @"Alert Tone";
         case 3:
-            return @"Device details";
+            return @"Device Details";
         default:
             return @"";
     }
@@ -165,16 +165,16 @@
     NSString *sectionName = @"";
     switch (section) {
         case 0:
-            sectionName = @"    Device name";
+            sectionName = @"    Device Name";
             break;
         case 1:
-            sectionName = @"    Device alert";
+            sectionName = @"    Device Alert";
             break;
         case 2:
-            sectionName = @"    Device alarm sound";
+            sectionName = @"    Alert Tone";
             break;
         case 3:
-            sectionName = @"    Device details";
+            sectionName = @"    Device Details";
             break;
         default:
             break;
@@ -209,7 +209,7 @@
             switch (indexPath.row) {
                 case 0:
                 {
-                    cell.textLabel.text = @"Disconnect alarm";
+                    cell.textLabel.text = @"Separation Alert";
                     cell.accessoryView = self.disconnectAlertBtn;
                     NSNumber *disconnectAlert = self.device.lastData[DisconnectAlertKey];
                     self.disconnectAlertBtn.on = disconnectAlert.boolValue;
@@ -233,17 +233,17 @@
             switch (indexPath.row) {
                 case 0:
                 {
-                    cell.textLabel.text = @"Device alarm sound";
+                    cell.textLabel.text = @"Device Alert Tone";
                     NSNumber *alertMusic = self.device.lastData[AlertMusicKey];
                     switch (alertMusic.integerValue) {
                         case 2:
-                            cell.detailTextLabel.text = @"Equipment alarm 2";
+                            cell.detailTextLabel.text = @"Alert 2";
                             break;
                         case 3:
-                            cell.detailTextLabel.text = @"Equipment alarm 3";
+                            cell.detailTextLabel.text = @"Alert 3";
                             break;
                         default:
-                            cell.detailTextLabel.text = @"Equipment alarm 1";
+                            cell.detailTextLabel.text = @"Alert 1";
                             break;
                     }
                     break;
@@ -251,16 +251,16 @@
                 case 1:
                 {
                     self.phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
-                    cell.textLabel.text = @"Cell phone alarm sound";
+                    cell.textLabel.text = @"Phone Alert Tone";
                     switch (self.phoneAlertMusic.integerValue) {
                         case 2:
-                            cell.detailTextLabel.text = @"Mobile phone alarm 2";
+                            cell.detailTextLabel.text = @"Alert 2";
                             break;
                         case 3:
-                            cell.detailTextLabel.text = @"Mobile phone alarm 3";
+                            cell.detailTextLabel.text = @"Alert 3";
                             break;
                         default:
-                            cell.detailTextLabel.text = @"Mobile phone alarm 1";
+                            cell.detailTextLabel.text = @"Alert 1";
                             break;
                     }
                     break;
@@ -274,11 +274,11 @@
         {
             switch (indexPath.row) {
                 case 0:
-                    cell.textLabel.text = @"Device address";
+                    cell.textLabel.text = @"Device Address";
                     cell.detailTextLabel.text = self.device.mac;
                     break;
                 case 1:
-                    cell.textLabel.text = @"Firmware version";
+                    cell.textLabel.text = @"Firmware";
                     cell.detailTextLabel.text = self.device.firmware;
                     break;
                 default:
@@ -295,6 +295,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     InAlarmType alertType = InDeviceAlert;
+    NSString *title = @"Select device alert tone";
     if (indexPath.section == 0 && indexPath.row == 0) {
         [InChangeDeviceNameView showChangeDeviceNameView:self.device.deviceName confirmHandle:^(NSString * _Nonnull newDeviceName) {
             NSLog(@"新设备名称: %@", newDeviceName);
@@ -331,19 +332,21 @@
                 else {
                     currentAlarmVoice = 0;
                 }
+                title = @"Select phone alert tone";
                 break;
             }
             case InDeviceAlert:
             {
                 NSNumber *alertMusic = self.device.lastData[AlertMusicKey];
                 currentAlarmVoice = alertMusic.integerValue - 1;
+                title = @"Select device alert tone";
                 break;
             }
             default:
                 break;
         }
         // 弹出选择框
-        [InAlarmTypeSelectionView showAlarmTypeSelectionView:alertType title:@"select ringtone" currentAlarmVoice:currentAlarmVoice confirmHanler:^(NSInteger newAlertVoice) {
+        [InAlarmTypeSelectionView showAlarmTypeSelectionView:alertType title:title currentAlarmVoice:currentAlarmVoice confirmHanler:^(NSInteger newAlertVoice) {
             switch (alertType) {
                 case InPhoneAlert:
                 {

@@ -30,13 +30,13 @@
 
 - (IBAction)resetBtnDidClick:(UIButton *)sender {
     NSString *email = self.emailTextField.text;
-    if (email == 0) {
+    if (email.length == 0) {
         [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmTitle:nil confirmHanler:nil];
         return;
     }
     [self.view endEditing:YES];
     NSLog(@"发送重置密码邮件:%@", email);
-    [InAlertView showAlertWithTitle:@"Information" message:@"Check your email for an email containing the link to reset your password." confirmTitle:@"OK" confirmHanler:^{
+    [InAlertView showAlertWithTitle:@"Email sent" message:@"Check your email for an email containing the link to reset your password." confirmTitle:@"OK" confirmHanler:^{
         // 发送重置密码邮件
         [InAlertTool showHUDAddedTo:self.view animated:YES];
         NSDictionary* body = @{@"LoginName":email, @"action":@"sendResetEmailByLoginName"};

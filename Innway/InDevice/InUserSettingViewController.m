@@ -110,19 +110,19 @@
             cell.textLabel.text = @"Change Password";
             break;
         case 1:
-            cell.textLabel.text = @"Buy More Innway";
+            cell.textLabel.text = @"Buy an Innway";
             break;
         case 2:
             cell.textLabel.text = @"Help Center";
             break;
         case 3:
-            cell.textLabel.text = @"Contact Us";
+            cell.textLabel.text = @"Contact Innway";
             break;
         case 4:
             cell.textLabel.text = @"Privacy Policy";
             break;
         case 5:{
-            cell.textLabel.text = @"Display User Location";
+            cell.textLabel.text = @"Display Phone Location";
             self.locationBtn.on = [common getIsShowUserLocation];
             cell.accessoryView = self.locationBtn;
             break;

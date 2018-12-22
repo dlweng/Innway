@@ -499,7 +499,7 @@
         case 1:
         {
             NSLog(@"跳转到购买中心");
-            InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Buy More Innway" UrlString:@"http://www.innwaytech.com"];
+            InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Buy an Innway" UrlString:@"http://www.innwaytech.com"];
             [self safePushViewController:webVC];
 //            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.innwaytech.com"]];
             break;
