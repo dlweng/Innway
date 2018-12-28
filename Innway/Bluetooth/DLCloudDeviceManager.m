@@ -102,7 +102,7 @@ static DLCloudDeviceManager *instance = nil;
             message = @"You can only add up to 8 devices";
         }
         else if (code == 400) {
-            message = @"Device has already been added";
+            message = @"Device found,but it's already linked to another account.";
         }
         else {
             if (error && error.code == -1) {
@@ -209,7 +209,7 @@ static DLCloudDeviceManager *instance = nil;
                 if ([name isEqualToString:@"Innway Card"]) {
                     device.type = InDeviceCard;
                 }
-                else if ([name isEqualToString:@"Innway chip"]) {
+                else if ([name isEqualToString:@"Innway Chip"]) {
                     device.type = InDeviceChip;
                 }
                 else if ([name isEqualToString:@"Innway Tag"]) {

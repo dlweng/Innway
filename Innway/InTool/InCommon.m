@@ -98,6 +98,18 @@
     self.pwd = nil;
 }
 
+- (void)saveLoginStatus:(BOOL)login {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:@(login) forKey:@"loginStatus"];
+    [defaults synchronize];
+}
+
+- (BOOL)getLoginStatus {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *loginStatus = [defaults valueForKey:@"loginStatus"];
+    return loginStatus.boolValue;
+}
+
 #pragma mark - 云端列表存取
 - (void)saveCloudList:(NSArray *)cloudList {
     if (cloudList == nil || self.ID <= 0) {
@@ -145,7 +157,7 @@
                 name = @"Innway Tag";
                 break;
             case InDeviceChip:
-                name = @"Innway chip";
+                name = @"Innway Chip";
                 break;
             default:
                 name = @"Innway Card";

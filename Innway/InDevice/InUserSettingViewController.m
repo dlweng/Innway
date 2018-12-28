@@ -79,6 +79,7 @@
 - (IBAction)logout{
     NSLog(@"退出账户");
 //    [[InCommon sharedInstance] clearUserInfo];
+    [common saveLoginStatus:NO];
     if (self.logoutUser) {
         // 清除云端列表
         [[DLCloudDeviceManager sharedInstance] deleteCloudList];

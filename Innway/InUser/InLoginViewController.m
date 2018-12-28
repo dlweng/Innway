@@ -40,8 +40,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (!common.unFirstLogin && common.ID != -1) {
-        common.unFirstLogin = YES;
+    BOOL login = [common getLoginStatus];
+    if (common.ID != -1 && login) {
         [self userLogin:nil]; // 自动登陆
     }
     [self.navigationController.navigationBar setHidden:NO];
@@ -73,6 +73,7 @@
                 NSString *userName = [data stringValueForKey:@"LoginName" defaultValue:@""];
                 NSString *password = [data stringValueForKey:@"PassWord" defaultValue:@""];
                 [common saveUserInfoWithID:ID email:userName pwd:password];
+                [common saveLoginStatus:YES];
             }
             [self pushToNewCotroller];
         }
