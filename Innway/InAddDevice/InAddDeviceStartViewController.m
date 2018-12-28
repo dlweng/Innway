@@ -39,7 +39,7 @@
     if (cloudDeviceList.count != 0) {
         [self pushToControlDeviceController:NO];
     }
-    self.backView.hidden = YES;
+    self.backView.hidden = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -49,7 +49,14 @@
 }
 
 - (void)goBack {
-    [self pushToControlDeviceController:YES];
+    NSLog(@"点击返回键");
+    __weak typeof(self) weakSelf = self;
+    [InAlertView showAlertWithMessage:@"Exit App?" confirmHanler:^{
+        if (weakSelf.navigationController.viewControllers.lastObject == self) {
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+            [common saveLoginStatus:NO];
+        }
+    } cancleHanler:nil];
 }
 
 - (void)pushToControlDeviceController:(BOOL)animation {
