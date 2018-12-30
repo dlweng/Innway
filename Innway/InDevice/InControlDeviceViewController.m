@@ -112,8 +112,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchPhone:) name:DeviceSearchPhoneNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchDeviceAlert:) name:DeviceSearchDeviceAlertNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopBtnAnimation) name:DeviceGetAckFailedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUI) name:ApplicationWillEnterForeground object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterForeground) name:ApplicationWillEnterForeground object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeOrientation) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    
     // 设置定时器
     __weak typeof(self) weakSelf = self;
     self.animationTimer = [NSTimer newTimerWithTimeInterval:0.4 repeats:YES block:^(NSTimer * _Nonnull timer) {
@@ -836,6 +837,39 @@
         }
     }
  
+}
+
+- (void)appDidEnterForeground {
+    [self updateUI]; // 先更新一下UI
+    __weak typeof(self) weakSelf = self;
+    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
+        NSLog(@"cloudList = %@", cloudList);
+        if (cloudList.count > 0) {
+            if (weakSelf.deviceListVC.selectDevice && [cloudList objectForKey:weakSelf.deviceListVC.selectDevice.mac]) {
+                // 当设备列表已有选中设备，且存在云端列表中，不需要重新设置
+            }
+            else {
+                NSString *mac = cloudList.allKeys[0];
+                DLDevice *device = cloudList[mac];
+                weakSelf.device = device;
+                weakSelf.deviceListVC.selectDevice = weakSelf.device;
+            }
+        }
+        else {
+            // 没有设备了，跳转到添加界面
+            if (weakSelf.navigationController.viewControllers.lastObject == self) {
+                NSArray *subViewController = weakSelf.navigationController.viewControllers;
+                if (subViewController.count >= 3) {
+                    InAddDeviceStartViewController *addDeviceStartVC = subViewController[2];
+                    if ([addDeviceStartVC isKindOfClass:[InAddDeviceStartViewController class]]) {
+                        [weakSelf.navigationController popToViewController:addDeviceStartVC animated:YES];
+                    }
+                }
+            }
+        }
+        [weakSelf.deviceListVC reloadView];
+        [weakSelf updateUI];
+    }];
 }
 
 #pragma mark - Properity

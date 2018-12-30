@@ -649,9 +649,9 @@
         // 1.设置rssi掉线
         _rssi = offlineRSSI;
         // 2.获取最新位置与时间， 并保存
-        NSLog(@"保存设备离线信息");
         _coordinate = common.currentLocation;
         _offlineTime = [common getCurrentTime];
+        NSLog(@"保存设备离线信息, _offlineTime = %@", _offlineTime);
         [common saveDeviceOfflineInfo:self];
         // 3.上传设备新位置
         [[InCommon sharedInstance] uploadDeviceLocation:self];

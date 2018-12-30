@@ -179,18 +179,16 @@ static DLCloudDeviceManager *instance = nil;
             if (code == 200) {
                 cloudDevices = [responseObject arrayValueForKey:@"data" defaultValue:nil];
                 NSLog(@"获取云端列表成功: %@", cloudDevices.description);
-                if (cloudDevices.count > 0) {
-                    // 保存本地云端列表
-                    [common saveCloudList:cloudDevices];
-                }
+                // 保存本地云端列表
+                [common saveCloudList:cloudDevices];
             }
             else {
                 NSLog(@"获取云端设备列表失败: %@", [responseObject stringValueForKey:@"message" defaultValue:@""]);
                 cloudDevices = [common getCloudList];
             }
         }
+        NSMutableDictionary *newList = [NSMutableDictionary dictionary];
         if (cloudDevices.count > 0) {
-            NSMutableDictionary *newList = [NSMutableDictionary dictionary];
             for (NSDictionary *cloudDevice in cloudDevices) {
                 NSString *mac = [cloudDevice stringValueForKey:@"mac" defaultValue:@""];
                 DLDevice *device = [self.cloudDeviceList objectForKey:mac];
@@ -202,7 +200,13 @@ static DLCloudDeviceManager *instance = nil;
                 }
                 device.mac = mac;
                 device.cloudID = [cloudDevice integerValueForKey:@"id" defaultValue:-1];
-                device.deviceName = [cloudDevice stringValueForKey:@"NickName" defaultValue:@""];
+                NSString *nickName = [cloudDevice stringValueForKey:@"NickName" defaultValue:@""];
+                if (nickName == nil) {
+                    [common getDeviceName:device];
+                }
+                else {
+                    device.deviceName = nickName;
+                }
                 [device setupCoordinate:[cloudDevice stringValueForKey:@"gps" defaultValue:@""]];
                 // 设置设备的类型
                 NSString *name = [cloudDevice stringValueForKey:@"name" defaultValue:@""];
@@ -249,8 +253,17 @@ static DLCloudDeviceManager *instance = nil;
                 }];
                 [newList setValue:device forKey:mac];
             }
-            self.cloudDeviceList = newList;
         }
+        NSLog(@"self.cloudDeviceList = %@", self.cloudDeviceList);
+        NSLog(@"newList = %@", newList);
+        for (NSString *mac in self.cloudDeviceList.allKeys) {
+            DLDevice *device = [self.cloudDeviceList objectForKey:mac];
+            DLDevice *newDevice = [newList objectForKey:device.mac];
+            if (!newDevice) {
+                [device disConnectToDevice:nil];
+            }
+        }
+        self.cloudDeviceList = newList;
         completion(self, [self.cloudDeviceList copy]);
     }];
     

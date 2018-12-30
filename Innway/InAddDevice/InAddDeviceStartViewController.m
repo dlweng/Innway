@@ -30,6 +30,7 @@
     self.backView.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goBack)];
     [self.backView addGestureRecognizer:tap];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterForeground) name:ApplicationWillEnterForeground object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -66,5 +67,21 @@
     [self.navigationController.navigationBar setHidden:NO];
 }
 
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationWillEnterForeground object:nil];
+}
+
+- (void)appDidEnterForeground {
+    if (self.navigationController.viewControllers.lastObject != self) {
+        return;
+    }
+    __weak typeof(self) weakSelf = self;
+    [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
+        if (cloudList.count != 0) {
+            [weakSelf pushToControlDeviceController:NO];
+        }
+    }];
+}
 
 @end
