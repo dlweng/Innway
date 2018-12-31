@@ -41,6 +41,8 @@
 	<string>The app requires photo library access to store photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>The app requires photo library access to browse existing photos.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The app requires microphone to tell the customer about the equipment.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
