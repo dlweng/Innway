@@ -666,21 +666,18 @@
 
 #pragma mark - 后台任务
 - (BOOL)beginBackgroundTask {
-    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        if (0 != self.backgroundTaskID) {
-            return YES;
-        }
-        __weak typeof(self) weakSelf = self;
-        self.backgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            if (0 != weakSelf.backgroundTaskID) {
-                NSInteger taskid = weakSelf.backgroundTaskID;
-                weakSelf.backgroundTaskID = 0;
-                [[UIApplication sharedApplication] endBackgroundTask:taskid];
-            }
-        }];
-        return 0 != self.backgroundTaskID;
+    if (0 != self.backgroundTaskID) {
+        return YES;
     }
-    return NO;
+    __weak typeof(self) weakSelf = self;
+    self.backgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        if (0 != weakSelf.backgroundTaskID) {
+            NSInteger taskid = weakSelf.backgroundTaskID;
+            weakSelf.backgroundTaskID = 0;
+            [[UIApplication sharedApplication] endBackgroundTask:taskid];
+        }
+    }];
+    return 0 != self.backgroundTaskID;
 }
 
 - (void)endBackgrondTask {

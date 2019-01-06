@@ -360,6 +360,9 @@
     // 2.新的方式，设置显示的范围
     //设置地图中的的经度、纬度
     CLLocationCoordinate2D center = self.mapView.userLocation.coordinate;
+    if (center.latitude == 0 && center.longitude == 0) {
+        center = common.currentLocation;
+    }
     //设置地图显示的范围
     MKCoordinateSpan span;
     //地图显示范围越小，细节越清楚；
