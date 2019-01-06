@@ -34,6 +34,8 @@
 		19F4A44621BFAE4800B82900 /* searchChip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19F4A43E21BFAE4700B82900 /* searchChip@2x.png */; };
 		19F4A44721BFAE4800B82900 /* searchCard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19F4A43F21BFAE4700B82900 /* searchCard@3x.png */; };
 		19F4A45021BFCBE400B82900 /* InWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19F4A44F21BFCBE400B82900 /* InWebViewController.m */; };
+		19F8517421E1E64500442841 /* loginBackground@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 19F8517221E1E64500442841 /* loginBackground@2x.jpg */; };
+		19F8517521E1E64500442841 /* loginBackground@3x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 19F8517321E1E64500442841 /* loginBackground@3x.jpg */; };
 		19FEDE4821BC1B9E0064F7B7 /* LibraryImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FEDE0721BC1B9D0064F7B7 /* LibraryImageCell.m */; };
 		19FEDE4921BC1B9E0064F7B7 /* LibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FEDE0821BC1B9D0064F7B7 /* LibraryViewController.m */; };
 		19FEDE4A21BC1B9E0064F7B7 /* LibraryImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19FEDE0921BC1B9D0064F7B7 /* LibraryImageCell.xib */; };
@@ -72,8 +74,6 @@
 		330FB8D821636F790032E657 /* up@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8D621636F790032E657 /* up@3x.png */; };
 		330FB8DB21636F830032E657 /* down@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8D921636F820032E657 /* down@3x.png */; };
 		330FB8DC21636F830032E657 /* down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8DA21636F820032E657 /* down@2x.png */; };
-		330FB8E3216370790032E657 /* loginBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E1216370780032E657 /* loginBackground@2x.png */; };
-		330FB8E4216370790032E657 /* loginBackground@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E2216370780032E657 /* loginBackground@3x.png */; };
 		330FB8EB2163C6DA0032E657 /* greenchip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E52163C6D90032E657 /* greenchip@2x.png */; };
 		330FB8EC2163C6DA0032E657 /* greenchip@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E62163C6D90032E657 /* greenchip@3x.png */; };
 		330FB8ED2163C6DA0032E657 /* greentag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E72163C6D90032E657 /* greentag@2x.png */; };
@@ -326,6 +326,8 @@
 		19F4A44E21BFCBE400B82900 /* InWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InWebViewController.h; sourceTree = "<group>"; };
 		19F4A44F21BFCBE400B82900 /* InWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InWebViewController.m; sourceTree = "<group>"; };
 		19F61050A82BF0B9B29DC8FF /* Pods-Innway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Innway.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Innway/Pods-Innway.debug.xcconfig"; sourceTree = "<group>"; };
+		19F8517221E1E64500442841 /* loginBackground@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "loginBackground@2x.jpg"; sourceTree = "<group>"; };
+		19F8517321E1E64500442841 /* loginBackground@3x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "loginBackground@3x.jpg"; sourceTree = "<group>"; };
 		19FEDE0621BC1B9D0064F7B7 /* LibraryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryViewController.h; sourceTree = "<group>"; };
 		19FEDE0721BC1B9D0064F7B7 /* LibraryImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryImageCell.m; sourceTree = "<group>"; };
 		19FEDE0821BC1B9D0064F7B7 /* LibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryViewController.m; sourceTree = "<group>"; };
@@ -402,8 +404,6 @@
 		330FB8D621636F790032E657 /* up@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "up@3x.png"; sourceTree = "<group>"; };
 		330FB8D921636F820032E657 /* down@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "down@3x.png"; sourceTree = "<group>"; };
 		330FB8DA21636F820032E657 /* down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "down@2x.png"; sourceTree = "<group>"; };
-		330FB8E1216370780032E657 /* loginBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginBackground@2x.png"; sourceTree = "<group>"; };
-		330FB8E2216370780032E657 /* loginBackground@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginBackground@3x.png"; sourceTree = "<group>"; };
 		330FB8E52163C6D90032E657 /* greenchip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenchip@2x.png"; sourceTree = "<group>"; };
 		330FB8E62163C6D90032E657 /* greenchip@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenchip@3x.png"; sourceTree = "<group>"; };
 		330FB8E72163C6D90032E657 /* greentag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greentag@2x.png"; sourceTree = "<group>"; };
@@ -1013,8 +1013,8 @@
 				3374C78E2112077C00F83101 /* icon_checked.png */,
 				3374C7902112077C00F83101 /* icon_dot_down.png */,
 				331797F7213BBB5B000B8DD6 /* icon_splash.jpg */,
-				330FB8E1216370780032E657 /* loginBackground@2x.png */,
-				330FB8E2216370780032E657 /* loginBackground@3x.png */,
+				19F8517221E1E64500442841 /* loginBackground@2x.jpg */,
+				19F8517321E1E64500442841 /* loginBackground@3x.jpg */,
 			);
 			path = image;
 			sourceTree = "<group>";
@@ -1338,7 +1338,6 @@
 				3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */,
 				3368B8522184C76500AC943F /* InHelpCenterInfoController.xib in Resources */,
 				3363950D217B5AAE006719EA /* InChangeDeviceNameView.xib in Resources */,
-				330FB8E3216370790032E657 /* loginBackground@2x.png in Resources */,
 				3374C7522112013B00F83101 /* InUser.storyboard in Resources */,
 				330FB8F02163C6DA0032E657 /* greentag@3x.png in Resources */,
 				33FFB9AF21733F6600E6A8C6 /* photoLibrary@2x.png in Resources */,
@@ -1380,7 +1379,6 @@
 				330FB8D421636F6E0032E657 /* annotation@3x.png in Resources */,
 				33FB62A0215D453900C6419C /* 30@2x.png in Resources */,
 				33639514217B6181006719EA /* check@2x.png in Resources */,
-				330FB8E4216370790032E657 /* loginBackground@3x.png in Resources */,
 				194AEF0921A04BAA00B0B76D /* narBarBackgroudImageX.jpg in Resources */,
 				19D98EE921C498EB0043C607 /* userBodyBG@3x.png in Resources */,
 				33E4FB5B219E487700A2F101 /* RSSI_3@2x.png in Resources */,
@@ -1416,6 +1414,7 @@
 				33FFB9362171D6E700E6A8C6 /* icon_add_device@2x.png in Resources */,
 				3385C6CE2157467D005FAB04 /* Rectangle2copy@2x.png in Resources */,
 				337E50282161F60F00CB6313 /* addButtonBackgroup@2x.png in Resources */,
+				19F8517421E1E64500442841 /* loginBackground@2x.jpg in Resources */,
 				33E4FB64219E487700A2F101 /* RSSI_8@2x.png in Resources */,
 				33FB6299215D453900C6419C /* 70@3x.png in Resources */,
 				3368B83D2184157000AC943F /* icon_menu@2x.png in Resources */,
@@ -1451,6 +1450,7 @@
 				33E4FB43219E3E7400A2F101 /* changeCamera@2x.png in Resources */,
 				33FB62AA215D453900C6419C /* 70@2x.png in Resources */,
 				33FB629A215D453900C6419C /* 90@2x.png in Resources */,
+				19F8517521E1E64500442841 /* loginBackground@3x.jpg in Resources */,
 				337E503A2162030D00CB6313 /* tag@2x.png in Resources */,
 				3317982B213BEB3D000B8DD6 /* InDeviceListCell.xib in Resources */,
 				3379A2D321561E73008D1AA2 /* background@2x.png in Resources */,
