@@ -282,6 +282,9 @@
 
 #pragma mark - 闪光灯动画
 - (void)startSharkAnimation {
+    if (!self.flashStatus) {
+        return;
+    }
     if (self.isSharkAnimationing) { //如果已经开始，断开
         return;
     }
@@ -333,6 +336,19 @@
         camera.torchMode = AVCaptureTorchModeOff;
     }
     [camera unlockForConfiguration];
+}
+
+#pragma mark - flash
+- (void)saveFlashStatus:(BOOL)flashStatus {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:@(!flashStatus) forKey:@"flashIsClose"];
+    [defaults synchronize];
+}
+
+- (BOOL)flashStatus {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL flashIsClose = [defaults boolForKey:@"flashIsClose"];
+    return !flashIsClose;
 }
 
 #pragma mark - 定位

@@ -15,6 +15,7 @@
 @interface InUserSettingViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UISwitch *locationBtn;
+@property (nonatomic, strong) UISwitch *flashBtn;
 @property (weak, nonatomic) IBOutlet UIButton *logoutBtn;
 @property (nonatomic, assign) CGPoint perPoint;
 @property (nonatomic, assign) CGPoint movePoint;
@@ -23,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBodyViewHeigthConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *userIconCenterYConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *btnTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBodyHeightConstraint;
 
 
 @end
@@ -41,6 +43,7 @@
     self.tableView.scrollEnabled = NO;
     
     [self addLocationBtn];
+    [self addFlashBtn];
     
     self.logoutBtn.layer.masksToBounds = YES;
     self.logoutBtn.layer.cornerRadius = 10;
@@ -54,6 +57,7 @@
     
     if ([UIScreen mainScreen].bounds.size.height == 568) {
         self.btnTopConstraint.constant = 15;
+        self.topBodyHeightConstraint.constant = 110;
     }
 }
 
@@ -68,11 +72,21 @@
     self.locationBtn = btn;
 }
 
+- (void)addFlashBtn {
+    self.flashBtn = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
+    [self.flashBtn addTarget:self action:@selector(flashBtnDidClick:) forControlEvents:UIControlEventValueChanged];
+}
+
 - (void)locationBtnDidClick {
     NSLog(@"按钮被点击, %d", self.locationBtn.isOn);
     if ([self.delegate respondsToSelector:@selector(settingViewController:showUserLocation:)]) {
         [self.delegate settingViewController:self showUserLocation:self.locationBtn.isOn];
     }
+}
+
+- (void)flashBtnDidClick:(UISwitch *)btn {
+    NSLog(@"闪光灯按钮被点击: %d", btn.isOn);
+    [common saveFlashStatus:btn.isOn];
 }
 
 // 注销账户
@@ -93,7 +107,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 6;
+    return 7;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -122,7 +136,12 @@
         case 4:
             cell.textLabel.text = @"Privacy Policy";
             break;
-        case 5:{
+        case 5:
+            cell.textLabel.text = @"Flash Light";
+            cell.accessoryView = self.flashBtn;
+            self.flashBtn.on = [common flashStatus];
+            break;
+        case 6:{
             cell.textLabel.text = @"Display Phone Location";
             self.locationBtn.on = [common getIsShowUserLocation];
             cell.accessoryView = self.locationBtn;
@@ -194,5 +213,7 @@
         [self.delegate settingViewController:self touchEnd:movePoint];
     }
 }
+
+
 
 @end

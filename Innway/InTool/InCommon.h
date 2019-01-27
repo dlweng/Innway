@@ -103,6 +103,9 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 - (void)uploadDeviceLocation:(DLDevice *)device;
 - (BOOL)isOpensLocation;
 
+- (void)saveFlashStatus:(BOOL)flashStatus;
+- (BOOL)flashStatus;
+
 // 获取RSSI对应的图片名称
 - (NSString *)getImageName:(NSNumber *)rssi;
 

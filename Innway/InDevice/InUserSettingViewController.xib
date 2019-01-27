@@ -14,6 +14,7 @@
                 <outlet property="btnTopConstraint" destination="1rb-Go-Gne" id="7SG-q2-Hjm"/>
                 <outlet property="emailLabel" destination="67y-Ob-vcF" id="6zt-he-yaH"/>
                 <outlet property="tableView" destination="4Zx-z8-Alq" id="CC8-v3-yyU"/>
+                <outlet property="topBodyHeightConstraint" destination="6bh-vD-vMr" id="xPl-TK-i8P"/>
                 <outlet property="topBodyViewHeigthConstraint" destination="6bh-vD-vMr" id="IcJ-7K-Tzb"/>
                 <outlet property="userIconCenterYConstraint" destination="wzD-xF-c80" id="tdE-Ox-j3c"/>
                 <outlet property="userNameLabel" destination="Oa7-ea-e7W" id="3e6-Fg-2HX"/>
@@ -26,10 +27,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="4Zx-z8-Alq">
-                    <rect key="frame" x="0.0" y="160" width="375" height="300"/>
+                    <rect key="frame" x="0.0" y="160" width="375" height="350"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="300" id="HKV-c2-Kov"/>
+                        <constraint firstAttribute="height" constant="350" id="HKV-c2-Kov"/>
                     </constraints>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="F6C-Of-Ivx"/>
@@ -43,7 +44,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="160"/>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8uS-EP-hYs">
-                            <rect key="frame" x="24" y="39.5" width="81" height="81"/>
+                            <rect key="frame" x="24" y="49.5" width="81" height="81"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="81" id="Y44-bb-2pO"/>
                                 <constraint firstAttribute="width" constant="81" id="am0-hc-VKj"/>
@@ -55,13 +56,13 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kevin" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oa7-ea-e7W">
-                            <rect key="frame" x="118" y="61.5" width="237" height="21"/>
+                            <rect key="frame" x="118" y="71.5" width="237" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="307262195@qq.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="67y-Ob-vcF">
-                            <rect key="frame" x="118" y="84.5" width="237" height="17"/>
+                            <rect key="frame" x="118" y="94.5" width="237" height="17"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -81,11 +82,11 @@
                         <constraint firstItem="8uS-EP-hYs" firstAttribute="leading" secondItem="aUX-EV-fgk" secondAttribute="leading" constant="24" id="ZIG-HF-U6y"/>
                         <constraint firstItem="9Q6-JL-uwX" firstAttribute="top" secondItem="aUX-EV-fgk" secondAttribute="top" id="ayH-mr-icM"/>
                         <constraint firstItem="67y-Ob-vcF" firstAttribute="top" secondItem="Oa7-ea-e7W" secondAttribute="bottom" constant="2" id="dtp-uY-hC2"/>
-                        <constraint firstItem="8uS-EP-hYs" firstAttribute="centerY" secondItem="aUX-EV-fgk" secondAttribute="centerY" id="wzD-xF-c80"/>
+                        <constraint firstItem="8uS-EP-hYs" firstAttribute="centerY" secondItem="aUX-EV-fgk" secondAttribute="centerY" constant="10" id="wzD-xF-c80"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2p5-7g-hzI">
-                    <rect key="frame" x="69" y="504" width="237" height="45"/>
+                    <rect key="frame" x="69" y="554" width="237" height="45"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <state key="normal" title="Log Out" backgroundImage="buyButton.png">
                         <color key="titleColor" red="0.31372549020000001" green="0.70196078429999997" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -95,7 +96,7 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Innway version 1.0.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ltf-dz-qBQ">
-                    <rect key="frame" x="119.5" y="564" width="136.5" height="18"/>
+                    <rect key="frame" x="119.5" y="614" width="136.5" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
