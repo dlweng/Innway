@@ -136,11 +136,12 @@
         case 4:
             cell.textLabel.text = @"Privacy Policy";
             break;
-        case 5:
+        case 5: {
             cell.textLabel.text = @"Flash Light";
             cell.accessoryView = self.flashBtn;
             self.flashBtn.on = [common flashStatus];
             break;
+        }
         case 6:{
             cell.textLabel.text = @"Display Phone Location";
             self.locationBtn.on = [common getIsShowUserLocation];
