@@ -156,9 +156,9 @@
             self.isDiscoverAllCharacter++;
         }
         if ([characteristic.UUID.UUIDString isEqualToString:ntfUUID.UUIDString]) {
-            NSLog(@"发现设备通知角色: %@", self.mac);
+            NSLog(@"发现设备通知角色: %@， characteristic = %@", self.mac, characteristic);
             self.isDiscoverAllCharacter++;
-            [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral on:YES];
+            [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:peripheral on:YES];
         }
         if (self.isDiscoverAllCharacter == 2) {
             __weak typeof(self) weakSelf = self;
