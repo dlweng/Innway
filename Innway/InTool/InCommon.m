@@ -12,6 +12,7 @@
 #import <objc/runtime.h>
 #import <AVFoundation/AVFoundation.h>
 #import "DLCloudDeviceManager.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface InCommon ()<CLLocationManagerDelegate> {
     NSTimer *_sharkTimer; // 闪光灯计时器
@@ -21,6 +22,8 @@
 @property (nonatomic, assign) UIBackgroundTaskIdentifier iBeaconBackgroundTaskID;
 //@property (nonatomic, assign) UIBackgroundTaskIdentifier uploadDeviceLocationtTaskID;
 @property (nonatomic, strong) CLBeaconRegion *iBeaconRegion;
+// 调节音量的view
+@property (nonatomic, strong) MPVolumeView *volumeView;
 
 @end
 
@@ -49,6 +52,12 @@
         _sharkTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(setupSharkLight) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_sharkTimer forMode:NSRunLoopCommonModes];
         [_sharkTimer setFireDate:[NSDate distantFuture]];
+        
+        // 往window增加调节音量试图
+        MPVolumeView *volumeView = [[MPVolumeView alloc] init];
+        [[UIApplication sharedApplication].keyWindow addSubview:volumeView];
+        [[UIApplication sharedApplication].keyWindow sendSubviewToBack:volumeView];
+        self.volumeView = volumeView;
     }
     return self;
 }
@@ -712,6 +721,19 @@
         self.backgroundTaskID = 0;
         [[UIApplication sharedApplication] endBackgroundTask:taskid];
     }
+}
+
+#pragma mark - 调到最大音量
+- (void)setLargeVolume {
+    UISlider* volumeViewSlider = nil;
+    for (UIView *view in [self.volumeView subviews]){
+        if ([view.class.description isEqualToString:@"MPVolumeSlider"]){
+            volumeViewSlider = (UISlider*)view;
+            break;
+        }
+    }
+    [volumeViewSlider setValue:1.0f animated:NO];
+    [volumeViewSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
 }
 
 #pragma mark - date

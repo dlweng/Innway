@@ -127,6 +127,7 @@
     CBUUID *firmwareServerUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareServerUUID];
     for (CBService *service in services) {
         if ([service.UUID.UUIDString isEqualToString:serverUUID.UUIDString]) {
+            NSLog(@"发现设备服务: %@", self.mac);
             CBUUID *ntfUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
             CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
             [self.peripheral discoverCharacteristics:@[ntfUUID, writeUUID] forService:service];
@@ -151,9 +152,11 @@
             return; //获取硬件数据
         }
         if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
+            NSLog(@"发现设备写角色: %@", self.mac);
             self.isDiscoverAllCharacter++;
         }
         if ([characteristic.UUID.UUIDString isEqualToString:ntfUUID.UUIDString]) {
+            NSLog(@"发现设备通知角色: %@", self.mac);
             self.isDiscoverAllCharacter++;
             [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:self.peripheral on:YES];
         }
@@ -794,6 +797,8 @@
 
 #pragma mark - 手机报警
 - (void)playSearchPhoneSound {
+    // 设置系统音量为最大音量
+    [common setLargeVolume];
     NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
     NSString *alertMusic;
     switch (phoneAlertMusic.integerValue) {
@@ -837,6 +842,8 @@
     if (self.offlinePlayer.isPlaying) {
         return;
     }
+    // 设置系统音量为最大音量
+    [common setLargeVolume];
     NSNumber *phoneAlertMusic = [[NSUserDefaults standardUserDefaults] objectForKey:PhoneAlertMusicKey];
     NSString *alertMusic;
     switch (phoneAlertMusic.integerValue) {

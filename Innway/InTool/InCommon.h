@@ -122,7 +122,8 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 + (BOOL)isIPhoneX; // 返回是否是刘海屏
 // 设置导航栏图片
 + (void)setNavgationBar:(UINavigationBar *)bar;
-
+//调节系统音量到最大音量
+- (void)setLargeVolume;
 #pragma mark - date
 //获取当前的时间 1980-01-01 00:00:01
 - (NSString *)getCurrentTime;
