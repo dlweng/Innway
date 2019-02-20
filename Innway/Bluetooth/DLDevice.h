@@ -10,6 +10,7 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <MapKit/MapKit.h>
 #import "InCommon.h"
+#import <AVFoundation/AVFoundation.h>
 
 // 设备硬件信息对应的key值
 #define ElectricKey @"Electric"
@@ -63,6 +64,8 @@
 @property (nonatomic, assign) BOOL isReconnectTimer;
 @property (nonatomic, assign) BOOL firstAdd; // 刚刚添加的设备，第一次连接要去发关闭断连通知
 @property (nonatomic, copy) NSString *firmware; //固件版本号
+@property (nonatomic, strong) AVAudioPlayer *offlinePlayer;
+@property (nonatomic, strong) AVAudioPlayer *searchPhonePlayer;
 
 + (instancetype)device:(CBPeripheral *)peripheral;
 

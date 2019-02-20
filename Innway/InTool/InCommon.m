@@ -24,6 +24,7 @@
 @property (nonatomic, strong) CLBeaconRegion *iBeaconRegion;
 // 调节音量的view
 @property (nonatomic, strong) MPVolumeView *volumeView;
+@property (nonatomic, assign) CGFloat oldVolume;
 
 @end
 
@@ -58,6 +59,7 @@
         [[UIApplication sharedApplication].keyWindow addSubview:volumeView];
         [[UIApplication sharedApplication].keyWindow sendSubviewToBack:volumeView];
         self.volumeView = volumeView;
+        self.oldVolume = -1;
     }
     return self;
 }
@@ -732,8 +734,34 @@
             break;
         }
     }
-    [volumeViewSlider setValue:1.0f animated:NO];
-    [volumeViewSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
+    if (volumeViewSlider.value < 1) {
+        // 音量不满时才去设置
+        self.oldVolume = volumeViewSlider.value;
+        [volumeViewSlider setValue:1.0f animated:NO];
+        [volumeViewSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void)restoreVolume {
+    if (self.oldVolume > 0) {
+        for (NSString *mac in [DLCloudDeviceManager sharedInstance].cloudDeviceList) {
+            DLDevice *device = [DLCloudDeviceManager sharedInstance].cloudDeviceList[mac];
+            if (device.offlinePlayer.isPlaying || device.searchPhonePlayer.isPlaying) {
+                return; // 当前还有音乐在响就不去修改
+            }
+        }
+        // 恢复旧的音量
+        UISlider* volumeViewSlider = nil;
+        for (UIView *view in [self.volumeView subviews]){
+            if ([view.class.description isEqualToString:@"MPVolumeSlider"]){
+                volumeViewSlider = (UISlider*)view;
+                break;
+            }
+        }
+        [volumeViewSlider setValue:self.oldVolume animated:NO];
+        [volumeViewSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
+        self.oldVolume = -1;
+    }
 }
 
 #pragma mark - date

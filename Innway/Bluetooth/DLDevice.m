@@ -15,7 +15,7 @@
 #import "DLCentralManager.h"
 #import "InCommon.h"
 #import "NSTimer+InTimer.h"
-#import <AVFoundation/AVFoundation.h>
+
 
 // 设置离线的RSSI值
 #define offlineRSSI @(-120)
@@ -44,8 +44,6 @@
 @property (nonatomic, assign) NSInteger alertMusic;
 @property (nonatomic, strong) NSMutableDictionary *data;
 @property (nonatomic, strong) NSMutableArray *rssiValues; // 更新RSSI逻辑，1秒获取一次RSSI，3秒更新一次UI，将3秒钟获取到的3次RSSI的最大值通知到界面
-@property (nonatomic, strong) AVAudioPlayer *searchPhonePlayer;
-@property (nonatomic, strong) AVAudioPlayer *offlinePlayer;
 @end
 
 @implementation DLDevice
@@ -834,7 +832,10 @@
     [common stopSharkAnimation]; //打开闪光灯
     if (self.searchPhonePlayer.isPlaying) {
         [self.searchPhonePlayer stop];
+        [common restoreVolume];
     }
+    self.searchPhonePlayer.delegate = self;
+    self.searchPhonePlayer = nil;
 }
 
 #pragma mark - 离线提示音
@@ -876,7 +877,15 @@
 - (void)stopOfflineSound {
     if (self.offlinePlayer.isPlaying) {
         [self.offlinePlayer stop];
+        [common restoreVolume];
     }
+    self.offlinePlayer.delegate = nil;
+    self.offlinePlayer = nil;
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    NSLog(@"播放结束");
+    [common restoreVolume];
 }
 
 #pragma mark - Properity

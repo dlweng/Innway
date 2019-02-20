@@ -124,6 +124,7 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 + (void)setNavgationBar:(UINavigationBar *)bar;
 //调节系统音量到最大音量
 - (void)setLargeVolume;
+- (void)restoreVolume;
 #pragma mark - date
 //获取当前的时间 1980-01-01 00:00:01
 - (NSString *)getCurrentTime;
