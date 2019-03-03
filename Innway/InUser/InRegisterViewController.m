@@ -123,8 +123,14 @@
     sender.selected = !sender.selected;
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
 - (void)dealloc {
-    
+    NSLog(@"注册界面被销毁");
 }
 
 

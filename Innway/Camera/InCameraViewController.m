@@ -82,6 +82,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    NSLog(@"摄像界面被销毁");
 }
 
 - (void)enterBackground {
@@ -204,7 +205,7 @@
             self.switchModeBtn.userInteractionEnabled = YES;
             self.goLibraryBtn.userInteractionEnabled = YES;
             self.goBackBtn.userInteractionEnabled = YES;
-            [self startTimer];
+            [self stopTimer];
             [self.takePhotoBtn setImage:[UIImage imageNamed:@"startRecode"] forState:UIControlStateNormal];
             [self.camera stopRecording];
         }

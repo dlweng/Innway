@@ -486,7 +486,7 @@
                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KcK-wC-r5x">
-                                                <rect key="frame" x="185" y="8" width="74" height="34"/>
+                                                <rect key="frame" x="175" y="0.0" width="120" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <state key="normal" title="Get code">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -507,15 +507,17 @@
                                             <constraint firstItem="QFi-CQ-9ju" firstAttribute="leading" secondItem="D22-ea-dxK" secondAttribute="trailing" constant="10" id="BkZ-D5-vnB"/>
                                             <constraint firstItem="tOk-tp-jNL" firstAttribute="leading" secondItem="bSC-l9-FrP" secondAttribute="leading" id="D2t-1Q-XHg"/>
                                             <constraint firstItem="QFi-CQ-9ju" firstAttribute="top" secondItem="bSC-l9-FrP" secondAttribute="top" constant="8" id="HiF-pe-GFu"/>
+                                            <constraint firstItem="KcK-wC-r5x" firstAttribute="leading" secondItem="QFi-CQ-9ju" secondAttribute="trailing" id="Jpi-cc-DQU"/>
                                             <constraint firstAttribute="height" constant="50" id="OQY-R3-qBS"/>
+                                            <constraint firstAttribute="trailing" secondItem="KcK-wC-r5x" secondAttribute="trailing" id="Oj2-sq-PEw"/>
                                             <constraint firstAttribute="trailing" secondItem="QFi-CQ-9ju" secondAttribute="trailing" constant="120" id="Pat-5b-Soh"/>
                                             <constraint firstItem="D22-ea-dxK" firstAttribute="leading" secondItem="bSC-l9-FrP" secondAttribute="leading" constant="10" id="SNo-K2-2zp"/>
-                                            <constraint firstItem="KcK-wC-r5x" firstAttribute="centerY" secondItem="bSC-l9-FrP" secondAttribute="centerY" id="SVr-lu-7ys"/>
                                             <constraint firstAttribute="bottom" secondItem="tOk-tp-jNL" secondAttribute="bottom" id="V6t-bT-IQw"/>
+                                            <constraint firstItem="KcK-wC-r5x" firstAttribute="top" secondItem="bSC-l9-FrP" secondAttribute="top" id="Xri-OO-3e7"/>
                                             <constraint firstItem="tOk-tp-jNL" firstAttribute="top" secondItem="bSC-l9-FrP" secondAttribute="top" id="ZQ6-bZ-1AD"/>
                                             <constraint firstAttribute="trailing" secondItem="tOk-tp-jNL" secondAttribute="trailing" id="nkm-61-CQf"/>
-                                            <constraint firstItem="KcK-wC-r5x" firstAttribute="leading" secondItem="QFi-CQ-9ju" secondAttribute="trailing" constant="10" id="osh-1F-QIW"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="sN5-dr-gEx"/>
+                                            <constraint firstAttribute="bottom" secondItem="KcK-wC-r5x" secondAttribute="bottom" id="twA-ZX-QCA"/>
                                             <constraint firstAttribute="bottom" secondItem="QFi-CQ-9ju" secondAttribute="bottom" constant="8" id="yt0-wm-qza"/>
                                             <constraint firstItem="D22-ea-dxK" firstAttribute="centerY" secondItem="bSC-l9-FrP" secondAttribute="centerY" id="zwd-xW-IJO"/>
                                         </constraints>
