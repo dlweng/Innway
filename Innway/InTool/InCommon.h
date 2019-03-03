@@ -122,6 +122,7 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 + (BOOL)isIPhoneX; // 返回是否是刘海屏
 // 设置导航栏图片
 + (void)setNavgationBar:(UINavigationBar *)bar;
++ (UIColor *)backgroundColor;
 //调节系统音量到最大音量
 - (void)setLargeVolume;
 - (void)restoreVolume;

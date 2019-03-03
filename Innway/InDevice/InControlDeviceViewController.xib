@@ -18,6 +18,7 @@
                 <outlet property="deviceListBackgroupView" destination="Xb7-vO-Ale" id="TWf-ak-8Ld"/>
                 <outlet property="deviceListBodyHeightConstraint" destination="uYh-Iz-OQN" id="cTH-hM-Rby"/>
                 <outlet property="deviceListBodyView" destination="gmk-bd-sj9" id="JrE-BD-6z6"/>
+                <outlet property="deviceListWhiteLine" destination="2RL-ic-JEu" id="sor-hX-QCZ"/>
                 <outlet property="mapTopConstraint" destination="dBd-b4-TbC" id="dVu-e8-Px6"/>
                 <outlet property="mapView" destination="HvX-U1-FGR" id="pwG-uI-NM8"/>
                 <outlet property="topBodyView" destination="sFK-RS-0Zf" id="QXx-M0-Pnt"/>
@@ -51,29 +52,43 @@
                             <rect key="frame" x="0.0" y="253.5" width="375" height="333.5"/>
                             <subviews>
                                 <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xb7-vO-Ale" userLabel="deviceListBackgroupView">
-                                    <rect key="frame" x="0.0" y="30" width="375" height="303.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="353.5"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2RL-ic-JEu" userLabel="deviceListWhiteLine">
+                                            <rect key="frame" x="157.5" y="15" width="60" height="6"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="60" id="Poy-30-3OS"/>
+                                                <constraint firstAttribute="height" constant="6" id="rgs-dN-ZIl"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="2RL-ic-JEu" firstAttribute="centerX" secondItem="Xb7-vO-Ale" secondAttribute="centerX" id="WGQ-Fx-2Ia"/>
+                                        <constraint firstItem="2RL-ic-JEu" firstAttribute="top" secondItem="Xb7-vO-Ale" secondAttribute="top" constant="15" id="gNs-Vm-S5O"/>
+                                    </constraints>
                                 </view>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="Xb7-vO-Ale" firstAttribute="top" secondItem="gmk-bd-sj9" secondAttribute="top" constant="30" id="2rT-Db-YLK"/>
+                                <constraint firstItem="Xb7-vO-Ale" firstAttribute="top" secondItem="gmk-bd-sj9" secondAttribute="top" id="2rT-Db-YLK"/>
                                 <constraint firstItem="Xb7-vO-Ale" firstAttribute="leading" secondItem="gmk-bd-sj9" secondAttribute="leading" id="LI5-lx-jbQ"/>
-                                <constraint firstAttribute="bottom" secondItem="Xb7-vO-Ale" secondAttribute="bottom" id="QSK-Dd-IKp"/>
+                                <constraint firstAttribute="bottom" secondItem="Xb7-vO-Ale" secondAttribute="bottom" constant="-20" id="QSK-Dd-IKp"/>
                                 <constraint firstAttribute="trailing" secondItem="Xb7-vO-Ale" secondAttribute="trailing" id="p9h-9m-s36"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5sJ-nE-FEW" userLabel="BottomBtnView">
                             <rect key="frame" x="0.0" y="587" width="375" height="80"/>
                             <subviews>
-                                <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VWe-Ph-kUo">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VWe-Ph-kUo">
                                     <rect key="frame" x="12" y="13" width="351" height="55"/>
-                                    <color key="backgroundColor" red="0.31372549020000001" green="0.70196078429999997" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="55" id="7xZ-WM-QQs"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                     <state key="normal" title="Ring INNWAY CARD">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </state>
                                     <connections>
                                         <action selector="controlDeviceBtnDidClick:" destination="-1" eventType="touchUpInside" id="1tC-bl-SQF"/>

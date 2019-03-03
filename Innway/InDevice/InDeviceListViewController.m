@@ -180,12 +180,12 @@
 
 - (void)setDown:(BOOL)down {
     _down = down;
-    if (down) {
-        self.upDownImage.image = [UIImage imageNamed:@"up"];
-    }
-    else {
-        self.upDownImage.image = [UIImage imageNamed:@"down"];
-    }
+//    if (down) {
+//        self.upDownImage.image = [UIImage imageNamed:@"up"];
+//    }
+//    else {
+//        self.upDownImage.image = [UIImage imageNamed:@"down"];
+//    }
 }
 
 - (void)device:(DLDevice *)device didUpdateData:(NSDictionary *)data{

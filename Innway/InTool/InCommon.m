@@ -685,10 +685,15 @@
 //        // IphoneXR
 //        imageName = @"narBarBackgroudImageXR.jpg";
 //    }
-    UIImage *backgroundImage = [UIImage imageNamed:imageName];
-    backgroundImage = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-    
-    [bar setBackgroundImage:backgroundImage forBarMetrics:UIBarMetricsDefault];
+//    UIImage *backgroundImage = [UIImage imageNamed:imageName];
+//    backgroundImage = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+//
+//    [bar setBackgroundImage:backgroundImage forBarMetrics:UIBarMetricsDefault];
+    [bar setBarTintColor:[self backgroundColor]];
+}
+
++ (UIColor *)backgroundColor {
+    return [UIColor colorWithRed:58.0/255.0 green:58.0/255.0 blue:56.0/255.0 alpha:1];
 }
 
 #pragma mark - 后台任务

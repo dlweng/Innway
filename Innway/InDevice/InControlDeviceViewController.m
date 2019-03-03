@@ -46,6 +46,8 @@
 // 设备列表
 @property (weak, nonatomic) IBOutlet UIView *deviceListBodyView;
 @property (weak, nonatomic) IBOutlet UIView *deviceListBackgroupView;
+@property (weak, nonatomic) IBOutlet UIView *deviceListWhiteLine;
+
 @property (nonatomic, strong)InDeviceListViewController *deviceListVC;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *deviceListBodyHeightConstraint;
 
@@ -206,6 +208,10 @@
 }
 
 - (void)addDeviceListView {
+    self.deviceListBackgroupView.layer.masksToBounds = YES;
+    self.deviceListBackgroupView.layer.cornerRadius = 15;
+    self.deviceListWhiteLine.layer.masksToBounds = YES;
+    self.deviceListWhiteLine.layer.cornerRadius = 3;
     self.deviceListVC = [InDeviceListViewController deviceListViewController];
     self.deviceListVC.delegate = self;
     self.deviceListVC.selectDevice = self.device;

@@ -10,14 +10,27 @@
 #import "LLSimpleCamera.h"
 #import "LibraryViewController.h"
 #import "InCommon.h"
+#import "NSTimer+InTimer.h"
 
 @interface InCameraViewController()<LibraryViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *cameraBodyView;
 @property (weak, nonatomic) IBOutlet UIButton *flashBtn;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UIButton *goBackBtn;
+@property (weak, nonatomic) IBOutlet UIButton *goLibraryBtn;
+
 
 @property (weak, nonatomic) IBOutlet UIButton *changeCameraBtn;
+@property (weak, nonatomic) IBOutlet UIButton *takePhotoBtn;
+@property (weak, nonatomic) IBOutlet UIButton *switchModeBtn;
+
+
+
 @property (strong, nonatomic) LLSimpleCamera *camera;
+
+@property (nonatomic, strong) dispatch_source_t timer;
+@property (nonatomic, assign) NSInteger recodeTime;
 
 @end
 
@@ -27,7 +40,7 @@
     [super viewDidLoad];
     self.camera = [[LLSimpleCamera alloc] initWithQuality:AVCaptureSessionPresetHigh
                                                  position:LLCameraPositionRear
-                                             videoEnabled:NO];
+                                             videoEnabled:YES];
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
      [self.camera attachToViewController:self view:self.cameraBodyView withFrame:CGRectMake(0, 0, screenSize.width, screenSize.height-93)];
     self.camera.fixOrientationAfterCapture = NO;
@@ -53,12 +66,29 @@
     [self.camera setOnError:^(LLSimpleCamera *camera, NSError *error) {
         NSLog(@"捕捉到错误: error = %@", error);
     }];
+    
+    [self.takePhotoBtn setImage:[UIImage imageNamed:@"photoGreenCamera.png"] forState:UIControlStateNormal];
+    self.switchModeBtn.selected = NO;
+    self.timeLabel.hidden = YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.camera start];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+}
+
+- (void)enterBackground {
+    if (self.switchModeBtn.selected && self.camera.isRecording) {
+        //进入后台的时候还在录像，停止录像
+        [self takeAPhoto];
+    }
 }
 
 - (void)image:(UIImage *)image didFinishSaveImageWithError:(NSError *)error contextInfo:(void *)contextInfo {
@@ -134,16 +164,91 @@
 }
 
 - (void)takeAPhoto {
-    [self.camera capture:^(LLSimpleCamera *camera, UIImage *image, NSDictionary *metadata, NSError *error) {
-        NSLog(@"获取照片, image = %@, metadata = %@, error = %@", image, metadata, error);
-        if(!error) {
-            // 相机拍完照进入保存
-            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSaveImageWithError:contextInfo:), (__bridge void *)self);
+    if (!self.switchModeBtn.selected) {
+        // 未选中， 拍照功能
+        [self.camera capture:^(LLSimpleCamera *camera, UIImage *image, NSDictionary *metadata, NSError *error) {
+            NSLog(@"获取照片, image = %@, metadata = %@, error = %@", image, metadata, error);
+            if(!error) {
+                // 相机拍完照进入保存
+                UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSaveImageWithError:contextInfo:), (__bridge void *)self);
+            }
+            else {
+                NSLog(@"An error has occured: %@", error);
+            }
+        } exactSeenImage:YES];
+    }
+    else {
+        // 选中，摄像机功能
+        if (!self.camera.isRecording) {
+            // 开启录像
+            self.switchModeBtn.userInteractionEnabled = NO;
+            self.goLibraryBtn.userInteractionEnabled = NO;
+            self.goBackBtn.userInteractionEnabled = NO;
+            self.flashBtn.hidden = YES;
+            self.changeCameraBtn.hidden = YES;
+            self.timeLabel.hidden = NO;
+            [self startTimer];
+            [self.takePhotoBtn setImage:[UIImage imageNamed:@"stopRecode"] forState:UIControlStateNormal];
+            NSURL *documentuURL =  [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+            NSURL *outputURL = [[documentuURL
+                                 URLByAppendingPathComponent:@"test1"] URLByAppendingPathExtension:@"mov"];
+            [self.camera startRecordingWithOutputUrl:outputURL didRecord:^(LLSimpleCamera *camera, NSURL *outputFileUrl, NSError *error) {
+                UISaveVideoAtPathToSavedPhotosAlbum(outputURL.path, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+            }];
         }
         else {
-            NSLog(@"An error has occured: %@", error);
+            // 关闭录像
+            self.timeLabel.hidden = YES;
+            self.changeCameraBtn.hidden = NO;
+            self.flashBtn.hidden = NO;
+            self.switchModeBtn.userInteractionEnabled = YES;
+            self.goLibraryBtn.userInteractionEnabled = YES;
+            self.goBackBtn.userInteractionEnabled = YES;
+            [self startTimer];
+            [self.takePhotoBtn setImage:[UIImage imageNamed:@"startRecode"] forState:UIControlStateNormal];
+            [self.camera stopRecording];
         }
-    } exactSeenImage:YES];
+    }
+}
+
+- (IBAction)switchModeBtnDidClick {
+    self.switchModeBtn.selected = !self.switchModeBtn.selected;
+    if (self.switchModeBtn.selected) {
+        [self.takePhotoBtn setImage:[UIImage imageNamed:@"startRecode.png"] forState:UIControlStateNormal];
+    }
+    else {
+        [self.takePhotoBtn setImage:[UIImage imageNamed:@"photoGreenCamera.png"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo: (void *)contextInfo {
+    NSLog(@"保存视频结果, error = %@", error);
+}
+
+- (void)startTimer {
+    __weak typeof(self) weakSelf = self;
+    self.recodeTime = -1;
+    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_queue_create(0, 0));
+    dispatch_source_set_event_handler(self.timer, ^{
+        ++weakSelf.recodeTime;
+        dispatch_async(dispatch_get_main_queue(), ^{
+             weakSelf.timeLabel.text = [weakSelf timeString];
+        });
+    });
+    dispatch_source_set_timer(self.timer, dispatch_walltime(NULL, 0), (uint64_t)(1 *NSEC_PER_SEC), 0);
+    dispatch_resume(self.timer);
+}
+
+- (void)stopTimer {
+    dispatch_source_cancel(self.timer);
+    self.timer = nil;
+}
+
+- (NSString *)timeString {
+    NSInteger second = self.recodeTime % 60;
+    NSInteger minuter = (self.recodeTime - self.recodeTime % 60) / 60;
+    NSInteger hour = self.recodeTime / 3600;
+    return [NSString stringWithFormat:@"%02zd:%02zd:%02zd", hour, minuter, second];
 }
 
 @end

@@ -40,6 +40,7 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
     
     self.disconnectAlertBtn = [[UISwitch alloc] init];
+    self.disconnectAlertBtn.onTintColor = [InCommon backgroundColor];
     [self.disconnectAlertBtn addTarget:self action:@selector(disconnectAlertBtnDidClick:) forControlEvents:UIControlEventValueChanged];
 //    self.reconnectTipBtn = [[UISwitch alloc] init];
 //    [self.reconnectTipBtn addTarget:self action:@selector(reconnectTipBtnDidClick:) forControlEvents:UIControlEventValueChanged];

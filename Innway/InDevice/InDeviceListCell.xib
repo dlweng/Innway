@@ -30,10 +30,10 @@
                         </constraints>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="greenchip.png" translatesAutoresizingMaskIntoConstraints="NO" id="d5C-HA-8cS" userLabel="chipView">
-                        <rect key="frame" x="23.5" y="12.5" width="35" height="35"/>
+                        <rect key="frame" x="24.5" y="13.5" width="33" height="33"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="35" id="LWw-V6-xXg"/>
-                            <constraint firstAttribute="width" constant="35" id="XEQ-X6-Vjx"/>
+                            <constraint firstAttribute="height" constant="33" id="LWw-V6-xXg" userLabel="height = 32"/>
+                            <constraint firstAttribute="width" constant="33" id="XEQ-X6-Vjx"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lily" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eec-Tj-d5Q">
@@ -43,10 +43,10 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="greencard.png" translatesAutoresizingMaskIntoConstraints="NO" id="Yzj-qe-W8F" userLabel="cardView.png">
-                        <rect key="frame" x="23" y="17.5" width="36" height="25"/>
+                        <rect key="frame" x="24.5" y="18" width="33" height="24"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="36" id="Bqh-wn-qG7"/>
-                            <constraint firstAttribute="height" constant="25" id="kUo-Hd-9gz"/>
+                            <constraint firstAttribute="width" constant="33" id="Bqh-wn-qG7"/>
+                            <constraint firstAttribute="height" constant="24" id="kUo-Hd-9gz"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last seen just now" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zfY-9c-UiS">
@@ -134,7 +134,7 @@
     <resources>
         <image name="0.png" width="36" height="15"/>
         <image name="5.png" width="33" height="27"/>
-        <image name="RSSI_0.png" width="52" height="52"/>
+        <image name="RSSI_0.png" width="57" height="57"/>
         <image name="greencard.png" width="34" height="22"/>
         <image name="greenchip.png" width="32" height="32"/>
         <image name="icon_more.png" width="99" height="99"/>

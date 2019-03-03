@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -23,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Rog-QR-ccx">
-                    <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                    <rect key="frame" x="0.0" y="30" width="375" height="637"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="GNe-EC-Wh9"/>
@@ -33,11 +33,11 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WFs-iN-ins">
                     <rect key="frame" x="137.5" y="0.0" width="100" height="30"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="up.png" translatesAutoresizingMaskIntoConstraints="NO" id="jhI-yt-Zoh">
-                            <rect key="frame" x="30" y="12" width="40" height="18"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jhI-yt-Zoh">
+                            <rect key="frame" x="10" y="6" width="80" height="24"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="40" id="12Z-Go-WKe"/>
-                                <constraint firstAttribute="height" constant="18" id="WPk-Cq-2FL"/>
+                                <constraint firstAttribute="width" constant="80" id="12Z-Go-WKe"/>
+                                <constraint firstAttribute="height" constant="24" id="WPk-Cq-2FL"/>
                             </constraints>
                         </imageView>
                     </subviews>
@@ -54,7 +54,7 @@
             <constraints>
                 <constraint firstItem="Rog-QR-ccx" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="17f-Mm-e8z"/>
                 <constraint firstItem="WFs-iN-ins" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="8JM-ix-Cm6"/>
-                <constraint firstItem="Rog-QR-ccx" firstAttribute="top" secondItem="WFs-iN-ins" secondAttribute="bottom" constant="14" id="Aq8-lV-Cfr"/>
+                <constraint firstItem="Rog-QR-ccx" firstAttribute="top" secondItem="WFs-iN-ins" secondAttribute="bottom" id="Aq8-lV-Cfr"/>
                 <constraint firstItem="WFs-iN-ins" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Tsj-ex-6cR"/>
                 <constraint firstAttribute="trailing" secondItem="Rog-QR-ccx" secondAttribute="trailing" id="XKM-nO-mk3"/>
                 <constraint firstAttribute="bottom" secondItem="Rog-QR-ccx" secondAttribute="bottom" id="cLv-vZ-f92"/>
@@ -62,7 +62,4 @@
             <point key="canvasLocation" x="53.600000000000001" y="82.3088455772114"/>
         </view>
     </objects>
-    <resources>
-        <image name="up.png" width="29" height="14"/>
-    </resources>
 </document>

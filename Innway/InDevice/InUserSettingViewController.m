@@ -14,6 +14,8 @@
 
 @interface InUserSettingViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (weak, nonatomic) IBOutlet UIView *topView;
 @property (nonatomic, strong) UISwitch *locationBtn;
 @property (nonatomic, strong) UISwitch *flashBtn;
 @property (weak, nonatomic) IBOutlet UIButton *logoutBtn;
@@ -49,6 +51,7 @@
     self.logoutBtn.layer.cornerRadius = 10;
     self.emailLabel.text = common.email;
     self.userNameLabel.text = @"User";
+    self.topView.backgroundColor = [InCommon backgroundColor];
     
     if ([InCommon isIPhoneX]) {
         self.userIconCenterYConstraint.constant += 20;
@@ -68,12 +71,14 @@
 
 - (void)addLocationBtn {
     UISwitch *btn = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
+    btn.onTintColor = [InCommon backgroundColor];
     [btn addTarget:self action:@selector(locationBtnDidClick) forControlEvents:UIControlEventValueChanged];
     self.locationBtn = btn;
 }
 
 - (void)addFlashBtn {
     self.flashBtn = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
+    self.flashBtn.onTintColor = [InCommon backgroundColor];
     [self.flashBtn addTarget:self action:@selector(flashBtnDidClick:) forControlEvents:UIControlEventValueChanged];
 }
 

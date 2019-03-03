@@ -15,6 +15,11 @@
                 <outlet property="cameraBodyView" destination="FyY-OP-Inc" id="uYh-1K-qDK"/>
                 <outlet property="changeCameraBtn" destination="ZGm-Fa-BFV" id="aW9-6D-9Jm"/>
                 <outlet property="flashBtn" destination="LNK-wp-AoS" id="WkN-1S-RFj"/>
+                <outlet property="goBackBtn" destination="9nQ-nR-bOl" id="w6a-LV-PGl"/>
+                <outlet property="goLibraryBtn" destination="aW3-49-ycy" id="pb1-h5-jgr"/>
+                <outlet property="switchModeBtn" destination="wpS-5s-Ify" id="pvX-h5-GC2"/>
+                <outlet property="takePhotoBtn" destination="8g5-or-lxg" id="Www-LT-esl"/>
+                <outlet property="timeLabel" destination="mOr-iK-PkO" id="fyN-ye-Wy7"/>
                 <outlet property="view" destination="iN0-l3-epB" id="0Oy-dK-bpV"/>
             </connections>
         </placeholder>
@@ -54,11 +59,25 @@
                                 <action selector="goBackAction" destination="-1" eventType="touchUpInside" id="XVw-La-RRg"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wpS-5s-Ify">
+                            <rect key="frame" x="236" y="31" width="33" height="32"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="33" id="fc5-wy-Jwd"/>
+                                <constraint firstAttribute="height" constant="32" id="qDv-da-bxJ"/>
+                            </constraints>
+                            <state key="normal" image="video.png"/>
+                            <state key="selected" image="camera.png"/>
+                            <connections>
+                                <action selector="switchModeBtnDidClick" destination="-1" eventType="touchUpInside" id="woX-Fe-fys"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="kco-QY-0wc" firstAttribute="leading" secondItem="Qhp-PS-bd4" secondAttribute="leading" id="2HY-9e-Yjc"/>
                         <constraint firstItem="aW3-49-ycy" firstAttribute="leading" secondItem="Qhp-PS-bd4" secondAttribute="leading" constant="20" id="8Dq-i8-2PP"/>
+                        <constraint firstItem="wpS-5s-Ify" firstAttribute="leading" secondItem="8g5-or-lxg" secondAttribute="trailing" constant="15" id="91h-CE-jXC"/>
+                        <constraint firstItem="wpS-5s-Ify" firstAttribute="centerY" secondItem="Qhp-PS-bd4" secondAttribute="centerY" id="A3E-CI-hxv"/>
                         <constraint firstItem="8g5-or-lxg" firstAttribute="centerX" secondItem="Qhp-PS-bd4" secondAttribute="centerX" id="Er8-3I-69r"/>
                         <constraint firstAttribute="bottom" secondItem="kco-QY-0wc" secondAttribute="bottom" id="HGU-BF-nxT"/>
                         <constraint firstItem="aW3-49-ycy" firstAttribute="centerY" secondItem="Qhp-PS-bd4" secondAttribute="centerY" id="KS7-ic-j7N"/>
@@ -93,6 +112,18 @@
                         <action selector="changeCamera" destination="-1" eventType="touchUpInside" id="nlw-ov-zQy"/>
                     </connections>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOr-iK-PkO">
+                    <rect key="frame" x="137.5" y="24" width="100" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="3Zx-4h-N9O"/>
+                        <constraint firstAttribute="width" constant="100" id="VEc-2k-aey"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="bTY-JZ-Biv"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="gLq-hY-JZL"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -101,18 +132,22 @@
                 <constraint firstItem="Qhp-PS-bd4" firstAttribute="top" secondItem="FyY-OP-Inc" secondAttribute="bottom" id="CBV-dq-cxV"/>
                 <constraint firstItem="LNK-wp-AoS" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="23" id="O8r-Qb-oUw"/>
                 <constraint firstAttribute="bottom" secondItem="Qhp-PS-bd4" secondAttribute="bottom" id="Q0m-F7-Utr"/>
+                <constraint firstItem="mOr-iK-PkO" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="4" id="SCC-IL-h3M"/>
                 <constraint firstItem="LNK-wp-AoS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="24" id="U1e-Au-Gnw"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Qhp-PS-bd4" secondAttribute="trailing" id="XyG-Or-a8R"/>
                 <constraint firstItem="FyY-OP-Inc" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="YyD-if-K4C"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="FyY-OP-Inc" secondAttribute="trailing" id="azH-zw-krQ"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="ZGm-Fa-BFV" secondAttribute="trailing" constant="23" id="cRe-U5-Cjd"/>
                 <constraint firstItem="Qhp-PS-bd4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="m7E-Y5-tGj"/>
+                <constraint firstItem="mOr-iK-PkO" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="tzu-ze-M8k"/>
                 <constraint firstItem="Qhp-PS-bd4" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="xWI-gu-Fh7"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="53.600000000000001" y="102.99850074962519"/>
         </view>
     </objects>
     <resources>
+        <image name="camera.png" width="29" height="29"/>
         <image name="changeCamera.png" width="29" height="29"/>
         <image name="photoBack.png" width="35" height="26"/>
         <image name="photoBackground.png" width="360" height="93"/>
@@ -120,5 +155,6 @@
         <image name="photoGreenCamera.png" width="67" height="67"/>
         <image name="photoLibrary.png" width="35" height="26"/>
         <image name="photoShark.png" width="29" height="29"/>
+        <image name="video.png" width="29" height="29"/>
     </resources>
 </document>
