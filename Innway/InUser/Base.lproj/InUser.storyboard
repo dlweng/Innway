@@ -64,11 +64,11 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wC0-Te-HMl">
                                 <rect key="frame" x="204" y="542" width="127" height="45"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Login" backgroundImage="whiteBtn.png">
-                                    <color key="titleColor" red="0.23529411764705882" green="0.52941176470588236" blue="0.36862745098039218" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Login" backgroundImage="sWhiteBtn.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <state key="highlighted" backgroundImage="whiteBtn.png">
-                                    <color key="titleColor" red="0.23529411759999999" green="0.52941176469999995" blue="0.36862745099999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="highlighted" backgroundImage="sWhiteBtn.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <segue destination="W8R-yy-i3d" kind="show" id="tAV-5Q-aqv"/>
@@ -213,14 +213,13 @@
                                     <constraint firstAttribute="trailing" secondItem="33V-Vc-jgs" secondAttribute="trailing" id="tnM-pr-N6V"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mcb-pq-xOm">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mcb-pq-xOm">
                                 <rect key="frame" x="60.5" y="264" width="254" height="45"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Log in" backgroundImage="greenLongButton.png">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Log in" backgroundImage="whiteLongButton.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <state key="highlighted" backgroundImage="greenLongButton.png">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="highlighted" backgroundImage="whiteLongButton.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="userLogin:" destination="W8R-yy-i3d" eventType="touchUpInside" id="kOj-QG-hsT"/>
@@ -327,10 +326,12 @@
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K7d-xE-hic">
                                 <rect key="frame" x="60.5" y="199" width="254" height="45"/>
-                                <state key="normal" title="Reset password" backgroundImage="greenLongButton.png">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Reset password" backgroundImage="whiteLongButton.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <state key="highlighted" backgroundImage="greenLongButton.png"/>
+                                <state key="highlighted" backgroundImage="whiteLongButton.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="resetBtnDidClick:" destination="GNs-5a-VOU" eventType="touchUpInside" id="WCj-ED-HmA"/>
                                 </connections>
@@ -539,11 +540,11 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a0m-cV-tmF">
                                 <rect key="frame" x="60.5" y="329" width="254" height="45"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Register" backgroundImage="greenLongButton.png">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Register" backgroundImage="whiteLongButton.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <state key="highlighted" backgroundImage="greenLongButton.png">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="highlighted" backgroundImage="whiteLongButton.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="registerBtnDidClick:" destination="9gS-C8-I1p" eventType="touchUpInside" id="Ycz-AU-NDD"/>
@@ -1245,7 +1246,6 @@ A
 </mutableData>
         </image>
         <image name="greenBtn.png" width="127" height="45"/>
-        <image name="greenLongButton.png" width="254" height="45"/>
         <image name="imageView:72E-o2-bBQ:image" width="34" height="43">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGUlNYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8QEQcI
@@ -1495,7 +1495,8 @@ N2w3cTd5N3w3gTeJN4w3njehN6YAAAAAAAACAQAAAAAAAABWAAAAAAAAAAAAAAAAAAA3qA
         <image name="loginBackground.jpg" width="360" height="640"/>
         <image name="registerCheck.png" width="16" height="16"/>
         <image name="registerUnCheck.png" width="16" height="16"/>
-        <image name="whiteBtn.png" width="127" height="45"/>
+        <image name="sWhiteBtn.png" width="127" height="45"/>
+        <image name="whiteLongButton.png" width="254" height="45"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="aaN-kV-54u"/>
