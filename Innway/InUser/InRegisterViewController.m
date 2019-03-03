@@ -9,12 +9,18 @@
 #import "InRegisterViewController.h"
 #import "InTextField.h"
 #import "InCommon.h"
+#import "InWebViewController.h"
+#import "NSTimer+InTimer.h"
 
 @interface InRegisterViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet InTextField *emailTextField;
 @property (weak, nonatomic) IBOutlet InTextField *passwordTextField;
-//@property (weak, nonatomic) IBOutlet UIButton *registerBtn;
+@property (weak, nonatomic) IBOutlet InTextField *verificationCodeTextField;
+@property (weak, nonatomic) IBOutlet UIButton *getCodeBtn;
+@property (weak, nonatomic) IBOutlet UIButton *agreenBtn;
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, assign) int time;
 
 
 @end
@@ -26,9 +32,7 @@
     self.navigationItem.title = @"Registration";
     self.emailTextField.delegate = self;
     self.passwordTextField.delegate = self;
-//    //设置按钮的圆弧
-//    self.registerBtn.layer.masksToBounds = YES;
-//    self.registerBtn.layer.cornerRadius = 25;
+    self.agreenBtn.selected = NO;
 }
 
 - (IBAction)registerBtnDidClick:(UIButton *)sender {
@@ -38,6 +42,14 @@
     }
     else if (self.passwordTextField.text.length == 0) {
         [InAlertView showAlertWithTitle:@"Information" message:@"Password required" confirmTitle:nil confirmHanler:nil];
+        return;
+    }
+    else if (self.verificationCodeTextField.text.length == 0) {
+        [InAlertView showAlertWithTitle:@"Information" message:@"Verification Code required" confirmTitle:nil confirmHanler:nil];
+        return;
+    }
+    else if (!self.agreenBtn.selected) {
+        [InAlertView showAlertWithTitle:@"Information" message:@"同意协议才能注册" confirmTitle:nil confirmHanler:nil];
         return;
     }
     
@@ -78,6 +90,43 @@
     }
     return YES;
 }
+
+- (IBAction)getCodeAction {
+    NSLog(@"发送获取验证码的请求");
+    self.getCodeBtn.enabled = NO;
+    self.time = 0;
+    __weak typeof(self) weakSelf = self;
+    self.timer = [NSTimer newTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        ++weakSelf.time;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.getCodeBtn setTitle:[NSString stringWithFormat:@"%ds Try again", 60 - self.time] forState:UIControlStateNormal];
+            if (weakSelf.time == 60) {
+                [weakSelf.getCodeBtn setTitle:@"Get code" forState:UIControlStateNormal];
+                weakSelf.getCodeBtn.enabled = YES;
+                [weakSelf.timer invalidate];
+                weakSelf.timer = nil;
+            }
+        });
+    }];
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+}
+
+- (IBAction)privacyPolicy {
+    NSLog(@"跳转隐私协议");
+    InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Privacy Policy" UrlString:@"http://3.16.195.135/PrivacyPolicy/PrivacyPolicy.html"];
+    if (self.navigationController.viewControllers.lastObject == self) {
+        [self.navigationController pushViewController:webVC animated:YES];
+    }
+}
+
+- (IBAction)agreenBtnClick:(UIButton *)sender {
+    sender.selected = !sender.selected;
+}
+
+- (void)dealloc {
+    
+}
+
 
 //- (IBAction)registerBtnDidClick:(UIButton *)sender {
 //    if (self.emailTextField.text.length == 0) {

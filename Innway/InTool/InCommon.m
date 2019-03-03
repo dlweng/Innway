@@ -170,6 +170,9 @@
             case InDeviceChip:
                 name = @"Innway Chip";
                 break;
+            case InDeviceCardHolder:
+                name = @"Innway Card Holder";
+                break;
             default:
                 name = @"Innway Card";
                 break;
@@ -608,8 +611,12 @@
     }
     else if ([peripheral.name isEqualToString:@"Innway Chip"]) {
         deviceType = InDeviceChip;
-    } else if ([peripheral.name isEqualToString:@"Innway Tag"]) {
+    }
+    else if ([peripheral.name isEqualToString:@"Innway Tag"]) {
         deviceType = InDeviceTag;
+    }
+    else if ([peripheral.name isEqualToString:@"Innway Chip Holder"]) {
+        deviceType = InDeviceCardHolder;
     }
     return deviceType;
 }

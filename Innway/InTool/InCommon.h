@@ -54,6 +54,11 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
      所有设备类型
      */
     InDeviceAll = 4,
+    
+    /**
+     tag设备
+     */
+    InDeviceCardHolder = 5
 };
 
 @class DLDevice;

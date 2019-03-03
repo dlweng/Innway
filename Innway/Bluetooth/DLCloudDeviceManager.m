@@ -219,6 +219,9 @@ static DLCloudDeviceManager *instance = nil;
                 else if ([name isEqualToString:@"Innway Tag"]) {
                     device.type = InDeviceTag;
                 }
+                else if ([name isEqualToString:@"Innway Card Holder"]) {
+                    device.type = InDeviceCardHolder;
+                }
                 // 获取云端保存的设备离线时间
                 NSString *offlineTime = [cloudDevice stringValueForKey:@"OfflineTime" defaultValue:@""];
                 if (offlineTime.length > 0) {

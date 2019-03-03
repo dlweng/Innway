@@ -18,6 +18,26 @@
 		1952C97A21B9894200988409 /* NSTimer+InTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1952C97921B9894200988409 /* NSTimer+InTimer.m */; };
 		1999D3B121D3BCBD0052B6BB /* photoShark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1999D3AF21D3BCBD0052B6BB /* photoShark@2x.png */; };
 		1999D3B221D3BCBD0052B6BB /* photoShark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1999D3B021D3BCBD0052B6BB /* photoShark@3x.png */; };
+		199B68F8222BC94500EC08E9 /* greenchip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68F6222BC94500EC08E9 /* greenchip@2x.png */; };
+		199B68F9222BC94500EC08E9 /* greenchip@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68F7222BC94500EC08E9 /* greenchip@3x.png */; };
+		199B68FC222BCD4D00EC08E9 /* cardHolder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68FA222BCD4C00EC08E9 /* cardHolder@2x.png */; };
+		199B68FD222BCD4D00EC08E9 /* cardHolder@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68FB222BCD4D00EC08E9 /* cardHolder@3x.png */; };
+		199B6900222BCDEB00EC08E9 /* photoGrayCamera@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68FE222BCDEA00EC08E9 /* photoGrayCamera@3x.png */; };
+		199B6901222BCDEB00EC08E9 /* photoGrayCamera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68FF222BCDEB00EC08E9 /* photoGrayCamera@2x.png */; };
+		199B6904222BCED000EC08E9 /* searchCardHolder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B6902222BCECF00EC08E9 /* searchCardHolder@2x.png */; };
+		199B6905222BCED000EC08E9 /* searchCardHolder@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B6903222BCED000EC08E9 /* searchCardHolder@3x.png */; };
+		199B6908222BCEDD00EC08E9 /* successCardHolder@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B6906222BCEDC00EC08E9 /* successCardHolder@3x.png */; };
+		199B6909222BCEDD00EC08E9 /* successCardHolder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B6907222BCEDC00EC08E9 /* successCardHolder@2x.png */; };
+		199B690E222BF42400EC08E9 /* registerCheck@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B690A222BF42000EC08E9 /* registerCheck@2x.png */; };
+		199B690F222BF42400EC08E9 /* registerUnCheck@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B690B222BF42200EC08E9 /* registerUnCheck@2x.png */; };
+		199B6910222BF42400EC08E9 /* registerCheck@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B690C222BF42200EC08E9 /* registerCheck@3x.png */; };
+		199B6911222BF42400EC08E9 /* registerUnCheck@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B690D222BF42300EC08E9 /* registerUnCheck@3x.png */; };
+		19BCF3A4222BC59900CE90E0 /* graycardholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19BCF39E222BC59800CE90E0 /* graycardholder@2x.png */; };
+		19BCF3A5222BC59900CE90E0 /* graycard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19BCF39F222BC59800CE90E0 /* graycard@2x.png */; };
+		19BCF3A6222BC59900CE90E0 /* graytag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19BCF3A0222BC59900CE90E0 /* graytag@2x.png */; };
+		19BCF3A7222BC59900CE90E0 /* graytag@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19BCF3A1222BC59900CE90E0 /* graytag@3x.png */; };
+		19BCF3A8222BC59900CE90E0 /* graycard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19BCF3A2222BC59900CE90E0 /* graycard@3x.png */; };
+		19BCF3A9222BC59900CE90E0 /* graycardholder@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19BCF3A3222BC59900CE90E0 /* graycardholder@3x.png */; };
 		19D98EE921C498EB0043C607 /* userBodyBG@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19D98EE721C498EA0043C607 /* userBodyBG@3x.png */; };
 		19D98EEA21C498EB0043C607 /* userBodyBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19D98EE821C498EA0043C607 /* userBodyBG@2x.png */; };
 		19E1A35B21A97E8400D9FBBD /* 100@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19E1A35921A97E8400D9FBBD /* 100@2x.png */; };
@@ -75,12 +95,6 @@
 		330FB8D821636F790032E657 /* up@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8D621636F790032E657 /* up@3x.png */; };
 		330FB8DB21636F830032E657 /* down@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8D921636F820032E657 /* down@3x.png */; };
 		330FB8DC21636F830032E657 /* down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8DA21636F820032E657 /* down@2x.png */; };
-		330FB8EB2163C6DA0032E657 /* greenchip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E52163C6D90032E657 /* greenchip@2x.png */; };
-		330FB8EC2163C6DA0032E657 /* greenchip@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E62163C6D90032E657 /* greenchip@3x.png */; };
-		330FB8ED2163C6DA0032E657 /* greentag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E72163C6D90032E657 /* greentag@2x.png */; };
-		330FB8EE2163C6DA0032E657 /* greencard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E82163C6D90032E657 /* greencard@2x.png */; };
-		330FB8EF2163C6DA0032E657 /* greencard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8E92163C6DA0032E657 /* greencard@3x.png */; };
-		330FB8F02163C6DA0032E657 /* greentag@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330FB8EA2163C6DA0032E657 /* greentag@3x.png */; };
 		331797F0213AF282000B8DD6 /* InAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 331797EF213AF282000B8DD6 /* InAnnotationView.m */; };
 		331797F8213BBB5B000B8DD6 /* icon_splash.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 331797F7213BBB5B000B8DD6 /* icon_splash.jpg */; };
 		3317982A213BEB3D000B8DD6 /* InDeviceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33179828213BEB3D000B8DD6 /* InDeviceListCell.m */; };
@@ -274,8 +288,6 @@
 		33FFB998217327B500E6A8C6 /* InChangePasswordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33FFB996217327B500E6A8C6 /* InChangePasswordCell.m */; };
 		33FFB999217327B500E6A8C6 /* InChangePasswordCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB997217327B500E6A8C6 /* InChangePasswordCell.xib */; };
 		33FFB9A02173392400E6A8C6 /* photoBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB99A2173392200E6A8C6 /* photoBack@2x.png */; };
-		33FFB9A12173392400E6A8C6 /* photoGreenCamera@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB99B2173392200E6A8C6 /* photoGreenCamera@3x.png */; };
-		33FFB9A22173392400E6A8C6 /* photoGreenCamera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB99C2173392200E6A8C6 /* photoGreenCamera@2x.png */; };
 		33FFB9A32173392400E6A8C6 /* photoAutoShark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB99D2173392200E6A8C6 /* photoAutoShark@2x.png */; };
 		33FFB9A42173392400E6A8C6 /* photoAutoShark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB99E2173392300E6A8C6 /* photoAutoShark@3x.png */; };
 		33FFB9A52173392400E6A8C6 /* photoBack@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33FFB99F2173392400E6A8C6 /* photoBack@3x.png */; };
@@ -309,6 +321,26 @@
 		1952C97921B9894200988409 /* NSTimer+InTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+InTimer.m"; sourceTree = "<group>"; };
 		1999D3AF21D3BCBD0052B6BB /* photoShark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoShark@2x.png"; sourceTree = "<group>"; };
 		1999D3B021D3BCBD0052B6BB /* photoShark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoShark@3x.png"; sourceTree = "<group>"; };
+		199B68F6222BC94500EC08E9 /* greenchip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenchip@2x.png"; sourceTree = "<group>"; };
+		199B68F7222BC94500EC08E9 /* greenchip@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenchip@3x.png"; sourceTree = "<group>"; };
+		199B68FA222BCD4C00EC08E9 /* cardHolder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cardHolder@2x.png"; sourceTree = "<group>"; };
+		199B68FB222BCD4D00EC08E9 /* cardHolder@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cardHolder@3x.png"; sourceTree = "<group>"; };
+		199B68FE222BCDEA00EC08E9 /* photoGrayCamera@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoGrayCamera@3x.png"; sourceTree = "<group>"; };
+		199B68FF222BCDEB00EC08E9 /* photoGrayCamera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoGrayCamera@2x.png"; sourceTree = "<group>"; };
+		199B6902222BCECF00EC08E9 /* searchCardHolder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "searchCardHolder@2x.png"; sourceTree = "<group>"; };
+		199B6903222BCED000EC08E9 /* searchCardHolder@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "searchCardHolder@3x.png"; sourceTree = "<group>"; };
+		199B6906222BCEDC00EC08E9 /* successCardHolder@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "successCardHolder@3x.png"; sourceTree = "<group>"; };
+		199B6907222BCEDC00EC08E9 /* successCardHolder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "successCardHolder@2x.png"; sourceTree = "<group>"; };
+		199B690A222BF42000EC08E9 /* registerCheck@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "registerCheck@2x.png"; sourceTree = "<group>"; };
+		199B690B222BF42200EC08E9 /* registerUnCheck@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "registerUnCheck@2x.png"; sourceTree = "<group>"; };
+		199B690C222BF42200EC08E9 /* registerCheck@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "registerCheck@3x.png"; sourceTree = "<group>"; };
+		199B690D222BF42300EC08E9 /* registerUnCheck@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "registerUnCheck@3x.png"; sourceTree = "<group>"; };
+		19BCF39E222BC59800CE90E0 /* graycardholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graycardholder@2x.png"; sourceTree = "<group>"; };
+		19BCF39F222BC59800CE90E0 /* graycard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graycard@2x.png"; sourceTree = "<group>"; };
+		19BCF3A0222BC59900CE90E0 /* graytag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graytag@2x.png"; sourceTree = "<group>"; };
+		19BCF3A1222BC59900CE90E0 /* graytag@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graytag@3x.png"; sourceTree = "<group>"; };
+		19BCF3A2222BC59900CE90E0 /* graycard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graycard@3x.png"; sourceTree = "<group>"; };
+		19BCF3A3222BC59900CE90E0 /* graycardholder@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graycardholder@3x.png"; sourceTree = "<group>"; };
 		19D98EE721C498EA0043C607 /* userBodyBG@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "userBodyBG@3x.png"; sourceTree = "<group>"; };
 		19D98EE821C498EA0043C607 /* userBodyBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "userBodyBG@2x.png"; sourceTree = "<group>"; };
 		19E1A35921A97E8400D9FBBD /* 100@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100@2x.png"; sourceTree = "<group>"; };
@@ -406,12 +438,6 @@
 		330FB8D621636F790032E657 /* up@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "up@3x.png"; sourceTree = "<group>"; };
 		330FB8D921636F820032E657 /* down@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "down@3x.png"; sourceTree = "<group>"; };
 		330FB8DA21636F820032E657 /* down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "down@2x.png"; sourceTree = "<group>"; };
-		330FB8E52163C6D90032E657 /* greenchip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenchip@2x.png"; sourceTree = "<group>"; };
-		330FB8E62163C6D90032E657 /* greenchip@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenchip@3x.png"; sourceTree = "<group>"; };
-		330FB8E72163C6D90032E657 /* greentag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greentag@2x.png"; sourceTree = "<group>"; };
-		330FB8E82163C6D90032E657 /* greencard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greencard@2x.png"; sourceTree = "<group>"; };
-		330FB8E92163C6DA0032E657 /* greencard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greencard@3x.png"; sourceTree = "<group>"; };
-		330FB8EA2163C6DA0032E657 /* greentag@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greentag@3x.png"; sourceTree = "<group>"; };
 		331797EE213AF282000B8DD6 /* InAnnotationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAnnotationView.h; sourceTree = "<group>"; };
 		331797EF213AF282000B8DD6 /* InAnnotationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAnnotationView.m; sourceTree = "<group>"; };
 		331797F7213BBB5B000B8DD6 /* icon_splash.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = icon_splash.jpg; sourceTree = "<group>"; };
@@ -642,8 +668,6 @@
 		33FFB996217327B500E6A8C6 /* InChangePasswordCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InChangePasswordCell.m; sourceTree = "<group>"; };
 		33FFB997217327B500E6A8C6 /* InChangePasswordCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InChangePasswordCell.xib; sourceTree = "<group>"; };
 		33FFB99A2173392200E6A8C6 /* photoBack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoBack@2x.png"; sourceTree = "<group>"; };
-		33FFB99B2173392200E6A8C6 /* photoGreenCamera@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoGreenCamera@3x.png"; sourceTree = "<group>"; };
-		33FFB99C2173392200E6A8C6 /* photoGreenCamera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoGreenCamera@2x.png"; sourceTree = "<group>"; };
 		33FFB99D2173392200E6A8C6 /* photoAutoShark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoAutoShark@2x.png"; sourceTree = "<group>"; };
 		33FFB99E2173392300E6A8C6 /* photoAutoShark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoAutoShark@3x.png"; sourceTree = "<group>"; };
 		33FFB99F2173392400E6A8C6 /* photoBack@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoBack@3x.png"; sourceTree = "<group>"; };
@@ -1024,6 +1048,10 @@
 		3379A2CC21561CDB008D1AA2 /* New */ = {
 			isa = PBXGroup;
 			children = (
+				199B690A222BF42000EC08E9 /* registerCheck@2x.png */,
+				199B690C222BF42200EC08E9 /* registerCheck@3x.png */,
+				199B690B222BF42200EC08E9 /* registerUnCheck@2x.png */,
+				199B690D222BF42300EC08E9 /* registerUnCheck@3x.png */,
 				33639510217B6180006719EA /* check@2x.png */,
 				3363950E217B6180006719EA /* check@3x.png */,
 				3363950F217B6180006719EA /* uncheck@2x.png */,
@@ -1042,10 +1070,10 @@
 				192A88DE222B83AB00A070F1 /* startRecode@3x.png */,
 				192A88DD222B83AB00A070F1 /* stopRecode@2x.png */,
 				192A88DF222B83AB00A070F1 /* stopRecode@3x.png */,
-				33FFB99C2173392200E6A8C6 /* photoGreenCamera@2x.png */,
-				33FFB99B2173392200E6A8C6 /* photoGreenCamera@3x.png */,
 				33E4FB41219E3E7300A2F101 /* changeCamera@2x.png */,
 				33E4FB40219E3E7300A2F101 /* changeCamera@3x.png */,
+				199B68FF222BCDEB00EC08E9 /* photoGrayCamera@2x.png */,
+				199B68FE222BCDEA00EC08E9 /* photoGrayCamera@3x.png */,
 				1999D3AF21D3BCBD0052B6BB /* photoShark@2x.png */,
 				1999D3B021D3BCBD0052B6BB /* photoShark@3x.png */,
 				33FFB99D2173392200E6A8C6 /* photoAutoShark@2x.png */,
@@ -1062,12 +1090,14 @@
 				33FFB92C2171A4CC00E6A8C6 /* userIcon@3x.png */,
 				19D98EE821C498EA0043C607 /* userBodyBG@2x.png */,
 				19D98EE721C498EA0043C607 /* userBodyBG@3x.png */,
-				330FB8E82163C6D90032E657 /* greencard@2x.png */,
-				330FB8E92163C6DA0032E657 /* greencard@3x.png */,
-				330FB8E52163C6D90032E657 /* greenchip@2x.png */,
-				330FB8E62163C6D90032E657 /* greenchip@3x.png */,
-				330FB8E72163C6D90032E657 /* greentag@2x.png */,
-				330FB8EA2163C6DA0032E657 /* greentag@3x.png */,
+				19BCF39F222BC59800CE90E0 /* graycard@2x.png */,
+				19BCF3A2222BC59900CE90E0 /* graycard@3x.png */,
+				19BCF39E222BC59800CE90E0 /* graycardholder@2x.png */,
+				19BCF3A3222BC59900CE90E0 /* graycardholder@3x.png */,
+				19BCF3A0222BC59900CE90E0 /* graytag@2x.png */,
+				19BCF3A1222BC59900CE90E0 /* graytag@3x.png */,
+				199B68F6222BC94500EC08E9 /* greenchip@2x.png */,
+				199B68F7222BC94500EC08E9 /* greenchip@3x.png */,
 				330FB8D521636F780032E657 /* up@2x.png */,
 				330FB8D621636F790032E657 /* up@3x.png */,
 				330FB8DA21636F820032E657 /* down@2x.png */,
@@ -1088,16 +1118,22 @@
 				337E504A21620E1A00CB6313 /* searchLine@3x.png */,
 				19F4A43A21BFAE4700B82900 /* searchCard@2x.png */,
 				19F4A43F21BFAE4700B82900 /* searchCard@3x.png */,
+				199B6902222BCECF00EC08E9 /* searchCardHolder@2x.png */,
+				199B6903222BCED000EC08E9 /* searchCardHolder@3x.png */,
 				19F4A43E21BFAE4700B82900 /* searchChip@2x.png */,
 				19F4A43D21BFAE4700B82900 /* searchChip@3x.png */,
 				19F4A43821BFAE4600B82900 /* successCard@2x.png */,
 				19F4A43921BFAE4600B82900 /* successCard@3x.png */,
 				19F4A43C21BFAE4700B82900 /* successChip@2x.png */,
 				19F4A43B21BFAE4700B82900 /* successChip@3x.png */,
+				199B6907222BCEDC00EC08E9 /* successCardHolder@2x.png */,
+				199B6906222BCEDC00EC08E9 /* successCardHolder@3x.png */,
 				337E504721620E1800CB6313 /* searchPhone@2x.png */,
 				337E504921620E1900CB6313 /* searchPhone@3x.png */,
 				337E50352162030D00CB6313 /* buyButton@2x.png */,
 				337E502E2162030A00CB6313 /* buyButton@3x.png */,
+				199B68FA222BCD4C00EC08E9 /* cardHolder@2x.png */,
+				199B68FB222BCD4D00EC08E9 /* cardHolder@3x.png */,
 				337E502F2162030A00CB6313 /* Card@2x.png */,
 				337E50312162030B00CB6313 /* Card@3x.png */,
 				19F4A43521BFA53300B82900 /* chip@2x.png */,
@@ -1318,31 +1354,35 @@
 				3374C7AB2112077C00F83101 /* icon_warning.png in Resources */,
 				33179838213BEDEB000B8DD6 /* InDeviceListAddDeviceCell.xib in Resources */,
 				3374C7A82112077C00F83101 /* icon_history_up.png in Resources */,
-				330FB8EC2163C6DA0032E657 /* greenchip@3x.png in Resources */,
 				33FB62AE215D45BC00C6419C /* 5@3x.png in Resources */,
 				33FFB9322171A4CD00E6A8C6 /* userIcon@2x.png in Resources */,
 				3379A2D721561E73008D1AA2 /* greenBtn@2x.png in Resources */,
 				3374C7542112013F00F83101 /* Assets.xcassets in Resources */,
+				19BCF3A7222BC59900CE90E0 /* graytag@3x.png in Resources */,
 				3374C7972112077C00F83101 /* icon_close.png in Resources */,
+				199B690E222BF42400EC08E9 /* registerCheck@2x.png in Resources */,
 				19FEDECC21BC1D4A0064F7B7 /* InCameraViewController.xib in Resources */,
 				33E9B81B215BC83300BA3EBE /* innwayLOGO@3x.png in Resources */,
 				337E504D21620E1B00CB6313 /* searchImage@3x.png in Resources */,
+				199B68FD222BCD4D00EC08E9 /* cardHolder@3x.png in Resources */,
 				3374C7982112077C00F83101 /* icon_back.png in Resources */,
 				33E9B81C215BC83300BA3EBE /* innwayLOGO@2x.png in Resources */,
 				33E4FB57219E487700A2F101 /* RSSI_0@2x.png in Resources */,
 				33FB62A7215D453900C6419C /* 50@2x.png in Resources */,
 				33FFB999217327B500E6A8C6 /* InChangePasswordCell.xib in Resources */,
+				19BCF3A8222BC59900CE90E0 /* graycard@3x.png in Resources */,
 				3374C7952112077C00F83101 /* icon_more.png in Resources */,
 				3385C6D421574BCC005FAB04 /* whiteLongButton@2x.png in Resources */,
 				3374C7A02112077C00F83101 /* icon_range_down.png in Resources */,
 				33E4FB65219E487700A2F101 /* RSSI_7@2x.png in Resources */,
 				337E504F21620E1B00CB6313 /* searchPhone@2x.png in Resources */,
 				3374C7B22112077C00F83101 /* icon_dot_down.png in Resources */,
+				199B6911222BF42400EC08E9 /* registerUnCheck@3x.png in Resources */,
 				3368B8522184C76500AC943F /* InHelpCenterInfoController.xib in Resources */,
 				3363950D217B5AAE006719EA /* InChangeDeviceNameView.xib in Resources */,
 				3374C7522112013B00F83101 /* InUser.storyboard in Resources */,
-				330FB8F02163C6DA0032E657 /* greentag@3x.png in Resources */,
 				33FFB9AF21733F6600E6A8C6 /* photoLibrary@2x.png in Resources */,
+				199B690F222BF42400EC08E9 /* registerUnCheck@2x.png in Resources */,
 				337E50362162030D00CB6313 /* buyButton@3x.png in Resources */,
 				3374C7992112077C00F83101 /* ic_oval.png in Resources */,
 				3385C6D521574BCC005FAB04 /* greenLongButton@3x.png in Resources */,
@@ -1350,9 +1390,10 @@
 				33FFB9302171A4CD00E6A8C6 /* userIcon@3x.png in Resources */,
 				192A88E1222B83AB00A070F1 /* stopRecode@2x.png in Resources */,
 				1999D3B221D3BCBD0052B6BB /* photoShark@3x.png in Resources */,
+				19BCF3A4222BC59900CE90E0 /* graycardholder@2x.png in Resources */,
+				199B6905222BCED000EC08E9 /* searchCardHolder@3x.png in Resources */,
 				33FB629C215D453900C6419C /* 90@3x.png in Resources */,
 				33E4FB5C219E487700A2F101 /* RSSI_8@3x.png in Resources */,
-				330FB8EF2163C6DA0032E657 /* greencard@3x.png in Resources */,
 				19E1A35B21A97E8400D9FBBD /* 100@2x.png in Resources */,
 				33639513217B6181006719EA /* uncheck@2x.png in Resources */,
 				33EE4CA92116FCBA00CDDC98 /* InDeviceSettingViewController.storyboard in Resources */,
@@ -1366,7 +1407,6 @@
 				33639505217B4036006719EA /* whiteBtn@2x.png in Resources */,
 				33FFB9352171D6E700E6A8C6 /* icon_add_device@3x.png in Resources */,
 				3374C7AD2112077C00F83101 /* icon_charging.png in Resources */,
-				330FB8ED2163C6DA0032E657 /* greentag@2x.png in Resources */,
 				33E4FB56219E487700A2F101 /* RSSI_0@3x.png in Resources */,
 				3374C7A72112077C00F83101 /* icon_location.png in Resources */,
 				3374C7A92112077C00F83101 /* icon_user.png in Resources */,
@@ -1378,6 +1418,8 @@
 				331797F8213BBB5B000B8DD6 /* icon_splash.jpg in Resources */,
 				330FB8DC21636F830032E657 /* down@2x.png in Resources */,
 				330FB8D421636F6E0032E657 /* annotation@3x.png in Resources */,
+				19BCF3A5222BC59900CE90E0 /* graycard@2x.png in Resources */,
+				199B68FC222BCD4D00EC08E9 /* cardHolder@2x.png in Resources */,
 				33FB62A0215D453900C6419C /* 30@2x.png in Resources */,
 				33639514217B6181006719EA /* check@2x.png in Resources */,
 				19D98EE921C498EB0043C607 /* userBodyBG@3x.png in Resources */,
@@ -1386,13 +1428,17 @@
 				337E505121620E1B00CB6313 /* searchPhone@3x.png in Resources */,
 				33E4FB58219E487700A2F101 /* RSSI_7@3x.png in Resources */,
 				33FB6296215D453900C6419C /* 60@2x.png in Resources */,
+				19BCF3A9222BC59900CE90E0 /* graycardholder@3x.png in Resources */,
 				19F4A44321BFAE4800B82900 /* successChip@3x.png in Resources */,
 				3368B83E2184157000AC943F /* icon_menu@3x.png in Resources */,
 				3385C6CD2157467D005FAB04 /* lockicon@3x.png in Resources */,
 				337E506621623CDA00CB6313 /* failedCard@2x.png in Resources */,
+				199B6901222BCDEB00EC08E9 /* photoGrayCamera@2x.png in Resources */,
 				330FB8DB21636F830032E657 /* down@3x.png in Resources */,
+				199B68F9222BC94500EC08E9 /* greenchip@3x.png in Resources */,
 				19F4A44621BFAE4800B82900 /* searchChip@2x.png in Resources */,
 				3374C7AF2112077C00F83101 /* icon_range_up.png in Resources */,
+				199B6910222BF42400EC08E9 /* registerCheck@3x.png in Resources */,
 				33FB62A9215D453900C6419C /* 10@3x.png in Resources */,
 				19F4A43721BFA53300B82900 /* chip@2x.png in Resources */,
 				337E505221620E1B00CB6313 /* searchLine@3x.png in Resources */,
@@ -1402,6 +1448,7 @@
 				337E50212161F42600CB6313 /* InAddDevice.storyboard in Resources */,
 				337E50292161F60F00CB6313 /* addButton@2x.png in Resources */,
 				19F4A43221BEACF200B82900 /* photoCloseShark@3x.png in Resources */,
+				199B6900222BCDEB00EC08E9 /* photoGrayCamera@3x.png in Resources */,
 				33FFB98F2172EF8900E6A8C6 /* InUserSettingViewController.xib in Resources */,
 				3379A2D521561E73008D1AA2 /* sWhiteBtn@3x.png in Resources */,
 				33FB62AF215D45BC00C6419C /* 5@2x.png in Resources */,
@@ -1414,24 +1461,26 @@
 				33FFB9362171D6E700E6A8C6 /* icon_add_device@2x.png in Resources */,
 				3385C6CE2157467D005FAB04 /* Rectangle2copy@2x.png in Resources */,
 				337E50282161F60F00CB6313 /* addButtonBackgroup@2x.png in Resources */,
+				199B6904222BCED000EC08E9 /* searchCardHolder@2x.png in Resources */,
 				19F8517421E1E64500442841 /* loginBackground@2x.jpg in Resources */,
 				33E4FB64219E487700A2F101 /* RSSI_8@2x.png in Resources */,
 				33FB6299215D453900C6419C /* 70@3x.png in Resources */,
 				3368B83D2184157000AC943F /* icon_menu@2x.png in Resources */,
 				192A88DA222B801000A070F1 /* video@2x.png in Resources */,
+				199B6908222BCEDD00EC08E9 /* successCardHolder@3x.png in Resources */,
 				3374C7AE2112077C00F83101 /* icon_dot_up.png in Resources */,
 				33FFB9AC21733E9200E6A8C6 /* photoBackground@3x.png in Resources */,
 				33A4102F2198759B008E7360 /* voice1.mp3 in Resources */,
 				3385C6CC2157467D005FAB04 /* Rectangle2copy@3x.png in Resources */,
 				33E4FB5E219E487700A2F101 /* RSSI_4@2x.png in Resources */,
 				330FB8D721636F790032E657 /* up@2x.png in Resources */,
-				330FB8EB2163C6DA0032E657 /* greenchip@2x.png in Resources */,
 				3368B8502184C38200AC943F /* InHelpCenterInfoCell.xib in Resources */,
 				19F4A44421BFAE4800B82900 /* successChip@2x.png in Resources */,
 				33FB629E215D453900C6419C /* 40@3x.png in Resources */,
 				337E504E21620E1B00CB6313 /* searchImage@2x.png in Resources */,
 				3368B8392184152300AC943F /* user@3x.png in Resources */,
 				33FFB9A42173392400E6A8C6 /* photoAutoShark@3x.png in Resources */,
+				19BCF3A6222BC59900CE90E0 /* graytag@2x.png in Resources */,
 				337E506721623CDA00CB6313 /* failedCard@3x.png in Resources */,
 				337E50392162030D00CB6313 /* Card@3x.png in Resources */,
 				33EE4C9B2116DBE000CDDC98 /* InDeviceListViewController.xib in Resources */,
@@ -1466,7 +1515,9 @@
 				33639506217B4036006719EA /* whiteBtn@3x.png in Resources */,
 				19E1A35C21A97E8400D9FBBD /* 100@3x.png in Resources */,
 				19F4A44121BFAE4800B82900 /* successCard@3x.png in Resources */,
+				199B6909222BCEDD00EC08E9 /* successCardHolder@2x.png in Resources */,
 				33E4FB59219E487700A2F101 /* RSSI_1@2x.png in Resources */,
+				199B68F8222BC94500EC08E9 /* greenchip@2x.png in Resources */,
 				3374C7A42112077C00F83101 /* icon_back_dark.png in Resources */,
 				33FB62A3215D453900C6419C /* 30@3x.png in Resources */,
 				33E4FB67219E487700A2F101 /* RSSI_5@3x.png in Resources */,
@@ -1481,7 +1532,6 @@
 				3374C7942112077C00F83101 /* icon_track_up.png in Resources */,
 				33E36F2B217CCAEB00FA79B9 /* charge@2x.png in Resources */,
 				330FB8D821636F790032E657 /* up@3x.png in Resources */,
-				33FFB9A22173392400E6A8C6 /* photoGreenCamera@2x.png in Resources */,
 				33FB629F215D453900C6419C /* 20@3x.png in Resources */,
 				3374C7962112077C00F83101 /* icon_default_image.png in Resources */,
 				33FB6298215D453900C6419C /* 10@2x.png in Resources */,
@@ -1497,7 +1547,6 @@
 				19F4A43321BEACF200B82900 /* photoCloseShark@2x.png in Resources */,
 				192A88E0222B83AB00A070F1 /* startRecode@2x.png in Resources */,
 				19F4A44721BFAE4800B82900 /* searchCard@3x.png in Resources */,
-				33FFB9A12173392400E6A8C6 /* photoGreenCamera@3x.png in Resources */,
 				3374C7A32112077C00F83101 /* icon_scan_line.png in Resources */,
 				337E505D21623C8500CB6313 /* successCheck@3x.png in Resources */,
 				3368B8482184BBF000AC943F /* InHelpCenterSelectionController.xib in Resources */,
@@ -1506,7 +1555,6 @@
 				337E505721620FF300CB6313 /* waiting@2x.png in Resources */,
 				3374C7AC2112077C00F83101 /* icon_warning_gray.png in Resources */,
 				33E4FB60219E487700A2F101 /* RSSI_1@3x.png in Resources */,
-				330FB8EE2163C6DA0032E657 /* greencard@2x.png in Resources */,
 				33E4FB66219E487700A2F101 /* RSSI_5@2x.png in Resources */,
 				19F4A44521BFAE4800B82900 /* searchChip@3x.png in Resources */,
 			);

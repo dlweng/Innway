@@ -42,7 +42,7 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="greencard.png" translatesAutoresizingMaskIntoConstraints="NO" id="Yzj-qe-W8F" userLabel="cardView.png">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graycardholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="Yzj-qe-W8F" userLabel="cardView.png">
                         <rect key="frame" x="24.5" y="18" width="33" height="24"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="33" id="Bqh-wn-qG7"/>
@@ -135,7 +135,7 @@
         <image name="0.png" width="36" height="15"/>
         <image name="5.png" width="33" height="27"/>
         <image name="RSSI_0.png" width="57" height="57"/>
-        <image name="greencard.png" width="34" height="22"/>
+        <image name="graycardholder.png" width="34" height="22"/>
         <image name="greenchip.png" width="32" height="32"/>
         <image name="icon_more.png" width="99" height="99"/>
     </resources>

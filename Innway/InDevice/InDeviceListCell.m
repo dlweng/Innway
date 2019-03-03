@@ -47,7 +47,7 @@
     switch (_device.type) {
         case InDeviceTag:
         {
-            self.chipView.image = [UIImage imageNamed:@"greentag"];
+            self.chipView.image = [UIImage imageNamed:@"graytag"];
             self.chipView.hidden = NO;
             self.cardView.hidden = YES;
             break;
@@ -59,8 +59,16 @@
             self.cardView.hidden = YES;
             break;
         }
+        case InDeviceCardHolder:
+        {
+            self.cardView.image = [UIImage imageNamed:@"graycardholder"];
+            self.chipView.hidden = YES;
+            self.cardView.hidden = NO;
+            break;
+        }
         default:
         {
+            self.cardView.image = [UIImage imageNamed:@"graycard"];
             self.chipView.hidden = YES;
             self.cardView.hidden = NO;
             break;

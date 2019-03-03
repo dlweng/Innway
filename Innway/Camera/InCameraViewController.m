@@ -67,7 +67,7 @@
         NSLog(@"捕捉到错误: error = %@", error);
     }];
     
-    [self.takePhotoBtn setImage:[UIImage imageNamed:@"photoGreenCamera.png"] forState:UIControlStateNormal];
+    [self.takePhotoBtn setImage:[UIImage imageNamed:@"photoGrayCamera.png"] forState:UIControlStateNormal];
     self.switchModeBtn.selected = NO;
     self.timeLabel.hidden = YES;
     
@@ -217,7 +217,7 @@
         [self.takePhotoBtn setImage:[UIImage imageNamed:@"startRecode.png"] forState:UIControlStateNormal];
     }
     else {
-        [self.takePhotoBtn setImage:[UIImage imageNamed:@"photoGreenCamera.png"] forState:UIControlStateNormal];
+        [self.takePhotoBtn setImage:[UIImage imageNamed:@"photoGrayCamera.png"] forState:UIControlStateNormal];
     }
 }
 

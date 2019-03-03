@@ -33,7 +33,8 @@
     self.arr = @[
 //  @{@"image": @"tag", @"title": @"Innway Tag"},
                  @{@"image": @"chip", @"title": @"Innway Chip"},
-                 @{@"image": @"Card", @"title": @"Innway Card"}];
+                 @{@"image": @"Card", @"title": @"Innway Card"},
+                 @{@"image": @"cardHolder", @"title": @"Innway Card Holder"}];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     [self.navigationController.navigationBar setHidden:NO];
     [InCommon setNavgationBar:self.navigationController.navigationBar];
@@ -88,6 +89,9 @@
             break;
         case 1:
             common.deviceType = InDeviceCard;
+            break;
+        case 2:
+            common.deviceType = InDeviceCardHolder;
             break;
         default:
             break;

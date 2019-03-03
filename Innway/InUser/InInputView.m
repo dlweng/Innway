@@ -13,7 +13,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.layer.borderWidth = 1.0f;
-    self.layer.borderColor = [UIColor colorWithRed:80.0/255.0f green:179.0/255.0f blue:122/255.0f alpha:1].CGColor;
+    self.layer.borderColor = [UIColor lightGrayColor].CGColor;
 }
 
 @end

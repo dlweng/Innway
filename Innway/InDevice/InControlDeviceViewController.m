@@ -573,6 +573,10 @@
                         break;
                     case InDeviceTag:
                         deviceImageName = @"tag";
+                        break;
+                    case InDeviceCardHolder:
+                        deviceImageName = @"cardHolder";
+                        break;
                     default:
                         break;
                 }
