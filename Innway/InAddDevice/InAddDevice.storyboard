@@ -144,7 +144,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kHk-t5-g10">
                                 <rect key="frame" x="69" y="326.5" width="237" height="45"/>
                                 <state key="normal" title="Buy a new Innway" backgroundImage="buyButton.png">
-                                    <color key="titleColor" red="0.31372549020000001" green="0.70196078429999997" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="buyNewInnway" destination="fGj-VC-VeB" eventType="touchUpInside" id="3mv-WL-btB"/>
@@ -406,7 +406,7 @@
                                 <rect key="frame" x="69" y="508" width="237" height="45"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" title="Confirm" backgroundImage="buyButton.png">
-                                    <color key="titleColor" red="0.31372549020000001" green="0.70196078429999997" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="confirm" destination="1UM-qv-G5S" eventType="touchUpInside" id="Mqg-m2-wVC"/>

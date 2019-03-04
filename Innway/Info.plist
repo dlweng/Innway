@@ -38,7 +38,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>The app requires access to your location data to enable the tracking functions of the Innway.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>The app requires microphone to tell you about the Innway.</string>
+	<string>Enable microphone access to record videos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>The app requires access to the photo library to save photos to and browse photos from your photo albums.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

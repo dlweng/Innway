@@ -60,7 +60,7 @@
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <state key="normal" title="Confirm" backgroundImage="buyButton.png">
-                                <color key="titleColor" red="0.31372549020000001" green="0.70196078429999997" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
                                 <action selector="confirmDidClick" destination="iN0-l3-epB" eventType="touchUpInside" id="PP0-Ir-tS3"/>
@@ -121,8 +121,8 @@
                                 <constraint firstAttribute="height" constant="45" id="PTs-Ku-Z9j"/>
                                 <constraint firstAttribute="width" constant="127" id="dXO-va-AQ0"/>
                             </constraints>
-                            <state key="normal" title="Cancel" backgroundImage="whiteBtn.png">
-                                <color key="titleColor" red="0.31372549020000001" green="0.70196078429999997" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" title="Cancel" backgroundImage="greenBtn.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
                                 <action selector="cancleDidClick" destination="iN0-l3-epB" eventType="touchUpInside" id="aan-11-tyi"/>
@@ -172,6 +172,5 @@
     <resources>
         <image name="buyButton.png" width="237" height="45"/>
         <image name="greenBtn.png" width="127" height="45"/>
-        <image name="whiteBtn.png" width="127" height="45"/>
     </resources>
 </document>

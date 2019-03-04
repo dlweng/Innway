@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *agreenBtn;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) int time;
+@property (nonatomic, assign) NSInteger code; //验证码
 
 
 @end
@@ -32,7 +33,12 @@
     self.navigationItem.title = @"Registration";
     self.emailTextField.delegate = self;
     self.passwordTextField.delegate = self;
+    self.verificationCodeTextField.delegate = self;
     self.agreenBtn.selected = NO;
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (IBAction)registerBtnDidClick:(UIButton *)sender {
@@ -40,16 +46,24 @@
         [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmTitle:nil confirmHanler:nil];
         return;
     }
+    else if (![self effectiveEmail:self.emailTextField.text]) {
+        [InAlertView showAlertWithTitle:@"Information" message:@"This is not a valid email address." confirmTitle:nil confirmHanler:nil];
+        return;
+    }
     else if (self.passwordTextField.text.length == 0) {
         [InAlertView showAlertWithTitle:@"Information" message:@"Password required" confirmTitle:nil confirmHanler:nil];
         return;
     }
     else if (self.verificationCodeTextField.text.length == 0) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"Verification Code required" confirmTitle:nil confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"Verification code required" confirmTitle:nil confirmHanler:nil];
+        return;
+    }
+    else if (self.verificationCodeTextField.text.integerValue != self.code) {
+        [InAlertView showAlertWithTitle:@"Information" message:@"Verification code invalid" confirmTitle:nil confirmHanler:nil];
         return;
     }
     else if (!self.agreenBtn.selected) {
-        [InAlertView showAlertWithTitle:@"Information" message:@"同意协议才能注册" confirmTitle:nil confirmHanler:nil];
+        [InAlertView showAlertWithTitle:@"Information" message:@"You must agree to the privacy policy to continue." confirmTitle:nil confirmHanler:nil];
         return;
     }
     
@@ -85,6 +99,9 @@
     if (textField == self.emailTextField) {
         [self.passwordTextField becomeFirstResponder];
     }
+    else if (textField == self.passwordTextField) {
+        [self.verificationCodeTextField becomeFirstResponder];
+    }
     else {
         [self.view endEditing:YES];
     }
@@ -92,8 +109,42 @@
 }
 
 - (IBAction)getCodeAction {
-    NSLog(@"发送获取验证码的请求");
+    if (self.emailTextField.text.length == 0) {
+        [InAlertView showAlertWithTitle:@"Information" message:@"Email address required" confirmTitle:nil confirmHanler:nil];
+        return;
+    }
+    else if (![self effectiveEmail:self.emailTextField.text]) {
+        [InAlertView showAlertWithTitle:@"Information" message:@"This is not a valid email address." confirmTitle:nil confirmHanler:nil];
+        return;
+    }
+    self.code = -1;
+    [self.view endEditing:YES];
+    [InAlertTool showHUDAddedTo:self.view animated:YES];
+    NSDictionary* body = @{@"email":self.emailTextField.text, @"action":@"GetEmailCheckCode"};
+    [InCommon sendHttpMethod:@"POST" URLString:httpDomain body:body completionHandler:^(NSURLResponse *response, NSDictionary *responseObject, NSError * _Nullable error) {
+        NSLog(@"发送验证码结果:responseObject = %@, error = %@", responseObject, error);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSInteger code = [responseObject integerValueForKey:@"code" defaultValue:500];
+        NSString *messgae;
+        
+        if (code == 200) {
+            messgae = [NSString stringWithFormat:@"An email with a verification code has been sent to %@", self.emailTextField.text];
+            NSInteger data = [responseObject integerValueForKey:@"data" defaultValue:0];
+            self.code = data;
+        }
+        else {
+            if (error && error.code == -1) {
+                messgae = @"Network connection lost";
+            }
+            else {
+                messgae = @"We are unable to send the verification code. Please check if your email address is correct.";
+            }
+        }
+        [InAlertView showAlertWithTitle:@"Information" message:messgae confirmTitle:nil confirmHanler:nil];
+    }];
+    
     self.getCodeBtn.enabled = NO;
+    // 发送验证码倒数
     self.time = 0;
     __weak typeof(self) weakSelf = self;
     self.timer = [NSTimer newTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
@@ -131,6 +182,12 @@
 
 - (void)dealloc {
     NSLog(@"注册界面被销毁");
+}
+
+- (BOOL)effectiveEmail:(NSString *)email {
+    NSString *emailRegex = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *pre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",emailRegex];
+    return [pre evaluateWithObject:email];
 }
 
 

@@ -16,10 +16,10 @@
 		192A88E2222B83AB00A070F1 /* startRecode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 192A88DE222B83AB00A070F1 /* startRecode@3x.png */; };
 		192A88E3222B83AB00A070F1 /* stopRecode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 192A88DF222B83AB00A070F1 /* stopRecode@3x.png */; };
 		1952C97A21B9894200988409 /* NSTimer+InTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1952C97921B9894200988409 /* NSTimer+InTimer.m */; };
+		1971D1A7222D8188003ABC3E /* graychip@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1971D1A5222D8188003ABC3E /* graychip@3x.png */; };
+		1971D1A8222D8188003ABC3E /* graychip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1971D1A6222D8188003ABC3E /* graychip@2x.png */; };
 		1999D3B121D3BCBD0052B6BB /* photoShark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1999D3AF21D3BCBD0052B6BB /* photoShark@2x.png */; };
 		1999D3B221D3BCBD0052B6BB /* photoShark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1999D3B021D3BCBD0052B6BB /* photoShark@3x.png */; };
-		199B68F8222BC94500EC08E9 /* greenchip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68F6222BC94500EC08E9 /* greenchip@2x.png */; };
-		199B68F9222BC94500EC08E9 /* greenchip@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68F7222BC94500EC08E9 /* greenchip@3x.png */; };
 		199B68FC222BCD4D00EC08E9 /* cardHolder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68FA222BCD4C00EC08E9 /* cardHolder@2x.png */; };
 		199B68FD222BCD4D00EC08E9 /* cardHolder@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68FB222BCD4D00EC08E9 /* cardHolder@3x.png */; };
 		199B6900222BCDEB00EC08E9 /* photoGrayCamera@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 199B68FE222BCDEA00EC08E9 /* photoGrayCamera@3x.png */; };
@@ -319,10 +319,10 @@
 		192A88DF222B83AB00A070F1 /* stopRecode@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stopRecode@3x.png"; sourceTree = "<group>"; };
 		1952C97821B9894200988409 /* NSTimer+InTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTimer+InTimer.h"; sourceTree = "<group>"; };
 		1952C97921B9894200988409 /* NSTimer+InTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+InTimer.m"; sourceTree = "<group>"; };
+		1971D1A5222D8188003ABC3E /* graychip@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graychip@3x.png"; sourceTree = "<group>"; };
+		1971D1A6222D8188003ABC3E /* graychip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graychip@2x.png"; sourceTree = "<group>"; };
 		1999D3AF21D3BCBD0052B6BB /* photoShark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoShark@2x.png"; sourceTree = "<group>"; };
 		1999D3B021D3BCBD0052B6BB /* photoShark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoShark@3x.png"; sourceTree = "<group>"; };
-		199B68F6222BC94500EC08E9 /* greenchip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenchip@2x.png"; sourceTree = "<group>"; };
-		199B68F7222BC94500EC08E9 /* greenchip@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenchip@3x.png"; sourceTree = "<group>"; };
 		199B68FA222BCD4C00EC08E9 /* cardHolder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cardHolder@2x.png"; sourceTree = "<group>"; };
 		199B68FB222BCD4D00EC08E9 /* cardHolder@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cardHolder@3x.png"; sourceTree = "<group>"; };
 		199B68FE222BCDEA00EC08E9 /* photoGrayCamera@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoGrayCamera@3x.png"; sourceTree = "<group>"; };
@@ -1092,12 +1092,12 @@
 				19D98EE721C498EA0043C607 /* userBodyBG@3x.png */,
 				19BCF39F222BC59800CE90E0 /* graycard@2x.png */,
 				19BCF3A2222BC59900CE90E0 /* graycard@3x.png */,
+				1971D1A6222D8188003ABC3E /* graychip@2x.png */,
+				1971D1A5222D8188003ABC3E /* graychip@3x.png */,
 				19BCF39E222BC59800CE90E0 /* graycardholder@2x.png */,
 				19BCF3A3222BC59900CE90E0 /* graycardholder@3x.png */,
 				19BCF3A0222BC59900CE90E0 /* graytag@2x.png */,
 				19BCF3A1222BC59900CE90E0 /* graytag@3x.png */,
-				199B68F6222BC94500EC08E9 /* greenchip@2x.png */,
-				199B68F7222BC94500EC08E9 /* greenchip@3x.png */,
 				330FB8D521636F780032E657 /* up@2x.png */,
 				330FB8D621636F790032E657 /* up@3x.png */,
 				330FB8DA21636F820032E657 /* down@2x.png */,
@@ -1435,7 +1435,6 @@
 				337E506621623CDA00CB6313 /* failedCard@2x.png in Resources */,
 				199B6901222BCDEB00EC08E9 /* photoGrayCamera@2x.png in Resources */,
 				330FB8DB21636F830032E657 /* down@3x.png in Resources */,
-				199B68F9222BC94500EC08E9 /* greenchip@3x.png in Resources */,
 				19F4A44621BFAE4800B82900 /* searchChip@2x.png in Resources */,
 				3374C7AF2112077C00F83101 /* icon_range_up.png in Resources */,
 				199B6910222BF42400EC08E9 /* registerCheck@3x.png in Resources */,
@@ -1494,6 +1493,7 @@
 				3328801C2115AA4900C4893B /* InControlDeviceViewController.xib in Resources */,
 				337E505621620FF300CB6313 /* waiting@3x.png in Resources */,
 				337E506421623CDA00CB6313 /* failedCheck@3x.png in Resources */,
+				1971D1A8222D8188003ABC3E /* graychip@2x.png in Resources */,
 				337E506521623CDA00CB6313 /* failedCheck@2x.png in Resources */,
 				33E4FB5A219E487700A2F101 /* RSSI_2@3x.png in Resources */,
 				192A88E2222B83AB00A070F1 /* startRecode@3x.png in Resources */,
@@ -1513,11 +1513,11 @@
 				33FB62A1215D453900C6419C /* 40@2x.png in Resources */,
 				3368B83A2184152300AC943F /* user@2x.png in Resources */,
 				33639506217B4036006719EA /* whiteBtn@3x.png in Resources */,
+				1971D1A7222D8188003ABC3E /* graychip@3x.png in Resources */,
 				19E1A35C21A97E8400D9FBBD /* 100@3x.png in Resources */,
 				19F4A44121BFAE4800B82900 /* successCard@3x.png in Resources */,
 				199B6909222BCEDD00EC08E9 /* successCardHolder@2x.png in Resources */,
 				33E4FB59219E487700A2F101 /* RSSI_1@2x.png in Resources */,
-				199B68F8222BC94500EC08E9 /* greenchip@2x.png in Resources */,
 				3374C7A42112077C00F83101 /* icon_back_dark.png in Resources */,
 				33FB62A3215D453900C6419C /* 30@3x.png in Resources */,
 				33E4FB67219E487700A2F101 /* RSSI_5@3x.png in Resources */,

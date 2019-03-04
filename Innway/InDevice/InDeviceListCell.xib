@@ -29,11 +29,11 @@
                             <constraint firstAttribute="height" constant="50" id="gE3-56-hC0"/>
                         </constraints>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="greenchip.png" translatesAutoresizingMaskIntoConstraints="NO" id="d5C-HA-8cS" userLabel="chipView">
-                        <rect key="frame" x="24.5" y="13.5" width="33" height="33"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graychip.png" translatesAutoresizingMaskIntoConstraints="NO" id="d5C-HA-8cS" userLabel="chipView">
+                        <rect key="frame" x="26.5" y="15.5" width="29" height="29"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="33" id="LWw-V6-xXg" userLabel="height = 32"/>
-                            <constraint firstAttribute="width" constant="33" id="XEQ-X6-Vjx"/>
+                            <constraint firstAttribute="height" constant="29" id="LWw-V6-xXg" userLabel="height = 32"/>
+                            <constraint firstAttribute="width" constant="29" id="XEQ-X6-Vjx"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lily" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eec-Tj-d5Q">
@@ -136,7 +136,7 @@
         <image name="5.png" width="33" height="27"/>
         <image name="RSSI_0.png" width="57" height="57"/>
         <image name="graycardholder.png" width="34" height="22"/>
-        <image name="greenchip.png" width="32" height="32"/>
+        <image name="graychip.png" width="27" height="27"/>
         <image name="icon_more.png" width="99" height="99"/>
     </resources>
 </document>

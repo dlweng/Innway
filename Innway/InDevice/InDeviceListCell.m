@@ -54,7 +54,7 @@
         }
         case InDeviceChip:
         {
-            self.chipView.image = [UIImage imageNamed:@"greenchip"];
+            self.chipView.image = [UIImage imageNamed:@"graychip"];
             self.chipView.hidden = NO;
             self.cardView.hidden = YES;
             break;
