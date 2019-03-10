@@ -41,6 +41,7 @@
         case InDeviceChip:
             self.navigationItem.title = @"Innway Chip";
             break;
+        
         default:
             break;
     }

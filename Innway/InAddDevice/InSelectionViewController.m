@@ -34,7 +34,8 @@
 //  @{@"image": @"tag", @"title": @"Innway Tag"},
                  @{@"image": @"chip", @"title": @"Innway Chip"},
                  @{@"image": @"Card", @"title": @"Innway Card"},
-                 @{@"image": @"cardHolder", @"title": @"Innway Card Holder"}];
+                 @{@"image": @"cardHolder", @"title": @"Innway Card Holder"},
+                 @{@"image": @"tag", @"title": @"Innway Tag"}];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     [self.navigationController.navigationBar setHidden:NO];
     [InCommon setNavgationBar:self.navigationController.navigationBar];
@@ -81,9 +82,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     common.deviceType = indexPath.row;
     switch (indexPath.row) {
-//        case 0:
-//            common.deviceType = InDeviceTag;
-//            break;
         case 0:
             common.deviceType = InDeviceChip;
             break;
@@ -92,6 +90,9 @@
             break;
         case 2:
             common.deviceType = InDeviceCardHolder;
+            break;
+        case 3:
+            common.deviceType = InDeviceTag;
             break;
         default:
             break;

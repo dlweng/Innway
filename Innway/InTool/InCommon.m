@@ -755,7 +755,7 @@
 }
 
 - (void)restoreVolume {
-    if (self.oldVolume > 0) {
+    if (self.oldVolume >= 0) {
         for (NSString *mac in [DLCloudDeviceManager sharedInstance].cloudDeviceList) {
             DLDevice *device = [DLCloudDeviceManager sharedInstance].cloudDeviceList[mac];
             if (device.offlinePlayer.isPlaying || device.searchPhonePlayer.isPlaying) {

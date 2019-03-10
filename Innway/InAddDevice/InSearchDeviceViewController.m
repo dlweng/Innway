@@ -122,6 +122,16 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
         self.searchTitleLabel.text = @"Searching for Innway Card Holder";
         self.failedMessageLabel.text = @"Innway Card Holder not found";
     }
+    else if (common.deviceType == InDeviceTag) {
+        self.sucessCardWidthConstrain.constant = 60;
+        self.failedCardWidthConstrain.constant = 60;
+        self.successCardImageView.image = [UIImage imageNamed:@"successTag"];
+        self.failedCardImageView.image = [UIImage imageNamed:@"successTag"];
+        self.searchCardImageView.image = [UIImage imageNamed:@"searchTag"];
+        self.navigationItem.title = @"Adding Innway Tag";
+        self.searchTitleLabel.text = @"Searching for Innway Tag";
+        self.failedMessageLabel.text = @"Innway Tag not found";
+    }
     self.successMessageLabel.text = @"Pairing completed";
 }
 
@@ -174,6 +184,9 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
             case InDeviceCardHolder:
                 message = @"1. Ensure that Bluetooth is enabled.\n2. Place the card holder next to your phone.\n3. Press and hold the button on the card holder for 5 seconds until you hear a beep.\n4. Press the \"Confirm\" button below.";
                 break;
+            case InDeviceTag:
+                message = @"1. Ensure that Bluetooth is enabled.\n2. Place the tag next to your phone.\n3. Press and hold the button on the Tag for 5 seconds until you hear a beep.\n4. Press the \"Confirm\" button below.";
+                break;
             default:
                 break;
         }
@@ -219,6 +232,9 @@ typedef NS_ENUM(NSInteger, InSearchViewType) {
                 break;
             case InDeviceCardHolder:
                 message = @"1. Ensure Bluetooth is enabled\n• Turn off Bluetooth and re-enable it again.\n2. Ensure Card Holder is turned on\n• Press the button on the Card Holder and check if the light flashes.\n• If the light doesn't flash, hold the button on the Card Holder for 5 seconds until you hear a beep and see the light flash.\n3. Ensure Card Holder is near your phone\n• Place your Card Holder next to your phone.";
+                break;
+            case InDeviceTag:
+                message = @"1. Ensure Bluetooth is enabled\n• Turn off Bluetooth and re-enable it again.\n2. Ensure Tag is turned on\n• Press the button on the Tag and check if the light flashes.\n• If the light doesn't flash, hold the button on the Tag for 5 seconds until you hear a beep and see the light flash.\n3. Ensure Tag is near your phone\n• Place your Tag next to your phone.";
                 break;
             default:
                 break;

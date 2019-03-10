@@ -386,7 +386,7 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if ([peripheral.identifier.UUIDString isEqualToString:self.peripheral.identifier.UUIDString]) {
-        NSLog(@"mac:%@, 接收读响应数据, peripheral：%@,  characteristic = %@, error = %@", self.mac, self.peripheral, characteristic.value, error);
+        NSLog(@"mac:%@, 接收读响应数据, peripheral：%@,  characteristic = %@, error = %@", self.mac, self.peripheral, characteristic, error);
         // 读硬件版本号
         CBUUID *firmwareChaUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareCharacteristicUUID];
         if ([characteristic.UUID.UUIDString isEqualToString:firmwareChaUUID.UUIDString]) {
