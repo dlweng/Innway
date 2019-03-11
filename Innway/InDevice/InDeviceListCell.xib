@@ -12,51 +12,51 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="InDeviceListCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="65.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zdh-MC-FwE" userLabel="backgroundView">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="65.5"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RSSI_0.png" translatesAutoresizingMaskIntoConstraints="NO" id="7or-9c-kQW" userLabel="rssiView.png">
-                        <rect key="frame" x="16" y="5" width="50" height="50"/>
+                        <rect key="frame" x="16" y="4" width="58" height="58"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="50" id="Weo-ko-gm9"/>
-                            <constraint firstAttribute="height" constant="50" id="gE3-56-hC0"/>
+                            <constraint firstAttribute="width" constant="58" id="Weo-ko-gm9"/>
+                            <constraint firstAttribute="height" constant="58" id="gE3-56-hC0"/>
                         </constraints>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graychip.png" translatesAutoresizingMaskIntoConstraints="NO" id="d5C-HA-8cS" userLabel="chipView">
-                        <rect key="frame" x="26.5" y="15.5" width="29" height="29"/>
+                        <rect key="frame" x="30.5" y="18.5" width="29" height="29"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="29" id="LWw-V6-xXg" userLabel="height = 32"/>
                             <constraint firstAttribute="width" constant="29" id="XEQ-X6-Vjx"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lily" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eec-Tj-d5Q">
-                        <rect key="frame" x="74" y="8.5" width="29" height="23"/>
+                        <rect key="frame" x="82" y="11.5" width="29" height="23"/>
                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graycardholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="Yzj-qe-W8F" userLabel="cardView.png">
-                        <rect key="frame" x="24.5" y="18" width="33" height="24"/>
+                        <rect key="frame" x="28.5" y="21" width="33" height="24"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="33" id="Bqh-wn-qG7"/>
                             <constraint firstAttribute="height" constant="24" id="kUo-Hd-9gz"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last seen just now" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zfY-9c-UiS">
-                        <rect key="frame" x="74" y="33.5" width="192" height="20"/>
+                        <rect key="frame" x="82" y="36.5" width="184" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gxp-sG-PFy">
-                        <rect key="frame" x="268" y="5" width="50" height="50"/>
+                        <rect key="frame" x="268" y="8" width="50" height="50"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="50" id="6x2-JF-jET"/>
                             <constraint firstAttribute="width" constant="50" id="Cpp-El-R85"/>
@@ -67,17 +67,17 @@
                         </connections>
                     </button>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UCe-5T-RAX" userLabel="batteryBodyView">
-                        <rect key="frame" x="230" y="0.0" width="36" height="59.5"/>
+                        <rect key="frame" x="230" y="0.0" width="36" height="65.5"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0.png" translatesAutoresizingMaskIntoConstraints="NO" id="u4K-zm-cHb">
-                                <rect key="frame" x="0.0" y="22" width="36" height="15.5"/>
+                                <rect key="frame" x="0.0" y="25" width="36" height="15.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="36" id="5Wy-PJ-zSr"/>
                                     <constraint firstAttribute="height" constant="15.300000000000001" id="VmL-GL-gpv"/>
                                 </constraints>
                             </imageView>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="5.png" translatesAutoresizingMaskIntoConstraints="NO" id="VR3-KF-34Z" userLabel="Alert">
-                                <rect key="frame" x="2.5" y="16" width="33.5" height="27.5"/>
+                                <rect key="frame" x="2.5" y="19" width="33.5" height="27.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="27.300000000000001" id="N3H-32-X4c"/>
                                     <constraint firstAttribute="width" constant="33.600000000000001" id="wRj-qj-53f"/>

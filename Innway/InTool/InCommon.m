@@ -700,7 +700,7 @@
 }
 
 + (UIColor *)backgroundColor {
-    return [UIColor colorWithRed:58.0/255.0 green:58.0/255.0 blue:56.0/255.0 alpha:1];
+    return [UIColor blackColor];
 }
 
 #pragma mark - 后台任务

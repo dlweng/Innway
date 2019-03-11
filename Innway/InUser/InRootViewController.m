@@ -12,8 +12,6 @@
 
 @interface InRootViewController ()
 
-@property (nonatomic, assign) BOOL firstAppear;
-
 @end
 
 @implementation InRootViewController

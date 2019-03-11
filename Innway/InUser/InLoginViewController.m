@@ -32,14 +32,15 @@
     //    //设置按钮的圆弧
     //    self.loginBtn.layer.masksToBounds = YES;
     //    self.loginBtn.layer.cornerRadius = 25;
-    if (common.ID != -1) {
-        self.emailTextField.text = common.email;
-        self.passwordTextField.text = common.pwd;
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if (common.ID != -1) {
+        self.emailTextField.text = common.email;
+        self.passwordTextField.text = common.pwd;
+    }
+    
     BOOL login = [common getLoginStatus];
     if (common.ID != -1 && login) {
         [self userLogin:nil]; // 自动登陆

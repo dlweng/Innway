@@ -11,6 +11,7 @@
 #import "InCommon.h"
 #import "InWebViewController.h"
 #import "NSTimer+InTimer.h"
+#import "InRootViewController.h"
 
 @interface InRegisterViewController ()<UITextFieldDelegate>
 
@@ -78,10 +79,22 @@
         NSString *messgae;
         
         if (code == 200) {
-            messgae = @"Registration success";
+            // 注册成功直接登录
+            NSLog(@"当前线程: %@", [NSThread currentThread]);
+            __block InRootViewController *rootVC = self.navigationController.viewControllers.firstObject;
+            __weak typeof(self) weakSelf = self;
+            if ([rootVC isKindOfClass:[InRootViewController class]]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    rootVC.firstAppear = YES;
+                    [common saveUserInfoWithID:MAXFLOAT email:self.emailTextField.text pwd:self.passwordTextField.text];
+                    [common saveLoginStatus:YES];
+                    [weakSelf.navigationController popToViewController:rootVC animated:NO];
+                });
+            }
         }
         else if (code == 300) {
             messgae = @"Username exists. Please try again";
+            [InAlertView showAlertWithTitle:@"Information" message:messgae confirmTitle:nil confirmHanler:nil];
         }
         else {
             if (error && error.code == -1) {
@@ -90,8 +103,9 @@
             else {
                 messgae = @"Registration failed";
             }
+            [InAlertView showAlertWithTitle:@"Information" message:messgae confirmTitle:nil confirmHanler:nil];
         }
-        [InAlertView showAlertWithTitle:@"Information" message:messgae confirmTitle:nil confirmHanler:nil];
+        
     }];
 }
 
@@ -150,7 +164,7 @@
     self.timer = [NSTimer newTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
         ++weakSelf.time;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.getCodeBtn setTitle:[NSString stringWithFormat:@"%ds Try again", 60 - self.time] forState:UIControlStateNormal];
+            [weakSelf.getCodeBtn setTitle:[NSString stringWithFormat:@"%ds", 60 - self.time] forState:UIControlStateNormal];
             if (weakSelf.time == 60) {
                 [weakSelf.getCodeBtn setTitle:@"Get code" forState:UIControlStateNormal];
                 weakSelf.getCodeBtn.enabled = YES;

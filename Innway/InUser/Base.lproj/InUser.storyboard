@@ -454,7 +454,7 @@
                                                 <rect key="frame" x="65" y="14.5" width="220" height="21"/>
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                <textInputTraits key="textInputTraits"/>
                                             </textField>
                                         </subviews>
                                         <constraints>
@@ -481,13 +481,13 @@
                                                 <color key="backgroundColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </view>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Verification code" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="D22-ea-dxK" customClass="InTextField">
-                                                <rect key="frame" x="10" y="14.5" width="154" height="21"/>
+                                                <rect key="frame" x="10" y="14.5" width="174" height="21"/>
                                                 <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KcK-wC-r5x">
-                                                <rect key="frame" x="175" y="0.0" width="120" height="50"/>
+                                                <rect key="frame" x="195" y="0.0" width="100" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <state key="normal" title="Get code">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -497,7 +497,7 @@
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QFi-CQ-9ju">
-                                                <rect key="frame" x="174" y="8" width="1" height="34"/>
+                                                <rect key="frame" x="194" y="8" width="1" height="34"/>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="1" id="88v-Z9-JBM"/>
@@ -511,7 +511,7 @@
                                             <constraint firstItem="KcK-wC-r5x" firstAttribute="leading" secondItem="QFi-CQ-9ju" secondAttribute="trailing" id="Jpi-cc-DQU"/>
                                             <constraint firstAttribute="height" constant="50" id="OQY-R3-qBS"/>
                                             <constraint firstAttribute="trailing" secondItem="KcK-wC-r5x" secondAttribute="trailing" id="Oj2-sq-PEw"/>
-                                            <constraint firstAttribute="trailing" secondItem="QFi-CQ-9ju" secondAttribute="trailing" constant="120" id="Pat-5b-Soh"/>
+                                            <constraint firstAttribute="trailing" secondItem="QFi-CQ-9ju" secondAttribute="trailing" constant="100" id="Pat-5b-Soh"/>
                                             <constraint firstItem="D22-ea-dxK" firstAttribute="leading" secondItem="bSC-l9-FrP" secondAttribute="leading" constant="10" id="SNo-K2-2zp"/>
                                             <constraint firstAttribute="bottom" secondItem="tOk-tp-jNL" secondAttribute="bottom" id="V6t-bT-IQw"/>
                                             <constraint firstItem="KcK-wC-r5x" firstAttribute="top" secondItem="bSC-l9-FrP" secondAttribute="top" id="Xri-OO-3e7"/>

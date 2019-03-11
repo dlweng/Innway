@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)rootViewController;
 
+@property (nonatomic, assign) BOOL firstAppear;
+
 @end
 
 NS_ASSUME_NONNULL_END

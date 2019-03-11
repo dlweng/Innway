@@ -55,10 +55,10 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="353.5"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2RL-ic-JEu" userLabel="deviceListWhiteLine">
-                                            <rect key="frame" x="157.5" y="15" width="60" height="6"/>
+                                            <rect key="frame" x="162.5" y="13" width="50" height="6"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="60" id="Poy-30-3OS"/>
+                                                <constraint firstAttribute="width" constant="50" id="Poy-30-3OS"/>
                                                 <constraint firstAttribute="height" constant="6" id="rgs-dN-ZIl"/>
                                             </constraints>
                                         </view>
@@ -66,7 +66,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstItem="2RL-ic-JEu" firstAttribute="centerX" secondItem="Xb7-vO-Ale" secondAttribute="centerX" id="WGQ-Fx-2Ia"/>
-                                        <constraint firstItem="2RL-ic-JEu" firstAttribute="top" secondItem="Xb7-vO-Ale" secondAttribute="top" constant="15" id="gNs-Vm-S5O"/>
+                                        <constraint firstItem="2RL-ic-JEu" firstAttribute="top" secondItem="Xb7-vO-Ale" secondAttribute="top" constant="13" id="gNs-Vm-S5O"/>
                                     </constraints>
                                 </view>
                             </subviews>

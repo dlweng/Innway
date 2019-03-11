@@ -170,6 +170,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         weakSelf.mapView.showsUserLocation = [common getIsShowUserLocation];
     });
+    [self showOfflineDeviceLocation];
 }
 
 - (void)dealloc {
@@ -199,6 +200,7 @@
     }
     [self setupControlDeviceBtnText];
     [self.deviceListVC reloadView];
+    [self showOfflineDeviceLocation];
     [self updateAnnotation];
 }
 
@@ -552,6 +554,7 @@
 {
 //    NSLog(@"地图用户位置更新, %f, %f", userLocation.coordinate.latitude, userLocation.coordinate.longitude);
     [InCommon sharedInstance].currentLocation = userLocation.coordinate;
+    [self showOfflineDeviceLocation];
 }
 
 // 画自定义大头针的方法
@@ -677,7 +680,7 @@
     [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
         
         for (CLPlacemark *placemark in placemarks) {
-            NSMutableString *address = [NSMutableString stringWithString:@"Near "];
+            NSMutableString *address = [NSMutableString stringWithString:@"Lost Near "];
             if (placemark.subThoroughfare.length > 0) {
                 [address appendFormat:@"%@ ", placemark.subThoroughfare];
             }
@@ -891,6 +894,34 @@
         _deviceAnnotation = [NSMutableDictionary dictionary];
     }
     return _deviceAnnotation;
+}
+
+// 显示离线的位置
+- (void)showOfflineDeviceLocation {
+    NSDictionary *deviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+    DLDevice *offlineDevice = nil;
+    for (NSString *mac in deviceList.allKeys) {
+        DLDevice *device = deviceList[mac];
+        if (!device.online) {
+            offlineDevice = device;
+            break;
+        }
+    }
+    if (offlineDevice) {
+        CLLocationCoordinate2D center = offlineDevice.coordinate;
+        if (center.latitude == 0 && center.longitude == 0) {
+            center = common.currentLocation;
+        }
+        //设置地图显示的范围
+        MKCoordinateSpan span;
+        //地图显示范围越小，细节越清楚；
+        span.latitudeDelta = 0.05;
+        span.longitudeDelta = 0.05;
+        //创建MKCoordinateRegion对象，该对象代表地图的显示中心和显示范围
+        MKCoordinateRegion region = {center,span};
+        //设置当前地图的显示中心和显示范围
+        [self.mapView setRegion:region animated:YES];
+    }
 }
 
 //- (AVCaptureSession *)captureSession

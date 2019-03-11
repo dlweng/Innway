@@ -91,7 +91,7 @@
     if (indexPath.row == self.cloudList.count) {
         return 50;
     }
-    return 70;
+    return 76;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
