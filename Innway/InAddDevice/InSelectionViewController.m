@@ -31,11 +31,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.arr = @[
-//  @{@"image": @"tag", @"title": @"Innway Tag"},
+                 @{@"image": @"tag", @"title": @"Innway Tag"},
                  @{@"image": @"chip", @"title": @"Innway Chip"},
                  @{@"image": @"Card", @"title": @"Innway Card"},
-                 @{@"image": @"cardHolder", @"title": @"Innway Card Holder"},
-                 @{@"image": @"tag", @"title": @"Innway Tag"}];
+                 @{@"image": @"cardHolder", @"title": @"Innway Card Holder"}];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     [self.navigationController.navigationBar setHidden:NO];
     [InCommon setNavgationBar:self.navigationController.navigationBar];
@@ -83,16 +82,16 @@
     common.deviceType = indexPath.row;
     switch (indexPath.row) {
         case 0:
-            common.deviceType = InDeviceChip;
+            common.deviceType = InDeviceTag;
             break;
         case 1:
-            common.deviceType = InDeviceCard;
+            common.deviceType = InDeviceChip;
             break;
         case 2:
-            common.deviceType = InDeviceCardHolder;
+            common.deviceType = InDeviceCard;
             break;
         case 3:
-            common.deviceType = InDeviceTag;
+            common.deviceType = InDeviceCardHolder;
             break;
         default:
             break;
