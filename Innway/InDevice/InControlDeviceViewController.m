@@ -760,6 +760,7 @@
 - (void)cameraViewControllerDidClickGoBack:(InCameraViewController *)vc {
     self.inTakePhoto = NO;
     [self.cameraVC dismissViewControllerAnimated:YES completion:nil];
+    self.cameraVC = nil;
 }
 
 #pragma mark - 按钮动画

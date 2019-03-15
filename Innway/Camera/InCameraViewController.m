@@ -165,13 +165,14 @@
 }
 
 - (void)takeAPhoto {
+    __weak typeof(self) weakSelf = self;
     if (!self.switchModeBtn.selected) {
         // 未选中， 拍照功能
         [self.camera capture:^(LLSimpleCamera *camera, UIImage *image, NSDictionary *metadata, NSError *error) {
             NSLog(@"获取照片, image = %@, metadata = %@, error = %@", image, metadata, error);
             if(!error) {
                 // 相机拍完照进入保存
-                UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSaveImageWithError:contextInfo:), (__bridge void *)self);
+                UIImageWriteToSavedPhotosAlbum(image, weakSelf, @selector(image:didFinishSaveImageWithError:contextInfo:), (__bridge void *)weakSelf);
             }
             else {
                 NSLog(@"An error has occured: %@", error);
@@ -194,7 +195,7 @@
             NSURL *outputURL = [[documentuURL
                                  URLByAppendingPathComponent:@"test1"] URLByAppendingPathExtension:@"mov"];
             [self.camera startRecordingWithOutputUrl:outputURL didRecord:^(LLSimpleCamera *camera, NSURL *outputFileUrl, NSError *error) {
-                UISaveVideoAtPathToSavedPhotosAlbum(outputURL.path, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+                UISaveVideoAtPathToSavedPhotosAlbum(outputURL.path, weakSelf, @selector(video:didFinishSavingWithError:contextInfo:), nil);
             }];
         }
         else {
@@ -241,8 +242,10 @@
 }
 
 - (void)stopTimer {
-    dispatch_source_cancel(self.timer);
-    self.timer = nil;
+    if (self.timer) {
+        dispatch_source_cancel(self.timer);
+        self.timer = nil;
+    }
 }
 
 - (NSString *)timeString {
