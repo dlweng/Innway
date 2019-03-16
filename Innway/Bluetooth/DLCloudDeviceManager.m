@@ -234,14 +234,14 @@ static DLCloudDeviceManager *instance = nil;
                 [common getDeviceOfflineInfo:device completion:^(NSString *offlineTime, NSString *gps) {
                     if (offlineTime.length > 0 && gps.length > 0) {
                         if (device.offlineTime.length == 0) {
-                            // 如果获取不到云端离线时间，那本地的离线时间和信息
+                            // 如果获取不到云端离线时间，拿本地的离线时间和信息
                             device.offlineTime = offlineTime;
                             [device setupCoordinate:gps];
                             return ;
                         }
                         else {
                             if ([common compareOneDateStr:offlineTime withAnotherDateStr:device.offlineTime] == -1) {
-                                // 如果本地的离线时间比较新新，用本地的离线时间
+                                // 如果本地的离线时间比较新，用本地的离线时间
                                 device.offlineTime = offlineTime;
                                 [device setupCoordinate:gps];
                                 return ;
