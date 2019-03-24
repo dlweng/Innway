@@ -164,8 +164,8 @@
     self.timer = [NSTimer newTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
         ++weakSelf.time;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.getCodeBtn setTitle:[NSString stringWithFormat:@"%ds", 60 - self.time] forState:UIControlStateNormal];
-            if (weakSelf.time == 60) {
+            [weakSelf.getCodeBtn setTitle:[NSString stringWithFormat:@"%ds", 120 - self.time] forState:UIControlStateNormal];
+            if (weakSelf.time == 120) {
                 [weakSelf.getCodeBtn setTitle:@"Get code" forState:UIControlStateNormal];
                 weakSelf.getCodeBtn.enabled = YES;
                 [weakSelf.timer invalidate];

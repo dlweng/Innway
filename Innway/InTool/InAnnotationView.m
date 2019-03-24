@@ -54,7 +54,12 @@
 {
     [super setAnnotation:annotation];
     if ([annotation isMemberOfClass:[InAnnotation class]]) {
-        self.image = [UIImage imageNamed:@"annotation"];
+        if (_onlineDevice) {
+            self.image = nil;
+        }
+        else {
+            self.image = [UIImage imageNamed:@"annotation"];
+        }
     }
     
 }

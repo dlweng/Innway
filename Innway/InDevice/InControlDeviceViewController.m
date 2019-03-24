@@ -402,8 +402,8 @@
 - (void)updateDevice:(DLDevice *)device {
     self.device = device;
     [self.device getDeviceInfo];
-    [self updateUI];
-//    [self toLocation];
+    [self setupControlDeviceBtnText];
+    [self.deviceListVC reloadView];
 }
 
 - (void)deviceSettingBtnDidClick:(DLDevice *)device {
@@ -416,7 +416,7 @@
     if (device != self.device) {
         [self updateDevice:device];
     }
-    [self showOfflineDeviceLocation:device];
+    [self showDeviceLocation:device];
 }
 
 - (void)deviceListViewControllerDidSelectedToAddDevice:(InDeviceListViewController *)menuVC {
@@ -558,37 +558,94 @@
 // 画自定义大头针的方法
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
-    NSLog(@"%@", NSStringFromClass([annotation class]));
     if ([annotation isKindOfClass:[InAnnotation class]]) {
         InAnnotation *myAnnotation = (InAnnotation *)annotation;
-        NSString *reuseID = @"InAnnotationView";
-        InAnnotationView *annotationView = (InAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseID];
-        if (annotationView == nil) {
-            annotationView = [[InAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseID];
-            annotationView.canShowCallout = YES;
-            NSString *deviceImageName = @"Card";
-            if (myAnnotation.device) {
+        InAnnotationView *annotationView = nil;
+        NSString *deviceImageName = nil;
+        NSString *reuseID = nil;
+        if (myAnnotation.device) {
+            if (myAnnotation.device.online) {
                 switch (myAnnotation.device.type) {
                     case InDeviceChip:
+                    {
                         deviceImageName = @"chip";
+                        reuseID = @"chipOnline";
                         break;
+                    }
                     case InDeviceTag:
+                    {
                         deviceImageName = @"tag";
+                        reuseID = @"tagOnline";
                         break;
+                    }
                     case InDeviceCardHolder:
+                    {
                         deviceImageName = @"cardHolder";
+                        reuseID = @"cardHolderOnline";
                         break;
+                    }
+                    case InDeviceCard:
+                    {
+                        deviceImageName = @"Card";
+                        reuseID = @"CardOnline";
+                        break;
+                    }
                     default:
                         break;
                 }
             }
+            else {
+                switch (myAnnotation.device.type) {
+                    case InDeviceChip:
+                    {
+                        deviceImageName = @"chip";
+                        reuseID = @"chipOffline";
+                        break;
+                    }
+                    case InDeviceTag:
+                    {
+                        deviceImageName = @"tag";
+                        reuseID = @"tagOffline";
+                        break;
+                    }
+                    case InDeviceCardHolder:
+                    {
+                        deviceImageName = @"cardHolder";
+                        reuseID = @"cardHolderOffline";
+                        break;
+                    }
+                    case InDeviceCard:
+                    {
+                        deviceImageName = @"Card";
+                        reuseID = @"CardOffline";
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+        }
+        if (!reuseID && !deviceImageName) {
+            return nil;
+        }
+        annotationView = (InAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseID];
+        if (annotationView == nil) {
+            annotationView = [[InAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseID];
+            annotationView.canShowCallout = YES;
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 38, 38)];
             [imageView setImage:[UIImage imageNamed:deviceImageName]];
             annotationView.leftCalloutAccessoryView = imageView;
-            UIButton *locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 38, 38)];
-            [locationBtn setImage:[UIImage imageNamed:@"icon_location"] forState:UIControlStateNormal];
-            [locationBtn addTarget:self action:@selector(goToLocationOfflineDevice:) forControlEvents:UIControlEventTouchUpInside];
-            annotationView.rightCalloutAccessoryView = locationBtn;
+            if (!myAnnotation.device.online) {
+                annotationView.onlineDevice = NO;
+                //离线设备才需要定位图标
+                UIButton *locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 38, 38)];
+                [locationBtn setImage:[UIImage imageNamed:@"icon_location"] forState:UIControlStateNormal];
+                [locationBtn addTarget:self action:@selector(goToLocationOfflineDevice:) forControlEvents:UIControlEventTouchUpInside];
+                annotationView.rightCalloutAccessoryView = locationBtn;
+            }
+            else {
+                annotationView.onlineDevice = YES;
+            }
         }
         myAnnotation.annotationView = annotationView;
         return annotationView;
@@ -634,14 +691,18 @@
     for (NSString *mac in cloudDeviceList.allKeys) {
         DLDevice *device = cloudDeviceList[mac];
         InAnnotation *annotation = [self.deviceAnnotation objectForKey:mac];
-        if (device.online && annotation) {
-            // 设备在线，但是存在大头针，删除大头针
-            [self.deviceAnnotation removeObjectForKey:mac];
+        // 设备离线和在线的大头针不同，都需要重新初始化，所以，每次重新生成大头针
+        if (annotation) {
             [self.mapView removeAnnotation:annotation];
+            [self.deviceAnnotation removeObjectForKey:mac];
         }
-        else if (!device.online && !annotation) {
-            annotation = [[InAnnotation alloc] init];
-            annotation.title = [NSString stringWithFormat:@"%@", device.deviceName];
+        annotation = [[InAnnotation alloc] init];
+        annotation.title = [NSString stringWithFormat:@"%@", device.deviceName];
+        if (device.online) {
+            annotation.coordinate = common.currentLocation;
+            annotation.subtitle = @"Last seen just now";
+        }
+        else {
             annotation.coordinate = device.coordinate;
             __weak typeof(self) weakSelf = self;
             [self reversGeocode:annotation.coordinate completion:^(NSString *str) {
@@ -650,14 +711,10 @@
                     [weakSelf.mapView selectAnnotation:annotation animated:YES];
                 });
             }];
-            annotation.device = device;
-            [self.deviceAnnotation setObject:annotation forKey:mac];
-            [self.mapView addAnnotation:annotation];
         }
-        else if(!device.online && annotation) {
-            annotation.title = [NSString stringWithFormat:@"%@", device.deviceName];
-            annotation.coordinate = device.coordinate;
-        }
+        annotation.device = device;
+        [self.deviceAnnotation setObject:annotation forKey:mac];
+        [self.mapView addAnnotation:annotation];
     }
 }
 
@@ -719,9 +776,11 @@
 }
 
 - (void)deviceRSSIChange:(NSNotification *)noti {
-    DLDevice *device = noti.object;
-    if (device.mac == self.device.mac) {
-        [self updateUI];
+    if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) {
+        DLDevice *device = noti.object;
+        if (device.mac == self.device.mac) {
+            [self.deviceListVC reloadView];
+        }
     }
 }
 
@@ -896,22 +955,28 @@
 }
 
 // 显示离线的位置
-- (void)showOfflineDeviceLocation:(DLDevice *)device {
+- (void)showDeviceLocation:(DLDevice *)device {
+    CLLocationCoordinate2D center = common.currentLocation;
     if (!device.online) {
-        CLLocationCoordinate2D center = device.coordinate;
-        if (center.latitude == 0 && center.longitude == 0) {
-            center = common.currentLocation;
-        }
-        //设置地图显示的范围
-        MKCoordinateSpan span;
-        //地图显示范围越小，细节越清楚；
-        span.latitudeDelta = 0.02;
-        span.longitudeDelta = 0.02;
-        //创建MKCoordinateRegion对象，该对象代表地图的显示中心和显示范围
-        MKCoordinateRegion region = {center,span};
-        //设置当前地图的显示中心和显示范围
-        [self.mapView setRegion:region animated:YES];
+        center = device.coordinate;
     }
+    if (center.latitude == 0 && center.longitude == 0) {
+        center = common.currentLocation;
+    }
+    //设置地图显示的范围
+    MKCoordinateSpan span;
+    //地图显示范围越小，细节越清楚；
+    span.latitudeDelta = 0.02;
+    span.longitudeDelta = 0.02;
+    //创建MKCoordinateRegion对象，该对象代表地图的显示中心和显示范围
+    MKCoordinateRegion region = {center,span};
+    //设置当前地图的显示中心和显示范围
+    [self.mapView setRegion:region animated:YES];
+    InAnnotation *annotation = [self.deviceAnnotation objectForKey:device.mac];
+    if (annotation) {
+        [self.mapView selectAnnotation:annotation animated:YES];
+    }
+    
 }
 
 @end

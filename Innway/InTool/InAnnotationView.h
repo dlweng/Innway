@@ -17,4 +17,5 @@
 
 
 @interface InAnnotationView : MKAnnotationView
+@property (nonatomic, assign) BOOL onlineDevice;
 @end

@@ -273,6 +273,9 @@
     uint8_t command[6] = {0xEE, 0x07, 0x02, disconnect, reconnect, 0x00};
     NSLog(@"改变设备：%@, 断连通知：%d, 重连通知：%d， 写数据: %@", _mac, disconnectAlert, reconnectAlert, [NSData dataWithBytes:command length:6]);
     [self write:[NSData dataWithBytes:command length:6]];
+    
+    // 默认断连设置成功,解决界面闪烁的问题
+    [self.data setValue:@(self.disconnectAlert) forKey:DisconnectAlertKey];
 }
 
 //警报音编码，可选 01，02，03
