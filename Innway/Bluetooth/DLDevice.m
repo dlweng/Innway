@@ -672,6 +672,9 @@
                 NSLog(@"播放离线音乐");
             }
         }
+        
+        // 做完离线处理再做离线通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:self];
     }
     
    
@@ -680,8 +683,6 @@
 //    _isSearchDevice = NO;
 //    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchDeviceAlertNotification object:self userInfo:@{@"device":self}];
     
-    // 做完离线处理再做离线通知
-    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:self];
 }
 
 // 关闭蓝牙做离线处理
