@@ -162,6 +162,9 @@
     [self.deviceListVC reloadView];
     [self.device getDeviceInfo];
     [self updateUI];
+    [self updateAllAnnotation];
+    [self showCurrentDeviceAnnotionView];
+    // 设置显示当前选中设备的大头针
     
     // 设置是否显示用户位置
     // 在viewDidLoad设置没有效果
@@ -199,7 +202,6 @@
     }
     [self setupControlDeviceBtnText];
     [self.deviceListVC reloadView];
-    [self updateAnnotation];
 }
 
 - (void)setupControlDeviceBtnText {
@@ -665,10 +667,12 @@
 
 - (void)deviceChangeOnline:(NSNotification *)notification {
 //    NSLog(@"接收到设备:%@, 状态改变的通知: %@",  notification.object);
-    [self updateAnnotation];
+    // 设备的在线状态发生变化，需要删除大头针重新添加
+    DLDevice *device = notification.object;
+    [self updateAnnotion:device];
 }
 
-- (void)updateAnnotation{
+- (void)updateAllAnnotation{
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         return;
     }
@@ -690,31 +694,50 @@
     // 2.更新存在云端列表设备的大头针状态
     for (NSString *mac in cloudDeviceList.allKeys) {
         DLDevice *device = cloudDeviceList[mac];
-        InAnnotation *annotation = [self.deviceAnnotation objectForKey:mac];
-        // 设备离线和在线的大头针不同，都需要重新初始化，所以，每次重新生成大头针
-        if (annotation) {
-            [self.mapView removeAnnotation:annotation];
-            [self.deviceAnnotation removeObjectForKey:mac];
-        }
-        annotation = [[InAnnotation alloc] init];
-        annotation.title = [NSString stringWithFormat:@"%@", device.deviceName];
-        if (device.online) {
-            annotation.coordinate = common.currentLocation;
-            annotation.subtitle = @"Last seen just now";
-        }
-        else {
-            annotation.coordinate = device.coordinate;
-            __weak typeof(self) weakSelf = self;
-            [self reversGeocode:annotation.coordinate completion:^(NSString *str) {
-                annotation.subtitle = str;
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.75 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self updateAnnotion:device];
+    }
+}
+
+- (void)updateAnnotion:(DLDevice *)device {
+    __block InAnnotation *annotation = [self.deviceAnnotation objectForKey:device.mac];
+    // 设备离线和在线的大头针不同，都需要重新初始化，所以，每次重新生成大头针
+    if (annotation) {
+        [self.mapView removeAnnotation:annotation];
+        [self.deviceAnnotation removeObjectForKey:device.mac];
+    }
+    annotation = [[InAnnotation alloc] init];
+    annotation.title = [NSString stringWithFormat:@"%@", device.deviceName];
+    if (device.online) {
+        annotation.coordinate = common.currentLocation;
+        annotation.subtitle = @"Last seen just now";
+    }
+    else {
+        __weak typeof(self) weakSelf = self;
+        annotation.coordinate = device.coordinate;
+        [self reversGeocode:annotation.coordinate completion:^(NSString *str) {
+            annotation.subtitle = str;
+            if ([weakSelf.device.mac isEqualToString:device.mac]) {
+                // 当设备为当前选中设备时，去显示地图
+                dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf.mapView selectAnnotation:annotation animated:YES];
                 });
-            }];
+            }
+        }];
+    }
+    annotation.device = device;
+    [self.deviceAnnotation setObject:annotation forKey:device.mac];
+    [self.mapView addAnnotation:annotation];
+    if ([self.device.mac isEqualToString:device.mac] && device.online) {
+        [self.mapView selectAnnotation:annotation animated:YES];
+    }
+}
+
+- (void)showCurrentDeviceAnnotionView {
+    if (self.device) {
+        InAnnotation *annotation = self.deviceAnnotation[self.device.mac];
+        if (annotation) {
+            [self.mapView selectAnnotation:annotation animated:YES];
         }
-        annotation.device = device;
-        [self.deviceAnnotation setObject:annotation forKey:mac];
-        [self.mapView addAnnotation:annotation];
     }
 }
 
@@ -915,6 +938,8 @@
 
 - (void)appDidEnterForeground {
     [self updateUI]; // 先更新一下UI
+    [self updateAllAnnotation];
+    [self showCurrentDeviceAnnotionView];
     __weak typeof(self) weakSelf = self;
     [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
         NSLog(@"cloudList = %@", cloudList);
@@ -943,6 +968,8 @@
         }
         [weakSelf.deviceListVC reloadView];
         [weakSelf updateUI];
+        [self updateAllAnnotation];
+        [weakSelf showCurrentDeviceAnnotionView];
     }];
 }
 

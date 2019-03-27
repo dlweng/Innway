@@ -681,7 +681,7 @@
 //    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchDeviceAlertNotification object:self userInfo:@{@"device":self}];
     
     // 做完离线处理再做离线通知
-    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(self.online)];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:self];
 }
 
 // 关闭蓝牙做离线处理
@@ -942,7 +942,7 @@
         // 关闭定时器
         _offlineTime = nil; // 初始化时间信息
         // 做设备上线通知 ; // 因为离线通知需要在做完离线处理的时候才能做，跟上线分开
-        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:@(self.online)];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceOnlineChangeNotification object:self];
     }
 }
 
