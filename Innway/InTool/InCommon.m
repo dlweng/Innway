@@ -444,7 +444,7 @@
  */
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
 {
-    CLLocation *location =  [locations firstObject];
+    CLLocation *location =  [locations lastObject];
     //  获取当前位置的经纬度
     self.currentLocation = location.coordinate;
     NSLog(@"common 地图位置更新: %f, %f", location.coordinate.latitude, location.coordinate.longitude);
