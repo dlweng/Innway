@@ -19,6 +19,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    if (application.applicationState == UIApplicationStateBackground) {
+        NSLog(@"app在后台, 是Ibeacon激活的app");
+        common.isIBeaconActive = YES;
+    }
     // Override point for customization after application launch.
     // 设置导航栏
     UINavigationBar *navigationBar = [UINavigationBar appearance];

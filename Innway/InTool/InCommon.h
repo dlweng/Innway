@@ -64,8 +64,8 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 @class DLDevice;
 @interface InCommon : NSObject
 @property (nonatomic, assign) NSInteger ID; // 用户ID
-@property (nonatomic, copy) NSString *email;
-@property (nonatomic, copy) NSString *pwd;
+@property (nonatomic, copy, nullable) NSString *email;
+@property (nonatomic, copy, nullable) NSString *pwd;
 //标识是否支持定位功能
 @property (nonatomic, assign) BOOL isLocation;
 @property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
@@ -74,7 +74,11 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 
 @property (nonatomic, assign) BOOL isSharkAnimationing;
 
-+ (instancetype)sharedInstance;
+// ibeacon激活app后，去连接设备有时候会出现无法接收设备通知数据的情况，做延时连接处理
+@property (nonatomic, assign) BOOL isIBeaconActive;
+@property (nonatomic, strong, nullable) NSMutableDictionary *ibeaconDeviceList;
+
++ ( instancetype)sharedInstance;
 
 - (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd;
 - (void)clearUserInfo;

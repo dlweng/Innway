@@ -80,7 +80,7 @@
         }
         else {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            // 如果实在后台，只有是通过iBeacon激活的才有可能，直接跳过
+            // 如果是在后台，只有是通过iBeacon激活的才有可能，直接跳过
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
                 if (common.email.length > 0 && common.pwd.length > 0) {
                     [self pushToNewCotroller];
@@ -112,6 +112,12 @@
             [self pushToAddDeviceController:YES];
         }
         else {
+            if (common.isIBeaconActive) {
+                common.ibeaconDeviceList = [NSMutableDictionary dictionaryWithDictionary:cloudList];
+                // 重置，避免注销登录出现断开重连的问题
+                NSLog(@"ibeacon激活设备，做延时连接处理 = %@", common.ibeaconDeviceList);
+                common.isIBeaconActive = NO;
+            }
             [self pushToAddDeviceController:NO];
         }
     }];

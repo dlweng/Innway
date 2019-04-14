@@ -446,8 +446,8 @@
                     NSLog(@"连接设备成功:%@", weakSelf.mac);
                     // 连接成功，去获取设备服务
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self stopReconnectTimer];
-                        self.isOfflineSounding = NO;
+                        [weakSelf stopReconnectTimer];
+                        weakSelf.isOfflineSounding = NO;
                         peripheral.delegate = weakSelf;
                         [weakSelf discoverServices];
                         if (completion) {
