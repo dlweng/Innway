@@ -178,7 +178,7 @@
 
 - (IBAction)privacyPolicy {
     NSLog(@"跳转隐私协议");
-    InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Privacy Policy" UrlString:@"http://3.16.195.135/PrivacyPolicy/PrivacyPolicy.html"];
+    InWebViewController *webVC = [[InWebViewController alloc] initWithTitle:@"Privacy Policy" UrlString:@"https://innwaytech.com/privacy-policy/"];
     if (self.navigationController.viewControllers.lastObject == self) {
         [self.navigationController pushViewController:webVC animated:YES];
     }
