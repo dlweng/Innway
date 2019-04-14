@@ -24,7 +24,10 @@
 #import "NSTimer+InTimer.h"
 #import "InCameraViewController.h"
 #import "InWebViewController.h"
+#import <pthread/pthread.h>
 #define coverViewAlpha 0.85  // 覆盖层的透明度
+
+static pthread_mutex_t _deviceAnnotationHandler = PTHREAD_MUTEX_INITIALIZER;
 
 @interface InControlDeviceViewController ()<DLDeviceDelegate, InDeviceListViewControllerDelegate, MKMapViewDelegate, InUserSettingViewControllerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, InCameraViewControllerDelegate>
 
@@ -61,6 +64,7 @@
 
 // 按钮闪烁动画
 @property (nonatomic, strong) NSTimer *animationTimer;
+@property (nonatomic, strong) NSTimer *updateOnlineAnnoationTimer;
 @property (nonatomic, assign) BOOL isBtnAnimation; // 标识按钮动画是否开启
 @property (nonatomic, assign) BOOL btnTextIsHide;
 // 标识当前是否在拍照界面，是的话接收到设备的05命令不要发出查找手机的警报，而是要拍照
@@ -125,6 +129,12 @@
     }];
     [[NSRunLoop currentRunLoop] addTimer:self.animationTimer forMode:NSRunLoopCommonModes];
     [self stopBtnAnimation];
+    
+    // 每10秒刷新一次在线设备的大头针
+    self.updateOnlineAnnoationTimer = [NSTimer newTimerWithTimeInterval:10 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        [weakSelf updateOnlineDeviceLocation];
+    }];
+    [[NSRunLoop currentRunLoop] addTimer:self.updateOnlineAnnoationTimer forMode:NSRunLoopCommonModes];
     
     // 隐私信息弹框提示
     if (![common isOpensLocation]) {
@@ -553,7 +563,7 @@
 #pragma mark - Map
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    NSLog(@"地图用户位置更新, %f, %f", userLocation.coordinate.latitude, userLocation.coordinate.longitude);
+    NSLog(@"地图位置更新, %f, %f", userLocation.coordinate.latitude, userLocation.coordinate.longitude);
     [InCommon sharedInstance].currentLocation = userLocation.coordinate;
 }
 
@@ -679,6 +689,7 @@
     NSMutableDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
     // 1.先删除已经不存在云端列表的设备大头针
     NSMutableArray *removeArr = [NSMutableArray array];
+    pthread_mutex_lock(&_deviceAnnotationHandler);
     for (NSString *mac in self.deviceAnnotation.allKeys) {
         DLDevice *device = cloudDeviceList[mac];
         if (!device) {
@@ -691,6 +702,7 @@
         [self.mapView removeAnnotation:annotation];
         [self.deviceAnnotation removeObjectForKey:mac];
     }
+    pthread_mutex_unlock(&_deviceAnnotationHandler);
     // 2.更新存在云端列表设备的大头针状态
     for (NSString *mac in cloudDeviceList.allKeys) {
         DLDevice *device = cloudDeviceList[mac];
@@ -703,7 +715,9 @@
     // 设备离线和在线的大头针不同，都需要重新初始化，所以，每次重新生成大头针
     if (annotation) {
         [self.mapView removeAnnotation:annotation];
+        pthread_mutex_lock(&_deviceAnnotationHandler);
         [self.deviceAnnotation removeObjectForKey:device.mac];
+        pthread_mutex_unlock(&_deviceAnnotationHandler);
     }
     annotation = [[InAnnotation alloc] init];
     annotation.title = [NSString stringWithFormat:@"%@", device.deviceName];
@@ -725,16 +739,40 @@
         }];
     }
     annotation.device = device;
+    pthread_mutex_lock(&_deviceAnnotationHandler);
     [self.deviceAnnotation setObject:annotation forKey:device.mac];
+    pthread_mutex_unlock(&_deviceAnnotationHandler);
     [self.mapView addAnnotation:annotation];
+    
     if ([self.device.mac isEqualToString:device.mac] && device.online) {
         [self.mapView selectAnnotation:annotation animated:YES];
     }
 }
 
+// 在线设备的大头针会根据位置移动而改变，这是实时更新大头针位置的
+- (void)updateOnlineDeviceLocation {
+    if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) {        
+        NSMutableDictionary *cloudDeviceList = [DLCloudDeviceManager sharedInstance].cloudDeviceList;
+        for (NSString *mac in cloudDeviceList) {
+            DLDevice *device = cloudDeviceList[mac];
+            if (device.online) {
+                pthread_mutex_lock(&_deviceAnnotationHandler);
+                InAnnotation *annotation = self.deviceAnnotation[mac];
+                if (annotation) {
+                    annotation.coordinate = common.currentLocation;
+                }
+                pthread_mutex_unlock(&_deviceAnnotationHandler);
+            }
+        }
+    }
+}
+
+
 - (void)showCurrentDeviceAnnotionView {
     if (self.device) {
+        pthread_mutex_lock(&_deviceAnnotationHandler);
         InAnnotation *annotation = self.deviceAnnotation[self.device.mac];
+        pthread_mutex_unlock(&_deviceAnnotationHandler);
         if (annotation) {
             [self.mapView selectAnnotation:annotation animated:YES];
         }
@@ -938,7 +976,7 @@
 
 - (void)appDidEnterForeground {
     [self updateUI]; // 先更新一下UI
-    [self updateAllAnnotation];
+//    [self updateAllAnnotation];
     [self showCurrentDeviceAnnotionView];
     __weak typeof(self) weakSelf = self;
     [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
@@ -999,7 +1037,9 @@
     MKCoordinateRegion region = {center,span};
     //设置当前地图的显示中心和显示范围
     [self.mapView setRegion:region animated:YES];
+    pthread_mutex_lock(&_deviceAnnotationHandler);
     InAnnotation *annotation = [self.deviceAnnotation objectForKey:device.mac];
+    pthread_mutex_unlock(&_deviceAnnotationHandler);
     if (annotation) {
         [self.mapView selectAnnotation:annotation animated:YES];
     }

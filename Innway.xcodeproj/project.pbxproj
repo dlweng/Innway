@@ -15,6 +15,7 @@
 		192A88E1222B83AB00A070F1 /* stopRecode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 192A88DD222B83AB00A070F1 /* stopRecode@2x.png */; };
 		192A88E2222B83AB00A070F1 /* startRecode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 192A88DE222B83AB00A070F1 /* startRecode@3x.png */; };
 		192A88E3222B83AB00A070F1 /* stopRecode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 192A88DF222B83AB00A070F1 /* stopRecode@3x.png */; };
+		193BCDE52263015B00D33AF3 /* JZLocationConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 193BCDE42263015B00D33AF3 /* JZLocationConverter.m */; };
 		1952C97A21B9894200988409 /* NSTimer+InTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1952C97921B9894200988409 /* NSTimer+InTimer.m */; };
 		1971D1A7222D8188003ABC3E /* graychip@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1971D1A5222D8188003ABC3E /* graychip@3x.png */; };
 		1971D1A8222D8188003ABC3E /* graychip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1971D1A6222D8188003ABC3E /* graychip@2x.png */; };
@@ -321,6 +322,8 @@
 		192A88DD222B83AB00A070F1 /* stopRecode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stopRecode@2x.png"; sourceTree = "<group>"; };
 		192A88DE222B83AB00A070F1 /* startRecode@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "startRecode@3x.png"; sourceTree = "<group>"; };
 		192A88DF222B83AB00A070F1 /* stopRecode@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stopRecode@3x.png"; sourceTree = "<group>"; };
+		193BCDE32263015B00D33AF3 /* JZLocationConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JZLocationConverter.h; sourceTree = "<group>"; };
+		193BCDE42263015B00D33AF3 /* JZLocationConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JZLocationConverter.m; sourceTree = "<group>"; };
 		1952C97821B9894200988409 /* NSTimer+InTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTimer+InTimer.h"; sourceTree = "<group>"; };
 		1952C97921B9894200988409 /* NSTimer+InTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+InTimer.m"; sourceTree = "<group>"; };
 		1971D1A5222D8188003ABC3E /* graychip@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graychip@3x.png"; sourceTree = "<group>"; };
@@ -866,6 +869,8 @@
 				331797EF213AF282000B8DD6 /* InAnnotationView.m */,
 				1952C97821B9894200988409 /* NSTimer+InTimer.h */,
 				1952C97921B9894200988409 /* NSTimer+InTimer.m */,
+				193BCDE32263015B00D33AF3 /* JZLocationConverter.h */,
+				193BCDE42263015B00D33AF3 /* JZLocationConverter.m */,
 			);
 			path = InTool;
 			sourceTree = "<group>";
@@ -1640,6 +1645,7 @@
 				19FEDE5521BC1B9E0064F7B7 /* YBImageBrowseCellData.m in Sources */,
 				19FEDE4C21BC1B9E0064F7B7 /* YBVideoBrowseCell.m in Sources */,
 				3328801B2115AA4900C4893B /* InControlDeviceViewController.m in Sources */,
+				193BCDE52263015B00D33AF3 /* JZLocationConverter.m in Sources */,
 				3385C6C6215743E5005FAB04 /* InInputView.m in Sources */,
 				1952C97A21B9894200988409 /* NSTimer+InTimer.m in Sources */,
 				3368B8422184ADCA00AC943F /* InFeedbackViewController.m in Sources */,

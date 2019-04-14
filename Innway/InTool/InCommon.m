@@ -13,6 +13,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "DLCloudDeviceManager.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "JZLocationConverter.h"
 
 @interface InCommon ()<CLLocationManagerDelegate> {
     NSTimer *_sharkTimer; // 闪光灯计时器
@@ -446,21 +447,19 @@
 {
     CLLocation *location =  [locations lastObject];
     //  获取当前位置的经纬度
-    self.currentLocation = location.coordinate;
-    NSLog(@"common 地图位置更新: %f, %f", location.coordinate.latitude, location.coordinate.longitude);
+    self.currentLocation = [JZLocationConverter wgs84ToGcj02:location.coordinate];
+    NSLog(@"common 位置更新: %f, %f", self.currentLocation.latitude, self.currentLocation.longitude);
     //  输出经纬度信息
     //  纬度:23.130250,经度:113.383898
     //  北纬正数,南纬:负数  东经:正数  西经:负数
-    NSLog(@"纬度:%lf,经度:%lf",self.currentLocation.latitude,self.currentLocation.longitude);
-    
 }
 
 - (void)setupLocationData {
     self.isLocation = YES;
     // 设置定位精度,越精确越费电
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     // 设置用户的位置改变多少m才去调用位置更新的方法
-    self.locationManager.distanceFilter =  100;
+    self.locationManager.distanceFilter = kCLDistanceFilterNone;
     [self.locationManager startUpdatingLocation];
 }
 
