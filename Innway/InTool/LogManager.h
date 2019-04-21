@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-#if DEBUG
+//#if DEBUG
 #define saveLog(format, ...) [[LogManager sharedInstance] logInfo:__func__ line:__LINE__ logStr:[NSString stringWithFormat:format, ## __VA_ARGS__]];
 
-#else
-#define GizLog(format, ...)
-#endif
+//#else
+//#define saveLog(format, ...)
+//#endif
 
 @interface LogManager : NSObject
 

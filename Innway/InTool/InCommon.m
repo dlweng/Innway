@@ -522,6 +522,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region {
     NSLog(@"开始监听ibeacon范围");
+    saveLog(@"开始监听ibeacon范围");
 //    [InCommon sendLocalNotification:@"开始监听ibeacon范围"];
 }
 
@@ -530,12 +531,14 @@
     if(state == CLRegionStateInside)
     {
         NSLog(@"进入了iBeacon的范围");
+        saveLog(@"进入了iBeacon的范围");
         [self beginiBeaconBackgroundTask];
 //        [InCommon sendLocalNotification:[NSString stringWithFormat:@"进入了iBeacon的范围"]];
     }
     else if(state == CLRegionStateOutside)
     {
         NSLog(@"退出了iBeacon的范围");
+        saveLog(@"退出了iBeacon的范围");
         [self beginiBeaconBackgroundTask];
 //        [InCommon sendLocalNotification:[NSString stringWithFormat:@"退出了iBeacon的范围"]];
     }
