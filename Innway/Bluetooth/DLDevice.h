@@ -66,6 +66,8 @@
 @property (nonatomic, copy) NSString *firmware; //固件版本号
 @property (nonatomic, strong) AVAudioPlayer *offlinePlayer;
 @property (nonatomic, strong) AVAudioPlayer *searchPhonePlayer;
+// 标志是否延时连接, ibeacon激活的要延时去连接设备
+@property (nonatomic, assign) BOOL delayConnect;
 
 + (instancetype)device:(CBPeripheral *)peripheral;
 

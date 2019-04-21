@@ -293,15 +293,17 @@ static float ibeaconActiveDelay = 2;
 - (void)autoConnectCloudDevice {
     for (NSString *mac in self.cloudDeviceList.allKeys) {
         __block DLDevice *device = self.cloudDeviceList[mac];
-        if (device.peripheral && !device.connecting) {
+        if (device.peripheral && !device.connecting && !device.delayConnect) {
             if (common.ibeaconDeviceList.count > 0) {
                 if ([common.ibeaconDeviceList objectForKey:device.mac]) {
                     NSLog(@"ibeacon激活设备，延迟%fs去连接, mac = %@", ibeaconActiveDelay, device.mac);
                     [common.ibeaconDeviceList removeObjectForKey:device.mac];
+                    device.delayConnect = YES;
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ibeaconActiveDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [device connectToDevice:nil];
+                        device.delayConnect = NO;
                     });
-                    ibeaconActiveDelay = ibeaconActiveDelay + 2;
+                    ibeaconActiveDelay++;
                 }
                 else {
                     [device connectToDevice:nil];

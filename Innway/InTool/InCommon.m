@@ -449,7 +449,6 @@
     self.currentLocation = [JZLocationConverter wgs84ToGcj02:location.coordinate];
     NSLog(@"common 位置更新: %f, %f", self.currentLocation.longitude, self.currentLocation.latitude);
     saveLog(@"%@", [NSString stringWithFormat:@"监听到位置更新: %f, %f", self.currentLocation.longitude, self.currentLocation.latitude]);
-
     //  输出经纬度信息
     //  纬度:23.130250,经度:113.383898
     //  北纬正数,南纬:负数  东经:正数  西经:负数
@@ -465,10 +464,16 @@
 }
 
 - (void)startUpdatingLocation {
+    if (!self.isLocation) {
+        return;
+    }
     [self.locationManager startUpdatingLocation];
 }
 
 - (void)stopUpdatingLocation {
+    if (!self.isLocation) {
+        return;
+    }
     NSDictionary *deviceList = [[DLCloudDeviceManager sharedInstance].cloudDeviceList copy];
     for (NSString *mac in deviceList.allKeys) {
         DLDevice *device = deviceList[mac];

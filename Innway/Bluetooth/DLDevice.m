@@ -91,6 +91,7 @@
 - (void)discoverServices {
     if (_peripheral) {
         NSLog(@"去获取设备服务:%@", self.mac);
+        saveLog(@"去获取设备服务:%@", self.mac);
         CBUUID *serviceUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
         CBUUID *firmwareServerUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareServerUUID];
         [_peripheral discoverServices:@[serviceUUID, firmwareServerUUID]];
@@ -99,6 +100,7 @@
     }
     else {
         NSLog(@"无法去获取设备服务:%@, 外设不存在", self.mac);
+        saveLog(@"无法去获取设备服务:%@, 外设不存在", self.mac);
     }
 }
 
@@ -151,10 +153,12 @@
         }
         if ([characteristic.UUID.UUIDString isEqualToString:writeUUID.UUIDString]) {
             NSLog(@"发现设备写角色: %@", self.mac);
+            saveLog(@"发现设备写角色: %@", self.mac);
             self.isDiscoverAllCharacter++;
         }
         if ([characteristic.UUID.UUIDString isEqualToString:ntfUUID.UUIDString]) {
             NSLog(@"发现设备通知角色: %@， characteristic = %@", self.mac, characteristic);
+            saveLog(@"发现设备通知角色: %@， characteristic = %@", self.mac, characteristic);
             self.isDiscoverAllCharacter++;
             [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:peripheral on:YES];
         }
@@ -165,6 +169,7 @@
                 //激活设备
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSLog(@"去激活设备: %@", weakSelf.mac);
+                    saveLog(@"去激活设备: %@", weakSelf.mac);
                     [weakSelf activeDevice];
                 });
                 if (self.firstAdd) { 
@@ -251,6 +256,7 @@
     }
     uint8_t getDeviceInfo[4] = {0xEE, 0x01, 0x00, 0x00};
     NSLog(@"mac = %@, 去获取设备硬件数据， %@", self.mac, [NSData dataWithBytes:getDeviceInfo length:4]);
+    saveLog(@"mac = %@, 去获取设备硬件数据", self.mac);
     [self write:[NSData dataWithBytes:getDeviceInfo length:4]];
 }
 
@@ -261,6 +267,7 @@
 
 - (void)searchPhoneACK {
     NSLog(@"回应设备:%@ 的查找数据", _mac);
+    saveLog(@"回应设备:%@ 的查找数据", _mac);
     uint8_t search[4] = {0xEE, 0x06, 0x00, 0x00};
     [self write:[NSData dataWithBytes:search length:4]];
 }
@@ -384,12 +391,14 @@
 }
 
 - (void) peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    saveLog(@"mac:%@, 写入的响应值: %@,  %@", self.mac, characteristic, error);
     NSLog(@"mac:%@, 写入的响应值: %@,  %@", self.mac, characteristic, error);
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if ([peripheral.identifier.UUIDString isEqualToString:self.peripheral.identifier.UUIDString]) {
         NSLog(@"mac:%@, 接收读响应数据, peripheral：%@,  characteristic = %@, error = %@", self.mac, self.peripheral, characteristic, error);
+        saveLog(@"mac:%@, 接收读响应数据, peripheral：%@,  characteristic = %@, error = %@", self.mac, self.peripheral, characteristic, error);
         // 读硬件版本号
         CBUUID *firmwareChaUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareCharacteristicUUID];
         if ([characteristic.UUID.UUIDString isEqualToString:firmwareChaUUID.UUIDString]) {
@@ -439,11 +448,13 @@
     }
     if (!self.connecting) {
         NSLog(@"开始去连接设备:%@", self.mac);
+        saveLog(@"开始去连接设备:%@", self.mac);
         __weak typeof(self) weakSelf = self;
         dispatch_async(dispatch_queue_create(0, 0), ^{
             [[DLCentralManager sharedInstance] connectToDevice:weakSelf.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
                 if (!error) {
                     NSLog(@"连接设备成功:%@", weakSelf.mac);
+                    saveLog(@"连接设备成功:%@", weakSelf.mac);
                     // 连接成功，去获取设备服务
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [weakSelf stopReconnectTimer];
@@ -458,6 +469,7 @@
                 }
                 else {
                     NSLog(@"连接设备失败:%@", weakSelf.mac);
+                    saveLog(@"连接设备失败:%@", weakSelf.mac);
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (completion) {
                             completion(weakSelf, error);
@@ -656,7 +668,7 @@
         _coordinate = common.currentLocation;
         _offlineTime = [common getCurrentTime];
         NSLog(@"保存设备离线信息, _offlineTime = %@", _offlineTime);
-        saveLog(@"%@", [NSString stringWithFormat:@"设备离线mac%@, 保存离线位置: %f, %f", _mac, _coordinate.longitude, _coordinate.latitude]);
+        saveLog(@"设备离线mac%@, 保存离线位置: %f, %f", _mac, _coordinate.longitude, _coordinate.latitude);
         [common saveDeviceOfflineInfo:self];
         // 3.上传设备新位置
         [[InCommon sharedInstance] uploadDeviceLocation:self];
@@ -1001,13 +1013,15 @@
     if (_isReconnectTimer) {
         [common startUpdatingLocation];
         NSLog(@"开始重连计时，开始定位, mac: %@", _mac);
-        saveLog(@"%@", [NSString stringWithFormat:@"开始重连计时，开始定位, mac: %@", _mac]);
+        saveLog(@"开始重连计时，开始定位, mac: %@", _mac);
     }
-    else {
+    else if (!_isReconnectTimer) {
+        // 从打开到关闭
         [common stopUpdatingLocation];
         NSLog(@"重连计时结束，关闭定位, mac: %@", _mac);
-        saveLog(@"%@",[NSString stringWithFormat:@"重连计时结束，关闭定位, mac: %@", _mac]);
+        saveLog(@"重连计时结束，关闭定位, mac: %@", _mac);
     }
+    
 }
 
 @end
