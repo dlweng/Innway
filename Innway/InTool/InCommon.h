@@ -102,7 +102,8 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 
 // 返回false，说明当前APP没有开启定位功能
 - (NSString *)getCurrentGps;
-- (BOOL)startUpdatingLocation;
+- (void)startUpdatingLocation;
+- (void)stopUpdatingLocation;
 - (void)uploadDeviceLocation:(DLDevice *)device;
 - (BOOL)isOpensLocation;
 

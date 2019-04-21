@@ -236,10 +236,12 @@ static DLCloudDeviceManager *instance = nil;
                             // 如果获取不到云端离线时间，拿本地的离线时间和信息
                             device.offlineTime = offlineTime;
                             [device setupCoordinate:gps];
+                            saveLog(@"获取不到云端离线时间，拿本地的离线时间和信息");
                             return ;
                         }
                         else {
                             if ([common compareOneDateStr:offlineTime withAnotherDateStr:device.offlineTime] == -1) {
+                                saveLog(@"本地的离线时间比较新，用本地的离线时间");
                                 // 如果本地的离线时间比较新，用本地的离线时间
                                 device.offlineTime = offlineTime;
                                 [device setupCoordinate:gps];
@@ -249,10 +251,12 @@ static DLCloudDeviceManager *instance = nil;
                     }
                     // 云端与本地的离线信息都已处理完，设备仍然没有离线信息，则为设备设置初始离线信息
                     if (device.offlineTime.length == 0) {
+                        saveLog(@"云端与本地的离线信息都已处理完，设备仍然没有离线信息，为设备设置初始离线信息");
                         device.offlineTime = [common getCurrentTime];
                         device.coordinate = common.currentLocation;
                     }
                 }];
+                saveLog(@"%@", [NSString stringWithFormat:@"获取云端列表的离线信息: mac: %@, 离线时间:%@, 离线位置: %f, %f", mac, device.offlineTime, device.coordinate.longitude, device.coordinate.latitude]);
                 [newList setValue:device forKey:mac];
             }
         }

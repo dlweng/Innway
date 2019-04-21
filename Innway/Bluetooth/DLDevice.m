@@ -656,6 +656,7 @@
         _coordinate = common.currentLocation;
         _offlineTime = [common getCurrentTime];
         NSLog(@"保存设备离线信息, _offlineTime = %@", _offlineTime);
+        saveLog(@"%@", [NSString stringWithFormat:@"设备离线mac%@, 保存离线位置: %f, %f", _mac, _coordinate.longitude, _coordinate.latitude]);
         [common saveDeviceOfflineInfo:self];
         // 3.上传设备新位置
         [[InCommon sharedInstance] uploadDeviceLocation:self];
@@ -992,6 +993,20 @@
     }
     else {
         [self stopOfflineSound];
+    }
+}
+
+- (void)setIsReconnectTimer:(BOOL)isReconnectTimer {
+    _isReconnectTimer = isReconnectTimer;
+    if (_isReconnectTimer) {
+        [common startUpdatingLocation];
+        NSLog(@"开始重连计时，开始定位, mac: %@", _mac);
+        saveLog(@"%@", [NSString stringWithFormat:@"开始重连计时，开始定位, mac: %@", _mac]);
+    }
+    else {
+        [common stopUpdatingLocation];
+        NSLog(@"重连计时结束，关闭定位, mac: %@", _mac);
+        saveLog(@"%@",[NSString stringWithFormat:@"重连计时结束，关闭定位, mac: %@", _mac]);
     }
 }
 

@@ -47,7 +47,6 @@
             _locationManager = [[CLLocationManager alloc] init];
             _locationManager.delegate = self;
             [_locationManager requestAlwaysAuthorization];
-            [_locationManager startUpdatingLocation];//开始定位
         }
         
         // 设置闪光灯定时器
@@ -448,7 +447,9 @@
     CLLocation *location =  [locations lastObject];
     //  获取当前位置的经纬度
     self.currentLocation = [JZLocationConverter wgs84ToGcj02:location.coordinate];
-    NSLog(@"common 位置更新: %f, %f", self.currentLocation.latitude, self.currentLocation.longitude);
+    NSLog(@"common 位置更新: %f, %f", self.currentLocation.longitude, self.currentLocation.latitude);
+    saveLog(@"%@", [NSString stringWithFormat:@"监听到位置更新: %f, %f", self.currentLocation.longitude, self.currentLocation.latitude]);
+
     //  输出经纬度信息
     //  纬度:23.130250,经度:113.383898
     //  北纬正数,南纬:负数  东经:正数  西经:负数
@@ -457,18 +458,25 @@
 - (void)setupLocationData {
     self.isLocation = YES;
     // 设置定位精度,越精确越费电
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
     // 设置用户的位置改变多少m才去调用位置更新的方法
     self.locationManager.distanceFilter = kCLDistanceFilterNone;
+
+}
+
+- (void)startUpdatingLocation {
     [self.locationManager startUpdatingLocation];
 }
 
-- (BOOL)startUpdatingLocation {
-    if (self.locationManager) {
-        [self.locationManager startUpdatingLocation];
-        return YES;
+- (void)stopUpdatingLocation {
+    NSDictionary *deviceList = [[DLCloudDeviceManager sharedInstance].cloudDeviceList copy];
+    for (NSString *mac in deviceList.allKeys) {
+        DLDevice *device = deviceList[mac];
+        if (device.isReconnectTimer) {
+            return; //只有一台设备在做重连就不去关闭定位
+        }
     }
-    return NO;
+    [self.locationManager stopUpdatingLocation];
 }
 
 #pragma mark - IBeacon 激活APP
@@ -673,7 +681,7 @@
 
 #pragma mark - 设置导航栏图片
 + (void)setNavgationBar:(UINavigationBar *)bar {
-    NSString *imageName = @"narBarBackgroudImage.png";
+//    NSString *imageName = @"narBarBackgroudImage.png";
 //    CGSize screenSize = [UIScreen mainScreen].bounds.size;
 //    if (screenSize.width == 375 && screenSize.height == 667) {
 //        // Iphone6/7/8

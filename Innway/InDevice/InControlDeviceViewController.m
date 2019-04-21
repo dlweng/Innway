@@ -563,7 +563,8 @@ static pthread_mutex_t _deviceAnnotationHandler = PTHREAD_MUTEX_INITIALIZER;
 #pragma mark - Map
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    NSLog(@"地图位置更新, %f, %f", userLocation.coordinate.latitude, userLocation.coordinate.longitude);
+    NSLog(@"地图位置更新, %f, %f", userLocation.coordinate.longitude, userLocation.coordinate.latitude);
+    saveLog(@"地图位置更新, %f, %f", userLocation.coordinate.longitude, userLocation.coordinate.latitude);
     [InCommon sharedInstance].currentLocation = userLocation.coordinate;
 }
 
