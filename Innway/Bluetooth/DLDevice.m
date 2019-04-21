@@ -159,38 +159,9 @@
         if ([characteristic.UUID.UUIDString isEqualToString:ntfUUID.UUIDString]) {
             NSLog(@"发现设备通知角色: %@， characteristic = %@", self.mac, characteristic);
             saveLog(@"发现设备通知角色: %@， characteristic = %@", self.mac, characteristic);
-            self.isDiscoverAllCharacter++;
             [self notification:DLServiceUUID characteristicUUID:DLNTFCharacteristicUUID p:peripheral on:YES];
         }
-        if (self.isDiscoverAllCharacter == 2) {
-            __weak typeof(self) weakSelf = self;
-            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                [NSThread sleepForTimeInterval:0.2];
-                //激活设备
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"去激活设备: %@", weakSelf.mac);
-                    saveLog(@"去激活设备: %@", weakSelf.mac);
-                    [weakSelf activeDevice];
-                });
-                if (self.firstAdd) { 
-                    self.firstAdd = NO;
-                    [NSThread sleepForTimeInterval:0.2];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        NSLog(@"第一次添加，去发关闭断连通知的命令");
-                        [weakSelf setDisconnectAlert:NO reconnectAlert:NO];
-                    });
-                }
-                [NSThread sleepForTimeInterval:0.2];
-                // 获取设备信息
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    weakSelf.online = YES;  //设置在线
-                    weakSelf.reconnectNum = 0;
-                    NSLog(@"设置设备在线");
-                    [weakSelf readRSSI];
-                    [weakSelf getDeviceInfo]; //防止两次发生时间太接近，导致下发失败
-                });
-            });
-        }
+        [self processConnectSuccess];
     }
 }
 
@@ -397,8 +368,8 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if ([peripheral.identifier.UUIDString isEqualToString:self.peripheral.identifier.UUIDString]) {
-        NSLog(@"mac:%@, 接收读响应数据, peripheral：%@,  characteristic = %@, error = %@", self.mac, self.peripheral, characteristic, error);
-        saveLog(@"mac:%@, 接收读响应数据, peripheral：%@,  characteristic = %@, error = %@", self.mac, self.peripheral, characteristic, error);
+        NSLog(@"mac:%@, 接收读响应/通知数据, peripheral：%@,  characteristic = %@, error = %@", self.mac, self.peripheral, characteristic, error);
+        saveLog(@"mac:%@, 接收读响应/通知数据, peripheral：%@,  characteristic = %@, error = %@", self.mac, self.peripheral, characteristic, error);
         // 读硬件版本号
         CBUUID *firmwareChaUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareCharacteristicUUID];
         if ([characteristic.UUID.UUIDString isEqualToString:firmwareChaUUID.UUIDString]) {
@@ -428,13 +399,55 @@
         NSLog(@"mac:%@,  通知功能更查找不到角色: %s", self.mac, [self CBUUIDToString:cu]);
         return;
     }
+    NSLog(@"mac:%@,  去使能通知角色: %@", self.mac, characteristic);
+    saveLog(@"mac:%@,  去使能通知角色: %@", self.mac, characteristic);
     [p setNotifyValue:on forCharacteristic:characteristic];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error {
-    NSLog(@"mac:%@, 接收来自设备的通知, characteristic = %@, error = %@", self.mac, characteristic, error);
-    
-    [self parseData:characteristic.value];
+    NSLog(@"mac:%@, 打开通知结果, characteristic = %@, error = %@", self.mac, characteristic, error);
+    saveLog(@"mac:%@, 打开通知结果, characteristic = %@, error = %@", self.mac, characteristic, error);
+    if (!error) {
+        if (self.isDiscoverAllCharacter < 2) {
+            self.isDiscoverAllCharacter++;
+            [self processConnectSuccess];
+        }
+        else {
+            [self parseData:characteristic.value];
+        }
+    }
+}
+
+- (void)processConnectSuccess {
+    if (self.isDiscoverAllCharacter == 2) {
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            [NSThread sleepForTimeInterval:0.2];
+            //激活设备
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"去激活设备: %@", weakSelf.mac);
+                saveLog(@"去激活设备: %@", weakSelf.mac);
+                [weakSelf activeDevice];
+            });
+            if (self.firstAdd) {
+                self.firstAdd = NO;
+                [NSThread sleepForTimeInterval:0.2];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSLog(@"第一次添加，去发关闭断连通知的命令");
+                    [weakSelf setDisconnectAlert:NO reconnectAlert:NO];
+                });
+            }
+            [NSThread sleepForTimeInterval:0.2];
+            // 获取设备信息
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.online = YES;  //设置在线
+                weakSelf.reconnectNum = 0;
+                NSLog(@"设置设备在线");
+                [weakSelf readRSSI];
+                [weakSelf getDeviceInfo]; //防止两次发生时间太接近，导致下发失败
+            });
+        });
+    }
 }
 
 #pragma mark - 连接与断开连接

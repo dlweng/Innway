@@ -303,7 +303,7 @@ static float ibeaconActiveDelay = 2;
                         [device connectToDevice:nil];
                         device.delayConnect = NO;
                     });
-                    ibeaconActiveDelay++;
+                    ibeaconActiveDelay = ibeaconActiveDelay + 3;
                 }
                 else {
                     [device connectToDevice:nil];
