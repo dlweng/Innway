@@ -980,6 +980,7 @@ static pthread_mutex_t _deviceAnnotationHandler = PTHREAD_MUTEX_INITIALIZER;
 //    [self updateAllAnnotation];
     [self showCurrentDeviceAnnotionView];
     __weak typeof(self) weakSelf = self;
+    saveLog(@"app进入前台，去获取云端列表");
     [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
         NSLog(@"cloudList = %@", cloudList);
         if (cloudList.count > 0) {

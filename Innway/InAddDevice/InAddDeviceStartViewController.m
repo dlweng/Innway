@@ -77,6 +77,7 @@
         return;
     }
     __weak typeof(self) weakSelf = self;
+    saveLog(@"app进入前台，去获取云端列表");
     [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
         if (cloudList.count != 0) {
             [weakSelf pushToControlDeviceController:NO];

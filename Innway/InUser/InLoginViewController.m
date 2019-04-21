@@ -106,6 +106,7 @@
 
 - (void)pushToNewCotroller {
     // 获取云端设备列表
+    saveLog(@"登录账户成功，去获取云端列表");
     [[DLCloudDeviceManager sharedInstance] getHTTPCloudDeviceListCompletion:^(DLCloudDeviceManager *manager, NSDictionary *cloudList) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (cloudList.count == 0) {
