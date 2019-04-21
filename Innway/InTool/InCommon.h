@@ -6,19 +6,13 @@
 //  Copyright © 2018年 innwaytech. All rights reserved.
 //
 
-//#ifdef DEBUG
-//#define NSLog(format, ...) printf("\n[%s] %s [第%d行] %s\n", __TIME__, __FUNCTION__, __LINE__, [[NSString stringWithFormat:format, ## __VA_ARGS__] UTF8String]);
-//#else
-//#define NSLog(format, ...)
-//#endif
-
-
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <CoreLocation/CoreLocation.h>
 #import <UIKit/UIKit.h>
 #import <MBProgressHUD.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "LogManager.h"
 
 #define common [InCommon sharedInstance]
 #define httpDomain @"http://3.16.195.135/GetData.ashx"

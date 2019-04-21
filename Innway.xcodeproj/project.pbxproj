@@ -45,6 +45,7 @@
 		19BCF3A5222BC59900CE90E0 /* graycard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19BCF39F222BC59800CE90E0 /* graycard@2x.png */; };
 		19BCF3A8222BC59900CE90E0 /* graycard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19BCF3A2222BC59900CE90E0 /* graycard@3x.png */; };
 		19BCF3A9222BC59900CE90E0 /* graycardholder@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19BCF3A3222BC59900CE90E0 /* graycardholder@3x.png */; };
+		19D8E363226C4C2000AC4C32 /* LogManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 19D8E362226C4C2000AC4C32 /* LogManager.m */; };
 		19D98EE921C498EB0043C607 /* userBodyBG@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19D98EE721C498EA0043C607 /* userBodyBG@3x.png */; };
 		19D98EEA21C498EB0043C607 /* userBodyBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19D98EE821C498EA0043C607 /* userBodyBG@2x.png */; };
 		19E1A35B21A97E8400D9FBBD /* 100@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19E1A35921A97E8400D9FBBD /* 100@2x.png */; };
@@ -354,6 +355,8 @@
 		19BCF39F222BC59800CE90E0 /* graycard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graycard@2x.png"; sourceTree = "<group>"; };
 		19BCF3A2222BC59900CE90E0 /* graycard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graycard@3x.png"; sourceTree = "<group>"; };
 		19BCF3A3222BC59900CE90E0 /* graycardholder@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graycardholder@3x.png"; sourceTree = "<group>"; };
+		19D8E361226C4C2000AC4C32 /* LogManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogManager.h; sourceTree = "<group>"; };
+		19D8E362226C4C2000AC4C32 /* LogManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogManager.m; sourceTree = "<group>"; };
 		19D98EE721C498EA0043C607 /* userBodyBG@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "userBodyBG@3x.png"; sourceTree = "<group>"; };
 		19D98EE821C498EA0043C607 /* userBodyBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "userBodyBG@2x.png"; sourceTree = "<group>"; };
 		19E1A35921A97E8400D9FBBD /* 100@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100@2x.png"; sourceTree = "<group>"; };
@@ -871,6 +874,8 @@
 				1952C97921B9894200988409 /* NSTimer+InTimer.m */,
 				193BCDE32263015B00D33AF3 /* JZLocationConverter.h */,
 				193BCDE42263015B00D33AF3 /* JZLocationConverter.m */,
+				19D8E361226C4C2000AC4C32 /* LogManager.h */,
+				19D8E362226C4C2000AC4C32 /* LogManager.m */,
 			);
 			path = InTool;
 			sourceTree = "<group>";
@@ -1636,6 +1641,7 @@
 				33FFB9392171DC9400E6A8C6 /* InDeviceSettingFooterView.m in Sources */,
 				3374C75A2112013F00F83101 /* main.m in Sources */,
 				19F4A45021BFCBE400B82900 /* InWebViewController.m in Sources */,
+				19D8E363226C4C2000AC4C32 /* LogManager.m in Sources */,
 				337E5040216203A900CB6313 /* InSelectionViewController.m in Sources */,
 				33EE4C922116C27300CDDC98 /* InUserSettingViewController.m in Sources */,
 				33EE4CA62116FA9B00CDDC98 /* InDeviceSettingViewController.m in Sources */,
