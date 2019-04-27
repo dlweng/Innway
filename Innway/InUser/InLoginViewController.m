@@ -113,12 +113,6 @@
             [self pushToAddDeviceController:YES];
         }
         else {
-            if (common.isIBeaconActive) {
-                common.ibeaconDeviceList = [NSMutableDictionary dictionaryWithDictionary:cloudList];
-                // 重置，避免注销登录出现断开重连的问题
-                NSLog(@"ibeacon激活设备，做延时连接处理 = %@", common.ibeaconDeviceList);
-                common.isIBeaconActive = NO;
-            }
             [self pushToAddDeviceController:NO];
         }
     }];

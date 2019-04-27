@@ -68,10 +68,6 @@ typedef NS_ENUM(NSInteger, InDeviceType) {
 
 @property (nonatomic, assign) BOOL isSharkAnimationing;
 
-// ibeacon激活app后，去连接设备有时候会出现无法接收设备通知数据的情况，做延时连接处理
-@property (nonatomic, assign) BOOL isIBeaconActive;
-@property (nonatomic, strong, nullable) NSMutableDictionary *ibeaconDeviceList;
-
 + ( instancetype)sharedInstance;
 
 - (void)saveUserInfoWithID:(NSInteger)ID email:(NSString *)email pwd:(NSString *)pwd;

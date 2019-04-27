@@ -256,6 +256,7 @@ static pthread_rwlock_t _connectDeviceEventHandler = PTHREAD_RWLOCK_INITIALIZER;
         NSString *mac = [self getDeviceMac:advertisementData];
         if (mac.length > 0) {
             DLKnowDevice *knowDevice = [_knownPeripherals objectForKey:mac];
+            saveLog(@"发现设备: %@, advertisementData = %@", mac, advertisementData);
             if (!knowDevice) {
                 // 发现列表不存在该设备，需要添加
 //                NSLog(@"发现新设备: %@, advertisementData = %@", mac, advertisementData);

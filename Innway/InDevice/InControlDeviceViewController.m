@@ -336,6 +336,7 @@ static pthread_mutex_t _deviceAnnotationHandler = PTHREAD_MUTEX_INITIALIZER;
             stopSound = YES;
         }
         device.isOfflineSounding = NO;
+        saveLog(@"主界面按钮被点击，去关闭离线报警：mac: %@", mac)
     }
     if (stopSound) {
         return;
@@ -345,10 +346,12 @@ static pthread_mutex_t _deviceAnnotationHandler = PTHREAD_MUTEX_INITIALIZER;
         if (self.device.isSearchDevice) {
             self.device.isSearchDevice = NO;
             NSLog(@"关闭查找设备");
+            saveLog(@"主界面按钮被点击， 关闭查找设备: %@", self.device.mac);
             [self stopBtnAnimation];
         }
         else {
             NSLog(@"打开查找设备");
+            saveLog(@"主界面按钮被点击， 打开查找设备: %@", self.device.mac);
             self.device.isSearchDevice = YES;
             [self startBtnAnimation];
             [self.device startSearchDeviceTimer]; // 开启查找需要监听，防止出现发送失败，一直在闪烁按钮的问题
@@ -356,6 +359,7 @@ static pthread_mutex_t _deviceAnnotationHandler = PTHREAD_MUTEX_INITIALIZER;
         [self.device searchDevice]; 
     }
     else {
+        saveLog(@"设备处于离线状态， 无法查找设备: %@", self.device.mac);
         if (self.device.isSearchDevice) { // 离线状态，如果手机在查找设备，要去关闭按钮动画
             self.device.isSearchDevice = NO;
             [self stopBtnAnimation];

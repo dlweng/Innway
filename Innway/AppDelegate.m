@@ -20,12 +20,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     if (application.applicationState == UIApplicationStateBackground) {
-        NSLog(@"app在后台, 是Ibeacon激活的app");
         saveLog(@"app在后台, 是Ibeacon激活的app");
-        common.isIBeaconActive = YES;
     }
     else {
-        NSLog(@"用户启动app");
+        saveLog(@"用户启动app");
     }
     // Override point for customization after application launch.
     // 设置导航栏

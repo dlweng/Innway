@@ -110,7 +110,8 @@
     __weak typeof(self) weakSelf = self;
     dispatch_source_set_event_handler(_disciverServerTimer, ^{
         dispatch_source_cancel(weakTimer);
-        if (weakSelf.isDiscoverAllCharacter == 0) {
+        if (weakSelf.isDiscoverAllCharacter != 2) {
+            saveLog(@"超时没有获取到所有的角色特征值，去断开重连：mac = %@", weakSelf.mac);
             if (weakSelf.peripheral) {
                  [[DLCentralManager sharedInstance] disConnectToDevice:weakSelf.peripheral completion:nil];
             }
@@ -443,6 +444,7 @@
                 weakSelf.online = YES;  //设置在线
                 weakSelf.reconnectNum = 0;
                 NSLog(@"设置设备在线");
+                saveLog(@"设置设备在线: mac = %d", weakSelf.online);
                 [weakSelf readRSSI];
                 [weakSelf getDeviceInfo]; //防止两次发生时间太接近，导致下发失败
             });
@@ -513,6 +515,7 @@
         return;
     }
     NSLog(@"开始去断开设备连接:%@", self.mac);
+    saveLog(@"用户手动断连设备:%@" ,self.mac);
     __weak typeof(self) weakSelf = self;
     [[DLCentralManager sharedInstance] disConnectToDevice:self.peripheral completion:^(DLCentralManager *manager, CBPeripheral *peripheral, NSError *error) {
         if (completion) {
@@ -539,7 +542,8 @@
 
 - (void)reconnectOprate {
     //被动的掉线且蓝牙打开，去做重连
-    if (self.online && !self.isReconnectTimer) { //当前是在线，需要计时设置为离线
+    if (self.online && !self.isReconnectTimer) {
+        //当前是在线，需要计时设置为离线
         // 开始重连计时
         [_offlineReconnectTimer setFireDate:[NSDate distantPast]];
         //                    // 激活后台线程 重连超时大于10秒，才需要这两行代码
@@ -552,19 +556,23 @@
         }
         self.reconnectNum++;
         NSLog(@"设备连接被断开，去重连设备, mac = %@, 重连计数: %d", self.mac, self.reconnectNum);
+        saveLog(@"设备连接被断开，去重连设备, mac = %@, 重连计数: %d", self.mac, self.reconnectNum);
         // 去重连设备
         self.isDiscoverAllCharacter = 0;
         [self connectToDevice:^(DLDevice *device, NSError *error) {
             if (error) {
                 NSLog(@"mac: %@, 设备重连失败", self.mac);
+                saveLog(@"mac: %@, 设备重连失败", self.mac);
             }
             else {
                 NSLog(@"mac: %@, 设备重连成功", self.mac);
+                saveLog(@"mac: %@, 设备重连成功", self.mac);
             }
         }];
     }
     else {
         NSLog(@"已经重连%d次, 不再去重连:%@", self.reconnectNum, self.mac);
+        saveLog(@"已经重连%d次, 不再去重连:%@", self.reconnectNum, self.mac);
         self.reconnectNum = 0;
     }
 }
@@ -573,9 +581,11 @@
 - (void)offlineTiming {
     _offlineReconnectTime++;
     NSLog(@"重连时间: %d，mac: %@", _offlineReconnectTime, self.mac);
+    saveLog(@"重连时间: %d，mac: %@", _offlineReconnectTime, self.mac);
     if (_offlineReconnectTime >= reconnectTimeOut) {
         if (!self.connected) { // 判断重连的条件降低
             NSLog(@"重连超时，还没连上设备, 保存设备离线信息 mac = %@", self.mac);
+            saveLog(@"重连超时，还没连上设备, 保存设备离线信息 mac = %@", self.mac);
             [self changeStatusToDisconnect:YES];
         }
         else {
@@ -691,11 +701,13 @@
                 // 关闭的断开连接通知，则不通知
                 if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
                     NSLog(@"去做掉线通知: %@", self.mac);
+                    saveLog(@"断连通知打开，去做掉线通知: %@", self.mac)
                     [InCommon sendLocalNotification:[NSString stringWithFormat:@"%@ disconnects from iPhone.", self.deviceName]];
                 }
                 self.isOfflineSounding = YES;
                 self.isSearchPhone = NO;
                 NSLog(@"播放离线音乐");
+                saveLog(@"播放离线音乐: mac:%@", self.mac);
             }
         }
         
@@ -906,6 +918,7 @@
 
 - (void)stopOfflineSound {
     if (self.offlinePlayer.isPlaying) {
+        saveLog(@"关闭离线报警:%@", self.mac);
         [self.offlinePlayer stop];
         [common restoreVolume];
     }
@@ -928,6 +941,7 @@
         return;
     }
     self.online = NO;
+    saveLog(@"赋值外设，去设备在线状态为离线：mac:%@, 旧的外设对象： %@, 新的外设对象：%@", self.mac, _peripheral, peripheral);
     NSLog(@"赋值外设，去设备在线状态为离线：mac:%@, 旧的外设对象： %@, 新的外设对象：%@", self.mac, _peripheral, peripheral);
     [_peripheral setDelegate:nil];
     _peripheral = peripheral;
@@ -975,9 +989,6 @@
 
 
 - (BOOL)connecting {
-    if ([DLCentralManager sharedInstance].state != CBCentralManagerStatePoweredOn) {
-        return NO;
-    }
     if (_peripheral && (_peripheral.state == CBPeripheralStateConnected || _peripheral.state == CBPeripheralStateConnecting)) {
         return YES;
     }
