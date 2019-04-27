@@ -122,13 +122,17 @@
     dispatch_resume(_disciverServerTimer);
 }
 
-- (void)peripheral:(CBPeripheral *)_peripheral didDiscoverServices:(NSError *)error {
-    NSArray *services = [_peripheral services];
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
+    if (![self.peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
+        return;
+    }
+    NSArray *services = [peripheral services];
     CBUUID *serverUUID = [DLUUIDTool CBUUIDFromInt:DLServiceUUID];
     CBUUID *firmwareServerUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareServerUUID];
     for (CBService *service in services) {
         if ([service.UUID.UUIDString isEqualToString:serverUUID.UUIDString]) {
             NSLog(@"发现设备服务: %@", self.mac);
+            saveLog(@"发现设备服务: %@", self.mac);
             CBUUID *ntfUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
             CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
             [self.peripheral discoverCharacteristics:@[ntfUUID, writeUUID] forService:service];
@@ -142,6 +146,9 @@
 }
 
 - (void) peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
+    if (![self.peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
+        return;
+    }
     CBUUID *ntfUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
     CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:DLWriteCharacteristicUUID];
     CBUUID *firmwareChaUUID = [DLUUIDTool CBUUIDFromInt:DLFirmwareCharacteristicUUID];
@@ -322,6 +329,7 @@
     }
     else if ([cmd isEqualToString:@"05"]) {
         NSLog(@"设备:%@ 寻找手机，手机要发出警报，05数据:%@", _mac, data);
+        saveLog(@"设备:%@ 寻找手机，手机要发出警报，05数据:%@", _mac, data);
         // 收到设备查找，要做出回应
         [self searchPhoneACK];
         [[NSNotificationCenter defaultCenter] postNotificationName:DeviceSearchPhoneNotification object:self userInfo:@{@"Device":self}];
@@ -347,19 +355,28 @@
     if (!self.connected) {
         return;
     }
-    CBUUID *su = [DLUUIDTool CBUUIDFromInt:serviceUUID];
-    CBUUID *cu = [DLUUIDTool CBUUIDFromInt:characteristicUUID];
-    CBService *service = [self findServiceFromUUID:su p:p];
+    CBUUID *serverUUID = [DLUUIDTool CBUUIDFromInt:serviceUUID];
+    CBUUID *writeUUID = [DLUUIDTool CBUUIDFromInt:characteristicUUID];
+    CBUUID *notiUUID = [DLUUIDTool CBUUIDFromInt:DLNTFCharacteristicUUID];
+    CBService *service = [self findServiceFromUUID:serverUUID p:p];
     if (!service) {
-        NSLog(@"mac:%@, 重连设备 %s", self.mac, [self CBUUIDToString:su]);
+        saveLog(@"写数据找不到服务，断开设备连接: %@", self.mac);
+        [[DLCentralManager sharedInstance] disConnectToDevice:p completion:nil];
         return;
     }
-    CBCharacteristic *characteristic = [self findCharacteristicFromUUID:cu service:service];
-    if (!characteristic) {
-        NSLog(@"mac:%@, 写数据查找不到角色: %s", self.mac, [self CBUUIDToString:cu]);
+    CBCharacteristic *writeCha = [self findCharacteristicFromUUID:writeUUID service:service];
+    if (!writeCha) {
+        saveLog(@"写数据查找不到写角色，断开设备连接: %@", self.mac);
+        [[DLCentralManager sharedInstance] disConnectToDevice:p completion:nil];
         return;
     }
-    [p writeValue:data forCharacteristic:characteristic type:responseType];
+    CBCharacteristic *notiCha = [self findCharacteristicFromUUID:notiUUID service:service];
+    if (!notiCha) {
+        saveLog(@"写数据查找不到通知角色，断开设备连接: %@", self.mac);
+        [[DLCentralManager sharedInstance] disConnectToDevice:p completion:nil];
+        return;
+    }
+    [p writeValue:data forCharacteristic:writeCha type:responseType];
 }
 
 - (void) peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -382,7 +399,11 @@
         // 读普通数据
         [self parseData:characteristic.value];
         if (self.delegate) {
+            saveLog(@"接收设备硬件数据, %@，更新界面， delegate: %@", self.mac, self.delegate);
             [self.delegate device:self didUpdateData:self.lastData];
+        }
+        else {
+            saveLog(@"接收设备硬件数据, %@， 没设置代理，无法更新界面", self.mac);
         }
     }
 }
@@ -866,6 +887,7 @@
     self.searchPhonePlayer.delegate = self;
     self.searchPhonePlayer.numberOfLoops = 300;
     self.searchPhonePlayer.volume = 1.0;
+    saveLog(@"播放查找手机音乐: %@", self.mac);
     [self.searchPhonePlayer play];
     [common startSharkAnimation]; //关闭闪光灯
 }
@@ -873,6 +895,7 @@
 - (void)stopSearchPhoneSound {
     [common stopSharkAnimation]; //打开闪光灯
     if (self.searchPhonePlayer.isPlaying) {
+        saveLog(@"关闭查找手机音乐: %@", self.mac);
         [self.searchPhonePlayer stop];
         [common restoreVolume];
     }

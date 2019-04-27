@@ -918,17 +918,20 @@ static pthread_mutex_t _deviceAnnotationHandler = PTHREAD_MUTEX_INITIALIZER;
 }
 
 - (void)searchPhone:(NSNotification *)noti {
-    if (self.inTakePhoto) {
+    if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground && self.inTakePhoto) {
+        saveLog(@"在拍照界面，不去查找手机，自动拍照");
         [self.cameraVC takeAPhoto];
         return;
     }
     DLDevice *device = noti.userInfo[@"Device"];
     if (device.isSearchPhone) {
+        saveLog(@"接收到关闭查找手机的命令,去关闭:%@", device.mac);
         device.isSearchPhone = NO;
         [self.searchPhoneDevices removeObjectForKey:device.mac];
         [self stopSearchPhone];
     }
     else {
+        saveLog(@"接收到打开查找手机的命令,去打开:%@", device.mac);
         if (self.searchPhoneDevices.count == 0) {
             // 只有当前没有设备在查找手机的时候才去开启动画
             [self startBtnAnimation];
