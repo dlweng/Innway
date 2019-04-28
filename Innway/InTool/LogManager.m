@@ -17,7 +17,7 @@ static const int LogMaxSaveDay = 2;
 static const NSString* LogFilePath = @"/Documents/Log/";
 
 // 最大的日志文件大小10MB
-static const long long maxFileSize = 15 * 1024 * 1024;
+static const long long maxFileSize = 10 * 1024 * 1024;
 //static const long long maxFileSize = 1000;
 
 @interface LogManager()

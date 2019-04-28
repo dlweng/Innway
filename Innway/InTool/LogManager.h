@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 //#if DEBUG
-#define saveLog(format, ...) [[LogManager sharedInstance] logInfo:__func__ line:__LINE__ logStr:[NSString stringWithFormat:format, ## __VA_ARGS__]];
+//#define saveLog(format, ...) [[LogManager sharedInstance] logInfo:__func__ line:__LINE__ logStr:[NSString stringWithFormat:format, ## __VA_ARGS__]];
 
 //#else
-//#define saveLog(format, ...)
+#define saveLog(format, ...)
 //#endif
 
 @interface LogManager : NSObject
